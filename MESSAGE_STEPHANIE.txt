@@ -1,0 +1,26 @@
+Stephanie ! 🌭
+
+La saucisse est prete ! J'ai termine le site + le back office pour ton congres.
+
+🌐 LE SITE PUBLIC :
+https://congres-saucisse.pages.dev
+(Clone de rdv-histoire.com avec toutes les rubriques, adapte Strasbourg + saucisses qui rebondissent 😄)
+
+🔐 TON ESPACE ADMIN :
+https://congres-saucisse.pages.dev/admin.html
+Mot de passe : SAUCISSE2026
+
+Dans ton espace tu as :
+📊 Ton Dashboard personnel avec graphiques et stats
+💰 Un simulateur financier (tous les frais d'un congres + revenus + rentabilite)
+✅ Une checklist de 66 items (J-6 mois → post-event)
+🔒 Module securite complet (14 scenarios de crise, autorisations, VIP)
+👥 Gestion participants, badges QR, check-in
+📧 Templates d'invitation + emails automatiques
+🍽️ Gestion traiteur (regimes alimentaires, marge, repas staff)
+📝 Ton espace "Recommandations de Stephanie" pour ajouter tes idees
+
+Regarde et dis-moi ce que tu en penses !
+Je suis tout ouie (enfin, tout yeux 😄 — tu sais, malentendant...)
+
+Emmanuel 🌭
