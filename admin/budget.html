@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Budget — Back Office</title>
+  <link rel="stylesheet" href="../css/admin.css">
+  <style>
+    .budget-gauge { background: var(--bg-card); border-radius: var(--radius); padding: 24px; margin-bottom: 24px; }
+    .budget-gauge.ok { border: 2px solid var(--green); }
+    .budget-gauge.warn { border: 2px solid var(--orange); }
+    .budget-gauge.danger { border: 2px solid var(--red); }
+    .budget-gauge h2 { margin-bottom: 12px; }
+    .gauge-display { display: flex; align-items: center; gap: 16px; margin-bottom: 12px; }
+    .gauge-bar-track { flex: 1; height: 24px; background: rgba(255,255,255,.06); border-radius: 12px; overflow: hidden; position: relative; }
+    .gauge-bar-fill { height: 100%; border-radius: 12px; transition: width .5s ease; display: flex; align-items: center; justify-content: center; font-size: .75rem; font-weight: 700; color: #111; }
+    .gauge-markers { position: relative; height: 16px; margin-top: 4px; }
+    .gauge-marker { position: absolute; top: 0; font-size: .65rem; color: var(--text-muted); transform: translateX(-50%); }
+    .gauge-pct { font-size: 2rem; font-weight: 900; min-width: 100px; text-align: right; }
+
+    .budget-summary { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 12px; margin-bottom: 24px; }
+    .budget-summary .stat-card { text-align: center; }
+
+    .budget-table-wrap { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius); padding: 0; margin-bottom: 24px; overflow: hidden; }
+    .budget-table { width: 100%; border-collapse: collapse; font-size: .82rem; }
+    .budget-table th { background: rgba(201,168,76,.06); padding: 12px 14px; text-align: left; font-weight: 700; font-size: .75rem; color: var(--gold); text-transform: uppercase; letter-spacing: .5px; border-bottom: 1px solid var(--border); }
+    .budget-table td { padding: 10px 14px; border-bottom: 1px solid rgba(201,168,76,.05); }
+    .budget-table tr:hover td { background: rgba(201,168,76,.03); }
+    .budget-table input { background: rgba(255,255,255,.04); border: 1px solid var(--border); border-radius: 6px; padding: 4px 8px; color: var(--text); font-size: .82rem; width: 100px; text-align: right; }
+    .budget-table .cat-header { background: rgba(201,168,76,.03); font-weight: 700; color: var(--gold); }
+    .budget-table .total-row { background: rgba(201,168,76,.06); font-weight: 700; }
+    .budget-table .diff-positive { color: var(--green); }
+    .budget-table .diff-negative { color: var(--red); }
+    .budget-table .contingence-row { background: rgba(245,158,11,.05); font-style: italic; }
+
+    .revenue-section { background: var(--bg-card); border: 1px solid var(--gold); border-radius: var(--radius); padding: 24px; margin-bottom: 24px; }
+    .revenue-section h3 { color: var(--gold); margin-bottom: 16px; }
+    .revenue-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; }
+    .revenue-card { text-align: center; padding: 12px; background: rgba(255,255,255,.02); border-radius: 8px; }
+    .revenue-card .rev-val { font-size: 1.4rem; font-weight: 900; color: var(--green); }
+    .revenue-card .rev-label { font-size: .72rem; color: var(--text-dim); }
+
+    .profit-box { text-align: center; padding: 24px; background: var(--bg-card); border-radius: var(--radius); margin-bottom: 24px; }
+    .profit-box .profit-val { font-size: 2.5rem; font-weight: 900; }
+    .profit-box .profit-val.positive { color: var(--green); }
+    .profit-box .profit-val.negative { color: var(--red); }
+    .profit-box .profit-label { font-size: .88rem; color: var(--text-dim); }
+  </style>
+</head>
+<body>
+
+<div class="login-overlay" id="login-overlay">
+  <div class="login-box"><h1><img src="../img/icons/icon-saucisse.png" alt="Saucisse" style="width:48px;height:48px;border-radius:12px;object-fit:contain;vertical-align:middle" title="Back Office"> Back Office</h1><p>Entrez le mot de passe</p><input type="password" id="login-pwd" placeholder="Mot de passe" onkeydown="if(event.key==='Enter')doLogin()"><button onclick="doLogin()">Connexion</button><div class="login-error" id="login-error">Mot de passe incorrect</div></div>
+</div>
+
+<header class="admin-header" id="admin-app" style="display:none;">
+  <div class="admin-brand"><img src="../img/icons/icon-saucisse.png" alt="Saucisse" style="width:28px;height:28px;border-radius:6px;object-fit:contain;vertical-align:middle" title="Back Office"> Back Office</div>
+  <nav class="admin-nav">
+    <a href="index.html"><img src="../img/icons/icon-dashboard.png" alt="" style="width:20px;height:20px;border-radius:4px;object-fit:contain;vertical-align:middle" title="Dashboard"> Dashboard</a>
+    <a href="participants.html"><img src="../img/icons/icon-participants.png" alt="" style="width:20px;height:20px;border-radius:4px;object-fit:contain;vertical-align:middle" title="Participants"> Participants</a>
+    <a href="invitations.html"><img src="../img/icons/icon-invitations.png" alt="" style="width:20px;height:20px;border-radius:4px;object-fit:contain;vertical-align:middle" title="Invitations"> Invitations</a>
+    <a href="traiteur.html"><img src="../img/icons/icon-traiteur.png" alt="" style="width:20px;height:20px;border-radius:4px;object-fit:contain;vertical-align:middle" title="Traiteur"> Traiteur</a>
+    <a href="salles.html"><img src="../img/icons/icon-salles.png" alt="" style="width:20px;height:20px;border-radius:4px;object-fit:contain;vertical-align:middle" title="Salles"> Salles</a>
+    <a href="checkin.html"><img src="../img/icons/icon-checkin.png" alt="" style="width:20px;height:20px;border-radius:4px;object-fit:contain;vertical-align:middle" title="Check-in"> Check-in</a>
+    <a href="emails.html"><img src="../img/icons/icon-emails.png" alt="" style="width:20px;height:20px;border-radius:4px;object-fit:contain;vertical-align:middle" title="Emails"> Emails</a>
+    <a href="checklist.html"><img src="../img/icons/icon-checkin.png" alt="" style="width:20px;height:20px;border-radius:4px;object-fit:contain;vertical-align:middle" title="Checklist"> Checklist</a>
+    <a href="speakers.html"><img src="../img/icons/icon-participants.png" alt="" style="width:20px;height:20px;border-radius:4px;object-fit:contain;vertical-align:middle" title="Speakers"> Speakers</a>
+    <a href="staff.html"><img src="../img/icons/icon-participants.png" alt="" style="width:20px;height:20px;border-radius:4px;object-fit:contain;vertical-align:middle" title="Staff"> Staff</a>
+    <a href="securite.html"><img src="../img/icons/icon-salles.png" alt="" style="width:20px;height:20px;border-radius:4px;object-fit:contain;vertical-align:middle" title="Securite"> Securite</a>
+    <a href="budget.html" class="active"><img src="../img/icons/icon-traiteur.png" alt="" style="width:20px;height:20px;border-radius:4px;object-fit:contain;vertical-align:middle" title="Budget"> Budget</a>
+    <a href="post-event.html"><img src="../img/icons/icon-emails.png" alt="" style="width:20px;height:20px;border-radius:4px;object-fit:contain;vertical-align:middle" title="Post-event"> Post-event</a>
+  </nav>
+  <button class="admin-logout" onclick="logout()">Deconnexion</button>
+</header>
+
+<div class="admin-content" id="admin-content" style="display:none;">
+  <h1 class="admin-title"><img src="../img/icons/icon-traiteur.png" alt="Budget" style="width:48px;height:48px;border-radius:12px;object-fit:contain;vertical-align:middle" title="Budget detaille"> Budget Detaille</h1>
+
+  <!-- GAUGE -->
+  <div class="budget-gauge" id="budget-gauge"></div>
+
+  <!-- SUMMARY -->
+  <div class="budget-summary" id="budget-summary"></div>
+
+  <!-- BUDGET TABLE -->
+  <div class="budget-table-wrap">
+    <table class="budget-table">
+      <thead>
+        <tr><th>Poste</th><th>Prevu</th><th>Reel</th><th>Ecart</th><th>% utilise</th></tr>
+      </thead>
+      <tbody id="budget-body"></tbody>
+    </table>
+  </div>
+
+  <!-- REVENUE -->
+  <div class="revenue-section">
+    <h3>Revenus — Inscriptions par type de pass</h3>
+    <div class="revenue-grid" id="revenue-grid"></div>
+  </div>
+
+  <!-- PROFIT/LOSS -->
+  <div class="profit-box" id="profit-box"></div>
+
+  <div style="text-align:center;">
+    <button onclick="exportBudgetPDF()" style="padding:12px 32px;border-radius:10px;background:var(--gold);color:#111;font-weight:700;border:none;cursor:pointer;font-size:.9rem;">Exporter PDF budget</button>
+  </div>
+</div>
+
+<script src="../js/data.js"></script>
+<script>
+var ADMIN_PWD='SAUCISSE2026';
+function doLogin(){if(document.getElementById('login-pwd').value===ADMIN_PWD){sessionStorage.setItem('congres_admin','1');showAdmin();}else{document.getElementById('login-error').style.display='block';}}
+function logout(){sessionStorage.removeItem('congres_admin');location.reload();}
+function showAdmin(){document.getElementById('login-overlay').style.display='none';document.getElementById('admin-app').style.display='flex';document.getElementById('admin-content').style.display='block';render();}
+if(sessionStorage.getItem('congres_admin'))showAdmin();
+
+var BUDGET_STORAGE = 'congres_budget_state';
+function loadBudgetState() { try { return JSON.parse(localStorage.getItem(BUDGET_STORAGE) || '{}'); } catch(e) { return {}; } }
+function saveBudgetState(s) { localStorage.setItem(BUDGET_STORAGE, JSON.stringify(s)); }
+
+var BUDGET_ITEMS = [
+  { cat: 'Lieu', items: [
+    { id: 'lieu_location', label: 'Location Palais des Congres (3 jours)', prevu: 25000 },
+    { id: 'lieu_extras', label: 'Extras (electricite, nettoyage, securite lieu)', prevu: 5000 }
+  ]},
+  { cat: 'Traiteur', items: [
+    { id: 'traiteur_repas', label: 'Repas participants (dejeuners x 3j)', prevu: 12000 },
+    { id: 'traiteur_petitdej', label: 'Petits-dejeuners', prevu: 4000 },
+    { id: 'traiteur_pauses', label: 'Pauses cafe (matin + apres-midi x 3j)', prevu: 3000 },
+    { id: 'traiteur_cocktail', label: 'Cocktail bienvenue J1', prevu: 5000 },
+    { id: 'traiteur_gala', label: 'Diner de gala J2', prevu: 8000 },
+    { id: 'traiteur_marge', label: 'Marge traiteur (+15%)', prevu: 4800 }
+  ]},
+  { cat: 'Technique', items: [
+    { id: 'tech_son', label: 'Sonorisation (toutes salles)', prevu: 8000 },
+    { id: 'tech_video', label: 'Video / ecrans / projecteurs', prevu: 6000 },
+    { id: 'tech_wifi', label: 'WiFi haute capacite (500+ connexions)', prevu: 3000 },
+    { id: 'tech_elec', label: 'Installation electrique supplementaire', prevu: 2000 }
+  ]},
+  { cat: 'Speakers', items: [
+    { id: 'spk_transport', label: 'Transport speakers (avion/train)', prevu: 12000 },
+    { id: 'spk_hotel', label: 'Hebergement speakers (3 nuits x 22)', prevu: 15000 },
+    { id: 'spk_honoraires', label: 'Honoraires / cachets', prevu: 20000 }
+  ]},
+  { cat: 'Communication', items: [
+    { id: 'com_print', label: 'Impressions (programmes, affiches, flyers)', prevu: 3000 },
+    { id: 'com_digital', label: 'Communication digitale (pub, social media)', prevu: 5000 },
+    { id: 'com_signaletique', label: 'Signaletique (panneaux, roll-up, bannieres)', prevu: 4000 }
+  ]},
+  { cat: 'Staff', items: [
+    { id: 'staff_remuneration', label: 'Remuneration staff/benevoles', prevu: 6000 },
+    { id: 'staff_repas', label: 'Repas staff (3 jours)', prevu: 2000 },
+    { id: 'staff_transport', label: 'Transport staff', prevu: 1000 }
+  ]},
+  { cat: 'Assurance', items: [
+    { id: 'assurance_rc', label: 'Responsabilite civile', prevu: 2000 },
+    { id: 'assurance_annulation', label: 'Assurance annulation', prevu: 3000 }
+  ]},
+  { cat: 'Goodies / Badges', items: [
+    { id: 'goodies_badges', label: 'Badges nominatifs + cordons', prevu: 1500 },
+    { id: 'goodies_kit', label: 'Kits participants (sacs, stylos, programmes)', prevu: 3000 },
+    { id: 'goodies_vip', label: 'Goodies VIP (pochettes premium)', prevu: 2000 }
+  ]}
+];
+
+function render() {
+  var state = loadBudgetState();
+  var stats = CONGRES.getStats();
+
+  var totalPrevu = 0, totalReel = 0;
+  BUDGET_ITEMS.forEach(function(cat) {
+    cat.items.forEach(function(item) {
+      totalPrevu += item.prevu;
+      totalReel += (state[item.id] !== undefined ? state[item.id] : 0);
+    });
+  });
+
+  // Add contingence
+  var contingence = Math.round(totalPrevu * 0.30);
+  totalPrevu += contingence;
+  var contingenceReel = state.contingence_reel || 0;
+  totalReel += contingenceReel;
+
+  var pctUsed = totalPrevu > 0 ? Math.round((totalReel / totalPrevu) * 100) : 0;
+  var gaugeColor = pctUsed >= 100 ? 'var(--red)' : pctUsed >= 90 ? 'var(--orange)' : pctUsed >= 75 ? 'var(--gold)' : 'var(--green)';
+  var gaugeClass = pctUsed >= 100 ? 'danger' : pctUsed >= 90 ? 'warn' : 'ok';
+
+  // Gauge
+  document.getElementById('budget-gauge').className = 'budget-gauge ' + gaugeClass;
+  document.getElementById('budget-gauge').innerHTML =
+    '<h2 style="color:var(--gold);">Consommation du budget</h2>' +
+    '<div class="gauge-display">' +
+      '<div class="gauge-bar-track">' +
+        '<div class="gauge-bar-fill" style="width:' + Math.min(pctUsed, 100) + '%;background:' + gaugeColor + ';">' + pctUsed + '%</div>' +
+      '</div>' +
+      '<div class="gauge-pct" style="color:' + gaugeColor + ';">' + pctUsed + '%</div>' +
+    '</div>' +
+    '<div class="gauge-markers">' +
+      '<span class="gauge-marker" style="left:75%;">75%</span>' +
+      '<span class="gauge-marker" style="left:90%;">90%</span>' +
+      '<span class="gauge-marker" style="left:100%;">100%</span>' +
+    '</div>' +
+    (pctUsed >= 75 ? '<p style="color:' + gaugeColor + ';font-size:.82rem;margin-top:12px;font-weight:700;">Alerte : ' + pctUsed + '% du budget consomme !</p>' : '');
+
+  // Summary
+  document.getElementById('budget-summary').innerHTML =
+    '<div class="stat-card"><div class="stat-value">' + totalPrevu.toLocaleString('fr-FR') + ' &euro;</div><div class="stat-label">Budget total prevu</div></div>' +
+    '<div class="stat-card"><div class="stat-value">' + totalReel.toLocaleString('fr-FR') + ' &euro;</div><div class="stat-label">Depenses reelles</div></div>' +
+    '<div class="stat-card"><div class="stat-value" style="color:' + (totalReel <= totalPrevu ? 'var(--green)' : 'var(--red)') + ';">' + (totalPrevu - totalReel).toLocaleString('fr-FR') + ' &euro;</div><div class="stat-label">Reste disponible</div></div>' +
+    '<div class="stat-card"><div class="stat-value">' + contingence.toLocaleString('fr-FR') + ' &euro;</div><div class="stat-label">Contingence (+30%)</div></div>';
+
+  // Budget table
+  var bodyHtml = '';
+  var grandPrevu = 0, grandReel = 0;
+
+  BUDGET_ITEMS.forEach(function(cat) {
+    var catPrevu = 0, catReel = 0;
+    cat.items.forEach(function(item) { catPrevu += item.prevu; catReel += (state[item.id] !== undefined ? state[item.id] : 0); });
+    grandPrevu += catPrevu;
+    grandReel += catReel;
+
+    bodyHtml += '<tr class="cat-header"><td colspan="5">' + cat.cat + '</td></tr>';
+    cat.items.forEach(function(item) {
+      var reel = state[item.id] !== undefined ? state[item.id] : 0;
+      var diff = reel - item.prevu;
+      var diffClass = diff > 0 ? 'diff-negative' : diff < 0 ? 'diff-positive' : '';
+      var usedPct = item.prevu > 0 ? Math.round((reel / item.prevu) * 100) : 0;
+
+      bodyHtml += '<tr>';
+      bodyHtml += '<td>' + item.label + '</td>';
+      bodyHtml += '<td style="text-align:right;">' + item.prevu.toLocaleString('fr-FR') + ' &euro;</td>';
+      bodyHtml += '<td><input type="number" value="' + reel + '" onchange="updateBudget(\'' + item.id + '\', parseInt(this.value) || 0)"></td>';
+      bodyHtml += '<td class="' + diffClass + '" style="text-align:right;">' + (diff >= 0 ? '+' : '') + diff.toLocaleString('fr-FR') + ' &euro;</td>';
+      bodyHtml += '<td style="text-align:right;">' + usedPct + '%</td>';
+      bodyHtml += '</tr>';
+    });
+    bodyHtml += '<tr style="background:rgba(201,168,76,.03);"><td style="text-align:right;font-weight:600;">Sous-total ' + cat.cat + '</td><td style="text-align:right;font-weight:700;">' + catPrevu.toLocaleString('fr-FR') + ' &euro;</td><td style="text-align:right;font-weight:700;">' + catReel.toLocaleString('fr-FR') + ' &euro;</td><td class="' + (catReel > catPrevu ? 'diff-negative' : 'diff-positive') + '" style="text-align:right;font-weight:700;">' + ((catReel - catPrevu >= 0 ? '+' : '') + (catReel - catPrevu).toLocaleString('fr-FR')) + ' &euro;</td><td style="text-align:right;">' + (catPrevu > 0 ? Math.round((catReel / catPrevu)*100) : 0) + '%</td></tr>';
+  });
+
+  // Contingence row
+  bodyHtml += '<tr class="contingence-row"><td>Contingence (+30% auto)</td><td style="text-align:right;">' + contingence.toLocaleString('fr-FR') + ' &euro;</td><td><input type="number" value="' + contingenceReel + '" onchange="updateBudget(\'contingence_reel\', parseInt(this.value) || 0)"></td><td></td><td></td></tr>';
+
+  // Grand total
+  bodyHtml += '<tr class="total-row"><td style="font-size:.95rem;">TOTAL GENERAL</td><td style="text-align:right;font-size:.95rem;">' + totalPrevu.toLocaleString('fr-FR') + ' &euro;</td><td style="text-align:right;font-size:.95rem;">' + totalReel.toLocaleString('fr-FR') + ' &euro;</td><td class="' + (totalReel > totalPrevu ? 'diff-negative' : 'diff-positive') + '" style="text-align:right;font-size:.95rem;">' + ((totalReel - totalPrevu >= 0 ? '+' : '') + (totalReel - totalPrevu).toLocaleString('fr-FR')) + ' &euro;</td><td style="text-align:right;font-size:.95rem;">' + pctUsed + '%</td></tr>';
+
+  document.getElementById('budget-body').innerHTML = bodyHtml;
+
+  // Revenue
+  var ins = CONGRES.loadInscriptions();
+  var revByPass = {};
+  var totalRevenue = 0;
+  ins.forEach(function(i) {
+    var p = CONGRES.getPass(i.pass);
+    if (p) {
+      revByPass[i.pass] = (revByPass[i.pass] || 0) + p.prix;
+      totalRevenue += p.prix;
+    }
+  });
+
+  var passNames = { standard: 'Standard', bronze: 'VIP Bronze', gold: 'VIP Gold', platinum: 'VIP Platinum', staff: 'Staff' };
+  var revHtml = '';
+  Object.keys(passNames).forEach(function(key) {
+    var count = stats.byPass[key] || 0;
+    var rev = revByPass[key] || 0;
+    revHtml += '<div class="revenue-card"><div class="rev-val">' + rev.toLocaleString('fr-FR') + ' &euro;</div><div class="rev-label">' + passNames[key] + ' (' + count + ' inscrits)</div></div>';
+  });
+  revHtml += '<div class="revenue-card" style="border:1px solid var(--green);border-radius:8px;"><div class="rev-val" style="font-size:1.8rem;">' + totalRevenue.toLocaleString('fr-FR') + ' &euro;</div><div class="rev-label">Total revenus inscriptions</div></div>';
+  document.getElementById('revenue-grid').innerHTML = revHtml;
+
+  // Profit/Loss
+  var profit = totalRevenue - totalReel;
+  var profitClass = profit >= 0 ? 'positive' : 'negative';
+  document.getElementById('profit-box').innerHTML =
+    '<div class="profit-val ' + profitClass + '">' + (profit >= 0 ? '+' : '') + profit.toLocaleString('fr-FR') + ' &euro;</div>' +
+    '<div class="profit-label">' + (profit >= 0 ? 'Benefice en temps reel' : 'Perte en temps reel') + '</div>';
+}
+
+function updateBudget(id, value) {
+  var state = loadBudgetState();
+  state[id] = value;
+  saveBudgetState(state);
+  render();
+}
+
+function exportBudgetPDF() {
+  var w = window.open('', '_blank');
+  w.document.write('<html><head><title>Budget — Congres Saucisse 2026</title><style>body{font-family:-apple-system,sans-serif;padding:40px;color:#111;}table{width:100%;border-collapse:collapse;margin:20px 0;}th,td{padding:8px 12px;border:1px solid #DDD;text-align:left;font-size:.85rem;}th{background:#F5F5F5;font-weight:700;}h1{font-size:1.3rem;}@media print{body{padding:20px;}}</style></head><body>');
+  w.document.write('<h1>Congres de la Saucisse 2026 — Budget</h1>');
+  w.document.write('<p>Date : ' + new Date().toLocaleDateString('fr-FR') + '</p>');
+  w.document.write(document.querySelector('.admin-content').innerHTML);
+  w.document.write('<script>setTimeout(function(){window.print();},300);<\/script></body></html>');
+}
+</script>
+</body>
+</html>

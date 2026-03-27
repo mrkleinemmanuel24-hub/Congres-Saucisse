@@ -30,6 +30,12 @@
     <a href="salles.html"><img src="../img/icons/icon-salles.png" alt="" style="width:20px;height:20px;border-radius:4px;object-fit:contain;vertical-align:middle" title="Salles"> Salles</a>
     <a href="checkin.html"><img src="../img/icons/icon-checkin.png" alt="" style="width:20px;height:20px;border-radius:4px;object-fit:contain;vertical-align:middle" title="Check-in"> Check-in</a>
     <a href="emails.html"><img src="../img/icons/icon-emails.png" alt="" style="width:20px;height:20px;border-radius:4px;object-fit:contain;vertical-align:middle" title="Emails"> Emails</a>
+    <a href="checklist.html"><img src="../img/icons/icon-checkin.png" alt="" style="width:20px;height:20px;border-radius:4px;object-fit:contain;vertical-align:middle" title="Checklist"> Checklist</a>
+    <a href="speakers.html"><img src="../img/icons/icon-participants.png" alt="" style="width:20px;height:20px;border-radius:4px;object-fit:contain;vertical-align:middle" title="Speakers"> Speakers</a>
+    <a href="staff.html"><img src="../img/icons/icon-participants.png" alt="" style="width:20px;height:20px;border-radius:4px;object-fit:contain;vertical-align:middle" title="Staff"> Staff</a>
+    <a href="securite.html"><img src="../img/icons/icon-salles.png" alt="" style="width:20px;height:20px;border-radius:4px;object-fit:contain;vertical-align:middle" title="Securite"> Securite</a>
+    <a href="budget.html"><img src="../img/icons/icon-traiteur.png" alt="" style="width:20px;height:20px;border-radius:4px;object-fit:contain;vertical-align:middle" title="Budget"> Budget</a>
+    <a href="post-event.html"><img src="../img/icons/icon-emails.png" alt="" style="width:20px;height:20px;border-radius:4px;object-fit:contain;vertical-align:middle" title="Post-event"> Post-event</a>
   </nav>
   <button class="admin-logout" onclick="logout()">Deconnexion</button>
 </header>
@@ -62,6 +68,10 @@
       <div id="alerts"></div>
     </div>
   </div>
+
+  <!-- NEW MODULE CARDS -->
+  <h2 style="font-size:1rem;color:var(--gold);margin:24px 0 16px;">Modules de gestion</h2>
+  <div class="stats-grid" id="module-cards"></div>
 
   <!-- RECENT INSCRIPTIONS -->
   <div class="chart-card" style="margin-top:20px;">
@@ -174,6 +184,48 @@ function renderDashboard() {
   });
   if (!alertsHtml) alertsHtml = '<p style="color:var(--text-muted);font-size:.85rem;">Aucune alerte pour le moment.</p>';
   document.getElementById('alerts').innerHTML = alertsHtml;
+
+  // Module cards
+  var staffState = {};
+  try { staffState = JSON.parse(localStorage.getItem('congres_staff_state') || '{}'); } catch(e) {}
+  var staffCurrent = staffState.currentStaff || 0;
+  var staffNeeded = Math.ceil(stats.total / 50);
+
+  var budgetState = {};
+  try { budgetState = JSON.parse(localStorage.getItem('congres_budget_state') || '{}'); } catch(e) {}
+
+  var checklistState = {};
+  try { checklistState = JSON.parse(localStorage.getItem('congres_checklist') || '{}'); } catch(e) {}
+  var clTotal = 66, clDone = 0;
+  Object.keys(checklistState).forEach(function(k) { if (checklistState[k] && checklistState[k].checked) clDone++; });
+  var clPct = clTotal > 0 ? Math.round((clDone / clTotal) * 100) : 0;
+
+  var speakerState = {};
+  try { speakerState = JSON.parse(localStorage.getItem('congres_speakers_state') || '{}'); } catch(e) {}
+  var spkConfirmed = 0, spkPending = 0;
+  CONGRES.SPEAKERS.forEach(function(s) {
+    var st = speakerState[s.id] || {};
+    if (st.status === 'confirmed' || (!st.status)) spkConfirmed++;
+    else if (st.status === 'pending') spkPending++;
+  });
+
+  var secState = {};
+  try { secState = JSON.parse(localStorage.getItem('congres_securite_state') || '{}'); } catch(e) {}
+  var secChecks = [secState.evacPlan, secState.daeLocated, secState.secouristePresent, secState.kitReady, secState.rampesOk, secState.ascenseursOk, secState.toilettesOk, secState.portes80cm, secState.salleCalme, secState.lsfDispo, secState.droitsImage, secState.autoMunicipale, secState.autoSonore, secState.assuranceRC];
+  var secDone = secChecks.filter(Boolean).length;
+  var secColor = secDone >= 11 ? 'var(--green)' : secDone >= 7 ? 'var(--orange)' : 'var(--red)';
+
+  var postState = {};
+  try { postState = JSON.parse(localStorage.getItem('congres_post_event') || '{}'); } catch(e) {}
+
+  var moduleHtml = '';
+  moduleHtml += '<div class="stat-card" onclick="location.href=\'staff.html\'" style="cursor:pointer;"><div class="stat-value" style="color:' + (staffCurrent >= staffNeeded ? 'var(--green)' : 'var(--red)') + ';">' + staffCurrent + '/' + staffNeeded + '</div><div class="stat-label">Staff (actuel/besoin)</div></div>';
+  moduleHtml += '<div class="stat-card" onclick="location.href=\'budget.html\'" style="cursor:pointer;"><div class="stat-value">Budget</div><div class="stat-label">Prevu vs Reel</div></div>';
+  moduleHtml += '<div class="stat-card" onclick="location.href=\'checklist.html\'" style="cursor:pointer;"><div class="stat-value">' + clPct + '%</div><div class="stat-label">Checklist (' + clDone + '/' + clTotal + ')</div></div>';
+  moduleHtml += '<div class="stat-card" onclick="location.href=\'speakers.html\'" style="cursor:pointer;"><div class="stat-value" style="color:var(--green);">' + spkConfirmed + '</div><div class="stat-label">Speakers confirmes</div></div>';
+  moduleHtml += '<div class="stat-card" onclick="location.href=\'securite.html\'" style="cursor:pointer;"><div class="stat-value" style="color:' + secColor + ';">' + secDone + '/14</div><div class="stat-label">Securite</div></div>';
+  moduleHtml += '<div class="stat-card" onclick="location.href=\'post-event.html\'" style="cursor:pointer;"><div class="stat-value">' + (postState.surveySent ? 'Oui' : 'Non') + '</div><div class="stat-label">Sondage envoye</div></div>';
+  document.getElementById('module-cards').innerHTML = moduleHtml;
 
   // Recent inscriptions
   var recent = ins.slice(-5).reverse();

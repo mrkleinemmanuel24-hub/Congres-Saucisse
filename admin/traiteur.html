@@ -35,6 +35,12 @@
     <a href="salles.html"><img src="../img/icons/icon-salles.png" alt="" style="width:20px;height:20px;border-radius:4px;object-fit:contain;vertical-align:middle" title="Salles"> Salles</a>
     <a href="checkin.html"><img src="../img/icons/icon-checkin.png" alt="" style="width:20px;height:20px;border-radius:4px;object-fit:contain;vertical-align:middle" title="Check-in"> Check-in</a>
     <a href="emails.html"><img src="../img/icons/icon-emails.png" alt="" style="width:20px;height:20px;border-radius:4px;object-fit:contain;vertical-align:middle" title="Emails"> Emails</a>
+    <a href="checklist.html"><img src="../img/icons/icon-checkin.png" alt="" style="width:20px;height:20px;border-radius:4px;object-fit:contain;vertical-align:middle" title="Checklist"> Checklist</a>
+    <a href="speakers.html"><img src="../img/icons/icon-participants.png" alt="" style="width:20px;height:20px;border-radius:4px;object-fit:contain;vertical-align:middle" title="Speakers"> Speakers</a>
+    <a href="staff.html"><img src="../img/icons/icon-participants.png" alt="" style="width:20px;height:20px;border-radius:4px;object-fit:contain;vertical-align:middle" title="Staff"> Staff</a>
+    <a href="securite.html"><img src="../img/icons/icon-salles.png" alt="" style="width:20px;height:20px;border-radius:4px;object-fit:contain;vertical-align:middle" title="Securite"> Securite</a>
+    <a href="budget.html"><img src="../img/icons/icon-traiteur.png" alt="" style="width:20px;height:20px;border-radius:4px;object-fit:contain;vertical-align:middle" title="Budget"> Budget</a>
+    <a href="post-event.html"><img src="../img/icons/icon-emails.png" alt="" style="width:20px;height:20px;border-radius:4px;object-fit:contain;vertical-align:middle" title="Post-event"> Post-event</a>
   </nav>
   <button class="admin-logout" onclick="logout()">Deconnexion</button>
 </header>
@@ -68,7 +74,25 @@
     </div>
   </div>
 
-  <!-- COST SUMMARY -->
+  <!-- STAFF MEALS -->
+  <div class="chart-card" style="margin-top:20px;">
+    <h3>Repas staff (comptes separement)</h3>
+    <div id="staff-meals"></div>
+  </div>
+
+  <!-- ALLERGENES (Big 8) -->
+  <div class="chart-card" style="margin-top:20px;">
+    <h3>Detail par allergene (Big 8)</h3>
+    <div id="allergene-detail"></div>
+  </div>
+
+  <!-- PAUSES CAFE -->
+  <div class="chart-card" style="margin-top:20px;">
+    <h3>Pauses cafe et boissons</h3>
+    <div id="pauses-detail"></div>
+  </div>
+
+  <!-- COST SUMMARY (with +15% margin) -->
   <div class="cost-summary" id="cost-summary"></div>
 
   <!-- EXPORT -->
@@ -148,7 +172,54 @@ function render() {
   });
   document.getElementById('regime-body').innerHTML = regimeHtml;
 
-  // Cost summary
+  // Staff meals
+  var staffState = {};
+  try { staffState = JSON.parse(localStorage.getItem('congres_staff_state') || '{}'); } catch(e) {}
+  var staffCount = staffState.currentStaff || 0;
+  var staffRepasTotal = staffCount * 3;
+  document.getElementById('staff-meals').innerHTML =
+    '<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;text-align:center;">' +
+    '<div><div style="font-size:1.5rem;font-weight:900;color:var(--gold);">' + staffCount + '</div><div style="font-size:.78rem;color:var(--text-dim);">Staff</div></div>' +
+    '<div><div style="font-size:1.5rem;font-weight:900;color:var(--gold);">' + staffRepasTotal + '</div><div style="font-size:.78rem;color:var(--text-dim);">Repas staff (3j)</div></div>' +
+    '<div><div style="font-size:1.5rem;font-weight:900;color:var(--gold);">' + (staffRepasTotal * 15) + ' &euro;</div><div style="font-size:.78rem;color:var(--text-dim);">Cout staff</div></div>' +
+    '</div>';
+
+  // Allergenes Big 8
+  var allergeneData = [
+    { nom: 'Gluten (ble, seigle, orge)', count: regimes['gluten'] || 0 },
+    { nom: 'Crustaces', count: Math.round(ins.length * 0.02) },
+    { nom: 'Oeufs', count: Math.round(ins.length * 0.03) },
+    { nom: 'Poisson', count: Math.round(ins.length * 0.02) },
+    { nom: 'Arachides', count: Math.round(ins.length * 0.04) },
+    { nom: 'Soja', count: Math.round(ins.length * 0.02) },
+    { nom: 'Lait / Lactose', count: Math.round(ins.length * 0.05) },
+    { nom: 'Fruits a coque (noix)', count: Math.round(ins.length * 0.03) }
+  ];
+  var allerHtml = '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:8px;">';
+  allergeneData.forEach(function(a) {
+    allerHtml += '<div style="padding:10px;background:rgba(255,255,255,.02);border-radius:8px;display:flex;justify-content:space-between;align-items:center;"><span style="font-size:.78rem;color:var(--text-dim);">' + a.nom + '</span><span style="font-weight:700;color:' + (a.count > 0 ? 'var(--orange)' : 'var(--green)') + ';">' + a.count + '</span></div>';
+  });
+  allerHtml += '</div>';
+  document.getElementById('allergene-detail').innerHTML = allerHtml;
+
+  // Pauses cafe & boissons
+  var pausesMatin = 3; // 3 jours
+  var pausesAprem = 3;
+  var totalPauses = pausesMatin + pausesAprem;
+  var totalParticipants = ins.length;
+  var eauParPause = 0.5; // 0.5L par personne par pause
+  var totalEau = totalParticipants * totalPauses * eauParPause;
+
+  document.getElementById('pauses-detail').innerHTML =
+    '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px;text-align:center;">' +
+    '<div style="padding:12px;background:rgba(255,255,255,.02);border-radius:8px;"><div style="font-size:1.3rem;font-weight:900;color:var(--gold);">' + totalPauses + '</div><div style="font-size:.72rem;color:var(--text-dim);">Pauses cafe total</div></div>' +
+    '<div style="padding:12px;background:rgba(255,255,255,.02);border-radius:8px;"><div style="font-size:1.3rem;font-weight:900;color:var(--gold);">' + pausesMatin + '</div><div style="font-size:.72rem;color:var(--text-dim);">Pauses matin (x3j)</div></div>' +
+    '<div style="padding:12px;background:rgba(255,255,255,.02);border-radius:8px;"><div style="font-size:1.3rem;font-weight:900;color:var(--gold);">' + pausesAprem + '</div><div style="font-size:.72rem;color:var(--text-dim);">Pauses aprem (x3j)</div></div>' +
+    '<div style="padding:12px;background:rgba(255,255,255,.02);border-radius:8px;"><div style="font-size:1.3rem;font-weight:900;color:var(--gold);">' + totalEau.toFixed(0) + 'L</div><div style="font-size:.72rem;color:var(--text-dim);">Eau estimee (0.5L/pers/pause)</div></div>' +
+    '<div style="padding:12px;background:rgba(255,255,255,.02);border-radius:8px;"><div style="font-size:1.3rem;font-weight:900;color:var(--gold);">' + (totalParticipants * totalPauses) + '</div><div style="font-size:.72rem;color:var(--text-dim);">Cafes/boissons total</div></div>' +
+    '</div>';
+
+  // Cost summary with +15% margin
   var prixRepas = 15;
   var prixPetitDej = 8;
   var prixPauseCafe = 3;
@@ -156,20 +227,24 @@ function render() {
   var prixGala = 65;
 
   var costItems = [
-    { label: 'Dejeuners (' + total + ' repas x ' + prixRepas + ' euros)', cost: total * prixRepas },
+    { label: 'Dejeuners participants (' + total + ' repas x ' + prixRepas + ' euros)', cost: total * prixRepas },
     { label: 'Petits-dejeuners (x ' + prixPetitDej + ' euros)', cost: Math.round(total * 0.8) * prixPetitDej },
     { label: 'Pauses cafe (x ' + prixPauseCafe + ' euros)', cost: total * 2 * prixPauseCafe },
     { label: 'Cocktail J1 (' + Math.round(dayTotals[0] * 0.4) + ' pers x ' + prixCocktail + ' euros)', cost: Math.round(dayTotals[0] * 0.4) * prixCocktail },
-    { label: 'Diner de gala J2 (' + Math.round(dayTotals[1] * 0.3) + ' pers x ' + prixGala + ' euros)', cost: Math.round(dayTotals[1] * 0.3) * prixGala }
+    { label: 'Diner de gala J2 (' + Math.round(dayTotals[1] * 0.3) + ' pers x ' + prixGala + ' euros)', cost: Math.round(dayTotals[1] * 0.3) * prixGala },
+    { label: 'Repas staff (' + staffRepasTotal + ' repas x ' + prixRepas + ' euros)', cost: staffRepasTotal * prixRepas }
   ];
 
-  var totalCost = 0;
+  var subtotal = 0;
   var costHtml = '<h3>Estimation des couts</h3>';
   costItems.forEach(function(c) {
-    totalCost += c.cost;
+    subtotal += c.cost;
     costHtml += '<div class="cost-row"><span>' + c.label + '</span><span style="font-weight:700;">' + c.cost.toLocaleString('fr-FR') + ' &euro;</span></div>';
   });
-  costHtml += '<div class="cost-total">Total estime : ' + totalCost.toLocaleString('fr-FR') + ' &euro;</div>';
+  var marge = Math.round(subtotal * 0.15);
+  var totalCost = subtotal + marge;
+  costHtml += '<div class="cost-row" style="color:var(--orange);"><span>Marge traiteur (+15% automatique)</span><span style="font-weight:700;">+ ' + marge.toLocaleString('fr-FR') + ' &euro;</span></div>';
+  costHtml += '<div class="cost-total">Total estime TTC : ' + totalCost.toLocaleString('fr-FR') + ' &euro;</div>';
   document.getElementById('cost-summary').innerHTML = costHtml;
 }
 

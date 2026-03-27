@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Speakers — Back Office</title>
+  <link rel="stylesheet" href="../css/admin.css">
+  <style>
+    .speaker-stats { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 12px; margin-bottom: 24px; }
+    .speaker-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; transition: all .2s; }
+    .speaker-card:hover { border-color: var(--gold); }
+    .speaker-header { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+    .speaker-avatar { width: 48px; height: 48px; border-radius: 50%; background: var(--gold-dim); display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: .9rem; color: var(--gold); }
+    .speaker-name { font-weight: 700; font-size: .9rem; }
+    .speaker-title { font-size: .75rem; color: var(--text-dim); }
+    .speaker-meta { font-size: .78rem; color: var(--text-dim); margin-bottom: 8px; }
+    .speaker-meta strong { color: var(--text); }
+    .speaker-sessions { margin: 10px 0; }
+    .speaker-session-item { font-size: .75rem; padding: 4px 8px; background: rgba(201,168,76,.05); border-radius: 6px; margin-bottom: 4px; color: var(--text-dim); }
+    .speaker-actions { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 12px; }
+    .speaker-actions button { padding: 5px 10px; border-radius: 6px; font-size: .7rem; font-weight: 600; border: none; cursor: pointer; transition: all .2s; }
+    .btn-confirm { background: rgba(34,197,94,.15); color: var(--green); }
+    .btn-relance { background: rgba(245,158,11,.15); color: var(--orange); }
+    .btn-slides { background: rgba(201,168,76,.15); color: var(--gold); }
+    .speaker-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(380px, 1fr)); gap: 16px; }
+    .comms-log { margin-top: 10px; max-height: 120px; overflow-y: auto; }
+    .comm-entry { font-size: .7rem; padding: 3px 0; border-bottom: 1px solid rgba(201,168,76,.05); color: var(--text-muted); }
+    .backup-field { margin-top: 8px; }
+    .backup-field input { background: rgba(255,255,255,.04); border: 1px solid var(--border); border-radius: 6px; padding: 4px 8px; color: var(--text); font-size: .75rem; width: 100%; }
+    .backup-field label { font-size: .7rem; color: var(--gold); }
+    .timer-bar { display: flex; align-items: center; gap: 8px; margin-top: 6px; }
+    .timer-bar .timer-track { flex: 1; height: 6px; background: rgba(255,255,255,.06); border-radius: 3px; overflow: hidden; }
+    .timer-bar .timer-fill { height: 100%; border-radius: 3px; }
+    .timer-bar .timer-label { font-size: .7rem; color: var(--text-dim); min-width: 60px; }
+    .filter-bar { display: flex; gap: 8px; margin-bottom: 20px; flex-wrap: wrap; }
+    .filter-bar select, .filter-bar input { padding: 8px 12px; border-radius: 8px; border: 1px solid var(--border); background: var(--bg-card); color: var(--text); font-size: .82rem; }
+    .contract-status { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 4px; }
+  </style>
+</head>
+<body>
+
+<div class="login-overlay" id="login-overlay">
+  <div class="login-box"><h1><img src="../img/icons/icon-saucisse.png" alt="Saucisse" style="width:48px;height:48px;border-radius:12px;object-fit:contain;vertical-align:middle" title="Back Office"> Back Office</h1><p>Entrez le mot de passe</p><input type="password" id="login-pwd" placeholder="Mot de passe" onkeydown="if(event.key==='Enter')doLogin()"><button onclick="doLogin()">Connexion</button><div class="login-error" id="login-error">Mot de passe incorrect</div></div>
+</div>
+
+<header class="admin-header" id="admin-app" style="display:none;">
+  <div class="admin-brand"><img src="../img/icons/icon-saucisse.png" alt="Saucisse" style="width:28px;height:28px;border-radius:6px;object-fit:contain;vertical-align:middle" title="Back Office"> Back Office</div>
+  <nav class="admin-nav">
+    <a href="index.html"><img src="../img/icons/icon-dashboard.png" alt="" style="width:20px;height:20px;border-radius:4px;object-fit:contain;vertical-align:middle" title="Dashboard"> Dashboard</a>
+    <a href="participants.html"><img src="../img/icons/icon-participants.png" alt="" style="width:20px;height:20px;border-radius:4px;object-fit:contain;vertical-align:middle" title="Participants"> Participants</a>
+    <a href="invitations.html"><img src="../img/icons/icon-invitations.png" alt="" style="width:20px;height:20px;border-radius:4px;object-fit:contain;vertical-align:middle" title="Invitations"> Invitations</a>
+    <a href="traiteur.html"><img src="../img/icons/icon-traiteur.png" alt="" style="width:20px;height:20px;border-radius:4px;object-fit:contain;vertical-align:middle" title="Traiteur"> Traiteur</a>
+    <a href="salles.html"><img src="../img/icons/icon-salles.png" alt="" style="width:20px;height:20px;border-radius:4px;object-fit:contain;vertical-align:middle" title="Salles"> Salles</a>
+    <a href="checkin.html"><img src="../img/icons/icon-checkin.png" alt="" style="width:20px;height:20px;border-radius:4px;object-fit:contain;vertical-align:middle" title="Check-in"> Check-in</a>
+    <a href="emails.html"><img src="../img/icons/icon-emails.png" alt="" style="width:20px;height:20px;border-radius:4px;object-fit:contain;vertical-align:middle" title="Emails"> Emails</a>
+    <a href="checklist.html"><img src="../img/icons/icon-checkin.png" alt="" style="width:20px;height:20px;border-radius:4px;object-fit:contain;vertical-align:middle" title="Checklist"> Checklist</a>
+    <a href="speakers.html" class="active"><img src="../img/icons/icon-participants.png" alt="" style="width:20px;height:20px;border-radius:4px;object-fit:contain;vertical-align:middle" title="Speakers"> Speakers</a>
+    <a href="staff.html"><img src="../img/icons/icon-participants.png" alt="" style="width:20px;height:20px;border-radius:4px;object-fit:contain;vertical-align:middle" title="Staff"> Staff</a>
+    <a href="securite.html"><img src="../img/icons/icon-salles.png" alt="" style="width:20px;height:20px;border-radius:4px;object-fit:contain;vertical-align:middle" title="Securite"> Securite</a>
+    <a href="budget.html"><img src="../img/icons/icon-traiteur.png" alt="" style="width:20px;height:20px;border-radius:4px;object-fit:contain;vertical-align:middle" title="Budget"> Budget</a>
+    <a href="post-event.html"><img src="../img/icons/icon-emails.png" alt="" style="width:20px;height:20px;border-radius:4px;object-fit:contain;vertical-align:middle" title="Post-event"> Post-event</a>
+  </nav>
+  <button class="admin-logout" onclick="logout()">Deconnexion</button>
+</header>
+
+<div class="admin-content" id="admin-content" style="display:none;">
+  <h1 class="admin-title"><img src="../img/icons/icon-participants.png" alt="Speakers" style="width:48px;height:48px;border-radius:12px;object-fit:contain;vertical-align:middle" title="Gestion intervenants"> Gestion des intervenants</h1>
+
+  <!-- STATS -->
+  <div class="speaker-stats" id="speaker-stats"></div>
+
+  <!-- FILTERS -->
+  <div class="filter-bar">
+    <input type="text" id="spk-search" placeholder="Rechercher un speaker..." oninput="render()">
+    <select id="spk-filter-status" onchange="render()">
+      <option value="">Tous statuts</option>
+      <option value="confirmed">Confirme</option>
+      <option value="pending">En attente</option>
+      <option value="cancelled">Annule</option>
+    </select>
+    <select id="spk-filter-slides" onchange="render()">
+      <option value="">Slides : tous</option>
+      <option value="received">Recues</option>
+      <option value="pending">En attente</option>
+      <option value="overdue">En retard</option>
+    </select>
+  </div>
+
+  <!-- SPEAKER GRID -->
+  <div class="speaker-grid" id="speaker-grid"></div>
+</div>
+
+<script src="../js/data.js"></script>
+<script>
+var ADMIN_PWD='SAUCISSE2026';
+function doLogin(){if(document.getElementById('login-pwd').value===ADMIN_PWD){sessionStorage.setItem('congres_admin','1');showAdmin();}else{document.getElementById('login-error').style.display='block';}}
+function logout(){sessionStorage.removeItem('congres_admin');location.reload();}
+function showAdmin(){document.getElementById('login-overlay').style.display='none';document.getElementById('admin-app').style.display='flex';document.getElementById('admin-content').style.display='block';render();}
+if(sessionStorage.getItem('congres_admin'))showAdmin();
+
+var SPK_STORAGE = 'congres_speakers_state';
+
+function loadSpeakerState() {
+  try { return JSON.parse(localStorage.getItem(SPK_STORAGE) || '{}'); } catch(e) { return {}; }
+}
+function saveSpeakerState(s) { localStorage.setItem(SPK_STORAGE, JSON.stringify(s)); }
+
+// Demo speaker states
+function getDefaultState(id) {
+  var defaults = {
+    1: { status: 'confirmed', slides: 'received', contract: true, comms: ['2026-02-01 : Invitation envoyee', '2026-02-05 : Confirmation recue', '2026-05-20 : Slides recues'] },
+    2: { status: 'confirmed', slides: 'received', contract: true, comms: ['2026-02-01 : Invitation envoyee', '2026-02-03 : Confirmation recue'] },
+    3: { status: 'confirmed', slides: 'pending', contract: true, comms: ['2026-02-01 : Invitation envoyee', '2026-02-10 : Confirmation recue'] },
+    4: { status: 'confirmed', slides: 'received', contract: true, comms: ['2026-02-01 : Invitation envoyee', '2026-02-08 : Confirmation recue'] },
+    5: { status: 'confirmed', slides: 'pending', contract: true, comms: ['2026-02-01 : Invitation envoyee', '2026-02-12 : Confirmation recue'] },
+    6: { status: 'cancelled', slides: 'pending', contract: false, comms: ['2026-02-01 : Invitation envoyee', '2026-03-15 : Annulation recue — probleme de sante'] },
+    7: { status: 'confirmed', slides: 'received', contract: true, comms: ['2026-02-01 : Invitation envoyee', '2026-02-04 : Confirmation recue'] },
+    8: { status: 'confirmed', slides: 'received', contract: true, comms: ['2026-02-01 : Invitation envoyee', '2026-02-06 : Confirmation recue'] },
+    9: { status: 'confirmed', slides: 'overdue', contract: true, comms: ['2026-02-01 : Invitation envoyee', '2026-02-20 : Confirmation recue', '2026-05-30 : Relance slides envoyee'] },
+    10: { status: 'confirmed', slides: 'received', contract: true, comms: ['2026-01-15 : Invitation envoyee', '2026-01-16 : Confirmation recue'] },
+    11: { status: 'confirmed', slides: 'received', contract: true, comms: ['2026-02-01 : Invitation envoyee', '2026-02-07 : Confirmation recue'] },
+    12: { status: 'confirmed', slides: 'pending', contract: true, comms: ['2026-02-01 : Invitation envoyee', '2026-02-14 : Confirmation recue'] },
+    13: { status: 'confirmed', slides: 'received', contract: true, comms: ['2026-02-01 : Invitation envoyee', '2026-02-09 : Confirmation recue'] },
+    14: { status: 'confirmed', slides: 'received', contract: true, comms: ['2026-02-01 : Invitation envoyee', '2026-02-11 : Confirmation recue'] },
+    15: { status: 'confirmed', slides: 'pending', contract: false, comms: ['2026-02-01 : Invitation envoyee', '2026-02-18 : Confirmation recue', '2026-03-01 : Contrat envoye'] },
+    16: { status: 'confirmed', slides: 'overdue', contract: true, comms: ['2026-02-01 : Invitation envoyee', '2026-02-22 : Confirmation recue'] },
+    17: { status: 'confirmed', slides: 'received', contract: true, comms: ['2026-02-01 : Invitation envoyee', '2026-02-05 : Confirmation recue'] },
+    18: { status: 'pending', slides: 'pending', contract: false, comms: ['2026-02-01 : Invitation envoyee', '2026-03-01 : Relance envoyee', '2026-03-15 : Reponse : en attente validation'] },
+    19: { status: 'confirmed', slides: 'received', contract: true, comms: ['2026-02-01 : Invitation envoyee', '2026-02-06 : Confirmation recue'] },
+    20: { status: 'confirmed', slides: 'received', contract: true, comms: ['2026-02-01 : Invitation envoyee', '2026-02-04 : Confirmation recue'] },
+    21: { status: 'confirmed', slides: 'received', contract: true, comms: ['2026-01-15 : Invitation envoyee', '2026-01-17 : Confirmation recue'] },
+    22: { status: 'confirmed', slides: 'pending', contract: true, comms: ['2026-02-01 : Invitation envoyee', '2026-02-13 : Confirmation recue'] }
+  };
+  return defaults[id] || { status: 'pending', slides: 'pending', contract: false, comms: [] };
+}
+
+function render() {
+  var state = loadSpeakerState();
+  var search = document.getElementById('spk-search').value.toLowerCase();
+  var filterStatus = document.getElementById('spk-filter-status').value;
+  var filterSlides = document.getElementById('spk-filter-slides').value;
+
+  var speakers = CONGRES.SPEAKERS;
+  var confirmed = 0, pending = 0, cancelled = 0, slidesOk = 0, slidesOverdue = 0, contractsSigned = 0;
+
+  speakers.forEach(function(spk) {
+    var s = state[spk.id] || getDefaultState(spk.id);
+    if (s.status === 'confirmed') confirmed++;
+    else if (s.status === 'pending') pending++;
+    else if (s.status === 'cancelled') cancelled++;
+    if (s.slides === 'received') slidesOk++;
+    if (s.slides === 'overdue') slidesOverdue++;
+    if (s.contract) contractsSigned++;
+  });
+
+  // Stats
+  document.getElementById('speaker-stats').innerHTML =
+    '<div class="stat-card"><div class="stat-value">' + speakers.length + '</div><div class="stat-label">Total speakers</div></div>' +
+    '<div class="stat-card"><div class="stat-value" style="color:var(--green);">' + confirmed + '</div><div class="stat-label">Confirmes</div></div>' +
+    '<div class="stat-card"><div class="stat-value" style="color:var(--orange);">' + pending + '</div><div class="stat-label">En attente</div></div>' +
+    '<div class="stat-card"><div class="stat-value" style="color:var(--red);">' + cancelled + '</div><div class="stat-label">Annules</div></div>' +
+    '<div class="stat-card"><div class="stat-value">' + slidesOk + '/' + speakers.length + '</div><div class="stat-label">Slides recues</div></div>' +
+    '<div class="stat-card"><div class="stat-value" style="color:var(--red);">' + slidesOverdue + '</div><div class="stat-label">Slides en retard</div></div>' +
+    '<div class="stat-card"><div class="stat-value">' + contractsSigned + '/' + speakers.length + '</div><div class="stat-label">Contrats signes</div></div>';
+
+  // Speaker cards
+  var html = '';
+  speakers.forEach(function(spk) {
+    var s = state[spk.id] || getDefaultState(spk.id);
+
+    // Filters
+    if (search && (spk.nom + ' ' + spk.prenom + ' ' + spk.org).toLowerCase().indexOf(search) === -1) return;
+    if (filterStatus && s.status !== filterStatus) return;
+    if (filterSlides && s.slides !== filterSlides) return;
+
+    var sessions = CONGRES.getSessionsBySpeaker(spk.id);
+    var statusColor = s.status === 'confirmed' ? 'var(--green)' : s.status === 'pending' ? 'var(--orange)' : 'var(--red)';
+    var statusLabel = s.status === 'confirmed' ? 'Confirme' : s.status === 'pending' ? 'En attente' : 'Annule';
+    var slidesColor = s.slides === 'received' ? 'var(--green)' : s.slides === 'overdue' ? 'var(--red)' : 'var(--orange)';
+    var slidesLabel = s.slides === 'received' ? 'Recues' : s.slides === 'overdue' ? 'En retard' : 'En attente';
+
+    html += '<div class="speaker-card">';
+    html += '<div class="speaker-header"><div class="speaker-avatar">' + spk.initiales + '</div><div><div class="speaker-name">' + spk.prenom + ' ' + spk.nom + '</div><div class="speaker-title">' + spk.titre + '</div></div></div>';
+    html += '<div class="speaker-meta"><strong>Org :</strong> ' + spk.org + '</div>';
+    html += '<div class="speaker-meta"><strong>Theme :</strong> ' + spk.theme + '</div>';
+    html += '<div class="speaker-meta"><strong>Statut :</strong> <span style="color:' + statusColor + ';font-weight:700;">' + statusLabel + '</span></div>';
+    html += '<div class="speaker-meta"><strong>Slides :</strong> <span style="color:' + slidesColor + ';">' + slidesLabel + '</span> | <strong>Contrat :</strong> <span class="contract-status" style="background:' + (s.contract ? 'var(--green)' : 'var(--red)') + ';"></span>' + (s.contract ? 'Signe' : 'Non signe') + '</div>';
+
+    // Sessions
+    html += '<div class="speaker-sessions">';
+    sessions.forEach(function(sess) {
+      var totalMin = 0;
+      if (sess.debut && sess.fin) {
+        var d = sess.debut.split(':'), f = sess.fin.split(':');
+        totalMin = (parseInt(f[0])*60 + parseInt(f[1])) - (parseInt(d[0])*60 + parseInt(d[1]));
+      }
+      html += '<div class="speaker-session-item">J' + sess.jour + ' ' + sess.debut + '-' + sess.fin + ' : ' + sess.titre + '</div>';
+      html += '<div class="timer-bar"><div class="timer-track"><div class="timer-fill" style="width:100%;background:var(--gold);"></div></div><div class="timer-label">' + totalMin + ' min</div></div>';
+    });
+    html += '</div>';
+
+    // Backup speaker
+    var backupVal = s.backup || '';
+    html += '<div class="backup-field"><label>Speaker backup :</label><input type="text" value="' + backupVal + '" placeholder="Nom du backup" onchange="updateSpeaker(' + spk.id + ', \'backup\', this.value)"></div>';
+
+    // Actions
+    html += '<div class="speaker-actions">';
+    if (s.status !== 'confirmed') {
+      html += '<button class="btn-confirm" onclick="setSpeakerStatus(' + spk.id + ', \'confirmed\')">Confirmer</button>';
+    }
+    html += '<button class="btn-relance" onclick="addComm(' + spk.id + ', \'Relance J-7 envoyee\')">Relance J-7</button>';
+    html += '<button class="btn-relance" onclick="addComm(' + spk.id + ', \'Relance J-1 envoyee\')">Relance J-1</button>';
+    html += '<button class="btn-relance" onclick="addComm(' + spk.id + ', \'Relance matin Jour J envoyee\')">Relance matin</button>';
+    if (s.slides !== 'received') {
+      html += '<button class="btn-slides" onclick="setSpeakerSlides(' + spk.id + ', \'received\')">Slides recues</button>';
+    }
+    if (!s.contract) {
+      html += '<button class="btn-confirm" onclick="updateSpeaker(' + spk.id + ', \'contract\', true)">Contrat signe</button>';
+    }
+    html += '</div>';
+
+    // Comms log
+    var comms = s.comms || [];
+    if (comms.length > 0) {
+      html += '<div class="comms-log">';
+      comms.slice().reverse().forEach(function(c) {
+        html += '<div class="comm-entry">' + c + '</div>';
+      });
+      html += '</div>';
+    }
+
+    html += '</div>';
+  });
+
+  document.getElementById('speaker-grid').innerHTML = html;
+}
+
+function setSpeakerStatus(id, status) {
+  var state = loadSpeakerState();
+  if (!state[id]) state[id] = getDefaultState(id);
+  state[id].status = status;
+  state[id].comms = state[id].comms || [];
+  state[id].comms.push(new Date().toISOString().split('T')[0] + ' : Statut change -> ' + status);
+  saveSpeakerState(state);
+  render();
+}
+
+function setSpeakerSlides(id, status) {
+  var state = loadSpeakerState();
+  if (!state[id]) state[id] = getDefaultState(id);
+  state[id].slides = status;
+  state[id].comms = state[id].comms || [];
+  state[id].comms.push(new Date().toISOString().split('T')[0] + ' : Slides marquees comme ' + status);
+  saveSpeakerState(state);
+  render();
+}
+
+function addComm(id, msg) {
+  var state = loadSpeakerState();
+  if (!state[id]) state[id] = getDefaultState(id);
+  state[id].comms = state[id].comms || [];
+  state[id].comms.push(new Date().toISOString().split('T')[0] + ' : ' + msg);
+  saveSpeakerState(state);
+  render();
+  alert('Action enregistree : ' + msg);
+}
+
+function updateSpeaker(id, key, value) {
+  var state = loadSpeakerState();
+  if (!state[id]) state[id] = getDefaultState(id);
+  state[id][key] = value;
+  saveSpeakerState(state);
+  render();
+}
+</script>
+</body>
+</html>

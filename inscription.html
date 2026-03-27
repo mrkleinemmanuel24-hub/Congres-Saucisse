@@ -71,6 +71,49 @@
     <div class="form-group"><label>Email *</label><input type="email" id="f-email" placeholder="votre@email.com" required></div>
     <div class="form-group"><label>Telephone</label><input type="tel" id="f-tel" placeholder="06 12 34 56 78"></div>
     <div class="form-group"><label>Entreprise / Organisation</label><input type="text" id="f-entreprise" placeholder="Nom de votre entreprise"></div>
+
+    <h3 style="font-size:.95rem;margin:20px 0 12px;color:var(--green);">Regime alimentaire</h3>
+    <div class="form-group">
+      <label>Selectionnez votre regime *</label>
+      <select id="f-regime" style="width:100%;padding:10px 14px;border-radius:10px;border:1px solid var(--border);background:var(--bg-card);color:var(--text);font-size:.88rem;">
+        <option value="standard">Standard</option>
+        <option value="vegetarien">Vegetarien</option>
+        <option value="vegan">Vegan</option>
+        <option value="sans-gluten">Sans gluten</option>
+        <option value="sans-lactose">Sans lactose</option>
+        <option value="halal">Halal</option>
+        <option value="casher">Casher</option>
+        <option value="allergie-noix">Allergie noix</option>
+        <option value="allergie-fruits-mer">Allergie fruits de mer</option>
+        <option value="autre">Autre (preciser ci-dessous)</option>
+      </select>
+    </div>
+    <div class="form-group" id="regime-autre-group" style="display:none;">
+      <label>Precisions regime / allergies</label>
+      <input type="text" id="f-regime-autre" placeholder="Ex: allergie arachides, intolerance FODMAP...">
+    </div>
+
+    <h3 style="font-size:.95rem;margin:20px 0 12px;color:var(--green);">Accessibilite</h3>
+    <div class="form-group">
+      <label>Avez-vous des besoins specifiques ?</label>
+      <div style="display:flex;flex-direction:column;gap:8px;margin-top:6px;">
+        <label style="display:flex;align-items:center;gap:8px;font-size:.85rem;cursor:pointer;"><input type="checkbox" id="f-acc-fauteuil" style="width:18px;height:18px;accent-color:var(--green);"> Fauteuil roulant / mobilite reduite</label>
+        <label style="display:flex;align-items:center;gap:8px;font-size:.85rem;cursor:pointer;"><input type="checkbox" id="f-acc-malvoyant" style="width:18px;height:18px;accent-color:var(--green);"> Malvoyant(e)</label>
+        <label style="display:flex;align-items:center;gap:8px;font-size:.85rem;cursor:pointer;"><input type="checkbox" id="f-acc-malentendant" style="width:18px;height:18px;accent-color:var(--green);"> Malentendant(e) / interpretation LSF</label>
+        <label style="display:flex;align-items:center;gap:8px;font-size:.85rem;cursor:pointer;"><input type="checkbox" id="f-acc-calme" style="width:18px;height:18px;accent-color:var(--green);"> Salle calme (quiet room)</label>
+        <label style="display:flex;align-items:center;gap:8px;font-size:.85rem;cursor:pointer;"><input type="checkbox" id="f-acc-autre-check" style="width:18px;height:18px;accent-color:var(--green);"> Autre (preciser)</label>
+      </div>
+    </div>
+    <div class="form-group" id="acc-autre-group" style="display:none;">
+      <input type="text" id="f-acc-autre" placeholder="Precisez vos besoins d'accessibilite">
+    </div>
+
+    <h3 style="font-size:.95rem;margin:20px 0 12px;color:var(--green);">Mentions legales</h3>
+    <div style="display:flex;flex-direction:column;gap:10px;">
+      <label style="display:flex;align-items:flex-start;gap:8px;font-size:.82rem;cursor:pointer;color:var(--text-dim);"><input type="checkbox" id="f-droits-image" style="width:18px;height:18px;accent-color:var(--green);flex-shrink:0;margin-top:2px;"> J'autorise la captation et la diffusion de mon image (photo/video) dans le cadre du Congres de la Saucisse 2026.</label>
+      <label style="display:flex;align-items:flex-start;gap:8px;font-size:.82rem;cursor:pointer;color:var(--text-dim);"><input type="checkbox" id="f-rgpd" style="width:18px;height:18px;accent-color:var(--green);flex-shrink:0;margin-top:2px;"> J'accepte le traitement de mes donnees personnelles pour l'organisation de cet evenement, conformement au RGPD. Mes donnees seront supprimees 6 mois apres l'evenement. *</label>
+    </div>
+
     <div style="text-align:right;margin-top:20px;">
       <button class="btn btn-green" onclick="nextStep(2)">Suivant →</button>
     </div>
@@ -164,8 +207,19 @@
 <script>
 var registration = {
   prenom: '', nom: '', email: '', tel: '', entreprise: '',
-  pass: 'standard', sessions: [], repas: 'standard', hotel: null, jours: [1,2,3]
+  pass: 'standard', sessions: [], repas: 'standard', hotel: null, jours: [1,2,3],
+  regime: 'standard', regimeAutre: '',
+  accessibilite: [], accAutre: '',
+  droitsImage: false, rgpd: false
 };
+
+// Toggle "autre" fields
+document.getElementById('f-regime').addEventListener('change', function() {
+  document.getElementById('regime-autre-group').style.display = this.value === 'autre' ? 'block' : 'none';
+});
+document.getElementById('f-acc-autre-check').addEventListener('change', function() {
+  document.getElementById('acc-autre-group').style.display = this.checked ? 'block' : 'none';
+});
 
 function nextStep(step) {
   // Validate current step
@@ -179,8 +233,26 @@ function nextStep(step) {
       alert('Veuillez remplir les champs obligatoires (prenom, nom, email).');
       return;
     }
+    // RGPD check
+    registration.rgpd = document.getElementById('f-rgpd').checked;
+    if (!registration.rgpd) {
+      alert('Vous devez accepter le traitement de vos donnees (RGPD) pour continuer.');
+      return;
+    }
+    // Collect new fields
+    registration.regime = document.getElementById('f-regime').value;
+    registration.regimeAutre = document.getElementById('f-regime-autre').value.trim();
+    registration.droitsImage = document.getElementById('f-droits-image').checked;
+    var accList = [];
+    if (document.getElementById('f-acc-fauteuil').checked) accList.push('fauteuil');
+    if (document.getElementById('f-acc-malvoyant').checked) accList.push('malvoyant');
+    if (document.getElementById('f-acc-malentendant').checked) accList.push('malentendant');
+    if (document.getElementById('f-acc-calme').checked) accList.push('salle-calme');
+    if (document.getElementById('f-acc-autre-check').checked) accList.push('autre');
+    registration.accessibilite = accList;
+    registration.accAutre = document.getElementById('f-acc-autre').value.trim();
     // Content filter
-    var fields = [registration.prenom, registration.nom, registration.entreprise];
+    var fields = [registration.prenom, registration.nom, registration.entreprise, registration.regimeAutre, registration.accAutre];
     for (var i = 0; i < fields.length; i++) {
       var check = ContentFilter.check(fields[i]);
       if (!check.ok) { alert(check.reason); return; }
@@ -358,6 +430,30 @@ function buildRecap() {
     '</div>';
   }
 
+  // Regime alimentaire
+  var regimeNames = { standard: 'Standard', vegetarien: 'Vegetarien', vegan: 'Vegan', 'sans-gluten': 'Sans gluten', 'sans-lactose': 'Sans lactose', halal: 'Halal', casher: 'Casher', 'allergie-noix': 'Allergie noix', 'allergie-fruits-mer': 'Allergie fruits de mer', autre: 'Autre' };
+  html += '<div class="recap-section"><h4>Regime alimentaire</h4>' +
+    '<div class="recap-row"><span>Regime</span><span>' + (regimeNames[registration.regime] || registration.regime) + '</span></div>';
+  if (registration.regimeAutre) html += '<div class="recap-row"><span>Precisions</span><span>' + registration.regimeAutre + '</span></div>';
+  html += '</div>';
+
+  // Accessibilite
+  if (registration.accessibilite.length > 0) {
+    html += '<div class="recap-section"><h4>Accessibilite</h4>';
+    registration.accessibilite.forEach(function(a) {
+      var names = { fauteuil: 'Fauteuil roulant', malvoyant: 'Malvoyant(e)', malentendant: 'Malentendant(e) / LSF', 'salle-calme': 'Salle calme', autre: 'Autre' };
+      html += '<div class="recap-row"><span>' + (names[a] || a) + '</span><span></span></div>';
+    });
+    if (registration.accAutre) html += '<div class="recap-row"><span>Precisions</span><span>' + registration.accAutre + '</span></div>';
+    html += '</div>';
+  }
+
+  // Mentions legales
+  html += '<div class="recap-section"><h4>Mentions legales</h4>' +
+    '<div class="recap-row"><span>Droits a l\'image</span><span>' + (registration.droitsImage ? 'Autorise' : 'Non autorise') + '</span></div>' +
+    '<div class="recap-row"><span>RGPD</span><span>Accepte</span></div>' +
+  '</div>';
+
   html += '<div class="recap-total">Total : ' + total + ' &euro;</div>';
   html += '<p style="font-size:.78rem;color:var(--text-muted);text-align:center;">Mode demonstration — aucun paiement reel ne sera effectue.</p>';
 
@@ -378,6 +474,12 @@ function confirmInscription() {
     repas: registration.repas,
     hotel: registration.hotel,
     jours: [1,2,3],
+    regime: registration.regime,
+    regimeAutre: registration.regimeAutre,
+    accessibilite: registration.accessibilite,
+    accAutre: registration.accAutre,
+    droitsImage: registration.droitsImage,
+    rgpd: registration.rgpd,
     statut: 'confirmed',
     date: new Date().toISOString().split('T')[0]
   };
