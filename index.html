@@ -3,810 +3,434 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Le Congres de la Saucisse — Strasbourg 2026</title>
+  <title>Congres de la Saucisse — Strasbourg 2026</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
   <link rel="stylesheet" href="css/front.css">
   <link rel="stylesheet" href="css/admin.css">
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
   <style>
-/* ═══ SPA LAYOUT ═══ */
-.spa-layout { display: flex; min-height: 100vh; }
+    /* ═══ SPA LAYOUT ═══ */
+    body { margin: 0; display: flex; min-height: 100vh; background: #171C22; }
 
-/* Override body from admin.css — we control colors per-section */
-body { background: var(--bg); margin: 0; }
+    /* Reset conflicting admin styles */
+    body.spa-body { font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', sans-serif; }
 
-/* ═══ SIDEBAR ═══ */
-.sidebar {
-  width: 260px; min-height: 100vh; background: #0F1118;
-  border-right: 1px solid rgba(201,168,76,.15);
-  display: flex; flex-direction: column; position: fixed; top: 0; left: 0; bottom: 0;
-  z-index: 1000; overflow-y: auto; transition: transform .3s ease;
-}
-.sidebar-brand {
-  padding: 20px 18px; display: flex; align-items: center; gap: 10px;
-  color: #C9A84C; font-weight: 800; font-size: 1rem;
-  border-bottom: 1px solid rgba(201,168,76,.1);
-}
-.sidebar-brand img { width: 32px; height: 32px; border-radius: 8px; object-fit: contain; }
+    .sidebar {
+      width: 260px; min-height: 100vh; background: #0F1118;
+      border-right: 1px solid rgba(201,168,76,.15);
+      position: fixed; top: 0; left: 0; bottom: 0; z-index: 1000;
+      overflow-y: auto; transition: transform .3s ease;
+      display: flex; flex-direction: column;
+    }
+    .sidebar-header {
+      padding: 20px 16px; font-size: 1.1rem; font-weight: 800;
+      color: #C9A84C; border-bottom: 1px solid rgba(201,168,76,.15);
+      display: flex; align-items: center; gap: 8px;
+    }
+    .sidebar-header img { width: 32px; height: 32px; border-radius: 8px; object-fit: contain; }
+    .sidebar-section {
+      padding: 16px 16px 6px; font-size: .68rem; font-weight: 700;
+      color: #5F5C55; text-transform: uppercase; letter-spacing: 1px;
+    }
+    .sidebar-link {
+      display: flex; align-items: center; gap: 10px;
+      padding: 10px 16px; font-size: .82rem; font-weight: 600;
+      color: #9B978F; cursor: pointer; transition: all .2s;
+      text-decoration: none; border: none; background: none; width: 100%; text-align: left;
+    }
+    .sidebar-link:hover { background: rgba(201,168,76,.08); color: #E8D48B; }
+    .sidebar-link.active { background: rgba(201,168,76,.15); color: #C9A84C; }
+    .sidebar-link img { width: 20px; height: 20px; border-radius: 4px; object-fit: contain; }
+    .sidebar-footer {
+      margin-top: auto; padding: 16px;
+      border-top: 1px solid rgba(201,168,76,.1);
+      font-size: .7rem; color: #5F5C55; text-align: center;
+    }
 
-.sidebar-section-label {
-  padding: 16px 18px 6px; font-size: .65rem; font-weight: 700;
-  text-transform: uppercase; letter-spacing: 1.5px; color: #5F5C55;
-}
+    .spa-content {
+      margin-left: 260px; flex: 1; min-height: 100vh;
+      background: #171C22; width: calc(100% - 260px);
+    }
 
-.sidebar-menu { list-style: none; padding: 0; margin: 0; }
-.sidebar-menu li a {
-  display: flex; align-items: center; gap: 10px;
-  padding: 10px 18px; color: #9B978F; font-size: .82rem; font-weight: 600;
-  text-decoration: none; transition: all .2s; border-left: 3px solid transparent;
-}
-.sidebar-menu li a:hover { background: rgba(201,168,76,.06); color: #E8D48B; }
-.sidebar-menu li a.active {
-  background: rgba(201,168,76,.1); color: #C9A84C;
-  border-left-color: #C9A84C;
-}
-.sidebar-menu li a .menu-icon { width: 20px; height: 20px; border-radius: 4px; object-fit: contain; }
-.sidebar-menu li a .menu-emoji { font-size: 1rem; width: 20px; text-align: center; }
+    .section-page { display: none; }
+    .section-page.active { display: block; }
 
-.admin-lock-badge {
-  display: inline-block; padding: 1px 6px; border-radius: 4px;
-  font-size: .6rem; font-weight: 700; background: rgba(220,38,38,.15);
-  color: #DC2626; margin-left: auto;
-}
+    /* Admin sections get admin bg */
+    .section-page.admin-section { background: #0F1118; }
 
-/* ═══ MAIN CONTENT ═══ */
-.main-content {
-  flex: 1; margin-left: 260px; min-height: 100vh;
-}
+    .hamburger {
+      display: none; position: fixed; top: 12px; left: 12px; z-index: 1001;
+      background: rgba(15,17,24,.9); border: 1px solid rgba(201,168,76,.2);
+      color: #C9A84C; font-size: 1.4rem; padding: 8px 12px; border-radius: 10px;
+      cursor: pointer; backdrop-filter: blur(8px);
+    }
+    .sidebar-overlay {
+      display: none; position: fixed; inset: 0; background: rgba(0,0,0,.6);
+      z-index: 999;
+    }
 
-/* ═══ MOBILE HAMBURGER ═══ */
-.mobile-header {
-  display: none; position: fixed; top: 0; left: 0; right: 0; z-index: 999;
-  background: rgba(15,17,24,.96); backdrop-filter: blur(12px);
-  padding: 14px 18px; border-bottom: 1px solid rgba(201,168,76,.15);
-  align-items: center; justify-content: space-between;
-}
-.mobile-header .brand { color: #C9A84C; font-weight: 800; font-size: .95rem; display: flex; align-items: center; gap: 8px; }
-.hamburger-btn { background: none; border: none; color: #C9A84C; font-size: 1.5rem; cursor: pointer; padding: 4px; }
-.sidebar-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.5); z-index: 999; }
+    @media (max-width: 900px) {
+      .hamburger { display: block; }
+      .sidebar { transform: translateX(-100%); }
+      .sidebar.open { transform: translateX(0); }
+      .sidebar-overlay.open { display: block; }
+      .spa-content { margin-left: 0; width: 100%; padding-top: 50px; }
+    }
 
-@media (max-width: 900px) {
-  .mobile-header { display: flex; }
-  .sidebar { transform: translateX(-100%); z-index: 1001; }
-  .sidebar.open { transform: translateX(0); }
-  .sidebar-overlay.open { display: block; }
-  .main-content { margin-left: 0; padding-top: 56px; }
-}
+    /* Page-specific inline styles from original pages */
+    .partners-grid { display: flex; flex-wrap: wrap; gap: 16px; justify-content: center; }
+    .partner-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; padding: 20px 28px; text-align: center; min-width: 180px; }
+    .partner-card .partner-name { font-weight: 700; font-size: .9rem; }
+    .partner-card .partner-type { font-size: .75rem; color: var(--text-muted); }
+    .highlight-speakers { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 16px; }
+    .programme-summary { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 16px; }
+    .day-summary { background: var(--bg-card); border: 1px solid var(--border); border-radius: 14px; padding: 24px; }
+    .day-summary h3 { color: #FFD300; font-size: 1rem; margin-bottom: 12px; }
+    .day-summary ul { list-style: none; }
+    .day-summary li { padding: 6px 0; font-size: .85rem; color: #B1B9C3; border-bottom: 1px solid rgba(255,255,255,.08); }
+    .day-summary li:last-child { border-bottom: none; }
+    .day-summary li strong { color: #2AD783; }
+    .infos-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 16px; }
+    .info-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 14px; padding: 20px; text-align: center; }
+    .info-card .icon { font-size: 2rem; margin-bottom: 8px; }
+    .info-card h4 { font-size: .95rem; margin-bottom: 6px; }
+    .info-card p { font-size: .82rem; color: #B1B9C3; }
 
-/* ═══ SECTION CONTAINERS ═══ */
-.spa-section { display: none; }
-.spa-section.active { display: block; }
+    /* Inscription styles */
+    .step-content { display: none; }
+    .step-content.active { display: block; }
+    .session-check { display: flex; align-items: center; gap: 10px; padding: 10px; background: rgba(255,255,255,.02); border-radius: 10px; margin-bottom: 6px; cursor: pointer; border: 1px solid transparent; transition: all .2s; }
+    .session-check:hover { border-color: rgba(42,215,131,.2); }
+    .session-check.checked { border-color: #2AD783; background: rgba(42,215,131,.05); }
+    .session-check input { width: 18px; height: 18px; accent-color: #2AD783; }
+    .hotel-option { display: flex; align-items: center; gap: 16px; padding: 14px; background: #1E2430; border: 2px solid rgba(255,255,255,.08); border-radius: 14px; margin-bottom: 10px; cursor: pointer; transition: all .2s; }
+    .hotel-option.selected { border-color: #2AD783; background: rgba(42,215,131,.03); }
+    .recap-section { background: #1E2430; border: 1px solid rgba(255,255,255,.08); border-radius: 14px; padding: 20px; margin-bottom: 16px; }
+    .recap-section h4 { color: #2AD783; font-size: .9rem; margin-bottom: 10px; }
+    .recap-row { display: flex; justify-content: space-between; padding: 6px 0; font-size: .85rem; border-bottom: 1px solid rgba(255,255,255,.08); }
+    .recap-row:last-child { border-bottom: none; }
+    .recap-total { font-size: 1.3rem; font-weight: 900; color: #FFD300; text-align: right; padding: 16px 0; }
+    .repas-option { display: flex; align-items: center; gap: 12px; padding: 12px; background: #1E2430; border: 2px solid rgba(255,255,255,.08); border-radius: 12px; margin-bottom: 8px; cursor: pointer; transition: all .2s; }
+    .repas-option.selected { border-color: #2AD783; }
+    .repas-option input { width: 18px; height: 18px; accent-color: #2AD783; }
+    .pass-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 16px; }
+    .staff-code { display: none; margin-top: 12px; }
+    .staff-code.visible { display: block; }
+    .confirmation-box { text-align: center; padding: 40px 24px; }
+    .confirmation-box .check-icon { width: 80px; height: 80px; border-radius: 50%; background: rgba(42,215,131,.1); border: 3px solid #2AD783; display: flex; align-items: center; justify-content: center; font-size: 2.5rem; margin: 0 auto 20px; }
 
-/* Public sections use front.css vars */
-.spa-section.public-section { --bg: #171C22; --bg-card: #1E2430; }
+    /* Plan styles */
+    .floor-tabs { margin-bottom: 24px; }
+    .plan-wrapper { position: relative; background: #1E2430; border: 1px solid rgba(255,255,255,.08); border-radius: 14px; padding: 24px; overflow: hidden; }
+    .plan-floor { display: none; }
+    .plan-floor.active { display: block; }
+    .plan-svg-container { width: 100%; max-width: 900px; margin: 0 auto; }
+    .room-popup { position: absolute; background: #1E2430; border: 1px solid #2AD783; border-radius: 12px; padding: 16px; max-width: 280px; z-index: 10; box-shadow: 0 8px 32px rgba(0,0,0,.5); display: none; }
+    .room-popup.visible { display: block; }
+    .room-popup h4 { color: #2AD783; font-size: .95rem; margin-bottom: 6px; }
+    .room-popup p { font-size: .82rem; color: #B1B9C3; margin-bottom: 4px; }
+    .room-popup .close-popup { position: absolute; top: 8px; right: 12px; background: none; border: none; color: #6B7280; font-size: 1.2rem; cursor: pointer; }
+    .legend { display: flex; flex-wrap: wrap; gap: 16px; margin-top: 20px; justify-content: center; }
+    .legend-item { display: flex; align-items: center; gap: 6px; font-size: .8rem; color: #B1B9C3; }
+    .legend-color { width: 16px; height: 16px; border-radius: 4px; }
+    .room-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 12px; margin-top: 24px; }
+    .room-info-card { background: #1E2430; border: 1px solid rgba(255,255,255,.08); border-radius: 12px; padding: 16px; cursor: pointer; transition: all .2s; }
+    .room-info-card:hover { border-color: rgba(42,215,131,.3); }
+    .room-info-card h4 { font-size: .9rem; margin-bottom: 4px; }
+    .room-info-card .room-meta { font-size: .78rem; color: #6B7280; }
+    .room-type-badge { display: inline-block; padding: 2px 8px; border-radius: 6px; font-size: .7rem; font-weight: 600; }
+    .type-auditorium { background: rgba(59,130,246,.15); color: #3B82F6; }
+    .type-conference { background: rgba(42,215,131,.15); color: #2AD783; }
+    .type-atelier { background: rgba(245,158,11,.15); color: #F59E0B; }
+    .type-reunion { background: rgba(168,85,247,.15); color: #A855F7; }
+    .type-expo { background: rgba(156,163,175,.15); color: #9CA3AF; }
+    .type-restauration { background: rgba(249,115,22,.15); color: #F97316; }
 
-/* Admin sections use admin.css vars */
-.spa-section.admin-section { background: #0F1118; }
+    /* Infos pratiques */
+    .info-section { margin-bottom: 40px; }
+    .info-section h2 { font-size: 1.2rem; color: #FFD300; margin-bottom: 16px; display: flex; align-items: center; gap: 10px; }
+    .transport-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; }
+    .transport-card { background: #1E2430; border: 1px solid rgba(255,255,255,.08); border-radius: 14px; padding: 20px; }
+    .transport-card h3 { font-size: .95rem; margin-bottom: 8px; display: flex; align-items: center; gap: 8px; }
+    .transport-card p { font-size: .85rem; color: #B1B9C3; line-height: 1.6; }
+    .resto-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 14px; }
+    .resto-card { background: #1E2430; border: 1px solid rgba(255,255,255,.08); border-radius: 12px; padding: 16px; }
+    .resto-card h4 { font-size: .9rem; margin-bottom: 4px; }
+    .resto-card .type { color: #FFD300; font-size: .78rem; font-weight: 600; }
+    .resto-card p { font-size: .82rem; color: #B1B9C3; margin-top: 4px; }
+    .discover-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 14px; }
+    .discover-card { background: #1E2430; border: 1px solid rgba(255,255,255,.08); border-radius: 12px; padding: 20px; text-align: center; }
+    .discover-card .icon { font-size: 2.5rem; margin-bottom: 8px; }
+    .discover-card h4 { font-size: .9rem; margin-bottom: 6px; }
+    .discover-card p { font-size: .8rem; color: #B1B9C3; }
+    .emergency-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; }
+    .emergency-card { background: rgba(220,38,38,.06); border: 1px solid rgba(220,38,38,.2); border-radius: 12px; padding: 16px; text-align: center; }
+    .emergency-card .number { font-size: 1.6rem; font-weight: 900; color: #DC2626; }
+    .emergency-card .label { font-size: .82rem; color: #B1B9C3; }
 
-/* ═══ ADMIN PASSWORD MODAL ═══ */
-.admin-login-modal {
-  position: fixed; inset: 0; z-index: 99999; background: rgba(0,0,0,.8);
-  backdrop-filter: blur(8px); display: flex; align-items: center; justify-content: center;
-}
-.admin-login-modal .login-box { max-width: 400px; width: 90%; }
+    /* Presse */
+    .press-section { margin-bottom: 40px; }
+    .press-section h2 { font-size: 1.2rem; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
+    .press-doc { display: flex; align-items: center; gap: 16px; background: #1E2430; border: 1px solid rgba(255,255,255,.08); border-radius: 12px; padding: 16px; margin-bottom: 10px; transition: all .2s; }
+    .press-doc:hover { border-color: rgba(42,215,131,.2); }
+    .press-doc .doc-icon { width: 48px; height: 48px; border-radius: 10px; background: rgba(220,38,38,.1); display: flex; align-items: center; justify-content: center; font-size: 1.5rem; }
+    .press-doc .doc-info h4 { font-size: .9rem; margin-bottom: 2px; }
+    .press-doc .doc-info p { font-size: .78rem; color: #6B7280; }
+    .press-doc .doc-dl { margin-left: auto; }
+    .media-kit { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; }
+    .media-item { background: #1E2430; border: 1px solid rgba(255,255,255,.08); border-radius: 12px; padding: 20px; text-align: center; }
+    .media-item .icon { font-size: 2rem; margin-bottom: 8px; }
+    .media-item h4 { font-size: .85rem; margin-bottom: 4px; }
+    .media-item p { font-size: .75rem; color: #6B7280; }
+    .contact-press { background: #1E2430; border: 1px solid rgba(255,255,255,.08); border-radius: 14px; padding: 24px; max-width: 500px; }
 
-/* ═══ PAGE-SPECIFIC INLINE STYLES (from original pages) ═══ */
-.partners-grid { display: flex; flex-wrap: wrap; gap: 16px; justify-content: center; }
-.partner-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; padding: 20px 28px; text-align: center; min-width: 180px; }
-.partner-card .partner-name { font-weight: 700; font-size: .9rem; }
-.partner-card .partner-type { font-size: .75rem; color: var(--text-muted); }
-.highlight-speakers { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 16px; }
-.programme-summary { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 16px; }
-.day-summary { background: var(--bg-card); border: 1px solid var(--border); border-radius: 14px; padding: 24px; }
-.day-summary h3 { color: #FFD300; font-size: 1rem; margin-bottom: 12px; }
-.day-summary ul { list-style: none; }
-.day-summary li { padding: 6px 0; font-size: .85rem; color: #B1B9C3; border-bottom: 1px solid rgba(255,255,255,.08); }
-.day-summary li:last-child { border-bottom: none; }
-.day-summary li strong { color: #2AD783; }
-.infos-grid-home { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 16px; }
-.info-card-home { background: var(--bg-card); border: 1px solid var(--border); border-radius: 14px; padding: 20px; text-align: center; }
-.info-card-home .icon { font-size: 2rem; margin-bottom: 8px; }
-.info-card-home h4 { font-size: .95rem; margin-bottom: 6px; }
-.info-card-home p { font-size: .82rem; color: #B1B9C3; }
+    /* Admin page-specific styles are loaded from admin.css, adding extras here */
+    .template-grid-inv { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; margin-bottom: 32px; }
+    .template-card-inv { background: #161822; border: 1px solid rgba(201,168,76,.1); border-radius: 14px; padding: 20px; cursor: pointer; transition: all .25s; }
+    .template-card-inv:hover { border-color: #C9A84C; transform: translateY(-2px); }
+    .template-card-inv.selected { border-color: #C9A84C; box-shadow: 0 0 20px rgba(201,168,76,.15); }
+    .template-card-inv h3 { font-size: .95rem; margin-bottom: 4px; }
+    .template-card-inv .type-badge { display: inline-block; padding: 3px 10px; border-radius: 6px; font-size: .72rem; font-weight: 700; margin-bottom: 8px; }
+    .template-card-inv p { font-size: .8rem; color: #9B978F; line-height: 1.6; }
+    .preview-area { background: #161822; border: 1px solid rgba(201,168,76,.1); border-radius: 14px; padding: 24px; margin-bottom: 20px; }
+    .preview-area h3 { color: #C9A84C; font-size: .95rem; margin-bottom: 16px; }
+    .inv-preview { background: #FFF; color: #111; border-radius: 16px; padding: 40px 32px; max-width: 600px; margin: 0 auto; font-family: Georgia, serif; line-height: 1.8; }
+    .inv-preview.luxury { background: linear-gradient(135deg, #1A1A2E, #16213E); color: #E8D48B; border: 2px solid rgba(201,168,76,.3); }
+    .inv-preview.press { background: #F8F9FA; color: #1A1A2E; border: 2px solid #2AD783; }
+    .inv-preview h2 { font-size: 1.2rem; margin-bottom: 16px; text-align: center; }
+    .inv-preview .inv-logo { text-align: center; font-size: 2.5rem; margin-bottom: 12px; }
+    .inv-preview .inv-footer { text-align: center; font-size: .75rem; margin-top: 20px; padding-top: 16px; border-top: 1px solid rgba(0,0,0,.1); color: #999; }
 
-/* Plan styles */
-.floor-tabs { margin-bottom: 24px; }
-.plan-wrapper { position: relative; background: var(--bg-card); border: 1px solid var(--border); border-radius: 14px; padding: 24px; overflow: hidden; }
-.plan-floor { display: none; }
-.plan-floor.active { display: block; }
-.plan-svg-container { width: 100%; max-width: 900px; margin: 0 auto; }
-.room-popup { position: absolute; background: var(--bg-card); border: 1px solid #2AD783; border-radius: 12px; padding: 16px; max-width: 280px; z-index: 10; box-shadow: 0 8px 32px rgba(0,0,0,.5); display: none; }
-.room-popup.visible { display: block; }
-.room-popup h4 { color: #2AD783; font-size: .95rem; margin-bottom: 6px; }
-.room-popup p { font-size: .82rem; color: #B1B9C3; margin-bottom: 4px; }
-.room-popup .close-popup { position: absolute; top: 8px; right: 12px; background: none; border: none; color: #6B7280; font-size: 1.2rem; cursor: pointer; }
-.legend { display: flex; flex-wrap: wrap; gap: 16px; margin-top: 20px; justify-content: center; }
-.legend-item { display: flex; align-items: center; gap: 6px; font-size: .8rem; color: #B1B9C3; }
-.legend-color { width: 16px; height: 16px; border-radius: 4px; }
-.room-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 12px; margin-top: 24px; }
-.room-info-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; padding: 16px; cursor: pointer; transition: all .2s; }
-.room-info-card:hover { border-color: rgba(42,215,131,.3); }
-.room-info-card h4 { font-size: .9rem; margin-bottom: 4px; }
-.room-info-card .room-meta { font-size: .78rem; color: #6B7280; }
-.room-type-badge { display: inline-block; padding: 2px 8px; border-radius: 6px; font-size: .7rem; font-weight: 600; }
-.type-auditorium { background: rgba(59,130,246,.15); color: #3B82F6; }
-.type-conference { background: rgba(42,215,131,.15); color: #2AD783; }
-.type-atelier { background: rgba(245,158,11,.15); color: #F59E0B; }
-.type-reunion { background: rgba(168,85,247,.15); color: #A855F7; }
-.type-expo { background: rgba(156,163,175,.15); color: #9CA3AF; }
-.type-restauration { background: rgba(249,115,22,.15); color: #F97316; }
+    /* Hide original navbars and footers — we use sidebar */
+    .section-page .navbar, .section-page .footer, .section-page .admin-header { display: none !important; }
+    .section-page .login-overlay { display: none !important; }
+    .section-page .admin-content { display: block !important; padding: 32px 24px; max-width: 1400px; margin: 0 auto; }
 
-/* Infos styles */
-.info-section { margin-bottom: 40px; }
-.info-section h2 { font-size: 1.2rem; color: #FFD300; margin-bottom: 16px; display: flex; align-items: center; gap: 10px; }
-.transport-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; }
-.transport-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 14px; padding: 20px; }
-.transport-card h3 { font-size: .95rem; margin-bottom: 8px; display: flex; align-items: center; gap: 8px; }
-.transport-card p { font-size: .85rem; color: #B1B9C3; line-height: 1.6; }
-.resto-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 14px; }
-.resto-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; padding: 16px; }
-.resto-card h4 { font-size: .9rem; margin-bottom: 4px; }
-.resto-card .type { color: #FFD300; font-size: .78rem; font-weight: 600; }
-.resto-card p { font-size: .82rem; color: #B1B9C3; margin-top: 4px; }
-.discover-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 14px; }
-.discover-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; padding: 20px; text-align: center; }
-.discover-card .icon { font-size: 2.5rem; margin-bottom: 8px; }
-.discover-card h4 { font-size: .9rem; margin-bottom: 6px; }
-.discover-card p { font-size: .8rem; color: #B1B9C3; }
-.emergency-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; }
-.emergency-card { background: rgba(220,38,38,.06); border: 1px solid rgba(220,38,38,.2); border-radius: 12px; padding: 16px; text-align: center; }
-.emergency-card .number { font-size: 1.6rem; font-weight: 900; color: #DC2626; }
-.emergency-card .label { font-size: .82rem; color: #B1B9C3; }
-
-/* Presse styles */
-.press-section { margin-bottom: 40px; }
-.press-section h2 { font-size: 1.2rem; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
-.press-doc { display: flex; align-items: center; gap: 16px; background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; padding: 16px; margin-bottom: 10px; transition: all .2s; }
-.press-doc:hover { border-color: rgba(42,215,131,.2); }
-.press-doc .doc-icon { width: 48px; height: 48px; border-radius: 10px; background: rgba(220,38,38,.1); display: flex; align-items: center; justify-content: center; font-size: 1.5rem; }
-.press-doc .doc-info h4 { font-size: .9rem; margin-bottom: 2px; }
-.press-doc .doc-info p { font-size: .78rem; color: #6B7280; }
-.press-doc .doc-dl { margin-left: auto; }
-.media-kit { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; }
-.media-item { background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; padding: 20px; text-align: center; }
-.media-item .icon { font-size: 2rem; margin-bottom: 8px; }
-.media-item h4 { font-size: .85rem; margin-bottom: 4px; }
-.media-item p { font-size: .75rem; color: #6B7280; }
-.contact-press { background: var(--bg-card); border: 1px solid var(--border); border-radius: 14px; padding: 24px; max-width: 500px; }
-
-/* Inscription styles */
-.step-content { display: none; }
-.step-content.active { display: block; }
-.session-check { display: flex; align-items: center; gap: 10px; padding: 10px; background: rgba(255,255,255,.02); border-radius: 10px; margin-bottom: 6px; cursor: pointer; border: 1px solid transparent; transition: all .2s; }
-.session-check:hover { border-color: rgba(42,215,131,.2); }
-.session-check.checked { border-color: #2AD783; background: rgba(42,215,131,.05); }
-.session-check input { width: 18px; height: 18px; accent-color: #2AD783; }
-.hotel-option { display: flex; align-items: center; gap: 16px; padding: 14px; background: var(--bg-card); border: 2px solid var(--border); border-radius: 14px; margin-bottom: 10px; cursor: pointer; transition: all .2s; }
-.hotel-option.selected { border-color: #2AD783; background: rgba(42,215,131,.03); }
-.hotel-option .hotel-stars { color: #FFD300; font-size: .8rem; }
-.recap-section { background: var(--bg-card); border: 1px solid var(--border); border-radius: 14px; padding: 20px; margin-bottom: 16px; }
-.recap-section h4 { color: #2AD783; font-size: .9rem; margin-bottom: 10px; }
-.recap-row { display: flex; justify-content: space-between; padding: 6px 0; font-size: .85rem; border-bottom: 1px solid var(--border); }
-.recap-row:last-child { border-bottom: none; }
-.recap-total { font-size: 1.3rem; font-weight: 900; color: #FFD300; text-align: right; padding: 16px 0; }
-.repas-option { display: flex; align-items: center; gap: 12px; padding: 12px; background: var(--bg-card); border: 2px solid var(--border); border-radius: 12px; margin-bottom: 8px; cursor: pointer; transition: all .2s; }
-.repas-option.selected { border-color: #2AD783; }
-.repas-option input { width: 18px; height: 18px; accent-color: #2AD783; }
-.pass-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 16px; }
-.staff-code { display: none; margin-top: 12px; }
-.staff-code.visible { display: block; }
-.confirmation-box { text-align: center; padding: 40px 24px; }
-.confirmation-box .check-icon { width: 80px; height: 80px; border-radius: 50%; background: rgba(42,215,131,.1); border: 3px solid #2AD783; display: flex; align-items: center; justify-content: center; font-size: 2.5rem; margin: 0 auto 20px; }
-
-/* ═══ ADMIN INLINE STYLES ═══ */
-/* Invitations */
-.inv-template-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; margin-bottom: 32px; }
-.inv-template-card { background: #161822; border: 1px solid rgba(201,168,76,.1); border-radius: 14px; padding: 20px; cursor: pointer; transition: all .25s; }
-.inv-template-card:hover { border-color: #C9A84C; transform: translateY(-2px); }
-.inv-template-card.selected { border-color: #C9A84C; box-shadow: 0 0 20px rgba(201,168,76,.15); }
-.inv-template-card h3 { font-size: .95rem; margin-bottom: 4px; }
-.inv-template-card .type-badge { display: inline-block; padding: 3px 10px; border-radius: 6px; font-size: .72rem; font-weight: 700; margin-bottom: 8px; }
-.inv-template-card p { font-size: .8rem; color: #9B978F; line-height: 1.6; }
-.inv-preview-area { background: #161822; border: 1px solid rgba(201,168,76,.1); border-radius: 14px; padding: 24px; margin-bottom: 20px; }
-.inv-preview-area h3 { color: #C9A84C; font-size: .95rem; margin-bottom: 16px; }
-.inv-preview { background: #FFF; color: #111; border-radius: 16px; padding: 40px 32px; max-width: 600px; margin: 0 auto; font-family: Georgia, serif; line-height: 1.8; }
-.inv-preview.luxury { background: linear-gradient(135deg, #1A1A2E, #16213E); color: #E8D48B; border: 2px solid rgba(201,168,76,.3); }
-.inv-preview.press { background: #F8F9FA; color: #1A1A2E; border: 2px solid #2AD783; }
-.inv-preview h2 { font-size: 1.2rem; margin-bottom: 16px; text-align: center; }
-.inv-preview .inv-logo { text-align: center; font-size: 2.5rem; margin-bottom: 12px; }
-.inv-preview .inv-footer { text-align: center; font-size: .75rem; margin-top: 20px; padding-top: 16px; border-top: 1px solid rgba(0,0,0,.1); color: #999; }
-.inv-controls { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 16px; }
-.inv-controls button { padding: 8px 18px; border-radius: 8px; font-size: .82rem; font-weight: 600; cursor: pointer; border: none; transition: all .2s; }
-.vars-info { background: rgba(201,168,76,.05); border: 1px solid rgba(201,168,76,.1); border-radius: 12px; padding: 16px; margin-bottom: 20px; }
-.vars-info code { background: rgba(201,168,76,.15); padding: 2px 6px; border-radius: 4px; font-size: .78rem; color: #C9A84C; }
-
-/* Traiteur */
-.meal-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 16px; margin-bottom: 24px; }
-.meal-card { background: #161822; border: 1px solid rgba(201,168,76,.1); border-radius: 14px; padding: 20px; text-align: center; }
-.meal-card .meal-icon { font-size: 2rem; margin-bottom: 8px; }
-.meal-card .meal-count { font-size: 2rem; font-weight: 900; color: #C9A84C; }
-.meal-card .meal-label { font-size: .82rem; color: #9B978F; }
-.cost-summary { background: #161822; border: 1px solid #C9A84C; border-radius: 14px; padding: 24px; margin-top: 24px; }
-.cost-summary h3 { color: #C9A84C; margin-bottom: 16px; }
-.cost-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid rgba(201,168,76,.1); font-size: .88rem; }
-.cost-row:last-child { border-bottom: none; }
-.cost-total { font-size: 1.3rem; font-weight: 900; color: #C9A84C; text-align: right; padding-top: 12px; margin-top: 8px; border-top: 2px solid #C9A84C; }
-
-/* Salles / Gauge */
-.gauge-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 16px; }
-.gauge-card .session-list { margin-top: 12px; }
-.gauge-card .session-item { display: flex; justify-content: space-between; align-items: center; padding: 6px 0; border-bottom: 1px solid rgba(201,168,76,.05); font-size: .78rem; }
-.gauge-card .session-item:last-child { border-bottom: none; }
-.alert-banner { background: rgba(220,38,38,.08); border: 1px solid rgba(220,38,38,.2); border-radius: 12px; padding: 16px; margin-bottom: 24px; display: none; }
-.alert-banner.visible { display: block; }
-.alert-banner h3 { color: #DC2626; font-size: .9rem; margin-bottom: 8px; }
-.alert-banner p { font-size: .82rem; color: #9B978F; }
-
-/* Check-in */
-.scanner-area { text-align: center; margin: 32px auto; max-width: 500px; }
-.scanner-box { background: #161822; border: 2px dashed rgba(201,168,76,.1); border-radius: 20px; padding: 40px; margin-bottom: 20px; }
-.scanner-box .icon { font-size: 4rem; margin-bottom: 12px; }
-.scanner-box p { color: #9B978F; font-size: .88rem; }
-.manual-entry { margin-top: 20px; }
-.manual-entry input { width: 100%; padding: 14px 18px; border-radius: 12px; border: 1px solid rgba(201,168,76,.1); background: rgba(255,255,255,.04); color: #E8E4DC; font-size: 1rem; text-align: center; font-weight: 700; letter-spacing: 1px; }
-.manual-entry input:focus { outline: none; border-color: #C9A84C; }
-.checkin-result { text-align: center; padding: 40px; border-radius: 20px; margin: 20px auto; max-width: 500px; display: none; }
-.checkin-ok { background: rgba(34,197,94,.08); border: 2px solid #22C55E; }
-.checkin-error { background: rgba(220,38,38,.08); border: 2px solid #DC2626; }
-.checkin-result .icon { font-size: 3rem; margin-bottom: 12px; }
-.checkin-result h2 { font-size: 1.2rem; margin-bottom: 8px; }
-.checkin-result p { font-size: .88rem; color: #9B978F; }
-.realtime-counters { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 12px; margin-top: 24px; }
-.counter-card { background: #161822; border: 1px solid rgba(201,168,76,.1); border-radius: 12px; padding: 16px; text-align: center; }
-.counter-card .counter-val { font-size: 1.8rem; font-weight: 900; color: #C9A84C; }
-.counter-card .counter-label { font-size: .78rem; color: #9B978F; }
-.checkin-log { margin-top: 24px; }
-.log-entry { display: flex; align-items: center; gap: 12px; padding: 10px 14px; background: rgba(34,197,94,.03); border: 1px solid rgba(34,197,94,.1); border-radius: 10px; margin-bottom: 6px; font-size: .85rem; }
-.log-entry.error { background: rgba(220,38,38,.03); border-color: rgba(220,38,38,.1); }
-.log-entry .log-time { color: #5F5C55; font-size: .78rem; min-width: 50px; }
-.log-entry .log-status { font-weight: 700; }
-.log-entry .log-status.ok { color: #22C55E; }
-.log-entry .log-status.err { color: #DC2626; }
-#camera-video { width: 100%; max-width: 400px; border-radius: 12px; display: none; }
-
-/* Emails */
-.email-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; margin-bottom: 24px; }
-.email-card { background: #161822; border: 1px solid rgba(201,168,76,.1); border-radius: 14px; padding: 20px; cursor: pointer; transition: all .25s; }
-.email-card:hover { border-color: #C9A84C; }
-.email-card.selected { border-color: #C9A84C; box-shadow: 0 0 20px rgba(201,168,76,.15); }
-.email-card h3 { font-size: .9rem; margin-bottom: 4px; }
-.email-card .timing { color: #C9A84C; font-size: .78rem; font-weight: 600; margin-bottom: 6px; }
-.email-card p { font-size: .8rem; color: #9B978F; }
-.email-preview { background: #FFF; color: #111; border-radius: 16px; padding: 32px; max-width: 600px; margin: 16px auto; font-family: -apple-system, sans-serif; line-height: 1.7; font-size: .9rem; }
-.email-preview h2 { font-size: 1.1rem; margin-bottom: 12px; color: #111; }
-.email-preview .header-bar { background: #171C22; color: #FFD300; padding: 16px; border-radius: 10px; text-align: center; margin-bottom: 20px; font-weight: 700; }
-.email-preview .footer-bar { text-align: center; padding-top: 16px; border-top: 1px solid #EEE; margin-top: 20px; font-size: .75rem; color: #999; }
-.email-preview ul { padding-left: 20px; margin: 10px 0; }
-.email-preview li { padding: 3px 0; }
-.history-log { margin-top: 24px; }
-.history-entry { display: flex; align-items: center; gap: 12px; padding: 10px 14px; background: #161822; border: 1px solid rgba(201,168,76,.1); border-radius: 10px; margin-bottom: 6px; font-size: .82rem; }
-.history-entry .h-time { color: #5F5C55; font-size: .75rem; min-width: 80px; }
-.history-entry .h-type { color: #C9A84C; font-weight: 600; min-width: 120px; }
-.send-options { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; margin-top: 16px; }
-.send-options button { padding: 10px 24px; border-radius: 10px; font-weight: 700; border: none; cursor: pointer; font-size: .85rem; transition: all .2s; }
-
-/* Checklist */
-.checklist-progress { background: #161822; border: 1px solid #C9A84C; border-radius: 14px; padding: 24px; margin-bottom: 32px; }
-.checklist-progress h2 { color: #C9A84C; font-size: 1.1rem; margin-bottom: 12px; }
-.progress-global { display: flex; align-items: center; gap: 16px; margin-bottom: 16px; }
-.progress-bar-track { flex: 1; height: 20px; background: rgba(255,255,255,.06); border-radius: 10px; overflow: hidden; }
-.progress-bar-fill { height: 100%; border-radius: 10px; transition: width .5s ease; display: flex; align-items: center; justify-content: center; font-size: .75rem; font-weight: 700; color: #111; }
-.progress-pct { font-size: 1.8rem; font-weight: 900; color: #C9A84C; min-width: 80px; text-align: right; }
-.section-progress-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px; }
-.section-mini { background: rgba(255,255,255,.02); border-radius: 8px; padding: 10px 12px; }
-.section-mini .mini-label { font-size: .72rem; color: #9B978F; margin-bottom: 4px; }
-.section-mini .mini-bar { height: 6px; background: rgba(255,255,255,.06); border-radius: 3px; overflow: hidden; }
-.section-mini .mini-fill { height: 100%; border-radius: 3px; transition: width .5s; }
-.checklist-section { background: #161822; border: 1px solid rgba(201,168,76,.1); border-radius: 14px; padding: 24px; margin-bottom: 20px; }
-.checklist-section h3 { color: #C9A84C; font-size: .95rem; margin-bottom: 4px; cursor: pointer; display: flex; align-items: center; gap: 8px; }
-.checklist-section h3 .toggle-arrow { transition: transform .2s; font-size: .7rem; }
-.checklist-section h3 .toggle-arrow.open { transform: rotate(90deg); }
-.section-subtitle { font-size: .78rem; color: #9B978F; margin-bottom: 16px; }
-.section-badge { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: .7rem; font-weight: 700; margin-left: 8px; }
-.checklist-item { display: grid; grid-template-columns: 32px 1fr 120px 140px 90px; gap: 10px; align-items: center; padding: 10px 12px; border-bottom: 1px solid rgba(201,168,76,.05); font-size: .82rem; transition: background .2s; }
-.checklist-item:hover { background: rgba(201,168,76,.03); }
-.checklist-item:last-child { border-bottom: none; }
-.checklist-item input[type="checkbox"] { width: 20px; height: 20px; accent-color: #22C55E; cursor: pointer; }
-.checklist-item.done .item-label { text-decoration: line-through; color: #5F5C55; }
-.checklist-item.overdue { background: rgba(220,38,38,.04); }
-.checklist-item .item-label { color: #E8E4DC; }
-.checklist-item .item-date input, .checklist-item .item-resp input { background: rgba(255,255,255,.04); border: 1px solid rgba(201,168,76,.1); border-radius: 6px; padding: 4px 8px; color: #E8E4DC; font-size: .75rem; width: 100%; }
-.checklist-item .item-status { text-align: center; }
-.status-tag { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: .68rem; font-weight: 700; }
-.status-fait { background: rgba(34,197,94,.15); color: #22C55E; }
-.status-encours { background: rgba(245,158,11,.15); color: #F59E0B; }
-.status-retard { background: rgba(220,38,38,.15); color: #DC2626; }
-.status-avenir { background: rgba(255,255,255,.08); color: #9B978F; }
-.overdue-alerts { background: rgba(220,38,38,.06); border: 1px solid rgba(220,38,38,.2); border-radius: 14px; padding: 20px; margin-bottom: 24px; display: none; }
-.overdue-alerts h3 { color: #DC2626; font-size: .9rem; margin-bottom: 10px; }
-@media (max-width: 768px) {
-  .checklist-item { grid-template-columns: 28px 1fr; }
-  .checklist-item .item-date, .checklist-item .item-resp, .checklist-item .item-status { display: none; }
-}
-
-/* Speakers admin */
-.spk-stats { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 12px; margin-bottom: 24px; }
-.spk-card { background: #161822; border: 1px solid rgba(201,168,76,.1); border-radius: 14px; padding: 20px; transition: all .2s; }
-.spk-card:hover { border-color: #C9A84C; }
-.spk-header { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
-.spk-avatar { width: 48px; height: 48px; border-radius: 50%; background: rgba(201,168,76,.15); display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: .9rem; color: #C9A84C; }
-.spk-name { font-weight: 700; font-size: .9rem; }
-.spk-title { font-size: .75rem; color: #9B978F; }
-.spk-meta { font-size: .78rem; color: #9B978F; margin-bottom: 8px; }
-.spk-meta strong { color: #E8E4DC; }
-.spk-sessions { margin: 10px 0; }
-.spk-session-item { font-size: .75rem; padding: 4px 8px; background: rgba(201,168,76,.05); border-radius: 6px; margin-bottom: 4px; color: #9B978F; }
-.spk-actions { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 12px; }
-.spk-actions button { padding: 5px 10px; border-radius: 6px; font-size: .7rem; font-weight: 600; border: none; cursor: pointer; transition: all .2s; }
-.spk-btn-confirm { background: rgba(34,197,94,.15); color: #22C55E; }
-.spk-btn-relance { background: rgba(245,158,11,.15); color: #F59E0B; }
-.spk-btn-slides { background: rgba(201,168,76,.15); color: #C9A84C; }
-.spk-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(380px, 1fr)); gap: 16px; }
-.comms-log { margin-top: 10px; max-height: 120px; overflow-y: auto; }
-.comm-entry { font-size: .7rem; padding: 3px 0; border-bottom: 1px solid rgba(201,168,76,.05); color: #5F5C55; }
-.backup-field { margin-top: 8px; }
-.backup-field input { background: rgba(255,255,255,.04); border: 1px solid rgba(201,168,76,.1); border-radius: 6px; padding: 4px 8px; color: #E8E4DC; font-size: .75rem; width: 100%; }
-.backup-field label { font-size: .7rem; color: #C9A84C; }
-.timer-bar { display: flex; align-items: center; gap: 8px; margin-top: 6px; }
-.timer-bar .timer-track { flex: 1; height: 6px; background: rgba(255,255,255,.06); border-radius: 3px; overflow: hidden; }
-.timer-bar .timer-fill { height: 100%; border-radius: 3px; }
-.timer-bar .timer-label { font-size: .7rem; color: #9B978F; min-width: 60px; }
-.filter-bar { display: flex; gap: 8px; margin-bottom: 20px; flex-wrap: wrap; }
-.filter-bar select, .filter-bar input { padding: 8px 12px; border-radius: 8px; border: 1px solid rgba(201,168,76,.1); background: #161822; color: #E8E4DC; font-size: .82rem; }
-.contract-status { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 4px; }
-
-/* Staff */
-.staff-calculator { background: #161822; border: 1px solid #C9A84C; border-radius: 14px; padding: 24px; margin-bottom: 24px; }
-.staff-calculator h3 { color: #C9A84C; margin-bottom: 16px; }
-.calc-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 16px; }
-.calc-card { text-align: center; padding: 16px; background: rgba(255,255,255,.02); border-radius: 10px; }
-.calc-card .calc-value { font-size: 2rem; font-weight: 900; color: #C9A84C; }
-.calc-card .calc-label { font-size: .78rem; color: #9B978F; }
-.calc-card.alert { border: 1px solid #DC2626; }
-.calc-card.ok { border: 1px solid #22C55E; }
-.poste-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 16px; margin-bottom: 24px; }
-.poste-card { background: #161822; border: 1px solid rgba(201,168,76,.1); border-radius: 14px; padding: 20px; }
-.poste-card h4 { color: #C9A84C; font-size: .9rem; margin-bottom: 8px; }
-.poste-card .poste-desc { font-size: .78rem; color: #9B978F; margin-bottom: 10px; line-height: 1.6; }
-.poste-card .poste-count { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
-.poste-card .poste-count label { font-size: .78rem; color: #9B978F; }
-.poste-card .poste-count input { width: 60px; padding: 4px 8px; border-radius: 6px; border: 1px solid rgba(201,168,76,.1); background: rgba(255,255,255,.04); color: #E8E4DC; font-size: .9rem; text-align: center; }
-.poste-card .poste-count .need { font-size: .78rem; color: #F59E0B; }
-.staff-member { display: flex; align-items: center; gap: 8px; padding: 6px 0; border-bottom: 1px solid rgba(201,168,76,.05); font-size: .78rem; }
-.staff-member:last-child { border-bottom: none; }
-.staff-member input { background: rgba(255,255,255,.04); border: 1px solid rgba(201,168,76,.1); border-radius: 6px; padding: 4px 8px; color: #E8E4DC; font-size: .78rem; flex: 1; }
-.staff-badge { display: inline-block; padding: 2px 6px; border-radius: 4px; font-size: .65rem; font-weight: 700; background: rgba(220,38,38,.15); color: #DC2626; }
-.add-staff-btn { padding: 5px 12px; border-radius: 6px; font-size: .72rem; font-weight: 600; border: none; cursor: pointer; background: rgba(201,168,76,.15); color: #C9A84C; margin-top: 8px; }
-.planning-section { margin-bottom: 24px; }
-.planning-table { width: 100%; border-collapse: collapse; font-size: .78rem; }
-.planning-table th { background: rgba(201,168,76,.06); padding: 8px 10px; text-align: left; color: #C9A84C; font-size: .72rem; text-transform: uppercase; border-bottom: 1px solid rgba(201,168,76,.1); }
-.planning-table td { padding: 8px 10px; border-bottom: 1px solid rgba(201,168,76,.05); color: #9B978F; }
-.planning-table .rotation-warning { color: #DC2626; font-weight: 700; }
-.repas-staff-card { background: #161822; border: 1px solid #C9A84C; border-radius: 14px; padding: 24px; margin-bottom: 24px; }
-.briefing-checklist { margin-top: 16px; }
-.briefing-item { display: flex; align-items: center; gap: 8px; padding: 6px 0; font-size: .82rem; }
-.briefing-item input { width: 18px; height: 18px; accent-color: #22C55E; }
-
-/* Securite */
-.security-status { background: #161822; border-radius: 14px; padding: 24px; margin-bottom: 24px; }
-.security-status.green { border: 2px solid #22C55E; }
-.security-status.orange { border: 2px solid #F59E0B; }
-.security-status.red { border: 2px solid #DC2626; }
-.security-status h2 { font-size: 1.2rem; margin-bottom: 4px; }
-.security-status .status-text { font-size: .88rem; color: #9B978F; }
-.security-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 16px; margin-bottom: 24px; }
-.sec-card { background: #161822; border: 1px solid rgba(201,168,76,.1); border-radius: 14px; padding: 20px; }
-.sec-card h4 { color: #C9A84C; font-size: .9rem; margin-bottom: 12px; }
-.sec-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid rgba(201,168,76,.05); font-size: .82rem; }
-.sec-row:last-child { border-bottom: none; }
-.sec-row .sec-label { color: #9B978F; }
-.sec-row .sec-value { font-weight: 700; }
-.sec-toggle { display: flex; align-items: center; gap: 8px; }
-.sec-toggle input { width: 18px; height: 18px; accent-color: #22C55E; }
-.evac-card { background: #161822; border: 1px solid rgba(201,168,76,.1); border-radius: 14px; padding: 24px; margin-bottom: 24px; }
-.evac-card h3 { color: #C9A84C; margin-bottom: 16px; }
-.evac-info { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 12px; }
-.evac-stat { text-align: center; padding: 12px; background: rgba(255,255,255,.02); border-radius: 8px; }
-.evac-stat .evac-val { font-size: 1.5rem; font-weight: 900; color: #C9A84C; }
-.evac-stat .evac-label { font-size: .72rem; color: #9B978F; }
-.pmr-section { background: #161822; border: 1px solid rgba(201,168,76,.1); border-radius: 14px; padding: 24px; margin-bottom: 24px; }
-.pmr-section h3 { color: #C9A84C; margin-bottom: 16px; }
-.pmr-item { display: flex; align-items: center; gap: 10px; padding: 8px 0; border-bottom: 1px solid rgba(201,168,76,.05); font-size: .82rem; }
-.pmr-item:last-child { border-bottom: none; }
-.pmr-item input[type="checkbox"] { width: 18px; height: 18px; accent-color: #22C55E; }
-.kit-section { background: #161822; border: 1px solid rgba(201,168,76,.1); border-radius: 14px; padding: 24px; margin-bottom: 24px; }
-.kit-section h3 { color: #C9A84C; margin-bottom: 16px; }
-.kit-item { display: flex; align-items: center; gap: 10px; padding: 6px 0; font-size: .82rem; }
-.kit-item input[type="checkbox"] { width: 16px; height: 16px; accent-color: #22C55E; }
-
-/* Budget */
-.budget-gauge { background: #161822; border-radius: 14px; padding: 24px; margin-bottom: 24px; }
-.budget-gauge.ok { border: 2px solid #22C55E; }
-.budget-gauge.warn { border: 2px solid #F59E0B; }
-.budget-gauge.danger { border: 2px solid #DC2626; }
-.gauge-display { display: flex; align-items: center; gap: 16px; margin-bottom: 12px; }
-.gauge-bar-track { flex: 1; height: 24px; background: rgba(255,255,255,.06); border-radius: 12px; overflow: hidden; position: relative; }
-.gauge-bar-fill { height: 100%; border-radius: 12px; transition: width .5s ease; display: flex; align-items: center; justify-content: center; font-size: .75rem; font-weight: 700; color: #111; }
-.gauge-markers { position: relative; height: 16px; margin-top: 4px; }
-.gauge-marker { position: absolute; top: 0; font-size: .65rem; color: #5F5C55; transform: translateX(-50%); }
-.gauge-pct { font-size: 2rem; font-weight: 900; min-width: 100px; text-align: right; }
-.budget-summary { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 12px; margin-bottom: 24px; }
-.budget-table-wrap { background: #161822; border: 1px solid rgba(201,168,76,.1); border-radius: 14px; padding: 0; margin-bottom: 24px; overflow: hidden; }
-.budget-table { width: 100%; border-collapse: collapse; font-size: .82rem; }
-.budget-table th { background: rgba(201,168,76,.06); padding: 12px 14px; text-align: left; font-weight: 700; font-size: .75rem; color: #C9A84C; text-transform: uppercase; letter-spacing: .5px; border-bottom: 1px solid rgba(201,168,76,.1); }
-.budget-table td { padding: 10px 14px; border-bottom: 1px solid rgba(201,168,76,.05); }
-.budget-table tr:hover td { background: rgba(201,168,76,.03); }
-.budget-table input { background: rgba(255,255,255,.04); border: 1px solid rgba(201,168,76,.1); border-radius: 6px; padding: 4px 8px; color: #E8E4DC; font-size: .82rem; width: 100px; text-align: right; }
-.budget-table .cat-header { background: rgba(201,168,76,.03); font-weight: 700; color: #C9A84C; }
-.budget-table .total-row { background: rgba(201,168,76,.06); font-weight: 700; }
-.budget-table .diff-positive { color: #22C55E; }
-.budget-table .diff-negative { color: #DC2626; }
-.budget-table .contingence-row { background: rgba(245,158,11,.05); font-style: italic; }
-.revenue-section { background: #161822; border: 1px solid #C9A84C; border-radius: 14px; padding: 24px; margin-bottom: 24px; }
-.revenue-section h3 { color: #C9A84C; margin-bottom: 16px; }
-.revenue-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; }
-.revenue-card { text-align: center; padding: 12px; background: rgba(255,255,255,.02); border-radius: 8px; }
-.revenue-card .rev-val { font-size: 1.4rem; font-weight: 900; color: #22C55E; }
-.revenue-card .rev-label { font-size: .72rem; color: #9B978F; }
-.profit-box { text-align: center; padding: 24px; background: #161822; border-radius: 14px; margin-bottom: 24px; }
-.profit-box .profit-val { font-size: 2.5rem; font-weight: 900; }
-.profit-box .profit-val.positive { color: #22C55E; }
-.profit-box .profit-val.negative { color: #DC2626; }
-.profit-box .profit-label { font-size: .88rem; color: #9B978F; }
-
-/* Post-event */
-.survey-section { background: #161822; border: 1px solid #C9A84C; border-radius: 14px; padding: 24px; margin-bottom: 24px; }
-.survey-section h3 { color: #C9A84C; margin-bottom: 16px; }
-.nps-gauge { text-align: center; margin-bottom: 20px; }
-.nps-score { font-size: 4rem; font-weight: 900; }
-.nps-label { font-size: .88rem; color: #9B978F; }
-.nps-scale { display: flex; gap: 4px; justify-content: center; margin: 12px 0; }
-.nps-scale .nps-item { width: 36px; height: 36px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: .75rem; font-weight: 700; cursor: pointer; transition: all .2s; }
-.nps-detractors { background: rgba(220,38,38,.15); color: #DC2626; }
-.nps-passives { background: rgba(245,158,11,.15); color: #F59E0B; }
-.nps-promoters { background: rgba(34,197,94,.15); color: #22C55E; }
-.survey-results { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; margin-bottom: 20px; }
-.survey-question { background: rgba(255,255,255,.02); border-radius: 10px; padding: 16px; }
-.survey-question h4 { font-size: .82rem; color: #C9A84C; margin-bottom: 10px; }
-.survey-bar { display: flex; align-items: center; gap: 8px; margin-bottom: 4px; }
-.survey-bar .s-label { min-width: 80px; font-size: .72rem; color: #9B978F; text-align: right; }
-.survey-bar .s-track { flex: 1; height: 16px; background: rgba(255,255,255,.04); border-radius: 4px; overflow: hidden; }
-.survey-bar .s-fill { height: 100%; border-radius: 4px; display: flex; align-items: center; padding-left: 6px; font-size: .65rem; font-weight: 700; color: #111; }
-.survey-bar .s-pct { min-width: 36px; font-size: .72rem; color: #9B978F; }
-.pe-template-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; margin-bottom: 24px; }
-.pe-template-card { background: #161822; border: 1px solid rgba(201,168,76,.1); border-radius: 14px; padding: 20px; }
-.pe-template-card h4 { color: #C9A84C; font-size: .9rem; margin-bottom: 8px; }
-.pe-template-card p { font-size: .78rem; color: #9B978F; line-height: 1.6; }
-.pe-template-card button { margin-top: 10px; padding: 6px 14px; border-radius: 6px; font-size: .75rem; font-weight: 600; border: none; cursor: pointer; background: rgba(201,168,76,.15); color: #C9A84C; }
-.debrief-checklist { margin-bottom: 24px; }
-.debrief-item { display: flex; align-items: center; gap: 10px; padding: 8px 0; border-bottom: 1px solid rgba(201,168,76,.05); font-size: .82rem; }
-.debrief-item:last-child { border-bottom: none; }
-.debrief-item input[type="checkbox"] { width: 18px; height: 18px; accent-color: #22C55E; }
-.rgpd-card { background: rgba(220,38,38,.05); border: 1px solid rgba(220,38,38,.2); border-radius: 14px; padding: 24px; margin-bottom: 24px; }
-.rgpd-card h3 { color: #DC2626; margin-bottom: 12px; }
-.rgpd-card .countdown { font-size: 2rem; font-weight: 900; color: #DC2626; text-align: center; margin: 12px 0; }
-.slides-section { background: #161822; border: 1px solid rgba(201,168,76,.1); border-radius: 14px; padding: 24px; margin-bottom: 24px; }
-.slides-section h3 { color: #C9A84C; margin-bottom: 16px; }
-.slides-item { display: flex; align-items: center; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid rgba(201,168,76,.05); font-size: .82rem; }
-.slides-item:last-child { border-bottom: none; }
-.slides-toggle { display: flex; align-items: center; gap: 6px; }
-.slides-toggle input { width: 16px; height: 16px; accent-color: #22C55E; }
-.send-status { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: .7rem; font-weight: 700; }
-.send-done { background: rgba(34,197,94,.15); color: #22C55E; }
-.send-pending { background: rgba(245,158,11,.15); color: #F59E0B; }
-
-/* Override admin-header/nav hidden since we use sidebar */
-.admin-header, .navbar, .login-overlay { display: none !important; }
+    /* Admin section inner styles: override admin-content that was hidden */
+    .admin-section .admin-content { display: block !important; }
   </style>
 </head>
-<body>
+<body class="spa-body">
 
-<!-- MOBILE HEADER -->
-<div class="mobile-header">
-  <div class="brand"><img src="img/icons/icon-saucisse.png" alt="" style="width:28px;height:28px;border-radius:6px;object-fit:contain"> Congres Saucisse</div>
-  <button class="hamburger-btn" onclick="toggleSidebar()">&#9776;</button>
-</div>
+<!-- HAMBURGER -->
+<button class="hamburger" onclick="toggleSidebar()">&#9776;</button>
 <div class="sidebar-overlay" id="sidebar-overlay" onclick="toggleSidebar()"></div>
 
-<div class="spa-layout">
-
-<!-- ═══ SIDEBAR ═══ -->
+<!-- SIDEBAR -->
 <nav class="sidebar" id="sidebar">
-  <div class="sidebar-brand">
+  <div class="sidebar-header">
     <img src="img/icons/icon-saucisse.png" alt="Saucisse"> Congres de la Saucisse
   </div>
 
-  <div class="sidebar-section-label">Public</div>
-  <ul class="sidebar-menu">
-    <li><a href="#accueil" onclick="showSection('accueil')" class="active" data-section="accueil"><img src="img/icons/icon-home.png" class="menu-icon" alt=""> Accueil</a></li>
-    <li><a href="#programme" onclick="showSection('programme')" data-section="programme"><img src="img/icons/icon-programme.png" class="menu-icon" alt=""> Programme</a></li>
-    <li><a href="#intervenants" onclick="showSection('intervenants')" data-section="intervenants"><img src="img/icons/icon-intervenants.png" class="menu-icon" alt=""> Intervenants</a></li>
-    <li><a href="#inscription" onclick="showSection('inscription')" data-section="inscription"><img src="img/icons/icon-inscription.png" class="menu-icon" alt=""> Inscription</a></li>
-    <li><a href="#plan" onclick="showSection('plan')" data-section="plan"><img src="img/icons/icon-plan.png" class="menu-icon" alt=""> Plan du Palais</a></li>
-    <li><a href="#infos" onclick="showSection('infos')" data-section="infos"><img src="img/icons/icon-infos.png" class="menu-icon" alt=""> Infos pratiques</a></li>
-    <li><a href="#presse" onclick="showSection('presse')" data-section="presse"><img src="img/icons/icon-presse.png" class="menu-icon" alt=""> Presse</a></li>
-  </ul>
+  <div class="sidebar-section">PUBLIC</div>
+  <a class="sidebar-link active" onclick="show('accueil')"><img src="img/icons/icon-home.png" alt=""> Accueil</a>
+  <a class="sidebar-link" onclick="show('programme')"><img src="img/icons/icon-programme.png" alt=""> Programme</a>
+  <a class="sidebar-link" onclick="show('intervenants')"><img src="img/icons/icon-intervenants.png" alt=""> Intervenants</a>
+  <a class="sidebar-link" onclick="show('inscription')"><img src="img/icons/icon-inscription.png" alt=""> Inscription</a>
+  <a class="sidebar-link" onclick="show('plan')"><img src="img/icons/icon-plan.png" alt=""> Plan</a>
+  <a class="sidebar-link" onclick="show('infos')"><img src="img/icons/icon-transport.png" alt=""> Infos pratiques</a>
+  <a class="sidebar-link" onclick="show('presse')"><img src="img/icons/icon-presse.png" alt=""> Presse</a>
 
-  <div class="sidebar-section-label">Administration</div>
-  <ul class="sidebar-menu" id="admin-menu">
-    <li><a href="#admin-dashboard" onclick="showAdminSection('admin-dashboard')" data-section="admin-dashboard"><img src="img/icons/icon-dashboard.png" class="menu-icon" alt=""> Dashboard <span class="admin-lock-badge" id="lock-badge">&#128274;</span></a></li>
-    <li><a href="#admin-participants" onclick="showAdminSection('admin-participants')" data-section="admin-participants"><img src="img/icons/icon-participants.png" class="menu-icon" alt=""> Participants</a></li>
-    <li><a href="#admin-invitations" onclick="showAdminSection('admin-invitations')" data-section="admin-invitations"><img src="img/icons/icon-invitations.png" class="menu-icon" alt=""> Invitations</a></li>
-    <li><a href="#admin-traiteur" onclick="showAdminSection('admin-traiteur')" data-section="admin-traiteur"><img src="img/icons/icon-traiteur.png" class="menu-icon" alt=""> Traiteur</a></li>
-    <li><a href="#admin-salles" onclick="showAdminSection('admin-salles')" data-section="admin-salles"><img src="img/icons/icon-salles.png" class="menu-icon" alt=""> Jauge salles</a></li>
-    <li><a href="#admin-checkin" onclick="showAdminSection('admin-checkin')" data-section="admin-checkin"><img src="img/icons/icon-checkin.png" class="menu-icon" alt=""> Check-in</a></li>
-    <li><a href="#admin-emails" onclick="showAdminSection('admin-emails')" data-section="admin-emails"><img src="img/icons/icon-emails.png" class="menu-icon" alt=""> Emails</a></li>
-    <li><a href="#admin-checklist" onclick="showAdminSection('admin-checklist')" data-section="admin-checklist"><img src="img/icons/icon-checkin.png" class="menu-icon" alt=""> Checklist</a></li>
-    <li><a href="#admin-speakers" onclick="showAdminSection('admin-speakers')" data-section="admin-speakers"><img src="img/icons/icon-participants.png" class="menu-icon" alt=""> Speakers</a></li>
-    <li><a href="#admin-staff" onclick="showAdminSection('admin-staff')" data-section="admin-staff"><img src="img/icons/icon-participants.png" class="menu-icon" alt=""> Staff</a></li>
-    <li><a href="#admin-securite" onclick="showAdminSection('admin-securite')" data-section="admin-securite"><img src="img/icons/icon-salles.png" class="menu-icon" alt=""> Securite</a></li>
-    <li><a href="#admin-budget" onclick="showAdminSection('admin-budget')" data-section="admin-budget"><img src="img/icons/icon-traiteur.png" class="menu-icon" alt=""> Budget</a></li>
-    <li><a href="#admin-postevent" onclick="showAdminSection('admin-postevent')" data-section="admin-postevent"><img src="img/icons/icon-emails.png" class="menu-icon" alt=""> Post-event</a></li>
-  </ul>
+  <div class="sidebar-section">ADMINISTRATION</div>
+  <a class="sidebar-link" onclick="showAdmin('dashboard')"><img src="img/icons/icon-dashboard.png" alt=""> Dashboard</a>
+  <a class="sidebar-link" onclick="showAdmin('participants')"><img src="img/icons/icon-participants.png" alt=""> Participants</a>
+  <a class="sidebar-link" onclick="showAdmin('invitations')"><img src="img/icons/icon-invitations.png" alt=""> Invitations</a>
+  <a class="sidebar-link" onclick="showAdmin('traiteur')"><img src="img/icons/icon-traiteur.png" alt=""> Traiteur</a>
+  <a class="sidebar-link" onclick="showAdmin('salles')"><img src="img/icons/icon-salles.png" alt=""> Salles</a>
+  <a class="sidebar-link" onclick="showAdmin('checkin')"><img src="img/icons/icon-checkin.png" alt=""> Check-in</a>
+  <a class="sidebar-link" onclick="showAdmin('emails')"><img src="img/icons/icon-emails.png" alt=""> Emails</a>
+  <a class="sidebar-link" onclick="showAdmin('checklist')"><img src="img/icons/icon-checkin.png" alt=""> Checklist</a>
+  <a class="sidebar-link" onclick="showAdmin('speakers')"><img src="img/icons/icon-participants.png" alt=""> Speakers</a>
+  <a class="sidebar-link" onclick="showAdmin('staff')"><img src="img/icons/icon-participants.png" alt=""> Staff</a>
+  <a class="sidebar-link" onclick="showAdmin('securite')"><img src="img/icons/icon-salles.png" alt=""> Securite</a>
+  <a class="sidebar-link" onclick="showAdmin('budget')"><img src="img/icons/icon-traiteur.png" alt=""> Budget</a>
+  <a class="sidebar-link" onclick="showAdmin('postevent')"><img src="img/icons/icon-emails.png" alt=""> Post-event</a>
 
-  <div style="padding:18px;margin-top:auto;border-top:1px solid rgba(201,168,76,.1);">
-    <div style="font-size:.72rem;color:#5F5C55;">Evenement fictif a but de demonstration.</div>
-    <div style="font-size:.72rem;color:#5F5C55;margin-top:4px;">12 — 14 juin 2026 · Palais des Congres</div>
-  </div>
+  <div class="sidebar-footer">Evenement fictif - demo<br>Strasbourg 2026</div>
 </nav>
 
-<!-- ═══ MAIN CONTENT AREA ═══ -->
-<main class="main-content">
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- MAIN CONTENT -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<main class="spa-content">
 
-<!-- ADMIN LOGIN MODAL (hidden by default) -->
-<div class="admin-login-modal" id="admin-login-modal" style="display:none;">
-  <div class="login-box">
-    <h1><img src="img/icons/icon-saucisse.png" alt="Saucisse" style="width:48px;height:48px;border-radius:12px;object-fit:contain;vertical-align:middle" title="Back Office"> Administration</h1>
-    <p>Entrez le mot de passe pour acceder au back office</p>
-    <input type="password" id="admin-pwd" placeholder="Mot de passe" onkeydown="if(event.key==='Enter')unlockAdmin()">
-    <button onclick="unlockAdmin()">Connexion</button>
-    <div class="login-error" id="admin-login-error">Mot de passe incorrect</div>
-    <div style="margin-top:12px;"><button onclick="cancelAdmin()" style="background:transparent;color:#5F5C55;border:1px solid rgba(201,168,76,.1);width:100%;padding:10px;border-radius:12px;cursor:pointer;font-size:.82rem;">Annuler</button></div>
-  </div>
+<!-- ══════ ACCUEIL ══════ -->
+<div id="section-accueil" class="section-page active">
+  <section class="hero">
+    <div class="hero-badge">12 — 14 juin 2026 · Palais des Congres de Strasbourg</div>
+    <h1>Le Congres de la Saucisse</h1>
+    <p class="subtitle">Le plus grand rassemblement europeen dedie a la saucisse artisanale.<br>3 jours de conferences, degustations, ateliers et rencontres.</p>
+    <div class="stats">
+      <div class="stat"><div class="stat-val">50+</div><div class="stat-label">Intervenants</div></div>
+      <div class="stat"><div class="stat-val">3</div><div class="stat-label">Jours</div></div>
+      <div class="stat"><div class="stat-val">23</div><div class="stat-label">Salles</div></div>
+      <div class="stat"><div class="stat-val">1800</div><div class="stat-label">Places</div></div>
+    </div>
+    <a href="javascript:show('inscription')" class="btn btn-green">S'inscrire maintenant</a>
+    <a href="javascript:show('programme')" class="btn btn-outline" style="margin-left:12px;">Voir le programme</a>
+  </section>
+  <div class="section-divider"></div>
+  <section class="section">
+    <h2 class="section-title">Programme en un coup d'oeil</h2>
+    <p class="section-subtitle">3 jours de conferences, tables rondes et ateliers pratiques.</p>
+    <div class="programme-summary" id="programme-summary"></div>
+    <div class="text-center mt-3"><a href="javascript:show('programme')" class="btn btn-outline btn-sm">Programme complet</a></div>
+  </section>
+  <div class="section-divider"></div>
+  <section class="section">
+    <h2 class="section-title">Intervenants vedettes</h2>
+    <p class="section-subtitle">Des experts internationaux de la saucisse artisanale.</p>
+    <div class="highlight-speakers" id="featured-speakers"></div>
+    <div class="text-center mt-3"><a href="javascript:show('intervenants')" class="btn btn-outline btn-sm">Tous les intervenants</a></div>
+  </section>
+  <div class="section-divider"></div>
+  <section class="section">
+    <h2 class="section-title text-gold">Nos partenaires</h2>
+    <p class="section-subtitle">Ils rendent cet evenement possible.</p>
+    <div class="partners-grid">
+      <div class="partner-card"><div class="partner-name">Ville de Strasbourg</div><div class="partner-type">Partenaire institutionnel</div></div>
+      <div class="partner-card"><div class="partner-name">Region Grand Est</div><div class="partner-type">Partenaire institutionnel</div></div>
+      <div class="partner-card"><div class="partner-name">IFCC</div><div class="partner-type">Partenaire scientifique</div></div>
+      <div class="partner-card"><div class="partner-name">Brasserie Meteor</div><div class="partner-type">Partenaire degustation</div></div>
+      <div class="partner-card"><div class="partner-name">Alsace Qualite</div><div class="partner-type">Label qualite</div></div>
+      <div class="partner-card"><div class="partner-name">INRAE</div><div class="partner-type">Partenaire recherche</div></div>
+      <div class="partner-card"><div class="partner-name">SausageTech</div><div class="partner-type">Partenaire innovation</div></div>
+      <div class="partner-card"><div class="partner-name">Fleischwerke</div><div class="partner-type">Sponsor Or</div></div>
+    </div>
+  </section>
+  <div class="section-divider"></div>
+  <section class="section">
+    <h2 class="section-title">Infos pratiques</h2>
+    <p class="section-subtitle">Tout ce qu'il faut savoir pour venir.</p>
+    <div class="infos-grid">
+      <div class="info-card"><div class="icon"><img src="img/icons/icon-transport.png" alt="Transport" style="width:64px;height:64px;border-radius:12px;object-fit:contain" title="TGV Paris-Strasbourg"></div><h4>TGV Paris → Strasbourg</h4><p>1h46 depuis Paris Gare de l'Est. Navette gare → Palais en 10 min.</p></div>
+      <div class="info-card"><div class="icon"><img src="img/icons/icon-transport.png" alt="Transport aerien" style="width:64px;height:64px;border-radius:12px;object-fit:contain" title="Aeroport d'Entzheim"></div><h4>Aeroport d'Entzheim</h4><p>Navette train 9 minutes vers Strasbourg centre.</p></div>
+      <div class="info-card"><div class="icon"><img src="img/icons/icon-hotel.png" alt="Hotel" style="width:64px;height:64px;border-radius:12px;object-fit:contain" title="Hotels a proximite"></div><h4>8 hotels a proximite</h4><p>De 85 a 220 euros/nuit, tous a moins de 600m du Palais.</p></div>
+      <div class="info-card"><div class="icon"><img src="img/icons/icon-transport.png" alt="Tram" style="width:64px;height:64px;border-radius:12px;object-fit:contain" title="Tram B ou E - Arret Wacken"></div><h4>Tram B ou E</h4><p>Arret "Wacken" — directement devant le Palais des Congres.</p></div>
+    </div>
+    <div class="text-center mt-3"><a href="javascript:show('infos')" class="btn btn-outline btn-sm">Toutes les infos pratiques</a></div>
+  </section>
+  <footer class="footer" style="display:block !important;">
+    <div class="footer-brand"><img src="img/icons/icon-saucisse.png" alt="Saucisse" style="width:28px;height:28px;border-radius:6px;object-fit:contain;vertical-align:middle" title="Congres de la Saucisse"> Le Congres de la Saucisse — Strasbourg 2026</div>
+    <p>12 — 14 juin 2026 · Palais des Congres de Strasbourg</p>
+    <p style="margin-top:12px;font-size:.72rem;color:var(--text-muted);">Evenement fictif a but de demonstration.</p>
+  </footer>
 </div>
 
-<!-- SPEAKER MODAL (shared) -->
+<!-- The remaining 19 sections are loaded dynamically via spa-sections.js -->
+<!-- Each section div will be injected by the SPA script -->
+<div id="section-programme" class="section-page"></div>
+<div id="section-intervenants" class="section-page"></div>
+<div id="section-inscription" class="section-page"></div>
+<div id="section-plan" class="section-page"></div>
+<div id="section-infos" class="section-page"></div>
+<div id="section-presse" class="section-page"></div>
+<div id="section-dashboard" class="section-page admin-section"></div>
+<div id="section-participants" class="section-page admin-section"></div>
+<div id="section-invitations" class="section-page admin-section"></div>
+<div id="section-traiteur" class="section-page admin-section"></div>
+<div id="section-salles" class="section-page admin-section"></div>
+<div id="section-checkin" class="section-page admin-section"></div>
+<div id="section-emails" class="section-page admin-section"></div>
+<div id="section-checklist" class="section-page admin-section"></div>
+<div id="section-speakers" class="section-page admin-section"></div>
+<div id="section-staff" class="section-page admin-section"></div>
+<div id="section-securite" class="section-page admin-section"></div>
+<div id="section-budget" class="section-page admin-section"></div>
+<div id="section-postevent" class="section-page admin-section"></div>
+
+</main>
+
+<!-- MODAL for intervenants -->
 <div class="modal-overlay" id="speaker-modal">
   <div class="modal">
-    <button class="modal-close" onclick="closeSpeakerModal()">&times;</button>
-    <div id="speaker-modal-content"></div>
+    <button class="modal-close" onclick="closeModal()">&times;</button>
+    <div id="modal-content"></div>
   </div>
 </div>
 
-<!-- DETAIL MODAL (admin participants) -->
+<!-- MODAL for participants detail -->
 <div class="modal-overlay" id="detail-modal" style="display:none;">
   <div class="modal" style="background:#161822;max-width:700px;border:1px solid rgba(201,168,76,.1);">
-    <button class="modal-close" onclick="closeDetail()" style="color:#5F5C55;">&times;</button>
+    <button class="modal-close" onclick="closeDetail()" style="color:#9B978F;">&times;</button>
     <div id="detail-content"></div>
   </div>
 </div>
 
-<!-- ═══ SECTION: ACCUEIL ═══ -->
-<div class="spa-section public-section active" id="section-accueil">
-<section class="hero">
-  <div class="hero-badge">12 — 14 juin 2026 · Palais des Congres de Strasbourg</div>
-  <h1>Le Congres de la Saucisse</h1>
-  <p class="subtitle">Le plus grand rassemblement europeen dedie a la saucisse artisanale.<br>3 jours de conferences, degustations, ateliers et rencontres.</p>
-  <div class="stats">
-    <div class="stat"><div class="stat-val">50+</div><div class="stat-label">Intervenants</div></div>
-    <div class="stat"><div class="stat-val">3</div><div class="stat-label">Jours</div></div>
-    <div class="stat"><div class="stat-val">23</div><div class="stat-label">Salles</div></div>
-    <div class="stat"><div class="stat-val">1800</div><div class="stat-label">Places</div></div>
-  </div>
-  <a href="#inscription" class="btn btn-green" onclick="showSection('inscription')">S'inscrire maintenant</a>
-  <a href="#programme" class="btn btn-outline" style="margin-left:12px;" onclick="showSection('programme')">Voir le programme</a>
-</section>
-<div class="section-divider"></div>
-<section class="section">
-  <h2 class="section-title">Programme en un coup d'oeil</h2>
-  <p class="section-subtitle">3 jours de conferences, tables rondes et ateliers pratiques.</p>
-  <div class="programme-summary" id="programme-summary"></div>
-  <div class="text-center mt-3"><a href="#programme" class="btn btn-outline btn-sm" onclick="showSection('programme')">Programme complet</a></div>
-</section>
-<div class="section-divider"></div>
-<section class="section">
-  <h2 class="section-title">Intervenants vedettes</h2>
-  <p class="section-subtitle">Des experts internationaux de la saucisse artisanale.</p>
-  <div class="highlight-speakers" id="featured-speakers"></div>
-  <div class="text-center mt-3"><a href="#intervenants" class="btn btn-outline btn-sm" onclick="showSection('intervenants')">Tous les intervenants</a></div>
-</section>
-<div class="section-divider"></div>
-<section class="section">
-  <h2 class="section-title text-gold">Nos partenaires</h2>
-  <p class="section-subtitle">Ils rendent cet evenement possible.</p>
-  <div class="partners-grid">
-    <div class="partner-card"><div class="partner-name">Ville de Strasbourg</div><div class="partner-type">Partenaire institutionnel</div></div>
-    <div class="partner-card"><div class="partner-name">Region Grand Est</div><div class="partner-type">Partenaire institutionnel</div></div>
-    <div class="partner-card"><div class="partner-name">IFCC</div><div class="partner-type">Partenaire scientifique</div></div>
-    <div class="partner-card"><div class="partner-name">Brasserie Meteor</div><div class="partner-type">Partenaire degustation</div></div>
-    <div class="partner-card"><div class="partner-name">Alsace Qualite</div><div class="partner-type">Label qualite</div></div>
-    <div class="partner-card"><div class="partner-name">INRAE</div><div class="partner-type">Partenaire recherche</div></div>
-    <div class="partner-card"><div class="partner-name">SausageTech</div><div class="partner-type">Partenaire innovation</div></div>
-    <div class="partner-card"><div class="partner-name">Fleischwerke</div><div class="partner-type">Sponsor Or</div></div>
-  </div>
-</section>
-<div class="section-divider"></div>
-<section class="section">
-  <h2 class="section-title">Infos pratiques</h2>
-  <p class="section-subtitle">Tout ce qu'il faut savoir pour venir.</p>
-  <div class="infos-grid-home">
-    <div class="info-card-home"><div class="icon"><img src="img/icons/icon-transport.png" alt="" style="width:64px;height:64px;border-radius:12px;object-fit:contain"></div><h4>TGV Paris - Strasbourg</h4><p>1h46 depuis Paris Gare de l'Est. Navette gare - Palais en 10 min.</p></div>
-    <div class="info-card-home"><div class="icon"><img src="img/icons/icon-transport.png" alt="" style="width:64px;height:64px;border-radius:12px;object-fit:contain"></div><h4>Aeroport d'Entzheim</h4><p>Navette train 9 minutes vers Strasbourg centre.</p></div>
-    <div class="info-card-home"><div class="icon"><img src="img/icons/icon-hotel.png" alt="" style="width:64px;height:64px;border-radius:12px;object-fit:contain"></div><h4>8 hotels a proximite</h4><p>De 85 a 220 euros/nuit, tous a moins de 600m du Palais.</p></div>
-    <div class="info-card-home"><div class="icon"><img src="img/icons/icon-transport.png" alt="" style="width:64px;height:64px;border-radius:12px;object-fit:contain"></div><h4>Tram B ou E</h4><p>Arret "Wacken" — directement devant le Palais des Congres.</p></div>
-  </div>
-  <div class="text-center mt-3"><a href="#infos" class="btn btn-outline btn-sm" onclick="showSection('infos')">Toutes les infos pratiques</a></div>
-</section>
-</div>
-
-</main>
-</div>
-
+<!-- SCRIPTS -->
 <script src="js/data.js"></script>
 <script src="js/qrcode.js"></script>
 <script src="js/content-filter.js"></script>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="js/spa-sections.js"></script>
+
 <script>
-// ═══ SPA CORE ═══
+/* ═══════════════════════════════════════════════════════
+   SPA NAVIGATION
+   ═══════════════════════════════════════════════════════ */
 var ADMIN_PWD = 'SAUCISSE2026';
-var adminUnlocked = localStorage.getItem('congres_admin_spa') === '1';
-var pendingAdminSection = null;
-var currentSection = 'accueil';
-var sectionInited = {};
+var adminUnlocked = !!localStorage.getItem('congress_admin_unlocked');
+var initializedSections = {};
+
+function show(id) {
+  document.querySelectorAll('.section-page').forEach(function(s) { s.classList.remove('active'); });
+  var el = document.getElementById('section-' + id);
+  if (el) {
+    el.classList.add('active');
+    // Initialize section content if not yet done
+    if (!initializedSections[id] && typeof SPA_INIT !== 'undefined' && SPA_INIT[id]) {
+      SPA_INIT[id]();
+      initializedSections[id] = true;
+    }
+  }
+  // Update active link
+  document.querySelectorAll('.sidebar-link').forEach(function(a) { a.classList.remove('active'); });
+  var links = document.querySelectorAll('.sidebar-link');
+  links.forEach(function(a) {
+    if (a.getAttribute('onclick') && a.getAttribute('onclick').indexOf("'" + id + "'") !== -1) {
+      a.classList.add('active');
+    }
+  });
+  // Close mobile sidebar
+  document.getElementById('sidebar').classList.remove('open');
+  document.getElementById('sidebar-overlay').classList.remove('open');
+  // Update hash
+  history.replaceState(null, '', '#' + id);
+  // Scroll to top
+  window.scrollTo({ top: 0 });
+}
+
+function showAdmin(id) {
+  if (!adminUnlocked) {
+    var pwd = prompt('Mot de passe administration :');
+    if (pwd !== ADMIN_PWD) { alert('Mot de passe incorrect'); return; }
+    localStorage.setItem('congress_admin_unlocked', '1');
+    adminUnlocked = true;
+  }
+  show(id);
+}
 
 function toggleSidebar() {
   document.getElementById('sidebar').classList.toggle('open');
   document.getElementById('sidebar-overlay').classList.toggle('open');
 }
 
-function showSection(id) {
-  document.querySelectorAll('.spa-section').forEach(function(s) { s.classList.remove('active'); });
-  var el = document.getElementById('section-' + id);
-  if (el) { el.classList.add('active'); }
-  document.querySelectorAll('.sidebar-menu a').forEach(function(a) { a.classList.remove('active'); });
-  var menuA = document.querySelector('[data-section="' + id + '"]');
-  if (menuA) menuA.classList.add('active');
-  currentSection = id;
-  window.scrollTo({top: 0});
-  // Close mobile sidebar
-  document.getElementById('sidebar').classList.remove('open');
-  document.getElementById('sidebar-overlay').classList.remove('open');
-  // Init section if needed
-  initSection(id);
-  // Update hash without triggering hashchange
-  history.replaceState(null, '', '#' + id);
-}
-
-function showAdminSection(id) {
-  if (!adminUnlocked) {
-    pendingAdminSection = id;
-    document.getElementById('admin-login-modal').style.display = 'flex';
-    document.getElementById('admin-pwd').focus();
-    return;
+// Handle hash on load
+window.addEventListener('DOMContentLoaded', function() {
+  // Init accueil always
+  if (typeof SPA_INIT !== 'undefined' && SPA_INIT['accueil']) {
+    SPA_INIT['accueil']();
+    initializedSections['accueil'] = true;
   }
-  showSection(id);
-}
-
-function unlockAdmin() {
-  var pwd = document.getElementById('admin-pwd').value;
-  if (pwd === ADMIN_PWD) {
-    adminUnlocked = true;
-    localStorage.setItem('congres_admin_spa', '1');
-    document.getElementById('admin-login-modal').style.display = 'none';
-    document.getElementById('admin-login-error').style.display = 'none';
-    document.getElementById('lock-badge').style.display = 'none';
-    if (pendingAdminSection) { showSection(pendingAdminSection); pendingAdminSection = null; }
-  } else {
-    document.getElementById('admin-login-error').style.display = 'block';
+  if (window.location.hash) {
+    var h = window.location.hash.substring(1);
+    var adminSections = ['dashboard','participants','invitations','traiteur','salles','checkin','emails','checklist','speakers','staff','securite','budget','postevent'];
+    if (adminSections.indexOf(h) !== -1) {
+      showAdmin(h);
+    } else {
+      show(h);
+    }
   }
-}
-
-function cancelAdmin() {
-  document.getElementById('admin-login-modal').style.display = 'none';
-  pendingAdminSection = null;
-}
-
-// Hide lock badge if already unlocked
-if (adminUnlocked) {
-  document.getElementById('lock-badge').style.display = 'none';
-}
-
-// ═══ LAZY SECTION INIT ═══
-function initSection(id) {
-  if (sectionInited[id]) return;
-  sectionInited[id] = true;
-  var fn = window['initSection_' + id.replace(/-/g, '_')];
-  if (fn) fn();
-}
-
-// ═══ ACCUEIL INIT ═══
-(function() {
-  // Programme summary
-  var container = document.getElementById('programme-summary');
-  var dayNames = ['', 'Jeudi 12 juin', 'Vendredi 13 juin', 'Samedi 14 juin'];
-  var dayThemes = ['', 'Histoire & Filiere', 'International & Innovation', 'Ateliers & Cloture'];
-  for (var d = 1; d <= 3; d++) {
-    var sessions = CONGRES.getSessionsByDay(d);
-    var html = '<div class="day-summary"><h3>' + dayNames[d] + '</h3><p style="font-size:.8rem;color:#6B7280;margin-bottom:12px;">' + dayThemes[d] + '</p><ul>';
-    sessions.slice(0, 4).forEach(function(s) { html += '<li><strong>' + s.debut + '</strong> ' + s.titre + '</li>'; });
-    if (sessions.length > 4) html += '<li style="color:#2AD783;">+ ' + (sessions.length - 4) + ' autres sessions...</li>';
-    html += '</ul></div>';
-    container.innerHTML += html;
-  }
-  // Featured speakers
-  var featured = [1, 3, 5, 6, 9, 20];
-  var sc = document.getElementById('featured-speakers');
-  featured.forEach(function(id) {
-    var s = CONGRES.getSpeaker(id);
-    if (!s) return;
-    sc.innerHTML += '<div class="speaker-card" onclick="showSection(\'intervenants\')"><div class="speaker-avatar">' + s.initiales + '</div><h3>' + s.prenom + ' ' + s.nom + '</h3><div class="title">' + s.titre + '</div><div class="org">' + s.org + '</div></div>';
-  });
-  sectionInited['accueil'] = true;
-})();
-
-// ═══ HASH ROUTING ═══
-function handleHash() {
-  var hash = location.hash.replace('#', '');
-  if (!hash) hash = 'accueil';
-  if (hash.startsWith('admin-')) {
-    showAdminSection(hash);
-  } else {
-    showSection(hash);
-  }
-}
-window.addEventListener('hashchange', handleHash);
-if (location.hash) handleHash();
-</script>
-
-<script>
-// ═══ DYNAMIC SECTION LOADER ═══
-var mainContent = document.querySelector('.main-content');
-
-// Helper to add section
-function addSection(id, cssClass, html) {
-  var div = document.createElement('div');
-  div.className = 'spa-section ' + cssClass;
-  div.id = 'section-' + id;
-  div.innerHTML = html;
-  mainContent.appendChild(div);
-}
-
-// ═══ PROGRAMME ═══
-addSection('programme', 'public-section', '<section class="section"><h1 class="section-title"><img src="img/icons/icon-programme.png" alt="" style="width:48px;height:48px;border-radius:12px;object-fit:contain;vertical-align:middle"> Programme complet</h1><p class="section-subtitle">32 sessions sur 3 jours — conferences, ateliers, degustations et tables rondes.</p><div class="tabs"><button class="tab-btn active" onclick="pgShowDay(1)">Jour 1 — Jeu. 12 juin</button><button class="tab-btn" onclick="pgShowDay(2)">Jour 2 — Ven. 13 juin</button><button class="tab-btn" onclick="pgShowDay(3)">Jour 3 — Sam. 14 juin</button></div><div class="filters" id="pg-filters"></div><div id="pg-sessions-list"></div><div class="text-center mt-3" style="padding:20px;"><p style="color:#6B7280;font-size:.82rem;">Cliquez sur le coeur pour ajouter a votre programme personnel.</p></div></section>');
-
-// ═══ INTERVENANTS ═══
-addSection('intervenants', 'public-section', '<section class="section"><h1 class="section-title"><img src="img/icons/icon-intervenants.png" alt="" style="width:48px;height:48px;border-radius:12px;object-fit:contain;vertical-align:middle"> Nos intervenants</h1><p class="section-subtitle">22 experts internationaux de la saucisse, de la gastronomie et de l\'innovation alimentaire.</p><div class="filters" id="iv-theme-filters"></div><div class="grid-3" id="iv-speakers-grid"></div></section>');
-
-// ═══ INSCRIPTION ═══
-addSection('inscription', 'public-section', '<section class="section" style="max-width:800px;"><h1 class="section-title"><img src="img/icons/icon-inscription.png" alt="" style="width:48px;height:48px;border-radius:12px;object-fit:contain;vertical-align:middle"> Inscription</h1><p class="section-subtitle">Reservez votre place au Congres de la Saucisse 2026.</p><div class="stepper"><div class="step-indicator active" data-step="1">1. Infos</div><div class="step-indicator" data-step="2">2. Pass</div><div class="step-indicator" data-step="3">3. Sessions</div><div class="step-indicator" data-step="4">4. Repas</div><div class="step-indicator" data-step="5">5. Hotel</div><div class="step-indicator" data-step="6">6. Recap</div><div class="step-indicator" data-step="7">7. Confirmation</div></div><div class="step-content active" data-step="1"><h2 style="font-size:1.1rem;margin-bottom:20px;">Informations personnelles</h2><div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;"><div class="form-group"><label>Prenom *</label><input type="text" id="f-prenom" placeholder="Votre prenom" required></div><div class="form-group"><label>Nom *</label><input type="text" id="f-nom" placeholder="Votre nom" required></div></div><div class="form-group"><label>Email *</label><input type="email" id="f-email" placeholder="votre@email.com" required></div><div class="form-group"><label>Telephone</label><input type="tel" id="f-tel" placeholder="06 12 34 56 78"></div><div class="form-group"><label>Entreprise / Organisation</label><input type="text" id="f-entreprise" placeholder="Nom de votre entreprise"></div><h3 style="font-size:.95rem;margin:20px 0 12px;color:#2AD783;">Regime alimentaire</h3><div class="form-group"><label>Selectionnez votre regime *</label><select id="f-regime" style="width:100%;padding:10px 14px;border-radius:10px;border:1px solid rgba(255,255,255,.08);background:#1E2430;color:#FFF;font-size:.88rem;"><option value="standard">Standard</option><option value="vegetarien">Vegetarien</option><option value="vegan">Vegan</option><option value="sans-gluten">Sans gluten</option><option value="sans-lactose">Sans lactose</option><option value="halal">Halal</option><option value="casher">Casher</option><option value="allergie-noix">Allergie noix</option><option value="allergie-fruits-mer">Allergie fruits de mer</option><option value="autre">Autre (preciser ci-dessous)</option></select></div><div class="form-group" id="regime-autre-group" style="display:none;"><label>Precisions</label><input type="text" id="f-regime-autre" placeholder="Ex: allergie arachides..."></div><h3 style="font-size:.95rem;margin:20px 0 12px;color:#2AD783;">Accessibilite</h3><div class="form-group"><label>Besoins specifiques ?</label><div style="display:flex;flex-direction:column;gap:8px;margin-top:6px;"><label style="display:flex;align-items:center;gap:8px;font-size:.85rem;cursor:pointer;"><input type="checkbox" id="f-acc-fauteuil" style="width:18px;height:18px;accent-color:#2AD783;"> Fauteuil roulant / mobilite reduite</label><label style="display:flex;align-items:center;gap:8px;font-size:.85rem;cursor:pointer;"><input type="checkbox" id="f-acc-malvoyant" style="width:18px;height:18px;accent-color:#2AD783;"> Malvoyant(e)</label><label style="display:flex;align-items:center;gap:8px;font-size:.85rem;cursor:pointer;"><input type="checkbox" id="f-acc-malentendant" style="width:18px;height:18px;accent-color:#2AD783;"> Malentendant(e) / LSF</label><label style="display:flex;align-items:center;gap:8px;font-size:.85rem;cursor:pointer;"><input type="checkbox" id="f-acc-calme" style="width:18px;height:18px;accent-color:#2AD783;"> Salle calme</label><label style="display:flex;align-items:center;gap:8px;font-size:.85rem;cursor:pointer;"><input type="checkbox" id="f-acc-autre-check" style="width:18px;height:18px;accent-color:#2AD783;"> Autre (preciser)</label></div></div><div class="form-group" id="acc-autre-group" style="display:none;"><input type="text" id="f-acc-autre" placeholder="Precisez vos besoins"></div><h3 style="font-size:.95rem;margin:20px 0 12px;color:#2AD783;">Mentions legales</h3><div style="display:flex;flex-direction:column;gap:10px;"><label style="display:flex;align-items:flex-start;gap:8px;font-size:.82rem;cursor:pointer;color:#B1B9C3;"><input type="checkbox" id="f-droits-image" style="width:18px;height:18px;accent-color:#2AD783;flex-shrink:0;margin-top:2px;"> J\'autorise la captation et diffusion de mon image.</label><label style="display:flex;align-items:flex-start;gap:8px;font-size:.82rem;cursor:pointer;color:#B1B9C3;"><input type="checkbox" id="f-rgpd" style="width:18px;height:18px;accent-color:#2AD783;flex-shrink:0;margin-top:2px;"> J\'accepte le traitement de mes donnees (RGPD). *</label></div><div style="text-align:right;margin-top:20px;"><button class="btn btn-green" onclick="insNextStep(2)">Suivant &rarr;</button></div></div><div class="step-content" data-step="2"><h2 style="font-size:1.1rem;margin-bottom:20px;">Choisissez votre pass</h2><div class="pass-grid" id="ins-pass-grid"></div><div class="staff-code" id="ins-staff-code-section"><div class="form-group"><label>Code Staff</label><input type="text" id="f-staff-code" placeholder="Entrez le code staff"></div></div><div style="display:flex;justify-content:space-between;margin-top:20px;"><button class="btn btn-outline" onclick="insNextStep(1)">&larr; Retour</button><button class="btn btn-green" onclick="insNextStep(3)">Suivant &rarr;</button></div></div><div class="step-content" data-step="3"><h2 style="font-size:1.1rem;margin-bottom:20px;">Choisissez vos sessions</h2><div class="tabs" style="margin-bottom:16px;"><button class="tab-btn active" onclick="insShowSessionDay(1, this)">Jour 1</button><button class="tab-btn" onclick="insShowSessionDay(2, this)">Jour 2</button><button class="tab-btn" onclick="insShowSessionDay(3, this)">Jour 3</button></div><div id="ins-session-choices"></div><div style="display:flex;justify-content:space-between;margin-top:20px;"><button class="btn btn-outline" onclick="insNextStep(2)">&larr; Retour</button><button class="btn btn-green" onclick="insNextStep(4)">Suivant &rarr;</button></div></div><div class="step-content" data-step="4"><h2 style="font-size:1.1rem;margin-bottom:20px;">Option repas</h2><p style="font-size:.85rem;color:#B1B9C3;margin-bottom:16px;">15 euros par repas/jour.</p><div id="ins-repas-choices"></div><div style="display:flex;justify-content:space-between;margin-top:20px;"><button class="btn btn-outline" onclick="insNextStep(3)">&larr; Retour</button><button class="btn btn-green" onclick="insNextStep(5)">Suivant &rarr;</button></div></div><div class="step-content" data-step="5"><h2 style="font-size:1.1rem;margin-bottom:20px;">Reservation d\'hotel (optionnel)</h2><p style="font-size:.85rem;color:#B1B9C3;margin-bottom:16px;">Prix par nuit pour 3 nuits (11-14 juin).</p><div id="ins-hotel-choices"></div><div class="hotel-option" onclick="insSelectHotel(null)" id="ins-hotel-none" style="border-color:#2AD783;"><div><strong>Pas besoin d\'hotel</strong><br><span style="font-size:.82rem;color:#6B7280;">J\'organise mon hebergement moi-meme</span></div></div><div style="display:flex;justify-content:space-between;margin-top:20px;"><button class="btn btn-outline" onclick="insNextStep(4)">&larr; Retour</button><button class="btn btn-green" onclick="insNextStep(6)">Voir le recapitulatif &rarr;</button></div></div><div class="step-content" data-step="6"><h2 style="font-size:1.1rem;margin-bottom:20px;">Recapitulatif</h2><div id="ins-recap-content"></div><div style="display:flex;justify-content:space-between;margin-top:20px;"><button class="btn btn-outline" onclick="insNextStep(5)">&larr; Retour</button><button class="btn btn-green" onclick="insConfirm()">Confirmer l\'inscription</button></div></div><div class="step-content" data-step="7"><div class="confirmation-box"><div class="check-icon">&check;</div><h2 style="font-size:1.4rem;margin-bottom:8px;">Inscription confirmee !</h2><p style="color:#B1B9C3;margin-bottom:24px;">Votre badge et votre programme ont ete generes.</p><div id="ins-badge-container"></div><div style="margin-top:20px;"><a href="#programme" class="btn btn-outline btn-sm" onclick="showSection(\'programme\')">Voir le programme</a> <a href="#accueil" class="btn btn-green btn-sm" style="margin-left:8px;" onclick="showSection(\'accueil\')">Retour a l\'accueil</a></div></div></div></section>');
-
-// ═══ PLAN ═══
-addSection('plan', 'public-section', '<section class="section"><h1 class="section-title"><img src="img/icons/icon-plan.png" alt="" style="width:48px;height:48px;border-radius:12px;object-fit:contain;vertical-align:middle"> Plan du Palais des Congres</h1><p class="section-subtitle">2 etages — cliquez sur une salle pour voir les details.</p><div class="tabs floor-tabs"><button class="tab-btn active" onclick="planShowFloor(\'rdc\', this)">Rez-de-chaussee</button><button class="tab-btn" onclick="planShowFloor(\'1er\', this)">1er etage</button></div><div class="plan-wrapper"><div class="plan-floor active" id="floor-rdc"><div class="plan-svg-container"><svg viewBox="0 0 800 500" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;"><rect x="20" y="20" width="760" height="460" rx="12" fill="none" stroke="#2AD783" stroke-width="1.5" opacity=".3"/><rect x="40" y="40" width="300" height="180" rx="10" fill="rgba(59,130,246,.12)" stroke="#3B82F6" stroke-width="1.5" class="plan-room" onclick="planShowRoom(\'erasme\', event)"/><text x="190" y="120" text-anchor="middle" fill="#3B82F6" font-size="14" font-weight="700">Salle Erasme</text><text x="190" y="140" text-anchor="middle" fill="#6B7280" font-size="11">450 places</text><rect x="360" y="40" width="220" height="140" rx="10" fill="rgba(59,130,246,.12)" stroke="#3B82F6" stroke-width="1.5" class="plan-room" onclick="planShowRoom(\'schweitzer\', event)"/><text x="470" y="100" text-anchor="middle" fill="#3B82F6" font-size="13" font-weight="700">Salle Schweitzer</text><text x="470" y="118" text-anchor="middle" fill="#6B7280" font-size="10">320 places</text><rect x="600" y="40" width="160" height="140" rx="10" fill="rgba(42,215,131,.12)" stroke="#2AD783" stroke-width="1.5" class="plan-room" onclick="planShowRoom(\'kleber\', event)"/><text x="680" y="100" text-anchor="middle" fill="#2AD783" font-size="12" font-weight="700">Salle Kleber</text><text x="680" y="118" text-anchor="middle" fill="#6B7280" font-size="10">120 places</text><rect x="40" y="240" width="180" height="120" rx="10" fill="rgba(245,158,11,.12)" stroke="#F59E0B" stroke-width="1.5" class="plan-room" onclick="planShowRoom(\'gutenberg\', event)"/><text x="130" y="295" text-anchor="middle" fill="#F59E0B" font-size="12" font-weight="700">Salle Gutenberg</text><text x="130" y="313" text-anchor="middle" fill="#6B7280" font-size="10">80 pl.</text><rect x="240" y="240" width="280" height="220" rx="10" fill="rgba(156,163,175,.08)" stroke="#9CA3AF" stroke-width="1.5" class="plan-room" onclick="planShowRoom(\'brandt\', event)"/><text x="380" y="340" text-anchor="middle" fill="#9CA3AF" font-size="14" font-weight="700">Salle Willy Brandt</text><text x="380" y="360" text-anchor="middle" fill="#6B7280" font-size="11">Espace Exposition</text><rect x="540" y="240" width="220" height="220" rx="10" fill="rgba(249,115,22,.08)" stroke="#F97316" stroke-width="1.5" class="plan-room" onclick="planShowRoom(\'europe\', event)"/><text x="650" y="340" text-anchor="middle" fill="#F97316" font-size="13" font-weight="700">Hall Europe</text><text x="650" y="360" text-anchor="middle" fill="#6B7280" font-size="10">Restauration</text><text x="400" y="490" text-anchor="middle" fill="#6B7280" font-size="11">Rez-de-chaussee</text><rect x="350" y="464" width="100" height="16" rx="4" fill="rgba(42,215,131,.2)" stroke="#2AD783"/><text x="400" y="477" text-anchor="middle" fill="#2AD783" font-size="9" font-weight="600">ENTREE</text></svg></div></div><div class="plan-floor" id="floor-1er"><div class="plan-svg-container"><svg viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;"><rect x="20" y="20" width="760" height="360" rx="12" fill="none" stroke="#FFD300" stroke-width="1.5" opacity=".3"/><rect x="40" y="40" width="240" height="150" rx="10" fill="rgba(42,215,131,.12)" stroke="#2AD783" stroke-width="1.5" class="plan-room" onclick="planShowRoom(\'cassin\', event)"/><text x="160" y="105" text-anchor="middle" fill="#2AD783" font-size="13" font-weight="700">Salle Cassin</text><text x="160" y="123" text-anchor="middle" fill="#6B7280" font-size="10">200 places</text><rect x="300" y="40" width="220" height="150" rx="10" fill="rgba(42,215,131,.12)" stroke="#2AD783" stroke-width="1.5" class="plan-room" onclick="planShowRoom(\'schuman\', event)"/><text x="410" y="105" text-anchor="middle" fill="#2AD783" font-size="13" font-weight="700">Salle Schuman</text><text x="410" y="123" text-anchor="middle" fill="#6B7280" font-size="10">150 places</text><rect x="540" y="40" width="220" height="150" rx="10" fill="rgba(245,158,11,.12)" stroke="#F59E0B" stroke-width="1.5" class="plan-room" onclick="planShowRoom(\'curie\', event)"/><text x="650" y="105" text-anchor="middle" fill="#F59E0B" font-size="13" font-weight="700">Salle Curie</text><text x="650" y="123" text-anchor="middle" fill="#6B7280" font-size="10">100 pl.</text><rect x="40" y="210" width="200" height="130" rx="10" fill="rgba(168,85,247,.12)" stroke="#A855F7" stroke-width="1.5" class="plan-room" onclick="planShowRoom(\'tomi\', event)"/><text x="140" y="270" text-anchor="middle" fill="#A855F7" font-size="12" font-weight="700">Salle Tomi Ungerer</text><text x="140" y="288" text-anchor="middle" fill="#6B7280" font-size="10">60 pl.</text><rect x="260" y="210" width="500" height="40" rx="6" fill="rgba(255,255,255,.03)" stroke="rgba(255,255,255,.08)"/><text x="510" y="234" text-anchor="middle" fill="#6B7280" font-size="10">Couloir + Escaliers</text><text x="400" y="380" text-anchor="middle" fill="#6B7280" font-size="11">1er etage</text></svg></div></div><div class="room-popup" id="room-popup"><button class="close-popup" onclick="planClosePopup()">&times;</button><div id="popup-content"></div></div></div><div class="legend"><div class="legend-item"><div class="legend-color" style="background:rgba(59,130,246,.3);"></div> Auditoriums</div><div class="legend-item"><div class="legend-color" style="background:rgba(42,215,131,.3);"></div> Conferences</div><div class="legend-item"><div class="legend-color" style="background:rgba(245,158,11,.3);"></div> Ateliers</div><div class="legend-item"><div class="legend-color" style="background:rgba(168,85,247,.3);"></div> Reunions</div><div class="legend-item"><div class="legend-color" style="background:rgba(156,163,175,.3);"></div> Exposition</div><div class="legend-item"><div class="legend-color" style="background:rgba(249,115,22,.3);"></div> Restauration</div></div><h2 class="section-title mt-3">Toutes les salles</h2><div class="room-list" id="plan-room-list"></div></section>');
-
-// ═══ INFOS ═══
-addSection('infos', 'public-section', '<section class="section"><h1 class="section-title">Infos pratiques</h1><p class="section-subtitle">Tout pour preparer votre venue.</p><div class="info-section"><h2><img src="img/icons/icon-plan.png" alt="" style="width:48px;height:48px;border-radius:12px;object-fit:contain;vertical-align:middle"> Plan du quartier</h2><div id="leaflet-map" class="map-container" style="margin-bottom:12px;"></div></div><div class="info-section"><h2><img src="img/icons/icon-transport.png" alt="" style="width:48px;height:48px;border-radius:12px;object-fit:contain;vertical-align:middle"> Venir a Strasbourg</h2><div class="transport-grid"><div class="transport-card"><h3>TGV</h3><p><strong>Paris - Strasbourg : 1h46</strong><br>Tram C puis B jusqu\'a l\'arret Wacken (20 min).</p></div><div class="transport-card"><h3>Avion</h3><p><strong>Aeroport Strasbourg-Entzheim</strong><br>Navette train en 9 minutes.</p></div><div class="transport-card"><h3>Voiture</h3><p><strong>A4 depuis Paris (4h30)</strong><br>Parking Wacken 800 places, 12 euros/jour.</p></div><div class="transport-card"><h3>Tram</h3><p><strong>Lignes B et E</strong>, arret Wacken.<br>Ticket : 1,80 euro. Pass 3 jours : 9,90 euros.</p></div></div></div><div class="info-section"><h2><img src="img/icons/icon-restaurant.png" alt="" style="width:48px;height:48px;border-radius:12px;object-fit:contain;vertical-align:middle"> Guide gourmand</h2><div class="resto-grid"><div class="resto-card"><h4>Maison Kammerzell</h4><div class="type">Winstub historique</div><p>XVe siecle. Knack, choucroute garnie.</p></div><div class="resto-card"><h4>Chez Yvonne</h4><div class="type">Winstub traditionnelle</div><p>Saucisses grillees, choucroute royale.</p></div><div class="resto-card"><h4>Au Pont Corbeau</h4><div class="type">Winstub & brasserie</div><p>Cervelas vinaigrette, tarte flambee.</p></div><div class="resto-card"><h4>Le Tire-Bouchon</h4><div class="type">Alsacien authentique</div><p>Flammekueche a volonte le soir.</p></div><div class="resto-card"><h4>La Corde a Linge</h4><div class="type">Flammekueche creative</div><p>Les meilleures de Strasbourg.</p></div><div class="resto-card"><h4>Brasserie Meteor</h4><div class="type">Brasserie alsacienne</div><p>Bieres et saucisses artisanales. Hochfelden.</p></div></div></div><div class="info-section"><h2><img src="img/icons/icon-cathedrale.png" alt="" style="width:48px;height:48px;border-radius:12px;object-fit:contain;vertical-align:middle"> Decouvrir Strasbourg</h2><div class="discover-grid"><div class="discover-card"><div class="icon"><img src="img/icons/icon-cathedrale.png" alt="" style="width:64px;height:64px;border-radius:12px;object-fit:contain"></div><h4>Cathedrale Notre-Dame</h4><p>Chef-d\'oeuvre gothique, 142m.</p></div><div class="discover-card"><div class="icon"><img src="img/icons/icon-petite-france.png" alt="" style="width:64px;height:64px;border-radius:12px;object-fit:contain"></div><h4>Petite France</h4><p>Maisons a colombages, canaux.</p></div><div class="discover-card"><div class="icon"><img src="img/icons/icon-parlement.png" alt="" style="width:64px;height:64px;border-radius:12px;object-fit:contain"></div><h4>Parlement Europeen</h4><p>A 500m du Palais. Visites gratuites.</p></div></div></div><div class="info-section"><h2><img src="img/icons/icon-meteo.png" alt="" style="width:48px;height:48px;border-radius:12px;object-fit:contain;vertical-align:middle"> Meteo en juin</h2><div class="card" style="max-width:500px;"><ul style="list-style:none;margin-top:10px;"><li style="padding:4px 0;color:#B1B9C3;">Temperature moyenne : <strong style="color:#2AD783;">20-25 C</strong></li><li style="padding:4px 0;color:#B1B9C3;">Ensoleillement : <strong style="color:#FFD300;">16h de jour</strong></li><li style="padding:4px 0;color:#B1B9C3;">Precipitations : moderees</li></ul></div></div><div class="info-section"><h2><img src="img/icons/icon-urgence.png" alt="" style="width:48px;height:48px;border-radius:12px;object-fit:contain;vertical-align:middle"> Numeros utiles</h2><div class="emergency-grid"><div class="emergency-card"><div class="number">15</div><div class="label">SAMU</div></div><div class="emergency-card"><div class="number">17</div><div class="label">Police</div></div><div class="emergency-card"><div class="number">18</div><div class="label">Pompiers</div></div><div class="emergency-card"><div class="number">112</div><div class="label">Urgences europeennes</div></div><div class="emergency-card" style="border-color:rgba(42,215,131,.2);background:rgba(42,215,131,.04);"><div class="number" style="color:#2AD783;">03 88 37 67 67</div><div class="label">Palais des Congres</div></div></div></div></section>');
-
-// ═══ PRESSE ═══
-addSection('presse', 'public-section', '<section class="section" style="max-width:800px;"><h1 class="section-title"><img src="img/icons/icon-presse.png" alt="" style="width:48px;height:48px;border-radius:12px;object-fit:contain;vertical-align:middle"> Espace Presse</h1><p class="section-subtitle">Accreditation, communiques et kit medias.</p><div class="press-section"><h2>Demander une accreditation presse</h2><div class="card" style="padding:24px;"><p style="font-size:.88rem;color:#B1B9C3;margin-bottom:16px;">Remplissez ce formulaire pour obtenir votre badge presse.</p><form id="press-form" onsubmit="submitPressForm(event)"><div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;"><div class="form-group"><label>Prenom *</label><input type="text" id="p-prenom" required></div><div class="form-group"><label>Nom *</label><input type="text" id="p-nom" required></div></div><div class="form-group"><label>Email professionnel *</label><input type="email" id="p-email" required></div><div class="form-group"><label>Media / Redaction *</label><input type="text" id="p-media" required placeholder="Ex: Le Monde, France 3..."></div><div class="form-group"><label>Objet de la couverture</label><textarea id="p-objet" rows="3" placeholder="Angle editorial..."></textarea></div><button type="submit" class="btn btn-green" style="width:100%;">Demander l\'accreditation</button></form><div id="press-success" class="hidden" style="text-align:center;padding:24px;"><div style="font-size:2.5rem;margin-bottom:12px;">&check;</div><h3 style="color:#2AD783;">Demande envoyee !</h3><p style="color:#B1B9C3;font-size:.88rem;">Reponse sous 48h (mode demo).</p></div></div></div><div class="press-section"><h2>Communiques de presse</h2><div class="press-doc"><div class="doc-icon"><img src="img/icons/icon-export.png" alt="" style="width:36px;height:36px;border-radius:8px;object-fit:contain"></div><div class="doc-info"><h4>Communique #1 — Lancement</h4><p>15 janvier 2026</p></div><div class="doc-dl"><button class="btn btn-outline btn-sm" onclick="alert(\'PDF mode demo\')">PDF</button></div></div><div class="press-doc"><div class="doc-icon"><img src="img/icons/icon-export.png" alt="" style="width:36px;height:36px;border-radius:8px;object-fit:contain"></div><div class="doc-info"><h4>Communique #2 — Programme complet</h4><p>15 mars 2026</p></div><div class="doc-dl"><button class="btn btn-outline btn-sm" onclick="alert(\'PDF mode demo\')">PDF</button></div></div></div><div class="press-section"><h2>Contact presse</h2><div class="contact-press"><p style="font-size:.9rem;line-height:1.8;"><strong>Service de presse</strong><br>Email : presse@congres-saucisse.fr<br>Tel : 03 88 37 67 67 (poste 3)<br>Responsable : <strong>Monique Pfleger</strong></p></div></div></section>');
-
-// ═══ ADMIN SECTIONS (placeholder divs — rendered on first visit) ═══
-var adminSections = ['admin-dashboard','admin-participants','admin-invitations','admin-traiteur','admin-salles','admin-checkin','admin-emails','admin-checklist','admin-speakers','admin-staff','admin-securite','admin-budget','admin-postevent'];
-adminSections.forEach(function(id) {
-  addSection(id, 'admin-section', '<div class="admin-content" id="' + id + '-content"><p style="color:#5F5C55;text-align:center;padding:60px;">Chargement...</p></div>');
 });
 </script>
-
-<!-- ═══ ALL SECTION JAVASCRIPT ═══ -->
-<script src="js/spa-sections.js"></script>
-
 </body>
 </html>
