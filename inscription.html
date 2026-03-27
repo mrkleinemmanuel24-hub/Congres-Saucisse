@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Inscription — Congres de la Saucisse 2026</title>
+  <link rel="stylesheet" href="css/front.css">
+  <style>
+    .step-content { display: none; }
+    .step-content.active { display: block; }
+    .session-check { display: flex; align-items: center; gap: 10px; padding: 10px; background: rgba(255,255,255,.02); border-radius: 10px; margin-bottom: 6px; cursor: pointer; border: 1px solid transparent; transition: all .2s; }
+    .session-check:hover { border-color: rgba(42,215,131,.2); }
+    .session-check.checked { border-color: var(--green); background: rgba(42,215,131,.05); }
+    .session-check input { width: 18px; height: 18px; accent-color: var(--green); }
+    .hotel-option { display: flex; align-items: center; gap: 16px; padding: 14px; background: var(--bg-card); border: 2px solid var(--border); border-radius: var(--radius); margin-bottom: 10px; cursor: pointer; transition: all .2s; }
+    .hotel-option.selected { border-color: var(--green); background: rgba(42,215,131,.03); }
+    .hotel-option .hotel-stars { color: var(--gold); font-size: .8rem; }
+    .recap-section { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; margin-bottom: 16px; }
+    .recap-section h4 { color: var(--green); font-size: .9rem; margin-bottom: 10px; }
+    .recap-row { display: flex; justify-content: space-between; padding: 6px 0; font-size: .85rem; border-bottom: 1px solid var(--border); }
+    .recap-row:last-child { border-bottom: none; }
+    .recap-total { font-size: 1.3rem; font-weight: 900; color: var(--gold); text-align: right; padding: 16px 0; }
+    .repas-option { display: flex; align-items: center; gap: 12px; padding: 12px; background: var(--bg-card); border: 2px solid var(--border); border-radius: 12px; margin-bottom: 8px; cursor: pointer; transition: all .2s; }
+    .repas-option.selected { border-color: var(--green); }
+    .repas-option input { width: 18px; height: 18px; accent-color: var(--green); }
+    .pass-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 16px; }
+    .staff-code { display: none; margin-top: 12px; }
+    .staff-code.visible { display: block; }
+    .confirmation-box { text-align: center; padding: 40px 24px; }
+    .confirmation-box .check-icon { width: 80px; height: 80px; border-radius: 50%; background: rgba(42,215,131,.1); border: 3px solid var(--green); display: flex; align-items: center; justify-content: center; font-size: 2.5rem; margin: 0 auto 20px; }
+  </style>
+</head>
+<body>
+
+<nav class="navbar">
+  <a href="index.html" class="navbar-brand"><span>🌭</span> Congres de la Saucisse</a>
+  <button class="nav-toggle" onclick="document.querySelector('.navbar-links').classList.toggle('open')">☰</button>
+  <div class="navbar-links">
+    <a href="index.html">Accueil</a>
+    <a href="programme.html">Programme</a>
+    <a href="intervenants.html">Intervenants</a>
+    <a href="plan.html">Plan</a>
+    <a href="infos.html">Infos pratiques</a>
+    <a href="presse.html">Presse</a>
+    <a href="inscription.html" class="cta-nav active">S'inscrire</a>
+  </div>
+</nav>
+
+<section class="section" style="max-width:800px;">
+  <h1 class="section-title">Inscription</h1>
+  <p class="section-subtitle">Reservez votre place au Congres de la Saucisse 2026.</p>
+
+  <!-- STEPPER -->
+  <div class="stepper">
+    <div class="step-indicator active" data-step="1">1. Infos</div>
+    <div class="step-indicator" data-step="2">2. Pass</div>
+    <div class="step-indicator" data-step="3">3. Sessions</div>
+    <div class="step-indicator" data-step="4">4. Repas</div>
+    <div class="step-indicator" data-step="5">5. Hotel</div>
+    <div class="step-indicator" data-step="6">6. Recapitulatif</div>
+    <div class="step-indicator" data-step="7">7. Confirmation</div>
+  </div>
+
+  <!-- STEP 1: Infos personnelles -->
+  <div class="step-content active" data-step="1">
+    <h2 style="font-size:1.1rem;margin-bottom:20px;">Informations personnelles</h2>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+      <div class="form-group"><label>Prenom *</label><input type="text" id="f-prenom" placeholder="Votre prenom" required></div>
+      <div class="form-group"><label>Nom *</label><input type="text" id="f-nom" placeholder="Votre nom" required></div>
+    </div>
+    <div class="form-group"><label>Email *</label><input type="email" id="f-email" placeholder="votre@email.com" required></div>
+    <div class="form-group"><label>Telephone</label><input type="tel" id="f-tel" placeholder="06 12 34 56 78"></div>
+    <div class="form-group"><label>Entreprise / Organisation</label><input type="text" id="f-entreprise" placeholder="Nom de votre entreprise"></div>
+    <div style="text-align:right;margin-top:20px;">
+      <button class="btn btn-green" onclick="nextStep(2)">Suivant →</button>
+    </div>
+  </div>
+
+  <!-- STEP 2: Pass -->
+  <div class="step-content" data-step="2">
+    <h2 style="font-size:1.1rem;margin-bottom:20px;">Choisissez votre pass</h2>
+    <div class="pass-grid" id="pass-grid"></div>
+    <div class="staff-code" id="staff-code-section">
+      <div class="form-group"><label>Code Staff</label><input type="text" id="f-staff-code" placeholder="Entrez le code staff"></div>
+    </div>
+    <div style="display:flex;justify-content:space-between;margin-top:20px;">
+      <button class="btn btn-outline" onclick="nextStep(1)">← Retour</button>
+      <button class="btn btn-green" onclick="nextStep(3)">Suivant →</button>
+    </div>
+  </div>
+
+  <!-- STEP 3: Sessions -->
+  <div class="step-content" data-step="3">
+    <h2 style="font-size:1.1rem;margin-bottom:20px;">Choisissez vos sessions</h2>
+    <div class="tabs" style="margin-bottom:16px;">
+      <button class="tab-btn active" onclick="showSessionDay(1, this)">Jour 1</button>
+      <button class="tab-btn" onclick="showSessionDay(2, this)">Jour 2</button>
+      <button class="tab-btn" onclick="showSessionDay(3, this)">Jour 3</button>
+    </div>
+    <div id="session-choices"></div>
+    <div style="display:flex;justify-content:space-between;margin-top:20px;">
+      <button class="btn btn-outline" onclick="nextStep(2)">← Retour</button>
+      <button class="btn btn-green" onclick="nextStep(4)">Suivant →</button>
+    </div>
+  </div>
+
+  <!-- STEP 4: Repas -->
+  <div class="step-content" data-step="4">
+    <h2 style="font-size:1.1rem;margin-bottom:20px;">Option repas</h2>
+    <p style="font-size:.85rem;color:var(--text-dim);margin-bottom:16px;">15 euros par repas/jour. Le meme menu sera servi les 3 jours.</p>
+    <div id="repas-choices"></div>
+    <div style="display:flex;justify-content:space-between;margin-top:20px;">
+      <button class="btn btn-outline" onclick="nextStep(3)">← Retour</button>
+      <button class="btn btn-green" onclick="nextStep(5)">Suivant →</button>
+    </div>
+  </div>
+
+  <!-- STEP 5: Hotel -->
+  <div class="step-content" data-step="5">
+    <h2 style="font-size:1.1rem;margin-bottom:20px;">Reservation d'hotel (optionnel)</h2>
+    <p style="font-size:.85rem;color:var(--text-dim);margin-bottom:16px;">Prix par nuit pour 3 nuits (11-14 juin).</p>
+    <div id="hotel-choices"></div>
+    <div class="hotel-option" onclick="selectHotel(null)" id="hotel-none" style="border-color:var(--green);">
+      <div><strong>Pas besoin d'hotel</strong><br><span style="font-size:.82rem;color:var(--text-muted);">J'organise mon hebergement moi-meme</span></div>
+    </div>
+    <div style="display:flex;justify-content:space-between;margin-top:20px;">
+      <button class="btn btn-outline" onclick="nextStep(4)">← Retour</button>
+      <button class="btn btn-green" onclick="nextStep(6)">Voir le recapitulatif →</button>
+    </div>
+  </div>
+
+  <!-- STEP 6: Recap -->
+  <div class="step-content" data-step="6">
+    <h2 style="font-size:1.1rem;margin-bottom:20px;">Recapitulatif de votre inscription</h2>
+    <div id="recap-content"></div>
+    <div style="display:flex;justify-content:space-between;margin-top:20px;">
+      <button class="btn btn-outline" onclick="nextStep(5)">← Retour</button>
+      <button class="btn btn-green" onclick="confirmInscription()">Confirmer l'inscription</button>
+    </div>
+  </div>
+
+  <!-- STEP 7: Confirmation -->
+  <div class="step-content" data-step="7">
+    <div class="confirmation-box">
+      <div class="check-icon">✓</div>
+      <h2 style="font-size:1.4rem;margin-bottom:8px;">Inscription confirmee !</h2>
+      <p style="color:var(--text-dim);margin-bottom:24px;">Votre badge et votre programme ont ete generes. Un email de confirmation a ete envoye (mode demo).</p>
+      <div id="badge-container"></div>
+      <div style="margin-top:20px;">
+        <a href="programme.html" class="btn btn-outline btn-sm">Voir le programme</a>
+        <a href="index.html" class="btn btn-green btn-sm" style="margin-left:8px;">Retour a l'accueil</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="footer-brand">🌭 Le Congres de la Saucisse — Strasbourg 2026</div>
+</footer>
+
+<script src="js/data.js"></script>
+<script src="js/qrcode.js"></script>
+<script src="js/content-filter.js"></script>
+<script>
+var registration = {
+  prenom: '', nom: '', email: '', tel: '', entreprise: '',
+  pass: 'standard', sessions: [], repas: 'standard', hotel: null, jours: [1,2,3]
+};
+
+function nextStep(step) {
+  // Validate current step
+  if (step === 2) {
+    registration.prenom = document.getElementById('f-prenom').value.trim();
+    registration.nom = document.getElementById('f-nom').value.trim();
+    registration.email = document.getElementById('f-email').value.trim();
+    registration.tel = document.getElementById('f-tel').value.trim();
+    registration.entreprise = document.getElementById('f-entreprise').value.trim();
+    if (!registration.prenom || !registration.nom || !registration.email) {
+      alert('Veuillez remplir les champs obligatoires (prenom, nom, email).');
+      return;
+    }
+    // Content filter
+    var fields = [registration.prenom, registration.nom, registration.entreprise];
+    for (var i = 0; i < fields.length; i++) {
+      var check = ContentFilter.check(fields[i]);
+      if (!check.ok) { alert(check.reason); return; }
+    }
+  }
+  if (step === 3 && registration.pass === 'staff') {
+    var code = document.getElementById('f-staff-code').value.trim();
+    if (code !== 'STAFF2026') { alert('Code staff invalide.'); return; }
+  }
+
+  // Show step
+  document.querySelectorAll('.step-content').forEach(function(el) { el.classList.remove('active'); });
+  document.querySelector('.step-content[data-step="' + step + '"]').classList.add('active');
+  document.querySelectorAll('.step-indicator').forEach(function(el) {
+    var s = parseInt(el.dataset.step);
+    el.classList.toggle('active', s === step);
+    el.classList.toggle('done', s < step);
+  });
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+
+  // Init step content
+  if (step === 2) initPasses();
+  if (step === 3) showSessionDay(1);
+  if (step === 4) initRepas();
+  if (step === 5) initHotels();
+  if (step === 6) buildRecap();
+}
+
+function initPasses() {
+  var html = '';
+  CONGRES.PASSES.forEach(function(p) {
+    var cls = '';
+    if (p.id === 'bronze') cls = ' vip-bronze';
+    if (p.id === 'gold') cls = ' vip-gold';
+    if (p.id === 'platinum') cls = ' vip-platinum';
+    if (p.id === 'staff') cls = ' staff';
+    var sel = registration.pass === p.id ? ' selected' : '';
+
+    html += '<div class="pass-card' + cls + sel + '" onclick="selectPass(\'' + p.id + '\')">' +
+      '<div class="pass-name">' + p.nom + '</div>' +
+      '<div class="pass-price">' + (p.prix === 0 ? 'Gratuit' : p.prix + ' &euro;') + '</div>' +
+      '<ul class="pass-features">';
+    p.features.forEach(function(f) { html += '<li>' + f + '</li>'; });
+    html += '</ul></div>';
+  });
+  document.getElementById('pass-grid').innerHTML = html;
+}
+
+function selectPass(id) {
+  registration.pass = id;
+  document.getElementById('staff-code-section').classList.toggle('visible', id === 'staff');
+  document.querySelectorAll('.pass-card').forEach(function(el) { el.classList.remove('selected'); });
+  event.currentTarget.classList.add('selected');
+}
+
+var sessionDay = 1;
+function showSessionDay(day, btn) {
+  sessionDay = day;
+  if (btn) {
+    btn.parentElement.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.remove('active'); });
+    btn.classList.add('active');
+  }
+  var sessions = CONGRES.getSessionsByDay(day);
+  var html = '';
+  sessions.forEach(function(s) {
+    var speakers = s.speakers.map(function(id) { var sp = CONGRES.getSpeaker(id); return sp ? sp.prenom + ' ' + sp.nom : ''; }).join(', ');
+    var salle = CONGRES.getSalle(s.salle);
+    var checked = registration.sessions.indexOf(s.id) !== -1;
+    html += '<label class="session-check' + (checked ? ' checked' : '') + '">' +
+      '<input type="checkbox" ' + (checked ? 'checked' : '') + ' onchange="toggleSession(' + s.id + ', this)">' +
+      '<div><strong>' + s.debut + '</strong> ' + s.titre + '<br><span style="font-size:.78rem;color:var(--text-muted);">' + speakers + ' · ' + (salle ? salle.nom : '') + '</span></div>' +
+    '</label>';
+  });
+  document.getElementById('session-choices').innerHTML = html;
+}
+
+function toggleSession(id, el) {
+  var idx = registration.sessions.indexOf(id);
+  if (idx === -1) registration.sessions.push(id);
+  else registration.sessions.splice(idx, 1);
+  el.closest('.session-check').classList.toggle('checked', el.checked);
+}
+
+function initRepas() {
+  var html = '';
+  CONGRES.REPAS_OPTIONS.forEach(function(r) {
+    var sel = registration.repas === r.id;
+    html += '<label class="repas-option' + (sel ? ' selected' : '') + '" onclick="selectRepas(\'' + r.id + '\')">' +
+      '<input type="radio" name="repas" ' + (sel ? 'checked' : '') + '>' +
+      '<div><strong>' + r.nom + '</strong> — ' + r.prix + ' &euro;/jour<br><span style="font-size:.8rem;color:var(--text-muted);">' + r.desc + '</span></div>' +
+    '</label>';
+  });
+  document.getElementById('repas-choices').innerHTML = html;
+}
+
+function selectRepas(id) {
+  registration.repas = id;
+  document.querySelectorAll('.repas-option').forEach(function(el) { el.classList.remove('selected'); });
+  setTimeout(function() {
+    document.querySelectorAll('.repas-option').forEach(function(el) {
+      if (el.querySelector('input').checked) el.classList.add('selected');
+    });
+  }, 10);
+}
+
+function initHotels() {
+  var html = '';
+  CONGRES.HOTELS.forEach(function(h) {
+    var sel = registration.hotel === h.id;
+    var stars = '';
+    for (var i = 0; i < h.etoiles; i++) stars += '★';
+    html += '<div class="hotel-option' + (sel ? ' selected' : '') + '" onclick="selectHotel(' + h.id + ')" data-hotel="' + h.id + '">' +
+      '<div style="flex:1;">' +
+        '<strong>' + h.nom + '</strong> <span class="hotel-stars">' + stars + '</span><br>' +
+        '<span style="font-size:.82rem;color:var(--text-muted);">' + h.distance + ' du Palais · ' + h.adresse + '</span>' +
+      '</div>' +
+      '<div style="text-align:right;">' +
+        '<div style="font-size:1.1rem;font-weight:800;color:var(--green);">' + h.prix + ' &euro;</div>' +
+        '<div style="font-size:.75rem;color:var(--text-muted);">/nuit (3 nuits = ' + (h.prix * 3) + ' &euro;)</div>' +
+      '</div>' +
+    '</div>';
+  });
+  document.getElementById('hotel-choices').innerHTML = html;
+}
+
+function selectHotel(id) {
+  registration.hotel = id;
+  document.querySelectorAll('.hotel-option').forEach(function(el) { el.classList.remove('selected'); });
+  if (id === null) {
+    document.getElementById('hotel-none').classList.add('selected');
+  } else {
+    var el = document.querySelector('[data-hotel="' + id + '"]');
+    if (el) el.classList.add('selected');
+    document.getElementById('hotel-none').classList.remove('selected');
+  }
+}
+
+function buildRecap() {
+  var pass = CONGRES.getPass(registration.pass);
+  var repas = CONGRES.REPAS_OPTIONS.find(function(r) { return r.id === registration.repas; });
+  var hotel = registration.hotel ? CONGRES.getHotel(registration.hotel) : null;
+
+  var passPrice = pass ? pass.prix : 0;
+  var repasPrice = repas ? repas.prix * 3 : 0;
+  var hotelPrice = hotel ? hotel.prix * 3 : 0;
+  // Platinum includes hotel
+  if (registration.pass === 'platinum') hotelPrice = 0;
+  var total = passPrice + repasPrice + hotelPrice;
+
+  var html = '<div class="recap-section"><h4>Informations personnelles</h4>' +
+    '<div class="recap-row"><span>Nom</span><span>' + registration.prenom + ' ' + registration.nom + '</span></div>' +
+    '<div class="recap-row"><span>Email</span><span>' + registration.email + '</span></div>' +
+    (registration.tel ? '<div class="recap-row"><span>Telephone</span><span>' + registration.tel + '</span></div>' : '') +
+    (registration.entreprise ? '<div class="recap-row"><span>Entreprise</span><span>' + registration.entreprise + '</span></div>' : '') +
+  '</div>';
+
+  html += '<div class="recap-section"><h4>Pass</h4>' +
+    '<div class="recap-row"><span>' + (pass ? pass.nom : '') + '</span><span>' + passPrice + ' &euro;</span></div>' +
+  '</div>';
+
+  html += '<div class="recap-section"><h4>Sessions selectionnees (' + registration.sessions.length + ')</h4>';
+  registration.sessions.forEach(function(sid) {
+    var s = CONGRES.getSession(sid);
+    if (s) html += '<div class="recap-row"><span>J' + s.jour + ' ' + s.debut + ' — ' + s.titre + '</span><span></span></div>';
+  });
+  html += '</div>';
+
+  html += '<div class="recap-section"><h4>Repas</h4>' +
+    '<div class="recap-row"><span>' + (repas ? repas.nom : '') + ' x 3 jours</span><span>' + repasPrice + ' &euro;</span></div>' +
+  '</div>';
+
+  if (hotel) {
+    html += '<div class="recap-section"><h4>Hotel</h4>' +
+      '<div class="recap-row"><span>' + hotel.nom + ' x 3 nuits</span><span>' + hotelPrice + ' &euro;</span></div>' +
+    '</div>';
+  }
+
+  html += '<div class="recap-total">Total : ' + total + ' &euro;</div>';
+  html += '<p style="font-size:.78rem;color:var(--text-muted);text-align:center;">Mode demonstration — aucun paiement reel ne sera effectue.</p>';
+
+  document.getElementById('recap-content').innerHTML = html;
+}
+
+function confirmInscription() {
+  var id = 'INS-' + String(Date.now()).slice(-6);
+  var newInscription = {
+    id: id,
+    nom: registration.nom,
+    prenom: registration.prenom,
+    email: registration.email,
+    tel: registration.tel,
+    entreprise: registration.entreprise,
+    pass: registration.pass,
+    sessions: registration.sessions,
+    repas: registration.repas,
+    hotel: registration.hotel,
+    jours: [1,2,3],
+    statut: 'confirmed',
+    date: new Date().toISOString().split('T')[0]
+  };
+
+  var list = CONGRES.loadInscriptions();
+  list.push(newInscription);
+  CONGRES.saveInscriptions(list);
+
+  // Generate badge
+  document.getElementById('badge-container').innerHTML = generateBadge(newInscription);
+
+  nextStep(7);
+}
+
+// Init
+nextStep(1);
+</script>
+<script>window.COPYRIGHT = { owner: 'Congres de la Saucisse', year: 2026 };</script>
+<script src="js/copyright-footer.js"></script>
+</body>
+</html>

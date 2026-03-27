@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Emails — Back Office</title>
+  <link rel="stylesheet" href="../css/admin.css">
+  <style>
+    .email-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; margin-bottom: 24px; }
+    .email-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; cursor: pointer; transition: all .25s; }
+    .email-card:hover { border-color: var(--gold); }
+    .email-card.selected { border-color: var(--gold); box-shadow: 0 0 20px rgba(201,168,76,.15); }
+    .email-card h3 { font-size: .9rem; margin-bottom: 4px; }
+    .email-card .timing { color: var(--gold); font-size: .78rem; font-weight: 600; margin-bottom: 6px; }
+    .email-card p { font-size: .8rem; color: var(--text-dim); }
+    .email-preview { background: #FFF; color: #111; border-radius: 16px; padding: 32px; max-width: 600px; margin: 16px auto; font-family: -apple-system, sans-serif; line-height: 1.7; font-size: .9rem; }
+    .email-preview h2 { font-size: 1.1rem; margin-bottom: 12px; color: #111; }
+    .email-preview .header-bar { background: #171C22; color: #FFD300; padding: 16px; border-radius: 10px; text-align: center; margin-bottom: 20px; font-weight: 700; }
+    .email-preview .footer-bar { text-align: center; padding-top: 16px; border-top: 1px solid #EEE; margin-top: 20px; font-size: .75rem; color: #999; }
+    .email-preview ul { padding-left: 20px; margin: 10px 0; }
+    .email-preview li { padding: 3px 0; }
+    .history-log { margin-top: 24px; }
+    .history-entry { display: flex; align-items: center; gap: 12px; padding: 10px 14px; background: var(--bg-card); border: 1px solid var(--border); border-radius: 10px; margin-bottom: 6px; font-size: .82rem; }
+    .history-entry .h-time { color: var(--text-muted); font-size: .75rem; min-width: 80px; }
+    .history-entry .h-type { color: var(--gold); font-weight: 600; min-width: 120px; }
+    .send-options { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; margin-top: 16px; }
+    .send-options button { padding: 10px 24px; border-radius: 10px; font-weight: 700; border: none; cursor: pointer; font-size: .85rem; transition: all .2s; }
+  </style>
+</head>
+<body>
+
+<div class="login-overlay" id="login-overlay">
+  <div class="login-box"><h1>🌭 Back Office</h1><p>Entrez le mot de passe</p><input type="password" id="login-pwd" placeholder="Mot de passe" onkeydown="if(event.key==='Enter')doLogin()"><button onclick="doLogin()">Connexion</button><div class="login-error" id="login-error">Mot de passe incorrect</div></div>
+</div>
+
+<header class="admin-header" id="admin-app" style="display:none;">
+  <div class="admin-brand">🌭 Back Office</div>
+  <nav class="admin-nav">
+    <a href="index.html">Dashboard</a>
+    <a href="participants.html">Participants</a>
+    <a href="invitations.html">Invitations</a>
+    <a href="traiteur.html">Traiteur</a>
+    <a href="salles.html">Salles</a>
+    <a href="checkin.html">Check-in</a>
+    <a href="emails.html" class="active">Emails</a>
+  </nav>
+  <button class="admin-logout" onclick="logout()">Deconnexion</button>
+</header>
+
+<div class="admin-content" id="admin-content" style="display:none;">
+  <h1 class="admin-title">Emails automatiques</h1>
+
+  <!-- EMAIL TEMPLATES -->
+  <div class="email-grid" id="email-grid"></div>
+
+  <!-- PREVIEW -->
+  <div class="chart-card" id="preview-area" style="display:none;">
+    <h3>Apercu de l'email</h3>
+    <div id="email-render"></div>
+    <div class="send-options">
+      <select id="send-target" style="padding:10px 14px;border-radius:10px;border:1px solid rgba(201,168,76,.1);background:var(--bg-card);color:var(--text);font-size:.85rem;">
+        <option value="all">Tous les participants</option>
+        <option value="confirmed">Confirmes uniquement</option>
+        <option value="pending">En attente uniquement</option>
+        <option value="vip">VIP (Bronze + Gold + Platinum)</option>
+        <option value="standard">Standard uniquement</option>
+      </select>
+      <button style="background:var(--gold);color:#111;" onclick="simulateSend()">Envoyer (simulation)</button>
+      <button style="background:rgba(201,168,76,.15);color:var(--gold);" onclick="previewPrint()">Imprimer</button>
+    </div>
+  </div>
+
+  <!-- HISTORY -->
+  <div class="chart-card history-log" style="margin-top:24px;">
+    <h3>Historique des envois</h3>
+    <div id="history-list"></div>
+  </div>
+</div>
+
+<script src="../js/data.js"></script>
+<script>
+var ADMIN_PWD='SAUCISSE2026';
+function doLogin(){if(document.getElementById('login-pwd').value===ADMIN_PWD){sessionStorage.setItem('congres_admin','1');showAdmin();}else{document.getElementById('login-error').style.display='block';}}
+function logout(){sessionStorage.removeItem('congres_admin');location.reload();}
+function showAdmin(){document.getElementById('login-overlay').style.display='none';document.getElementById('admin-app').style.display='flex';document.getElementById('admin-content').style.display='block';init();}
+if(sessionStorage.getItem('congres_admin'))showAdmin();
+
+var EMAIL_TEMPLATES = [
+  {
+    id: 'confirmation',
+    nom: 'Confirmation d\'inscription',
+    timing: 'Envoi immediat',
+    desc: 'Email automatique apres chaque inscription. Contient le recapitulatif et le badge QR.',
+    html: '<div class="email-preview"><div class="header-bar">🌭 Congres de la Saucisse — Strasbourg 2026</div>' +
+      '<h2>Votre inscription est confirmee !</h2>' +
+      '<p>Bonjour <strong>{PRENOM}</strong>,</p>' +
+      '<p>Nous avons le plaisir de confirmer votre inscription au Congres de la Saucisse 2026.</p>' +
+      '<p><strong>Recapitulatif :</strong></p>' +
+      '<ul><li>Pass : <strong>{PASS}</strong></li><li>Dates : 12-14 juin 2026</li><li>Lieu : Palais des Congres de Strasbourg</li></ul>' +
+      '<p>Votre badge numerique est joint a cet email. Presentez-le a l\'entree (version numerique ou imprimee).</p>' +
+      '<p>A bientot a Strasbourg !</p>' +
+      '<div class="footer-bar">Congres de la Saucisse 2026 · congres-saucisse.pages.dev</div></div>'
+  },
+  {
+    id: 'rappel-j7',
+    nom: 'Rappel J-7',
+    timing: 'Envoye le 5 juin 2026',
+    desc: 'Rappel une semaine avant le congres. Infos transport, meteo, programme personnalise.',
+    html: '<div class="email-preview"><div class="header-bar">🌭 Congres de la Saucisse — Strasbourg 2026</div>' +
+      '<h2>J-7 : On vous attend !</h2>' +
+      '<p>Bonjour <strong>{PRENOM}</strong>,</p>' +
+      '<p>Le Congres de la Saucisse commence dans <strong>7 jours</strong> ! Voici quelques rappels utiles :</p>' +
+      '<ul>' +
+        '<li>📍 Palais des Congres, Place Adrien Zeller, 67000 Strasbourg</li>' +
+        '<li>🚋 Tram B ou E, arret Wacken</li>' +
+        '<li>🌡️ Meteo prevue : 22°C, ensoleille</li>' +
+        '<li>🕘 Ouverture des portes : 8h30</li>' +
+      '</ul>' +
+      '<p>N\'oubliez pas votre badge (numerique ou imprime) !</p>' +
+      '<p><a href="#" style="color:#2AD783;">Voir votre programme personnalise</a></p>' +
+      '<div class="footer-bar">Congres de la Saucisse 2026 · congres-saucisse.pages.dev</div></div>'
+  },
+  {
+    id: 'rappel-j1',
+    nom: 'Rappel J-1',
+    timing: 'Envoye le 11 juin 2026',
+    desc: 'Dernier rappel la veille. Horaires, plan, badge, check-in express.',
+    html: '<div class="email-preview"><div class="header-bar">🌭 Congres de la Saucisse — Strasbourg 2026</div>' +
+      '<h2>C\'est demain !</h2>' +
+      '<p>Bonjour <strong>{PRENOM}</strong>,</p>' +
+      '<p>Le grand jour est demain ! Tout est pret pour vous accueillir.</p>' +
+      '<ul>' +
+        '<li>⏰ Accueil et check-in des 8h30</li>' +
+        '<li>🎤 Ceremonie d\'ouverture a 9h00 — Salle Erasme</li>' +
+        '<li>☕ Petit-dejeuner offert au Hall Europe</li>' +
+        '<li>📱 Montrez votre badge QR a l\'entree pour un check-in express</li>' +
+      '</ul>' +
+      '<p>Votre premiere session : <strong>{SESSION_1}</strong></p>' +
+      '<p>A demain !</p>' +
+      '<div class="footer-bar">Congres de la Saucisse 2026 · congres-saucisse.pages.dev</div></div>'
+  },
+  {
+    id: 'programme-jour',
+    nom: 'Programme du jour',
+    timing: 'Envoye chaque matin a 7h',
+    desc: 'Programme personnalise de la journee avec les sessions selectionnees et les salles.',
+    html: '<div class="email-preview"><div class="header-bar">🌭 Votre programme — Jour {JOUR}</div>' +
+      '<h2>Bonjour {PRENOM}, voici votre journee !</h2>' +
+      '<p><strong>Vos sessions aujourd\'hui :</strong></p>' +
+      '<ul>' +
+        '<li>🕘 09:00 — Ceremonie d\'ouverture (Salle Erasme)</li>' +
+        '<li>🕙 10:00 — De Rome a Strasbourg : 3000 ans de saucisse (Salle Erasme)</li>' +
+        '<li>🕛 14:00 — Knack, cervelas : les secrets du gout (Salle Erasme)</li>' +
+        '<li>🕓 16:30 — Table ronde : l\'avenir de la saucisse (Salle Erasme)</li>' +
+      '</ul>' +
+      '<p><strong>Infos du jour :</strong></p>' +
+      '<ul>' +
+        '<li>☕ Pause cafe : 10h45 et 15h45 — Hall Europe</li>' +
+        '<li>🍽️ Dejeuner : 12h00-13h30 — Hall Europe</li>' +
+        '<li>🍸 Cocktail de bienvenue : 18h30 — Hall Europe</li>' +
+      '</ul>' +
+      '<p>Bonne journee au congres !</p>' +
+      '<div class="footer-bar">Congres de la Saucisse 2026 · congres-saucisse.pages.dev</div></div>'
+  }
+];
+
+var history = JSON.parse(localStorage.getItem('congres_email_history') || '[]');
+var selectedEmail = null;
+
+function init() {
+  var html = '';
+  EMAIL_TEMPLATES.forEach(function(t) {
+    html += '<div class="email-card" id="email-' + t.id + '" onclick="selectEmail(\'' + t.id + '\')">' +
+      '<h3>' + t.nom + '</h3>' +
+      '<div class="timing">' + t.timing + '</div>' +
+      '<p>' + t.desc + '</p>' +
+    '</div>';
+  });
+  document.getElementById('email-grid').innerHTML = html;
+  renderHistory();
+}
+
+function selectEmail(id) {
+  selectedEmail = EMAIL_TEMPLATES.find(function(t) { return t.id === id; });
+  document.querySelectorAll('.email-card').forEach(function(el) { el.classList.remove('selected'); });
+  document.getElementById('email-' + id).classList.add('selected');
+  document.getElementById('preview-area').style.display = 'block';
+  document.getElementById('email-render').innerHTML = selectedEmail.html;
+}
+
+function simulateSend() {
+  if (!selectedEmail) return;
+  var target = document.getElementById('send-target').value;
+  var ins = CONGRES.loadInscriptions();
+  var filtered = ins;
+  if (target === 'confirmed') filtered = ins.filter(function(i) { return i.statut === 'confirmed'; });
+  if (target === 'pending') filtered = ins.filter(function(i) { return i.statut === 'pending'; });
+  if (target === 'vip') filtered = ins.filter(function(i) { return ['bronze','gold','platinum'].indexOf(i.pass) !== -1; });
+  if (target === 'standard') filtered = ins.filter(function(i) { return i.pass === 'standard'; });
+
+  var entry = {
+    time: new Date().toLocaleString('fr-FR'),
+    type: selectedEmail.nom,
+    target: target,
+    count: filtered.length
+  };
+  history.unshift(entry);
+  localStorage.setItem('congres_email_history', JSON.stringify(history));
+  renderHistory();
+
+  alert('Email "' + selectedEmail.nom + '" envoye (simulation) a ' + filtered.length + ' participant(s).\n\nDestinataires : ' + filtered.map(function(i) { return i.prenom + ' ' + i.nom + ' <' + i.email + '>'; }).join(', '));
+}
+
+function renderHistory() {
+  var html = '';
+  if (history.length === 0) {
+    html = '<p style="color:var(--text-muted);font-size:.85rem;">Aucun envoi enregistre.</p>';
+  }
+  history.slice(0, 15).forEach(function(h) {
+    html += '<div class="history-entry">' +
+      '<span class="h-time">' + h.time + '</span>' +
+      '<span class="h-type">' + h.type + '</span>' +
+      '<span>' + h.count + ' destinataire(s) · cible : ' + h.target + '</span>' +
+    '</div>';
+  });
+  document.getElementById('history-list').innerHTML = html;
+}
+
+function previewPrint() {
+  if (!selectedEmail) return;
+  var w = window.open('', '_blank');
+  w.document.write('<html><head><title>Email</title><style>body{padding:40px;font-family:-apple-system,sans-serif;}@media print{body{padding:0;}}</style></head><body>' + selectedEmail.html + '<script>setTimeout(function(){window.print();},300);<\/script></body></html>');
+}
+</script>
+</body>
+</html>

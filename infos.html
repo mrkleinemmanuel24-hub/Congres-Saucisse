@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Infos pratiques — Congres de la Saucisse 2026</title>
+  <link rel="stylesheet" href="css/front.css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+  <style>
+    .info-section { margin-bottom: 40px; }
+    .info-section h2 { font-size: 1.2rem; color: var(--gold); margin-bottom: 16px; display: flex; align-items: center; gap: 10px; }
+    .transport-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; }
+    .transport-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; }
+    .transport-card h3 { font-size: .95rem; margin-bottom: 8px; display: flex; align-items: center; gap: 8px; }
+    .transport-card p { font-size: .85rem; color: var(--text-dim); line-height: 1.6; }
+    .resto-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 14px; }
+    .resto-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; padding: 16px; }
+    .resto-card h4 { font-size: .9rem; margin-bottom: 4px; }
+    .resto-card .type { color: var(--gold); font-size: .78rem; font-weight: 600; }
+    .resto-card p { font-size: .82rem; color: var(--text-dim); margin-top: 4px; }
+    .discover-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 14px; }
+    .discover-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; padding: 20px; text-align: center; }
+    .discover-card .icon { font-size: 2.5rem; margin-bottom: 8px; }
+    .discover-card h4 { font-size: .9rem; margin-bottom: 6px; }
+    .discover-card p { font-size: .8rem; color: var(--text-dim); }
+    .emergency-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; }
+    .emergency-card { background: rgba(220,38,38,.06); border: 1px solid rgba(220,38,38,.2); border-radius: 12px; padding: 16px; text-align: center; }
+    .emergency-card .number { font-size: 1.6rem; font-weight: 900; color: #DC2626; }
+    .emergency-card .label { font-size: .82rem; color: var(--text-dim); }
+  </style>
+</head>
+<body>
+
+<nav class="navbar">
+  <a href="index.html" class="navbar-brand"><span>🌭</span> Congres de la Saucisse</a>
+  <button class="nav-toggle" onclick="document.querySelector('.navbar-links').classList.toggle('open')">☰</button>
+  <div class="navbar-links">
+    <a href="index.html">Accueil</a>
+    <a href="programme.html">Programme</a>
+    <a href="intervenants.html">Intervenants</a>
+    <a href="plan.html">Plan</a>
+    <a href="infos.html" class="active">Infos pratiques</a>
+    <a href="presse.html">Presse</a>
+    <a href="inscription.html" class="cta-nav">S'inscrire</a>
+  </div>
+</nav>
+
+<section class="section">
+  <h1 class="section-title">Infos pratiques</h1>
+  <p class="section-subtitle">Tout pour preparer votre venue au Congres de la Saucisse 2026.</p>
+
+  <!-- MAP -->
+  <div class="info-section">
+    <h2>📍 Plan du quartier</h2>
+    <div id="map" class="map-container" style="margin-bottom:12px;"></div>
+    <p class="text-muted" style="font-size:.78rem;text-align:center;">Palais des Congres, hotels, gare et restaurants a proximite.</p>
+  </div>
+
+  <!-- TRANSPORT -->
+  <div class="info-section">
+    <h2>🚄 Venir a Strasbourg</h2>
+    <div class="transport-grid">
+      <div class="transport-card">
+        <h3>🚄 TGV</h3>
+        <p><strong>Paris Gare de l'Est → Strasbourg : 1h46</strong><br>
+        Depuis la gare, prendre le <strong>Tram C</strong> direction Neuhof puis <strong>Tram B</strong> jusqu'a l'arret <strong>Wacken</strong> (20 min).<br>
+        Ou taxi (15 min, ~15 euros).</p>
+      </div>
+      <div class="transport-card">
+        <h3>✈️ Avion</h3>
+        <p><strong>Aeroport Strasbourg-Entzheim (SXB)</strong><br>
+        Navette train en <strong>9 minutes</strong> vers Strasbourg Gare Centrale.<br>
+        Vols directs : Paris, Lyon, Marseille, Toulouse, Nice, Londres, Amsterdam.</p>
+      </div>
+      <div class="transport-card">
+        <h3>🚗 Voiture</h3>
+        <p><strong>A4 depuis Paris (450 km, 4h30)</strong><br>
+        <strong>A35 depuis Lyon (490 km, 4h45)</strong><br>
+        Parking Wacken a 100m du Palais (800 places, 12 euros/jour).</p>
+      </div>
+      <div class="transport-card">
+        <h3>🚋 Tram</h3>
+        <p><strong>Lignes B et E</strong>, arret <strong>Wacken</strong> — directement devant le Palais des Congres.<br>
+        Ticket : 1,80 euro. Pass 3 jours : 9,90 euros.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- GUIDE GOURMAND -->
+  <div class="info-section">
+    <h2>🍽️ Guide gourmand — Ou manger</h2>
+    <p style="color:var(--text-dim);font-size:.88rem;margin-bottom:16px;">Vous etes au Congres de la Saucisse ? Voici les meilleures adresses pour prolonger le plaisir.</p>
+    <div class="resto-grid">
+      <div class="resto-card">
+        <h4>Maison Kammerzell</h4><div class="type">Winstub historique</div>
+        <p>Cuisine alsacienne dans un batiment du XVe siecle. Knack, choucroute garnie, cervelas. Place de la Cathedrale.</p>
+      </div>
+      <div class="resto-card">
+        <h4>Chez Yvonne</h4><div class="type">Winstub traditionnelle</div>
+        <p>Institution strasbourgeoise. Saucisses grillees, fleischnacka, choucroute royale. 10 Rue du Sanglier.</p>
+      </div>
+      <div class="resto-card">
+        <h4>Au Pont Corbeau</h4><div class="type">Winstub & brasserie</div>
+        <p>Cervelas vinaigrette, fleischnacka, tarte flambee. Vue sur l'Ill. 21 Quai Saint-Nicolas.</p>
+      </div>
+      <div class="resto-card">
+        <h4>Le Tire-Bouchon</h4><div class="type">Alsacien authentique</div>
+        <p>Flammekueche a volonte le soir. Knack geante, presskopf. 5 Rue des Tailleurs de Pierre.</p>
+      </div>
+      <div class="resto-card">
+        <h4>La Corde a Linge</h4><div class="type">Flammekueche creative</div>
+        <p>Les meilleures flammekueche de Strasbourg, declinaisons originales. 2 Place Benjamin Zix, Petite France.</p>
+      </div>
+      <div class="resto-card">
+        <h4>Brasserie Meteor</h4><div class="type">Brasserie alsacienne</div>
+        <p>La brasserie partenaire du congres ! Bieres et saucisses artisanales. Hochfelden (20 min en voiture).</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- DECOUVRIR -->
+  <div class="info-section">
+    <h2>🏛️ Decouvrir Strasbourg</h2>
+    <div class="discover-grid">
+      <div class="discover-card">
+        <div class="icon">⛪</div>
+        <h4>Cathedrale Notre-Dame</h4>
+        <p>Chef-d'oeuvre gothique, 142m de haut. Horloge astronomique et plateforme panoramique.</p>
+      </div>
+      <div class="discover-card">
+        <div class="icon">🏘️</div>
+        <h4>Petite France</h4>
+        <p>Quartier pittoresque, maisons a colombages, canaux. Le coeur historique de Strasbourg.</p>
+      </div>
+      <div class="discover-card">
+        <div class="icon">🇪🇺</div>
+        <h4>Parlement Europeen</h4>
+        <p>A 500m du Palais des Congres. Visites guidees gratuites sur reservation.</p>
+      </div>
+      <div class="discover-card">
+        <div class="icon">🚢</div>
+        <h4>Bateau sur l'Ill</h4>
+        <p>Croisiere de 70 min a travers la ville. Depart tous les 30 min depuis le Palais Rohan.</p>
+      </div>
+      <div class="discover-card">
+        <div class="icon">🍺</div>
+        <h4>Route des Vins</h4>
+        <p>A 30 min en voiture. Riquewihr, Colmar, Eguisheim. Riesling, Gewurztraminer.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- METEO -->
+  <div class="info-section">
+    <h2>☀️ Meteo en juin</h2>
+    <div class="card" style="max-width:500px;">
+      <p style="font-size:.9rem;">En juin a Strasbourg :</p>
+      <ul style="list-style:none;margin-top:10px;">
+        <li style="padding:4px 0;color:var(--text-dim);">🌡️ Temperature moyenne : <strong style="color:var(--green);">20-25°C</strong></li>
+        <li style="padding:4px 0;color:var(--text-dim);">☀️ Ensoleillement : <strong style="color:var(--gold);">16h de jour</strong></li>
+        <li style="padding:4px 0;color:var(--text-dim);">🌧️ Precipitations : moderees (prevoir un parapluie)</li>
+        <li style="padding:4px 0;color:var(--text-dim);">👔 Tenue : decontractee, veste legere pour le soir</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- NUMEROS UTILES -->
+  <div class="info-section">
+    <h2>📞 Numeros utiles</h2>
+    <div class="emergency-grid">
+      <div class="emergency-card"><div class="number">15</div><div class="label">SAMU (Urgences medicales)</div></div>
+      <div class="emergency-card"><div class="number">17</div><div class="label">Police</div></div>
+      <div class="emergency-card"><div class="number">18</div><div class="label">Pompiers</div></div>
+      <div class="emergency-card"><div class="number">112</div><div class="label">Urgences europeennes</div></div>
+      <div class="emergency-card"><div class="number">114</div><div class="label">Urgences SMS (sourds)</div></div>
+      <div class="emergency-card" style="border-color:rgba(42,215,131,.2);background:rgba(42,215,131,.04);">
+        <div class="number" style="color:var(--green);">03 88 37 67 67</div>
+        <div class="label">Palais des Congres (accueil)</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="footer-brand">🌭 Le Congres de la Saucisse — Strasbourg 2026</div>
+  <div class="footer-links">
+    <a href="index.html">Accueil</a>
+    <a href="programme.html">Programme</a>
+    <a href="inscription.html">Inscription</a>
+  </div>
+</footer>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+// Leaflet map centered on Palais des Congres
+var map = L.map('map').setView([48.5953, 7.7700], 15);
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  attribution: '&copy; OpenStreetMap'
+}).addTo(map);
+
+// Palais des Congres
+L.marker([48.5953, 7.7700]).addTo(map).bindPopup('<strong>Palais des Congres</strong><br>Le lieu du congres !').openPopup();
+
+// Hotels
+var hotels = [
+  [48.5948, 7.7720, 'Hilton Strasbourg — 200m'],
+  [48.5956, 7.7695, 'Mercure Palais des Congres — 50m'],
+  [48.5940, 7.7710, 'ibis Styles Wacken — 300m'],
+  [48.5960, 7.7740, 'AC Hotel Marriott — 400m'],
+  [48.5935, 7.7690, 'Hotel D — 350m'],
+  [48.5965, 7.7750, 'Holiday Inn Express — 450m'],
+  [48.5910, 7.7530, 'Novotel Halles — 500m'],
+  [48.5815, 7.7440, 'Regent Petite France — 600m']
+];
+hotels.forEach(function(h) {
+  L.marker([h[0], h[1]], { opacity: 0.8 }).addTo(map).bindPopup('<strong>🏨 ' + h[2] + '</strong>');
+});
+
+// Gare
+L.marker([48.5850, 7.7340]).addTo(map).bindPopup('<strong>🚄 Gare de Strasbourg</strong>');
+
+// Restaurants
+var restos = [
+  [48.5818, 7.7510, 'Maison Kammerzell'],
+  [48.5830, 7.7460, 'Chez Yvonne'],
+  [48.5790, 7.7490, 'Au Pont Corbeau']
+];
+restos.forEach(function(r) {
+  L.circleMarker([r[0], r[1]], { radius: 6, color: '#F97316', fillColor: '#F97316', fillOpacity: 0.6 }).addTo(map).bindPopup('<strong>🍽️ ' + r[2] + '</strong>');
+});
+</script>
+<script>window.COPYRIGHT = { owner: 'Congres de la Saucisse', year: 2026 };</script>
+<script src="js/copyright-footer.js"></script>
+</body>
+</html>

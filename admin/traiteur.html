@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Traiteur — Back Office</title>
+  <link rel="stylesheet" href="../css/admin.css">
+  <style>
+    .meal-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 16px; margin-bottom: 24px; }
+    .meal-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; text-align: center; }
+    .meal-card .meal-icon { font-size: 2rem; margin-bottom: 8px; }
+    .meal-card .meal-count { font-size: 2rem; font-weight: 900; color: var(--gold); }
+    .meal-card .meal-label { font-size: .82rem; color: var(--text-dim); }
+    .breakdown-table { margin-top: 24px; }
+    .cost-summary { background: var(--bg-card); border: 1px solid var(--gold); border-radius: var(--radius); padding: 24px; margin-top: 24px; }
+    .cost-summary h3 { color: var(--gold); margin-bottom: 16px; }
+    .cost-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid var(--border); font-size: .88rem; }
+    .cost-row:last-child { border-bottom: none; }
+    .cost-total { font-size: 1.3rem; font-weight: 900; color: var(--gold); text-align: right; padding-top: 12px; margin-top: 8px; border-top: 2px solid var(--gold); }
+  </style>
+</head>
+<body>
+
+<div class="login-overlay" id="login-overlay">
+  <div class="login-box"><h1>🌭 Back Office</h1><p>Entrez le mot de passe</p><input type="password" id="login-pwd" placeholder="Mot de passe" onkeydown="if(event.key==='Enter')doLogin()"><button onclick="doLogin()">Connexion</button><div class="login-error" id="login-error">Mot de passe incorrect</div></div>
+</div>
+
+<header class="admin-header" id="admin-app" style="display:none;">
+  <div class="admin-brand">🌭 Back Office</div>
+  <nav class="admin-nav">
+    <a href="index.html">Dashboard</a>
+    <a href="participants.html">Participants</a>
+    <a href="invitations.html">Invitations</a>
+    <a href="traiteur.html" class="active">Traiteur</a>
+    <a href="salles.html">Salles</a>
+    <a href="checkin.html">Check-in</a>
+    <a href="emails.html">Emails</a>
+  </nav>
+  <button class="admin-logout" onclick="logout()">Deconnexion</button>
+</header>
+
+<div class="admin-content" id="admin-content" style="display:none;">
+  <h1 class="admin-title">Gestion Traiteur</h1>
+
+  <!-- TOTALS BY REGIME -->
+  <h2 style="font-size:1rem;color:var(--text-dim);margin-bottom:16px;">Repas par regime alimentaire (total 3 jours)</h2>
+  <div class="meal-grid" id="meal-grid"></div>
+
+  <!-- BREAKDOWN BY DAY -->
+  <div class="chart-card">
+    <h3>Ventilation par jour et par service</h3>
+    <div class="admin-table-wrap">
+      <table class="admin-table">
+        <thead><tr><th>Service</th><th>Jour 1 (Jeu. 12)</th><th>Jour 2 (Ven. 13)</th><th>Jour 3 (Sam. 14)</th><th>Total</th></tr></thead>
+        <tbody id="breakdown-body"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- REGIME DETAIL BY DAY -->
+  <div class="chart-card" style="margin-top:20px;">
+    <h3>Detail par regime et par jour</h3>
+    <div class="admin-table-wrap">
+      <table class="admin-table">
+        <thead><tr><th>Regime</th><th>Jour 1</th><th>Jour 2</th><th>Jour 3</th><th>Total</th></tr></thead>
+        <tbody id="regime-body"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- COST SUMMARY -->
+  <div class="cost-summary" id="cost-summary"></div>
+
+  <!-- EXPORT -->
+  <div style="margin-top:20px;text-align:center;">
+    <button onclick="exportPDF()" style="padding:12px 32px;border-radius:10px;background:var(--gold);color:#111;font-weight:700;border:none;cursor:pointer;font-size:.9rem;">Exporter PDF pour le traiteur</button>
+  </div>
+</div>
+
+<script src="../js/data.js"></script>
+<script>
+var ADMIN_PWD='SAUCISSE2026';
+function doLogin(){if(document.getElementById('login-pwd').value===ADMIN_PWD){sessionStorage.setItem('congres_admin','1');showAdmin();}else{document.getElementById('login-error').style.display='block';}}
+function logout(){sessionStorage.removeItem('congres_admin');location.reload();}
+function showAdmin(){document.getElementById('login-overlay').style.display='none';document.getElementById('admin-app').style.display='flex';document.getElementById('admin-content').style.display='block';render();}
+if(sessionStorage.getItem('congres_admin'))showAdmin();
+
+function render() {
+  var ins = CONGRES.loadInscriptions();
+  var regimes = { standard: 0, veggie: 0, halal: 0, gluten: 0 };
+  var regimesByDay = { standard: [0,0,0], veggie: [0,0,0], halal: [0,0,0], gluten: [0,0,0] };
+
+  ins.forEach(function(i) {
+    var r = i.repas || 'standard';
+    var days = i.jours || [1,2,3];
+    days.forEach(function(d) {
+      regimes[r] = (regimes[r] || 0) + 1;
+      if (regimesByDay[r]) regimesByDay[r][d-1]++;
+    });
+  });
+
+  var total = Object.values(regimes).reduce(function(a,b){return a+b;},0);
+
+  // Meal cards
+  var icons = { standard: '🥩', veggie: '🥗', halal: '🌙', gluten: '🌾' };
+  var names = { standard: 'Standard', veggie: 'Vegetarien', halal: 'Halal', gluten: 'Sans gluten' };
+  var html = '';
+  Object.keys(names).forEach(function(key) {
+    html += '<div class="meal-card"><div class="meal-icon">' + icons[key] + '</div><div class="meal-count">' + regimes[key] + '</div><div class="meal-label">' + names[key] + '</div></div>';
+  });
+  html += '<div class="meal-card"><div class="meal-icon">📊</div><div class="meal-count">' + total + '</div><div class="meal-label">Total repas</div></div>';
+  document.getElementById('meal-grid').innerHTML = html;
+
+  // Breakdown by service
+  var services = [
+    { nom: 'Petit-dejeuner', ratio: 0.8 },
+    { nom: 'Pause cafe matin', ratio: 1.0 },
+    { nom: 'Dejeuner', ratio: 1.0 },
+    { nom: 'Pause cafe apres-midi', ratio: 1.0 },
+    { nom: 'Cocktail (J1 soir)', ratio: 0.4 },
+    { nom: 'Diner de gala (J2 soir)', ratio: 0.3 }
+  ];
+
+  var dayTotals = [0, 0, 0];
+  Object.keys(regimesByDay).forEach(function(r) { for(var d=0;d<3;d++) dayTotals[d] += regimesByDay[r][d]; });
+
+  var brkHtml = '';
+  var grandTotal = 0;
+  services.forEach(function(s) {
+    var d1 = Math.round(dayTotals[0] * s.ratio);
+    var d2 = Math.round(dayTotals[1] * s.ratio);
+    var d3 = Math.round(dayTotals[2] * s.ratio);
+    if (s.nom.includes('Cocktail')) { d2 = 0; d3 = 0; }
+    if (s.nom.includes('Gala')) { d1 = 0; d3 = 0; }
+    var t = d1 + d2 + d3;
+    grandTotal += t;
+    brkHtml += '<tr><td>' + s.nom + '</td><td>' + d1 + '</td><td>' + d2 + '</td><td>' + d3 + '</td><td><strong>' + t + '</strong></td></tr>';
+  });
+  brkHtml += '<tr style="background:rgba(201,168,76,.05);"><td><strong>Total</strong></td><td><strong>' + dayTotals[0] + '</strong></td><td><strong>' + dayTotals[1] + '</strong></td><td><strong>' + dayTotals[2] + '</strong></td><td><strong>' + grandTotal + '</strong></td></tr>';
+  document.getElementById('breakdown-body').innerHTML = brkHtml;
+
+  // Regime by day
+  var regimeHtml = '';
+  Object.keys(names).forEach(function(key) {
+    var r = regimesByDay[key];
+    var t = r[0] + r[1] + r[2];
+    regimeHtml += '<tr><td>' + names[key] + '</td><td>' + r[0] + '</td><td>' + r[1] + '</td><td>' + r[2] + '</td><td><strong>' + t + '</strong></td></tr>';
+  });
+  document.getElementById('regime-body').innerHTML = regimeHtml;
+
+  // Cost summary
+  var prixRepas = 15;
+  var prixPetitDej = 8;
+  var prixPauseCafe = 3;
+  var prixCocktail = 25;
+  var prixGala = 65;
+
+  var costItems = [
+    { label: 'Dejeuners (' + total + ' repas x ' + prixRepas + ' euros)', cost: total * prixRepas },
+    { label: 'Petits-dejeuners (x ' + prixPetitDej + ' euros)', cost: Math.round(total * 0.8) * prixPetitDej },
+    { label: 'Pauses cafe (x ' + prixPauseCafe + ' euros)', cost: total * 2 * prixPauseCafe },
+    { label: 'Cocktail J1 (' + Math.round(dayTotals[0] * 0.4) + ' pers x ' + prixCocktail + ' euros)', cost: Math.round(dayTotals[0] * 0.4) * prixCocktail },
+    { label: 'Diner de gala J2 (' + Math.round(dayTotals[1] * 0.3) + ' pers x ' + prixGala + ' euros)', cost: Math.round(dayTotals[1] * 0.3) * prixGala }
+  ];
+
+  var totalCost = 0;
+  var costHtml = '<h3>Estimation des couts</h3>';
+  costItems.forEach(function(c) {
+    totalCost += c.cost;
+    costHtml += '<div class="cost-row"><span>' + c.label + '</span><span style="font-weight:700;">' + c.cost.toLocaleString('fr-FR') + ' &euro;</span></div>';
+  });
+  costHtml += '<div class="cost-total">Total estime : ' + totalCost.toLocaleString('fr-FR') + ' &euro;</div>';
+  document.getElementById('cost-summary').innerHTML = costHtml;
+}
+
+function exportPDF() {
+  // Print-friendly version
+  var w = window.open('', '_blank');
+  w.document.write('<html><head><title>Traiteur — Congres Saucisse 2026</title><style>body{font-family:-apple-system,sans-serif;padding:40px;color:#111;}table{width:100%;border-collapse:collapse;margin:20px 0;}th,td{padding:8px 12px;border:1px solid #DDD;text-align:left;font-size:.85rem;}th{background:#F5F5F5;font-weight:700;}h1{font-size:1.3rem;}h2{font-size:1rem;margin-top:24px;}@media print{body{padding:20px;}}</style></head><body>');
+  w.document.write('<h1>Congres de la Saucisse 2026 — Commande Traiteur</h1>');
+  w.document.write('<p>Date : ' + new Date().toLocaleDateString('fr-FR') + '</p>');
+  w.document.write(document.querySelector('.admin-content').innerHTML);
+  w.document.write('<script>setTimeout(function(){window.print();},300);<\/script></body></html>');
+}
+</script>
+</body>
+</html>

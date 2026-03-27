@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Le Congres de la Saucisse — Strasbourg 2026</title>
+  <link rel="stylesheet" href="css/front.css">
+  <style>
+    .partners-grid { display: flex; flex-wrap: wrap; gap: 16px; justify-content: center; }
+    .partner-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; padding: 20px 28px; text-align: center; min-width: 180px; }
+    .partner-card .partner-name { font-weight: 700; font-size: .9rem; }
+    .partner-card .partner-type { font-size: .75rem; color: var(--text-muted); }
+    .highlight-speakers { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 16px; }
+    .programme-summary { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 16px; }
+    .day-summary { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius); padding: 24px; }
+    .day-summary h3 { color: var(--gold); font-size: 1rem; margin-bottom: 12px; }
+    .day-summary ul { list-style: none; }
+    .day-summary li { padding: 6px 0; font-size: .85rem; color: var(--text-dim); border-bottom: 1px solid var(--border); }
+    .day-summary li:last-child { border-bottom: none; }
+    .day-summary li strong { color: var(--green); }
+    .infos-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 16px; }
+    .info-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; text-align: center; }
+    .info-card .icon { font-size: 2rem; margin-bottom: 8px; }
+    .info-card h4 { font-size: .95rem; margin-bottom: 6px; }
+    .info-card p { font-size: .82rem; color: var(--text-dim); }
+  </style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+  <a href="index.html" class="navbar-brand"><span>🌭</span> Congres de la Saucisse</a>
+  <button class="nav-toggle" onclick="document.querySelector('.navbar-links').classList.toggle('open')">☰</button>
+  <div class="navbar-links">
+    <a href="index.html" class="active">Accueil</a>
+    <a href="programme.html">Programme</a>
+    <a href="intervenants.html">Intervenants</a>
+    <a href="plan.html">Plan</a>
+    <a href="infos.html">Infos pratiques</a>
+    <a href="presse.html">Presse</a>
+    <a href="inscription.html" class="cta-nav">S'inscrire</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-badge">12 — 14 juin 2026 · Palais des Congres de Strasbourg</div>
+  <h1>Le Congres de la Saucisse</h1>
+  <p class="subtitle">Le plus grand rassemblement europeen dedie a la saucisse artisanale.<br>3 jours de conferences, degustations, ateliers et rencontres.</p>
+  <div class="stats">
+    <div class="stat"><div class="stat-val">50+</div><div class="stat-label">Intervenants</div></div>
+    <div class="stat"><div class="stat-val">3</div><div class="stat-label">Jours</div></div>
+    <div class="stat"><div class="stat-val">23</div><div class="stat-label">Salles</div></div>
+    <div class="stat"><div class="stat-val">1800</div><div class="stat-label">Places</div></div>
+  </div>
+  <a href="inscription.html" class="btn btn-green">S'inscrire maintenant</a>
+  <a href="programme.html" class="btn btn-outline" style="margin-left:12px;">Voir le programme</a>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- PROGRAMME RESUME -->
+<section class="section">
+  <h2 class="section-title">Programme en un coup d'oeil</h2>
+  <p class="section-subtitle">3 jours de conferences, tables rondes et ateliers pratiques.</p>
+  <div class="programme-summary" id="programme-summary"></div>
+  <div class="text-center mt-3">
+    <a href="programme.html" class="btn btn-outline btn-sm">Programme complet</a>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- INTERVENANTS VEDETTES -->
+<section class="section">
+  <h2 class="section-title">Intervenants vedettes</h2>
+  <p class="section-subtitle">Des experts internationaux de la saucisse artisanale.</p>
+  <div class="highlight-speakers" id="featured-speakers"></div>
+  <div class="text-center mt-3">
+    <a href="intervenants.html" class="btn btn-outline btn-sm">Tous les intervenants</a>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- PARTENAIRES -->
+<section class="section">
+  <h2 class="section-title text-gold">Nos partenaires</h2>
+  <p class="section-subtitle">Ils rendent cet evenement possible.</p>
+  <div class="partners-grid">
+    <div class="partner-card"><div class="partner-name">Ville de Strasbourg</div><div class="partner-type">Partenaire institutionnel</div></div>
+    <div class="partner-card"><div class="partner-name">Region Grand Est</div><div class="partner-type">Partenaire institutionnel</div></div>
+    <div class="partner-card"><div class="partner-name">IFCC</div><div class="partner-type">Partenaire scientifique</div></div>
+    <div class="partner-card"><div class="partner-name">Brasserie Meteor</div><div class="partner-type">Partenaire degustation</div></div>
+    <div class="partner-card"><div class="partner-name">Alsace Qualite</div><div class="partner-type">Label qualite</div></div>
+    <div class="partner-card"><div class="partner-name">INRAE</div><div class="partner-type">Partenaire recherche</div></div>
+    <div class="partner-card"><div class="partner-name">SausageTech</div><div class="partner-type">Partenaire innovation</div></div>
+    <div class="partner-card"><div class="partner-name">Fleischwerke</div><div class="partner-type">Sponsor Or</div></div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- INFOS PRATIQUES -->
+<section class="section">
+  <h2 class="section-title">Infos pratiques</h2>
+  <p class="section-subtitle">Tout ce qu'il faut savoir pour venir.</p>
+  <div class="infos-grid">
+    <div class="info-card">
+      <div class="icon">🚄</div>
+      <h4>TGV Paris → Strasbourg</h4>
+      <p>1h46 depuis Paris Gare de l'Est. Navette gare → Palais en 10 min.</p>
+    </div>
+    <div class="info-card">
+      <div class="icon">✈️</div>
+      <h4>Aeroport d'Entzheim</h4>
+      <p>Navette train 9 minutes vers Strasbourg centre.</p>
+    </div>
+    <div class="info-card">
+      <div class="icon">🏨</div>
+      <h4>8 hotels a proximite</h4>
+      <p>De 85 a 220 euros/nuit, tous a moins de 600m du Palais.</p>
+    </div>
+    <div class="info-card">
+      <div class="icon">🚋</div>
+      <h4>Tram B ou E</h4>
+      <p>Arret "Wacken" — directement devant le Palais des Congres.</p>
+    </div>
+  </div>
+  <div class="text-center mt-3">
+    <a href="infos.html" class="btn btn-outline btn-sm">Toutes les infos pratiques</a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-brand">🌭 Le Congres de la Saucisse — Strasbourg 2026</div>
+  <p>12 — 14 juin 2026 · Palais des Congres de Strasbourg</p>
+  <div class="footer-links">
+    <a href="programme.html">Programme</a>
+    <a href="intervenants.html">Intervenants</a>
+    <a href="inscription.html">Inscription</a>
+    <a href="plan.html">Plan</a>
+    <a href="infos.html">Infos pratiques</a>
+    <a href="presse.html">Presse</a>
+    <a href="admin/">Back Office</a>
+  </div>
+  <p style="margin-top:12px;font-size:.72rem;color:var(--text-muted);">Evenement fictif a but de demonstration.</p>
+</footer>
+
+<script src="js/data.js"></script>
+<script>
+(function() {
+  // Programme summary
+  var container = document.getElementById('programme-summary');
+  var dayNames = ['', 'Jeudi 12 juin', 'Vendredi 13 juin', 'Samedi 14 juin'];
+  var dayThemes = ['', 'Histoire & Filiere', 'International & Innovation', 'Ateliers & Cloture'];
+
+  for (var d = 1; d <= 3; d++) {
+    var sessions = CONGRES.getSessionsByDay(d);
+    var html = '<div class="day-summary"><h3>' + dayNames[d] + '</h3><p style="font-size:.8rem;color:var(--text-muted);margin-bottom:12px;">' + dayThemes[d] + '</p><ul>';
+    sessions.slice(0, 4).forEach(function(s) {
+      html += '<li><strong>' + s.debut + '</strong> ' + s.titre + '</li>';
+    });
+    if (sessions.length > 4) html += '<li style="color:var(--green);">+ ' + (sessions.length - 4) + ' autres sessions...</li>';
+    html += '</ul></div>';
+    container.innerHTML += html;
+  }
+
+  // Featured speakers (top 6)
+  var featured = [1, 3, 5, 6, 9, 20];
+  var speakerContainer = document.getElementById('featured-speakers');
+  featured.forEach(function(id) {
+    var s = CONGRES.getSpeaker(id);
+    if (!s) return;
+    speakerContainer.innerHTML += '<div class="speaker-card" onclick="location.href=\'intervenants.html#speaker-' + s.id + '\'">' +
+      '<div class="speaker-avatar">' + s.initiales + '</div>' +
+      '<h3>' + s.prenom + ' ' + s.nom + '</h3>' +
+      '<div class="title">' + s.titre + '</div>' +
+      '<div class="org">' + s.org + '</div>' +
+    '</div>';
+  });
+})();
+</script>
+<script>window.COPYRIGHT = { owner: 'Congres de la Saucisse', year: 2026 };</script>
+<script src="js/copyright-footer.js"></script>
+</body>
+</html>

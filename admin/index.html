@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Back Office — Congres de la Saucisse</title>
+  <link rel="stylesheet" href="../css/admin.css">
+</head>
+<body>
+
+<!-- LOGIN -->
+<div class="login-overlay" id="login-overlay">
+  <div class="login-box">
+    <h1>🌭 Back Office</h1>
+    <p>Congres de la Saucisse — Strasbourg 2026</p>
+    <input type="password" id="login-pwd" placeholder="Mot de passe" onkeydown="if(event.key==='Enter')doLogin()">
+    <button onclick="doLogin()">Connexion</button>
+    <div class="login-error" id="login-error">Mot de passe incorrect</div>
+  </div>
+</div>
+
+<!-- ADMIN HEADER -->
+<header class="admin-header" id="admin-app" style="display:none;">
+  <div class="admin-brand">🌭 Back Office — Congres Saucisse</div>
+  <nav class="admin-nav">
+    <a href="index.html" class="active">Dashboard</a>
+    <a href="participants.html">Participants</a>
+    <a href="invitations.html">Invitations</a>
+    <a href="traiteur.html">Traiteur</a>
+    <a href="salles.html">Salles</a>
+    <a href="checkin.html">Check-in</a>
+    <a href="emails.html">Emails</a>
+  </nav>
+  <button class="admin-logout" onclick="logout()">Deconnexion</button>
+</header>
+
+<div class="admin-content" id="admin-content" style="display:none;">
+  <h1 class="admin-title">Dashboard</h1>
+
+  <!-- STATS -->
+  <div class="stats-grid" id="stats-grid"></div>
+
+  <!-- CHARTS -->
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;">
+    <div class="chart-card">
+      <h3>Repartition des passes</h3>
+      <div id="chart-passes"></div>
+    </div>
+    <div class="chart-card">
+      <h3>Inscriptions par jour (simulation)</h3>
+      <div id="chart-timeline"></div>
+    </div>
+  </div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:20px;">
+    <div class="chart-card">
+      <h3>Repas commandes</h3>
+      <div id="chart-repas"></div>
+    </div>
+    <div class="chart-card">
+      <h3>Alertes</h3>
+      <div id="alerts"></div>
+    </div>
+  </div>
+
+  <!-- RECENT INSCRIPTIONS -->
+  <div class="chart-card" style="margin-top:20px;">
+    <h3>Dernieres inscriptions</h3>
+    <div class="admin-table-wrap">
+      <table class="admin-table">
+        <thead><tr><th>ID</th><th>Nom</th><th>Email</th><th>Pass</th><th>Date</th><th>Statut</th></tr></thead>
+        <tbody id="recent-table"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<script src="../js/data.js"></script>
+<script>
+var ADMIN_PWD = 'SAUCISSE2026';
+
+function doLogin() {
+  var pwd = document.getElementById('login-pwd').value;
+  if (pwd === ADMIN_PWD) {
+    sessionStorage.setItem('congres_admin', '1');
+    showAdmin();
+  } else {
+    document.getElementById('login-error').style.display = 'block';
+  }
+}
+
+function logout() {
+  sessionStorage.removeItem('congres_admin');
+  location.reload();
+}
+
+function showAdmin() {
+  document.getElementById('login-overlay').style.display = 'none';
+  document.getElementById('admin-app').style.display = 'flex';
+  document.getElementById('admin-content').style.display = 'block';
+  renderDashboard();
+}
+
+function renderDashboard() {
+  var stats = CONGRES.getStats();
+  var ins = CONGRES.loadInscriptions();
+
+  // Stat cards
+  var passNames = { standard: 'Standard', bronze: 'VIP Bronze', gold: 'VIP Gold', platinum: 'VIP Platinum', staff: 'Staff' };
+  var statsHtml = '<div class="stat-card"><div class="stat-value">' + stats.total + '</div><div class="stat-label">Inscrits total</div></div>' +
+    '<div class="stat-card"><div class="stat-value">' + stats.revenue.toLocaleString('fr-FR') + ' &euro;</div><div class="stat-label">Revenus</div></div>';
+  Object.keys(passNames).forEach(function(key) {
+    statsHtml += '<div class="stat-card"><div class="stat-value">' + (stats.byPass[key] || 0) + '</div><div class="stat-label">' + passNames[key] + '</div></div>';
+  });
+  var totalRepas = 0;
+  Object.values(stats.repasCount).forEach(function(v) { totalRepas += v; });
+  statsHtml += '<div class="stat-card"><div class="stat-value">' + totalRepas + '</div><div class="stat-label">Repas commandes</div></div>';
+  document.getElementById('stats-grid').innerHTML = statsHtml;
+
+  // Pass chart
+  var maxPass = Math.max.apply(null, Object.values(stats.byPass).concat([1]));
+  var passColors = { standard: '#9CA3AF', bronze: '#CD7F32', gold: '#FFD300', platinum: '#C8C8DC', staff: '#DC2626' };
+  var passHtml = '';
+  Object.keys(passNames).forEach(function(key) {
+    var val = stats.byPass[key] || 0;
+    var pct = (val / maxPass) * 100;
+    passHtml += '<div class="chart-bar">' +
+      '<div class="chart-bar-label">' + passNames[key] + '</div>' +
+      '<div class="chart-bar-track"><div class="chart-bar-fill" style="width:' + pct + '%;background:' + passColors[key] + ';">' + val + '</div></div>' +
+    '</div>';
+  });
+  document.getElementById('chart-passes').innerHTML = passHtml;
+
+  // Timeline chart (simulated)
+  var days = ['Jan', 'Fev', 'Mars', 'Avr', 'Mai', 'Juin'];
+  var values = [1, 2, 3, 4, stats.total - 5, stats.total];
+  var maxT = Math.max.apply(null, values);
+  var timeHtml = '';
+  days.forEach(function(d, i) {
+    var pct = (values[i] / maxT) * 100;
+    timeHtml += '<div class="chart-bar">' +
+      '<div class="chart-bar-label">' + d + '</div>' +
+      '<div class="chart-bar-track"><div class="chart-bar-fill" style="width:' + pct + '%;background:var(--gold);">' + values[i] + '</div></div>' +
+    '</div>';
+  });
+  document.getElementById('chart-timeline').innerHTML = timeHtml;
+
+  // Repas chart
+  var repasNames = { standard: 'Standard', veggie: 'Vegetarien', halal: 'Halal', gluten: 'Sans gluten' };
+  var maxR = Math.max.apply(null, Object.values(stats.repasCount).concat([1]));
+  var repasHtml = '';
+  Object.keys(repasNames).forEach(function(key) {
+    var val = stats.repasCount[key] || 0;
+    var pct = (val / maxR) * 100;
+    repasHtml += '<div class="chart-bar">' +
+      '<div class="chart-bar-label">' + repasNames[key] + '</div>' +
+      '<div class="chart-bar-track"><div class="chart-bar-fill" style="width:' + pct + '%;background:var(--green);">' + val + '</div></div>' +
+    '</div>';
+  });
+  document.getElementById('chart-repas').innerHTML = repasHtml;
+
+  // Alerts
+  var alertsHtml = '';
+  CONGRES.SESSIONS.forEach(function(s) {
+    var salle = CONGRES.getSalle(s.salle);
+    if (salle && (s.inscrits / salle.capacite) >= 0.8) {
+      var pct = Math.round((s.inscrits / salle.capacite) * 100);
+      var color = pct >= 100 ? 'var(--red)' : 'var(--orange)';
+      alertsHtml += '<div style="padding:8px 12px;background:rgba(245,158,11,.06);border-radius:8px;margin-bottom:6px;font-size:.82rem;">' +
+        '<span style="color:' + color + ';font-weight:700;">' + pct + '%</span> ' +
+        salle.nom + ' — ' + s.titre + ' (J' + s.jour + ')' +
+      '</div>';
+    }
+  });
+  if (!alertsHtml) alertsHtml = '<p style="color:var(--text-muted);font-size:.85rem;">Aucune alerte pour le moment.</p>';
+  document.getElementById('alerts').innerHTML = alertsHtml;
+
+  // Recent inscriptions
+  var recent = ins.slice(-5).reverse();
+  var tagClasses = { standard: 'tag-standard', bronze: 'tag-bronze', gold: 'tag-gold', platinum: 'tag-platinum', staff: 'tag-staff' };
+  var statusTags = { confirmed: 'tag-confirmed', pending: 'tag-pending', declined: 'tag-declined' };
+  var tableHtml = '';
+  recent.forEach(function(i) {
+    var p = CONGRES.getPass(i.pass);
+    tableHtml += '<tr>' +
+      '<td>' + i.id + '</td>' +
+      '<td>' + i.prenom + ' ' + i.nom + '</td>' +
+      '<td>' + i.email + '</td>' +
+      '<td><span class="tag ' + (tagClasses[i.pass] || '') + '">' + (p ? p.nom : i.pass) + '</span></td>' +
+      '<td>' + i.date + '</td>' +
+      '<td><span class="tag ' + (statusTags[i.statut] || '') + '">' + i.statut + '</span></td>' +
+    '</tr>';
+  });
+  document.getElementById('recent-table').innerHTML = tableHtml;
+}
+
+// Check if already logged in
+if (sessionStorage.getItem('congres_admin')) {
+  showAdmin();
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Invitations — Back Office</title>
+  <link rel="stylesheet" href="../css/admin.css">
+  <style>
+    .template-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; margin-bottom: 32px; }
+    .template-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; cursor: pointer; transition: all .25s; }
+    .template-card:hover { border-color: var(--gold); transform: translateY(-2px); }
+    .template-card.selected { border-color: var(--gold); box-shadow: 0 0 20px rgba(201,168,76,.15); }
+    .template-card h3 { font-size: .95rem; margin-bottom: 4px; }
+    .template-card .type-badge { display: inline-block; padding: 3px 10px; border-radius: 6px; font-size: .72rem; font-weight: 700; margin-bottom: 8px; }
+    .template-card p { font-size: .8rem; color: var(--text-dim); line-height: 1.6; }
+    .preview-area { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius); padding: 24px; margin-bottom: 20px; }
+    .preview-area h3 { color: var(--gold); font-size: .95rem; margin-bottom: 16px; }
+    .inv-preview { background: #FFF; color: #111; border-radius: 16px; padding: 40px 32px; max-width: 600px; margin: 0 auto; font-family: Georgia, serif; line-height: 1.8; }
+    .inv-preview.luxury { background: linear-gradient(135deg, #1A1A2E, #16213E); color: #E8D48B; border: 2px solid rgba(201,168,76,.3); }
+    .inv-preview.press { background: #F8F9FA; color: #1A1A2E; border: 2px solid #2AD783; }
+    .inv-preview h2 { font-size: 1.2rem; margin-bottom: 16px; text-align: center; }
+    .inv-preview .inv-logo { text-align: center; font-size: 2.5rem; margin-bottom: 12px; }
+    .inv-preview .inv-footer { text-align: center; font-size: .75rem; margin-top: 20px; padding-top: 16px; border-top: 1px solid rgba(0,0,0,.1); color: #999; }
+    .inv-controls { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 16px; }
+    .inv-controls button { padding: 8px 18px; border-radius: 8px; font-size: .82rem; font-weight: 600; cursor: pointer; border: none; transition: all .2s; }
+    .tracking-table { margin-top: 24px; }
+    .vars-info { background: rgba(201,168,76,.05); border: 1px solid var(--border); border-radius: 12px; padding: 16px; margin-bottom: 20px; }
+    .vars-info code { background: rgba(201,168,76,.15); padding: 2px 6px; border-radius: 4px; font-size: .78rem; color: var(--gold); }
+  </style>
+</head>
+<body>
+
+<div class="login-overlay" id="login-overlay">
+  <div class="login-box"><h1>🌭 Back Office</h1><p>Entrez le mot de passe</p><input type="password" id="login-pwd" placeholder="Mot de passe" onkeydown="if(event.key==='Enter')doLogin()"><button onclick="doLogin()">Connexion</button><div class="login-error" id="login-error">Mot de passe incorrect</div></div>
+</div>
+
+<header class="admin-header" id="admin-app" style="display:none;">
+  <div class="admin-brand">🌭 Back Office</div>
+  <nav class="admin-nav">
+    <a href="index.html">Dashboard</a>
+    <a href="participants.html">Participants</a>
+    <a href="invitations.html" class="active">Invitations</a>
+    <a href="traiteur.html">Traiteur</a>
+    <a href="salles.html">Salles</a>
+    <a href="checkin.html">Check-in</a>
+    <a href="emails.html">Emails</a>
+  </nav>
+  <button class="admin-logout" onclick="logout()">Deconnexion</button>
+</header>
+
+<div class="admin-content" id="admin-content" style="display:none;">
+  <h1 class="admin-title">Templates d'invitation</h1>
+
+  <div class="vars-info">
+    <strong>Variables disponibles :</strong>
+    <code>{NOM}</code> <code>{PRENOM}</code> <code>{DATE}</code> <code>{PASS}</code> <code>{HOTEL}</code> <code>{SESSIONS}</code> <code>{EMAIL}</code>
+  </div>
+
+  <!-- TEMPLATE SELECTION -->
+  <div class="template-grid" id="template-grid"></div>
+
+  <!-- PREVIEW -->
+  <div class="preview-area" id="preview-area" style="display:none;">
+    <h3>Apercu de l'invitation</h3>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px;">
+      <div class="form-group"><label style="color:var(--gold);">Destinataire</label><input type="text" id="inv-dest" placeholder="Nom complet" value="Jean Dupont"></div>
+      <div class="form-group"><label style="color:var(--gold);">Email</label><input type="text" id="inv-email" placeholder="Email" value="jean.dupont@gmail.com"></div>
+    </div>
+    <div id="invitation-render"></div>
+    <div class="inv-controls">
+      <button style="background:var(--gold);color:#111;" onclick="simulateSend()">Envoyer (simulation)</button>
+      <button style="background:rgba(201,168,76,.15);color:var(--gold);" onclick="copyInvitation()">Copier le texte</button>
+      <button style="background:rgba(201,168,76,.15);color:var(--gold);" onclick="printInvitation()">Imprimer</button>
+    </div>
+  </div>
+
+  <!-- TRACKING -->
+  <div class="chart-card tracking-table">
+    <h3>Suivi des invitations</h3>
+    <div class="admin-table-wrap">
+      <table class="admin-table">
+        <thead><tr><th>Destinataire</th><th>Type</th><th>Date envoi</th><th>Statut</th><th>Badge</th></tr></thead>
+        <tbody id="tracking-body"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<script src="../js/data.js"></script>
+<script>
+var ADMIN_PWD = 'SAUCISSE2026';
+function doLogin(){if(document.getElementById('login-pwd').value===ADMIN_PWD){sessionStorage.setItem('congres_admin','1');showAdmin();}else{document.getElementById('login-error').style.display='block';}}
+function logout(){sessionStorage.removeItem('congres_admin');location.reload();}
+function showAdmin(){document.getElementById('login-overlay').style.display='none';document.getElementById('admin-app').style.display='flex';document.getElementById('admin-content').style.display='block';init();}
+if(sessionStorage.getItem('congres_admin'))showAdmin();
+
+var TEMPLATES = [
+  {
+    id: 'speaker',
+    type: 'Speaker / Intervenant',
+    ton: 'Formel, prestigieux',
+    badge: 'tag-gold',
+    badgeColor: '#C9A84C',
+    cssClass: 'luxury',
+    html: function(name) {
+      return '<div class="inv-preview luxury">' +
+        '<div class="inv-logo">🌭</div>' +
+        '<h2>Invitation Officielle</h2>' +
+        '<p>Cher(e) <strong>' + name + '</strong>,</p>' +
+        '<p>Nous avons le grand honneur de vous inviter en qualite d\'intervenant(e) au <strong>Congres de la Saucisse — Strasbourg 2026</strong>, qui se tiendra du 12 au 14 juin 2026 au Palais des Congres de Strasbourg.</p>' +
+        '<p>Votre expertise exceptionnelle dans le domaine charcutier fait de votre participation un element central de notre programme. Nous serions tres honores de vous compter parmi nos intervenants.</p>' +
+        '<p><strong>Votre programme personnalise :</strong></p>' +
+        '<ul style="margin:10px 0;padding-left:20px;">' +
+          '<li>Hebergement au Hilton Strasbourg (3 nuits)</li>' +
+          '<li>Transfert gare/aeroport</li>' +
+          '<li>Diner officiel des speakers (12 juin)</li>' +
+          '<li>Acces backstage et lounge VIP</li>' +
+        '</ul>' +
+        '<p>Nous vous prions de confirmer votre participation avant le 15 avril 2026.</p>' +
+        '<p>Avec nos plus sinceres salutations,<br><strong>Le Comite d\'Organisation</strong></p>' +
+        '<div class="inv-footer">Congres de la Saucisse — Palais des Congres, Strasbourg — 12-14 juin 2026</div>' +
+      '</div>';
+    }
+  },
+  {
+    id: 'platinum',
+    type: 'VIP Platinum',
+    ton: 'Luxueux, exclusif',
+    badge: 'tag-platinum',
+    badgeColor: '#C8C8DC',
+    cssClass: 'luxury',
+    html: function(name) {
+      return '<div class="inv-preview luxury">' +
+        '<div class="inv-logo">🌭</div>' +
+        '<h2>Invitation Prestige — VIP Platinum</h2>' +
+        '<p>Cher(e) <strong>' + name + '</strong>,</p>' +
+        '<p>Vous faites partie d\'un cercle tres exclusif de passionnes que nous souhaitons accueillir dans les meilleures conditions au <strong>Congres de la Saucisse 2026</strong>.</p>' +
+        '<p>En tant qu\'invite(e) <strong>VIP Platinum</strong>, vous beneficierez de :</p>' +
+        '<ul style="margin:10px 0;padding-left:20px;">' +
+          '<li>3 nuits au Hilton Strasbourg (suite superieure)</li>' +
+          '<li>Transfert personnalise gare/aeroport</li>' +
+          '<li>Places reservees au premier rang</li>' +
+          '<li>Diner de gala + diner prive avec les speakers</li>' +
+          '<li>Acces lounge VIP et backstage</li>' +
+          '<li>Photo officielle encadree</li>' +
+        '</ul>' +
+        '<p>Ce pass d\'une valeur de 1 200 euros vous est offert en remerciement de votre soutien exceptionnel.</p>' +
+        '<p>Avec notre plus profonde gratitude,<br><strong>Le Comite d\'Organisation</strong></p>' +
+        '<div class="inv-footer">Congres de la Saucisse — Palais des Congres, Strasbourg — 12-14 juin 2026</div>' +
+      '</div>';
+    }
+  },
+  {
+    id: 'vip',
+    type: 'VIP Gold / Bronze',
+    ton: 'Premium, chaleureux',
+    badge: 'tag-gold',
+    badgeColor: '#FFD300',
+    cssClass: '',
+    html: function(name) {
+      return '<div class="inv-preview">' +
+        '<div class="inv-logo">🌭</div>' +
+        '<h2>Invitation Privilege — VIP</h2>' +
+        '<p>Cher(e) <strong>' + name + '</strong>,</p>' +
+        '<p>Nous avons le plaisir de vous inviter au <strong>Congres de la Saucisse — Strasbourg 2026</strong> avec un acces <strong>VIP</strong>.</p>' +
+        '<p>Vos avantages :</p>' +
+        '<ul style="margin:10px 0;padding-left:20px;">' +
+          '<li>Places reservees aux premiers rangs</li>' +
+          '<li>Cocktail de bienvenue (12 juin)</li>' +
+          '<li>Diner de gala (13 juin soir)</li>' +
+          '<li>Acces au lounge VIP</li>' +
+          '<li>Rencontre speakers (15 min)</li>' +
+          '<li>Degustation privee</li>' +
+        '</ul>' +
+        '<p>32 sessions, 22 experts internationaux et 3 jours inoubliables vous attendent !</p>' +
+        '<p>Chaleureusement,<br><strong>Le Comite d\'Organisation</strong></p>' +
+        '<div class="inv-footer">Congres de la Saucisse — Palais des Congres, Strasbourg — 12-14 juin 2026</div>' +
+      '</div>';
+    }
+  },
+  {
+    id: 'standard',
+    type: 'Participant Standard',
+    ton: 'Chaleureux, enthousiaste',
+    badge: 'tag-standard',
+    badgeColor: '#9CA3AF',
+    cssClass: '',
+    html: function(name) {
+      return '<div class="inv-preview">' +
+        '<div class="inv-logo">🌭</div>' +
+        '<h2>Vous etes invite(e) !</h2>' +
+        '<p>Bonjour <strong>' + name + '</strong>,</p>' +
+        '<p>Le <strong>Congres de la Saucisse 2026</strong> ouvre ses portes du 12 au 14 juin au Palais des Congres de Strasbourg, et nous serions ravis de vous y accueillir !</p>' +
+        '<p><strong>Au programme :</strong></p>' +
+        '<ul style="margin:10px 0;padding-left:20px;">' +
+          '<li>32 sessions, conferences et ateliers</li>' +
+          '<li>22 experts internationaux</li>' +
+          '<li>Degustations et decouvertes</li>' +
+          '<li>Espace exposition 800m2</li>' +
+          '<li>Pauses cafe et networking</li>' +
+        '</ul>' +
+        '<p>Le pass Standard (150 euros) vous donne acces a l\'ensemble des conferences et pauses cafe.</p>' +
+        '<p>Inscrivez-vous sur notre site pour reserver votre place !</p>' +
+        '<p>A bientot a Strasbourg !<br><strong>L\'equipe du Congres de la Saucisse</strong></p>' +
+        '<div class="inv-footer">Congres de la Saucisse — Palais des Congres, Strasbourg — 12-14 juin 2026</div>' +
+      '</div>';
+    }
+  },
+  {
+    id: 'presse',
+    type: 'Presse',
+    ton: 'Professionnel, factuel',
+    badge: 'tag-confirmed',
+    badgeColor: '#22C55E',
+    cssClass: 'press',
+    html: function(name) {
+      return '<div class="inv-preview press">' +
+        '<div class="inv-logo">🌭</div>' +
+        '<h2>Accreditation Presse</h2>' +
+        '<p>Cher(e) <strong>' + name + '</strong>,</p>' +
+        '<p>Le service de presse du <strong>Congres de la Saucisse 2026</strong> a le plaisir de vous accorder une accreditation presse pour couvrir l\'evenement.</p>' +
+        '<p><strong>Votre accreditation vous donne acces a :</strong></p>' +
+        '<ul style="margin:10px 0;padding-left:20px;">' +
+          '<li>Toutes les conferences et ateliers</li>' +
+          '<li>Espace presse dedie (wifi haut debit, prises, cafe)</li>' +
+          '<li>Interviews speakers sur rendez-vous</li>' +
+          '<li>Kit presse (communiques, photos HD, contacts)</li>' +
+          '<li>Point presse quotidien a 18h</li>' +
+        '</ul>' +
+        '<p><strong>Contact presse :</strong> Monique Pfleger — presse@congres-saucisse.fr — 03 88 37 67 67 (poste 3)</p>' +
+        '<p>Cordialement,<br><strong>Service de Presse — Congres de la Saucisse</strong></p>' +
+        '<div class="inv-footer">Congres de la Saucisse — Palais des Congres, Strasbourg — 12-14 juin 2026</div>' +
+      '</div>';
+    }
+  }
+];
+
+var selectedTemplate = null;
+
+// Demo tracking data
+var trackingData = [
+  { nom: 'Jean-Marc Schaller', type: 'Speaker', date: '2026-02-01', statut: 'confirmed', badge: 'tag-gold' },
+  { nom: 'Klaus Muller', type: 'Speaker', date: '2026-02-01', statut: 'confirmed', badge: 'tag-gold' },
+  { nom: 'Hans Schmidt', type: 'VIP Platinum', date: '2026-02-15', statut: 'confirmed', badge: 'tag-platinum' },
+  { nom: 'Jean Dupont', type: 'VIP Gold', date: '2026-02-20', statut: 'confirmed', badge: 'tag-gold' },
+  { nom: 'Claire Petit', type: 'Presse', date: '2026-03-05', statut: 'pending', badge: 'tag-pending' },
+  { nom: 'Pierre Martin', type: 'Standard', date: '2026-03-10', statut: 'pending', badge: 'tag-pending' },
+  { nom: 'Isabella Rossi', type: 'Speaker', date: '2026-02-01', statut: 'declined', badge: 'tag-declined' }
+];
+
+function init() {
+  // Template cards
+  var html = '';
+  TEMPLATES.forEach(function(t) {
+    html += '<div class="template-card" id="tpl-' + t.id + '" onclick="selectTemplate(\'' + t.id + '\')">' +
+      '<span class="type-badge" style="background:' + t.badgeColor + ';color:#111;">' + t.type + '</span>' +
+      '<h3>' + t.type + '</h3>' +
+      '<p><strong>Ton :</strong> ' + t.ton + '</p>' +
+    '</div>';
+  });
+  document.getElementById('template-grid').innerHTML = html;
+
+  // Tracking
+  var trackHtml = '';
+  trackingData.forEach(function(t) {
+    trackHtml += '<tr><td>' + t.nom + '</td><td>' + t.type + '</td><td>' + t.date + '</td><td><span class="tag ' + t.badge + '">' + t.statut + '</span></td><td><span class="tag" style="background:' + (TEMPLATES.find(function(x){return x.type===t.type;})||{badgeColor:'#999'}).badgeColor + ';color:#111;">' + t.type + '</span></td></tr>';
+  });
+  document.getElementById('tracking-body').innerHTML = trackHtml;
+}
+
+function selectTemplate(id) {
+  selectedTemplate = TEMPLATES.find(function(t) { return t.id === id; });
+  document.querySelectorAll('.template-card').forEach(function(el) { el.classList.remove('selected'); });
+  document.getElementById('tpl-' + id).classList.add('selected');
+  document.getElementById('preview-area').style.display = 'block';
+  renderPreview();
+}
+
+function renderPreview() {
+  if (!selectedTemplate) return;
+  var name = document.getElementById('inv-dest').value || 'Nom Prenom';
+  document.getElementById('invitation-render').innerHTML = selectedTemplate.html(name);
+}
+
+// Update preview on input change
+document.getElementById('inv-dest').addEventListener('input', renderPreview);
+
+function simulateSend() {
+  var email = document.getElementById('inv-email').value;
+  alert('Invitation envoyee (simulation) a : ' + email + '\n\nDans un vrai systeme, l\'email serait envoye via SMTP/API.');
+}
+
+function copyInvitation() {
+  var text = document.getElementById('invitation-render').innerText;
+  navigator.clipboard.writeText(text).then(function() { alert('Texte copie dans le presse-papier !'); });
+}
+
+function printInvitation() {
+  var html = document.getElementById('invitation-render').innerHTML;
+  var w = window.open('', '_blank');
+  w.document.write('<html><head><title>Invitation</title><style>body{padding:40px;font-family:Georgia,serif;}@media print{body{padding:0;}}</style></head><body>' + html + '<script>setTimeout(function(){window.print();},300);<\/script></body></html>');
+}
+</script>
+</body>
+</html>
