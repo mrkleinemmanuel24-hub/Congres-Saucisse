@@ -25,7 +25,7 @@
 <body>
 
 <nav class="navbar">
-  <a href="index.html" class="navbar-brand"><span>🌭</span> Congres de la Saucisse</a>
+  <a href="index.html" class="navbar-brand"><img src="img/icons/icon-saucisse.png" alt="Saucisse" style="width:32px;height:32px;border-radius:8px;object-fit:contain;vertical-align:middle" title="Congres de la Saucisse"> Congres de la Saucisse</a>
   <button class="nav-toggle" onclick="document.querySelector('.navbar-links').classList.toggle('open')">☰</button>
   <div class="navbar-links">
     <a href="index.html">Accueil</a>
@@ -39,12 +39,12 @@
 </nav>
 
 <section class="section" style="max-width:800px;">
-  <h1 class="section-title">Espace Presse</h1>
+  <h1 class="section-title"><img src="img/icons/icon-presse.png" alt="Presse" style="width:48px;height:48px;border-radius:12px;object-fit:contain;vertical-align:middle" title="Espace Presse"> Espace Presse</h1>
   <p class="section-subtitle">Accreditation, communiques et kit medias pour les journalistes.</p>
 
   <!-- ACCREDITATION -->
   <div class="press-section">
-    <h2>📰 Demander une accreditation presse</h2>
+    <h2><img src="img/icons/icon-presse.png" alt="Accreditation" style="width:36px;height:36px;border-radius:10px;object-fit:contain;vertical-align:middle" title="Accreditation presse"> Demander une accreditation presse</h2>
     <div class="card" style="padding:24px;">
       <p style="font-size:.88rem;color:var(--text-dim);margin-bottom:16px;">Remplissez ce formulaire pour obtenir votre badge presse (acces gratuit a l'ensemble du congres).</p>
       <form id="press-form" onsubmit="submitPress(event)">
@@ -68,9 +68,9 @@
 
   <!-- COMMUNIQUES -->
   <div class="press-section">
-    <h2>📄 Communiques de presse</h2>
+    <h2><img src="img/icons/icon-presse.png" alt="Communiques" style="width:36px;height:36px;border-radius:10px;object-fit:contain;vertical-align:middle" title="Communiques de presse"> Communiques de presse</h2>
     <div class="press-doc">
-      <div class="doc-icon">📄</div>
+      <div class="doc-icon"><img src="img/icons/icon-export.png" alt="Document" style="width:36px;height:36px;border-radius:8px;object-fit:contain" title="Document PDF"></div>
       <div class="doc-info">
         <h4>Communique #1 — Lancement du Congres</h4>
         <p>15 janvier 2026 — Annonce officielle, programme, premiers intervenants confirmes.</p>
@@ -78,7 +78,7 @@
       <div class="doc-dl"><button class="btn btn-outline btn-sm" onclick="alert('Telechargement PDF (mode demo)')">PDF</button></div>
     </div>
     <div class="press-doc">
-      <div class="doc-icon">📄</div>
+      <div class="doc-icon"><img src="img/icons/icon-export.png" alt="Document" style="width:36px;height:36px;border-radius:8px;object-fit:contain" title="Document PDF"></div>
       <div class="doc-info">
         <h4>Communique #2 — Programme complet</h4>
         <p>15 mars 2026 — 32 sessions, 22 intervenants, 10 salles. Programme definitif.</p>
@@ -86,7 +86,7 @@
       <div class="doc-dl"><button class="btn btn-outline btn-sm" onclick="alert('Telechargement PDF (mode demo)')">PDF</button></div>
     </div>
     <div class="press-doc">
-      <div class="doc-icon">📄</div>
+      <div class="doc-icon"><img src="img/icons/icon-export.png" alt="Document" style="width:36px;height:36px;border-radius:8px;object-fit:contain" title="Document PDF"></div>
       <div class="doc-info">
         <h4>Communique #3 — Chiffres et bilan</h4>
         <p>A venir — Sera disponible le 15 juin 2026 apres le congres.</p>
@@ -97,28 +97,28 @@
 
   <!-- KIT MEDIAS -->
   <div class="press-section">
-    <h2>🎨 Kit medias</h2>
+    <h2><img src="img/icons/icon-presse.png" alt="Kit medias" style="width:36px;height:36px;border-radius:10px;object-fit:contain;vertical-align:middle" title="Kit medias"> Kit medias</h2>
     <div class="media-kit">
       <div class="media-item">
-        <div class="icon">🖼️</div>
+        <div class="icon"><img src="img/icons/icon-saucisse.png" alt="Logo" style="width:48px;height:48px;border-radius:12px;object-fit:contain" title="Logo officiel"></div>
         <h4>Logo officiel</h4>
         <p>PNG + SVG, fond clair/sombre</p>
         <button class="btn btn-outline btn-sm mt-1" onclick="alert('Telechargement (mode demo)')">Telecharger</button>
       </div>
       <div class="media-item">
-        <div class="icon">📸</div>
+        <div class="icon"><img src="img/icons/icon-cathedrale.png" alt="Photos" style="width:48px;height:48px;border-radius:12px;object-fit:contain" title="Photos HD de Strasbourg"></div>
         <h4>Photos HD</h4>
         <p>Palais des Congres, Strasbourg</p>
         <button class="btn btn-outline btn-sm mt-1" onclick="alert('Telechargement (mode demo)')">Telecharger</button>
       </div>
       <div class="media-item">
-        <div class="icon">🎬</div>
+        <div class="icon"><img src="img/icons/icon-home.png" alt="Video" style="width:48px;height:48px;border-radius:12px;object-fit:contain" title="Video teaser du congres"></div>
         <h4>Video teaser</h4>
         <p>30 sec, format 16:9 et carre</p>
         <button class="btn btn-outline btn-sm mt-1" onclick="alert('Telechargement (mode demo)')">Telecharger</button>
       </div>
       <div class="media-item">
-        <div class="icon">📊</div>
+        <div class="icon"><img src="img/icons/icon-dashboard.png" alt="Infographie" style="width:48px;height:48px;border-radius:12px;object-fit:contain" title="Infographie et chiffres cles"></div>
         <h4>Infographie</h4>
         <p>Chiffres cles du congres</p>
         <button class="btn btn-outline btn-sm mt-1" onclick="alert('Telechargement (mode demo)')">Telecharger</button>
@@ -128,7 +128,7 @@
 
   <!-- CONTACT PRESSE -->
   <div class="press-section">
-    <h2>📧 Contact presse</h2>
+    <h2><img src="img/icons/icon-emails.png" alt="Contact" style="width:36px;height:36px;border-radius:10px;object-fit:contain;vertical-align:middle" title="Contact presse"> Contact presse</h2>
     <div class="contact-press">
       <p style="font-size:.9rem;line-height:1.8;">
         <strong>Service de presse — Congres de la Saucisse</strong><br>
@@ -141,7 +141,7 @@
 </section>
 
 <footer class="footer">
-  <div class="footer-brand">🌭 Le Congres de la Saucisse — Strasbourg 2026</div>
+  <div class="footer-brand"><img src="img/icons/icon-saucisse.png" alt="Saucisse" style="width:28px;height:28px;border-radius:6px;object-fit:contain;vertical-align:middle" title="Congres de la Saucisse"> Le Congres de la Saucisse — Strasbourg 2026</div>
 </footer>
 
 <script src="js/content-filter.js"></script>

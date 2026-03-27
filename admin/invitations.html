@@ -31,25 +31,25 @@
 <body>
 
 <div class="login-overlay" id="login-overlay">
-  <div class="login-box"><h1>🌭 Back Office</h1><p>Entrez le mot de passe</p><input type="password" id="login-pwd" placeholder="Mot de passe" onkeydown="if(event.key==='Enter')doLogin()"><button onclick="doLogin()">Connexion</button><div class="login-error" id="login-error">Mot de passe incorrect</div></div>
+  <div class="login-box"><h1><img src="../img/icons/icon-saucisse.png" alt="Saucisse" style="width:48px;height:48px;border-radius:12px;object-fit:contain;vertical-align:middle" title="Back Office"> Back Office</h1><p>Entrez le mot de passe</p><input type="password" id="login-pwd" placeholder="Mot de passe" onkeydown="if(event.key==='Enter')doLogin()"><button onclick="doLogin()">Connexion</button><div class="login-error" id="login-error">Mot de passe incorrect</div></div>
 </div>
 
 <header class="admin-header" id="admin-app" style="display:none;">
-  <div class="admin-brand">🌭 Back Office</div>
+  <div class="admin-brand"><img src="../img/icons/icon-saucisse.png" alt="Saucisse" style="width:28px;height:28px;border-radius:6px;object-fit:contain;vertical-align:middle" title="Back Office"> Back Office</div>
   <nav class="admin-nav">
-    <a href="index.html">Dashboard</a>
-    <a href="participants.html">Participants</a>
-    <a href="invitations.html" class="active">Invitations</a>
-    <a href="traiteur.html">Traiteur</a>
-    <a href="salles.html">Salles</a>
-    <a href="checkin.html">Check-in</a>
-    <a href="emails.html">Emails</a>
+    <a href="index.html"><img src="../img/icons/icon-dashboard.png" alt="" style="width:20px;height:20px;border-radius:4px;object-fit:contain;vertical-align:middle" title="Dashboard"> Dashboard</a>
+    <a href="participants.html"><img src="../img/icons/icon-participants.png" alt="" style="width:20px;height:20px;border-radius:4px;object-fit:contain;vertical-align:middle" title="Participants"> Participants</a>
+    <a href="invitations.html" class="active"><img src="../img/icons/icon-invitations.png" alt="" style="width:20px;height:20px;border-radius:4px;object-fit:contain;vertical-align:middle" title="Invitations"> Invitations</a>
+    <a href="traiteur.html"><img src="../img/icons/icon-traiteur.png" alt="" style="width:20px;height:20px;border-radius:4px;object-fit:contain;vertical-align:middle" title="Traiteur"> Traiteur</a>
+    <a href="salles.html"><img src="../img/icons/icon-salles.png" alt="" style="width:20px;height:20px;border-radius:4px;object-fit:contain;vertical-align:middle" title="Salles"> Salles</a>
+    <a href="checkin.html"><img src="../img/icons/icon-checkin.png" alt="" style="width:20px;height:20px;border-radius:4px;object-fit:contain;vertical-align:middle" title="Check-in"> Check-in</a>
+    <a href="emails.html"><img src="../img/icons/icon-emails.png" alt="" style="width:20px;height:20px;border-radius:4px;object-fit:contain;vertical-align:middle" title="Emails"> Emails</a>
   </nav>
   <button class="admin-logout" onclick="logout()">Deconnexion</button>
 </header>
 
 <div class="admin-content" id="admin-content" style="display:none;">
-  <h1 class="admin-title">Templates d'invitation</h1>
+  <h1 class="admin-title"><img src="../img/icons/icon-invitations.png" alt="Invitations" style="width:48px;height:48px;border-radius:12px;object-fit:contain;vertical-align:middle" title="Templates d'invitation"> Templates d'invitation</h1>
 
   <div class="vars-info">
     <strong>Variables disponibles :</strong>
@@ -104,7 +104,7 @@ var TEMPLATES = [
     cssClass: 'luxury',
     html: function(name) {
       return '<div class="inv-preview luxury">' +
-        '<div class="inv-logo">🌭</div>' +
+        '<div class="inv-logo"><img src="../img/icons/icon-saucisse.png" alt="Logo" style="width:64px;height:64px;border-radius:12px;object-fit:contain" title="Congres de la Saucisse"></div>' +
         '<h2>Invitation Officielle</h2>' +
         '<p>Cher(e) <strong>' + name + '</strong>,</p>' +
         '<p>Nous avons le grand honneur de vous inviter en qualite d\'intervenant(e) au <strong>Congres de la Saucisse — Strasbourg 2026</strong>, qui se tiendra du 12 au 14 juin 2026 au Palais des Congres de Strasbourg.</p>' +
@@ -131,7 +131,7 @@ var TEMPLATES = [
     cssClass: 'luxury',
     html: function(name) {
       return '<div class="inv-preview luxury">' +
-        '<div class="inv-logo">🌭</div>' +
+        '<div class="inv-logo"><img src="../img/icons/icon-saucisse.png" alt="Logo" style="width:64px;height:64px;border-radius:12px;object-fit:contain" title="Congres de la Saucisse"></div>' +
         '<h2>Invitation Prestige — VIP Platinum</h2>' +
         '<p>Cher(e) <strong>' + name + '</strong>,</p>' +
         '<p>Vous faites partie d\'un cercle tres exclusif de passionnes que nous souhaitons accueillir dans les meilleures conditions au <strong>Congres de la Saucisse 2026</strong>.</p>' +
@@ -159,7 +159,7 @@ var TEMPLATES = [
     cssClass: '',
     html: function(name) {
       return '<div class="inv-preview">' +
-        '<div class="inv-logo">🌭</div>' +
+        '<div class="inv-logo"><img src="../img/icons/icon-saucisse.png" alt="Logo" style="width:64px;height:64px;border-radius:12px;object-fit:contain" title="Congres de la Saucisse"></div>' +
         '<h2>Invitation Privilege — VIP</h2>' +
         '<p>Cher(e) <strong>' + name + '</strong>,</p>' +
         '<p>Nous avons le plaisir de vous inviter au <strong>Congres de la Saucisse — Strasbourg 2026</strong> avec un acces <strong>VIP</strong>.</p>' +
@@ -187,7 +187,7 @@ var TEMPLATES = [
     cssClass: '',
     html: function(name) {
       return '<div class="inv-preview">' +
-        '<div class="inv-logo">🌭</div>' +
+        '<div class="inv-logo"><img src="../img/icons/icon-saucisse.png" alt="Logo" style="width:64px;height:64px;border-radius:12px;object-fit:contain" title="Congres de la Saucisse"></div>' +
         '<h2>Vous etes invite(e) !</h2>' +
         '<p>Bonjour <strong>' + name + '</strong>,</p>' +
         '<p>Le <strong>Congres de la Saucisse 2026</strong> ouvre ses portes du 12 au 14 juin au Palais des Congres de Strasbourg, et nous serions ravis de vous y accueillir !</p>' +
@@ -215,7 +215,7 @@ var TEMPLATES = [
     cssClass: 'press',
     html: function(name) {
       return '<div class="inv-preview press">' +
-        '<div class="inv-logo">🌭</div>' +
+        '<div class="inv-logo"><img src="../img/icons/icon-saucisse.png" alt="Logo" style="width:64px;height:64px;border-radius:12px;object-fit:contain" title="Congres de la Saucisse"></div>' +
         '<h2>Accreditation Presse</h2>' +
         '<p>Cher(e) <strong>' + name + '</strong>,</p>' +
         '<p>Le service de presse du <strong>Congres de la Saucisse 2026</strong> a le plaisir de vous accorder une accreditation presse pour couvrir l\'evenement.</p>' +

@@ -36,29 +36,29 @@
 <body>
 
 <div class="login-overlay" id="login-overlay">
-  <div class="login-box"><h1>🌭 Back Office</h1><p>Entrez le mot de passe</p><input type="password" id="login-pwd" placeholder="Mot de passe" onkeydown="if(event.key==='Enter')doLogin()"><button onclick="doLogin()">Connexion</button><div class="login-error" id="login-error">Mot de passe incorrect</div></div>
+  <div class="login-box"><h1><img src="../img/icons/icon-saucisse.png" alt="Saucisse" style="width:48px;height:48px;border-radius:12px;object-fit:contain;vertical-align:middle" title="Back Office"> Back Office</h1><p>Entrez le mot de passe</p><input type="password" id="login-pwd" placeholder="Mot de passe" onkeydown="if(event.key==='Enter')doLogin()"><button onclick="doLogin()">Connexion</button><div class="login-error" id="login-error">Mot de passe incorrect</div></div>
 </div>
 
 <header class="admin-header" id="admin-app" style="display:none;">
-  <div class="admin-brand">🌭 Back Office</div>
+  <div class="admin-brand"><img src="../img/icons/icon-saucisse.png" alt="Saucisse" style="width:28px;height:28px;border-radius:6px;object-fit:contain;vertical-align:middle" title="Back Office"> Back Office</div>
   <nav class="admin-nav">
-    <a href="index.html">Dashboard</a>
-    <a href="participants.html">Participants</a>
-    <a href="invitations.html">Invitations</a>
-    <a href="traiteur.html">Traiteur</a>
-    <a href="salles.html">Salles</a>
-    <a href="checkin.html" class="active">Check-in</a>
-    <a href="emails.html">Emails</a>
+    <a href="index.html"><img src="../img/icons/icon-dashboard.png" alt="" style="width:20px;height:20px;border-radius:4px;object-fit:contain;vertical-align:middle" title="Dashboard"> Dashboard</a>
+    <a href="participants.html"><img src="../img/icons/icon-participants.png" alt="" style="width:20px;height:20px;border-radius:4px;object-fit:contain;vertical-align:middle" title="Participants"> Participants</a>
+    <a href="invitations.html"><img src="../img/icons/icon-invitations.png" alt="" style="width:20px;height:20px;border-radius:4px;object-fit:contain;vertical-align:middle" title="Invitations"> Invitations</a>
+    <a href="traiteur.html"><img src="../img/icons/icon-traiteur.png" alt="" style="width:20px;height:20px;border-radius:4px;object-fit:contain;vertical-align:middle" title="Traiteur"> Traiteur</a>
+    <a href="salles.html"><img src="../img/icons/icon-salles.png" alt="" style="width:20px;height:20px;border-radius:4px;object-fit:contain;vertical-align:middle" title="Salles"> Salles</a>
+    <a href="checkin.html" class="active"><img src="../img/icons/icon-checkin.png" alt="" style="width:20px;height:20px;border-radius:4px;object-fit:contain;vertical-align:middle" title="Check-in"> Check-in</a>
+    <a href="emails.html"><img src="../img/icons/icon-emails.png" alt="" style="width:20px;height:20px;border-radius:4px;object-fit:contain;vertical-align:middle" title="Emails"> Emails</a>
   </nav>
   <button class="admin-logout" onclick="logout()">Deconnexion</button>
 </header>
 
 <div class="admin-content" id="admin-content" style="display:none;">
-  <h1 class="admin-title">Check-in Jour J</h1>
+  <h1 class="admin-title"><img src="../img/icons/icon-checkin.png" alt="Check-in" style="width:48px;height:48px;border-radius:12px;object-fit:contain;vertical-align:middle" title="Check-in Jour J"> Check-in Jour J</h1>
 
   <div class="scanner-area">
     <div class="scanner-box">
-      <div class="icon">📷</div>
+      <div class="icon"><img src="../img/icons/icon-qrcode.png" alt="Scanner QR" style="width:64px;height:64px;border-radius:12px;object-fit:contain" title="Scanner le QR code du badge"></div>
       <p>Scannez le QR code du badge participant</p>
       <video id="camera-video" autoplay playsinline></video>
       <button onclick="startCamera()" style="padding:10px 24px;border-radius:10px;background:var(--gold);color:#111;font-weight:700;border:none;cursor:pointer;margin-top:12px;">Activer la camera</button>
