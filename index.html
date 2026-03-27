@@ -1068,6 +1068,66 @@ if (typeof generateBadge === 'undefined') {
     return '<div class="badge-preview"><div class="badge-header">🌭 CONGRES DE LA SAUCISSE 2026</div><div class="badge-name">' + ins.prenom + ' ' + ins.nom + '</div><div class="badge-company">' + (ins.entreprise || '') + '</div><div class="badge-pass badge-pass-' + ins.pass + '">' + (pass ? pass.nom : ins.pass) + '</div><div style="font-size:.78rem;color:#999;margin-top:12px;">' + ins.id + '</div></div>';
   };
 }
+
+/* ═══════════════════════════════════════════════════════
+   CUSTOM SECTIONS — Injected from admin "Mes Rubriques"
+   ═══════════════════════════════════════════════════════ */
+(function() {
+  var sections = [];
+  try { sections = JSON.parse(localStorage.getItem('congres_custom_sections') || '[]'); } catch(e) {}
+  if (!sections.length) return;
+
+  var nav = document.querySelector('.topbar-nav');
+  var ctas = document.querySelector('.topbar-ctas');
+  var partenaires = document.getElementById('partenaires');
+  var insertBefore = partenaires ? partenaires.parentNode : null;
+
+  sections.forEach(function(sec) {
+    if (!sec.titre || !sec.contenu) return;
+
+    // Build section HTML
+    var sectionEl = document.createElement('section');
+    sectionEl.id = sec.id || 'custom-section';
+    sectionEl.className = 'section';
+    sectionEl.style.cssText = 'max-width:900px;margin:0 auto;';
+
+    var imgHtml = sec.image ? '<img src="' + sec.image + '" style="max-width:100%;border-radius:16px;margin-bottom:24px;" onerror="this.style.display=\'none\'">' : '';
+    var textHtml = sec.contenu.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g, '<br>');
+
+    sectionEl.innerHTML =
+      '<span class="section-label section-label-green">Rubrique</span>' +
+      '<h2 class="section-title">' + (sec.icon || '📄') + ' ' + sec.titre + '</h2>' +
+      imgHtml +
+      '<div style="font-size:.95rem;color:#B8B8D0;line-height:1.8;">' + textHtml + '</div>';
+
+    // Insert divider + section before partenaires or at end before footer
+    var divider = document.createElement('div');
+    divider.className = 'sausage-divider';
+    divider.textContent = '\uD83C\uDF2D\uD83C\uDF2D\uD83C\uDF2D\uD83C\uDF2D\uD83C\uDF2D\uD83C\uDF2D\uD83C\uDF2D\uD83C\uDF2D\uD83C\uDF2D\uD83C\uDF2D\uD83C\uDF2D\uD83C\uDF2D\uD83C\uDF2D\uD83C\uDF2D\uD83C\uDF2D\uD83C\uDF2D\uD83C\uDF2D\uD83C\uDF2D\uD83C\uDF2D\uD83C\uDF2D\uD83C\uDF2D\uD83C\uDF2D\uD83C\uDF2D\uD83C\uDF2D\uD83C\uDF2D\uD83C\uDF2D\uD83C\uDF2D\uD83C\uDF2D\uD83C\uDF2D\uD83C\uDF2D';
+
+    var footer = document.querySelector('.site-footer');
+    if (footer) {
+      footer.parentNode.insertBefore(divider, footer);
+      footer.parentNode.insertBefore(sectionEl, footer);
+    } else {
+      document.body.appendChild(divider);
+      document.body.appendChild(sectionEl);
+    }
+
+    // Add nav link if visible
+    if (sec.visible && nav) {
+      var link = document.createElement('a');
+      link.href = '#' + (sec.id || 'custom-section');
+      link.textContent = sec.titre;
+      // Insert before the CTAs area in the nav
+      if (ctas) {
+        nav.appendChild(link);
+      } else {
+        nav.appendChild(link);
+      }
+    }
+  });
+})();
 </script>
 
 </body>

@@ -138,6 +138,7 @@
   <a class="sidebar-link" onclick="showAdmin('securite')"><img src="img/icons/icon-salles.png" alt=""> Securite</a>
   <a class="sidebar-link" onclick="showAdmin('budget')"><img src="img/icons/icon-traiteur.png" alt=""> Budget</a>
   <a class="sidebar-link" onclick="showAdmin('postevent')"><img src="img/icons/icon-emails.png" alt=""> Post-event</a>
+  <a class="sidebar-link" onclick="showAdmin('rubriques')"><img src="img/icons/icon-programme.png" alt=""> Mes Rubriques</a>
 
   <div class="sidebar-footer">Evenement fictif - demo<br>Strasbourg 2026</div>
 </nav>
@@ -374,6 +375,7 @@
 <div id="section-securite" class="section-page admin-section"></div>
 <div id="section-budget" class="section-page admin-section"></div>
 <div id="section-postevent" class="section-page admin-section"></div>
+<div id="section-rubriques" class="section-page admin-section"></div>
 
 </main>
 
@@ -460,7 +462,7 @@ window.addEventListener('DOMContentLoaded', function() {
   }
   if (window.location.hash) {
     var h = window.location.hash.substring(1);
-    var adminSections = ['dashboard','participants','invitations','traiteur','salles','checkin','emails','checklist','speakers','staff','securite','budget','postevent'];
+    var adminSections = ['dashboard','participants','invitations','traiteur','salles','checkin','emails','checklist','speakers','staff','securite','budget','postevent','rubriques'];
     if (adminSections.indexOf(h) !== -1) {
       showAdmin(h);
     } else {

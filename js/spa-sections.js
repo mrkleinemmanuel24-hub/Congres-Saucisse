@@ -333,3 +333,235 @@ SPA_INIT.securite = function() { var s=CONGRES.getStats();document.getElementByI
 SPA_INIT.budget = function() { var s=CONGRES.getStats();document.getElementById('section-budget').innerHTML=adminWrap('Budget','icon-traiteur.png','<div class="stats-grid"><div class="stat-card"><div class="stat-value">164 300 &euro;</div><div class="stat-label">Budget prevu</div></div><div class="stat-card"><div class="stat-value" style="color:#22C55E;">'+s.revenue.toLocaleString('fr-FR')+' &euro;</div><div class="stat-label">Revenus</div></div></div>'); };
 
 SPA_INIT.postevent = function() { document.getElementById('section-postevent').innerHTML=adminWrap('Post-event','icon-emails.png','<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px;"><div class="chart-card"><h3>Sondage satisfaction</h3><p style="font-size:.82rem;color:#9B978F;">A envoyer J+1.</p></div><div class="chart-card"><h3>Remerciements speakers</h3><p style="font-size:.82rem;color:#9B978F;">Emails personnalises.</p></div><div class="chart-card"><h3>Galerie photos</h3><p style="font-size:.82rem;color:#9B978F;">Publication web J+3.</p></div><div class="chart-card"><h3>Bilan financier</h3><p style="font-size:.82rem;color:#9B978F;">Rapport a J+15.</p></div></div>'); };
+
+/* ══════════════════════════════════════
+   MES RUBRIQUES — Editeur de sections personnalisees
+   ══════════════════════════════════════ */
+SPA_INIT.rubriques = function() {
+  var el = document.getElementById('section-rubriques');
+  var MAX_SECTIONS = 10;
+  var LS_KEY = 'congres_custom_sections';
+
+  function loadSections() {
+    try { return JSON.parse(localStorage.getItem(LS_KEY) || '[]'); } catch(e) { return []; }
+  }
+  function saveSections(arr) {
+    localStorage.setItem(LS_KEY, JSON.stringify(arr));
+  }
+  function slugify(str) {
+    return 'custom-' + str.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').substring(0, 40);
+  }
+
+  function render() {
+    var sections = loadSections();
+    var listHtml = '';
+
+    if (sections.length === 0) {
+      listHtml = '<div style="text-align:center;padding:40px;color:#9B978F;font-size:.88rem;">Aucune rubrique personnalisee pour le moment.<br>Cliquez sur "Ajouter une rubrique" pour commencer.</div>';
+    } else {
+      sections.forEach(function(sec, idx) {
+        listHtml += '<div style="background:#161822;border:1px solid rgba(201,168,76,.1);border-radius:14px;padding:16px 20px;margin-bottom:12px;display:flex;align-items:center;gap:16px;">' +
+          '<div style="font-size:1.8rem;flex-shrink:0;">' + (sec.icon || '📄') + '</div>' +
+          '<div style="flex:1;min-width:0;">' +
+            '<div style="font-weight:700;font-size:.95rem;color:#E8E4DC;">' + sec.titre + '</div>' +
+            '<div style="font-size:.78rem;color:#9B978F;margin-top:2px;">' +
+              (sec.visible ? '<span style="color:#22C55E;">Visible dans le menu</span>' : '<span style="color:#F59E0B;">Masque</span>') +
+              (sec.image ? ' · Image incluse' : '') +
+              ' · ' + (sec.contenu || '').substring(0, 60) + (sec.contenu && sec.contenu.length > 60 ? '...' : '') +
+            '</div>' +
+          '</div>' +
+          '<div style="display:flex;gap:6px;flex-shrink:0;">' +
+            (idx > 0 ? '<button onclick="SPA_RUB.move(' + idx + ',-1)" style="background:rgba(201,168,76,.1);border:none;border-radius:8px;padding:6px 10px;color:#C9A84C;cursor:pointer;font-size:.9rem;" title="Monter">&#9650;</button>' : '') +
+            (idx < sections.length - 1 ? '<button onclick="SPA_RUB.move(' + idx + ',1)" style="background:rgba(201,168,76,.1);border:none;border-radius:8px;padding:6px 10px;color:#C9A84C;cursor:pointer;font-size:.9rem;" title="Descendre">&#9660;</button>' : '') +
+            '<button onclick="SPA_RUB.preview(' + idx + ')" style="background:rgba(42,215,131,.1);border:none;border-radius:8px;padding:6px 12px;color:#2AD783;cursor:pointer;font-size:.82rem;font-weight:600;" title="Apercu">Apercu</button>' +
+            '<button onclick="SPA_RUB.edit(' + idx + ')" style="background:rgba(201,168,76,.1);border:none;border-radius:8px;padding:6px 12px;color:#C9A84C;cursor:pointer;font-size:.82rem;font-weight:600;">Modifier</button>' +
+            '<button onclick="SPA_RUB.remove(' + idx + ')" style="background:rgba(220,38,38,.1);border:none;border-radius:8px;padding:6px 12px;color:#DC2626;cursor:pointer;font-size:.82rem;font-weight:600;">Supprimer</button>' +
+          '</div>' +
+        '</div>';
+      });
+    }
+
+    var formHtml = '<div id="rub-form" style="display:none;background:#161822;border:1px solid rgba(201,168,76,.15);border-radius:16px;padding:24px;margin-top:20px;">' +
+      '<h3 id="rub-form-title" style="color:#C9A84C;font-size:1rem;margin-bottom:16px;">Nouvelle rubrique</h3>' +
+      '<input type="hidden" id="rub-edit-idx" value="-1">' +
+      '<div style="display:grid;grid-template-columns:1fr 120px;gap:12px;margin-bottom:12px;">' +
+        '<div><label style="display:block;font-size:.78rem;color:#9B978F;margin-bottom:4px;font-weight:600;">Titre de la rubrique *</label>' +
+        '<input type="text" id="rub-titre" placeholder="Ex: Nos sponsors, FAQ, Concours..." style="width:100%;padding:10px 14px;border-radius:10px;border:1px solid rgba(201,168,76,.15);background:rgba(255,255,255,.04);color:#E8E4DC;font-size:.88rem;"></div>' +
+        '<div><label style="display:block;font-size:.78rem;color:#9B978F;margin-bottom:4px;font-weight:600;">Emoji / Icone</label>' +
+        '<input type="text" id="rub-icon" placeholder="📄" value="📄" style="width:100%;padding:10px 14px;border-radius:10px;border:1px solid rgba(201,168,76,.15);background:rgba(255,255,255,.04);color:#E8E4DC;font-size:1.2rem;text-align:center;"></div>' +
+      '</div>' +
+      '<div style="margin-bottom:12px;">' +
+        '<label style="display:block;font-size:.78rem;color:#9B978F;margin-bottom:4px;font-weight:600;">Contenu *</label>' +
+        '<div style="font-size:.72rem;color:#5F5C55;margin-bottom:6px;">Tapez votre texte librement. Les retours a la ligne sont conserves tels quels.</div>' +
+        '<textarea id="rub-contenu" rows="10" placeholder="Ecrivez le contenu de votre rubrique ici..." style="width:100%;padding:14px;border-radius:10px;border:1px solid rgba(201,168,76,.15);background:rgba(255,255,255,.04);color:#E8E4DC;font-size:.88rem;line-height:1.7;resize:vertical;font-family:inherit;"></textarea>' +
+      '</div>' +
+      '<div style="margin-bottom:12px;">' +
+        '<label style="display:block;font-size:.78rem;color:#9B978F;margin-bottom:4px;font-weight:600;">URL de l\'image (optionnel)</label>' +
+        '<input type="text" id="rub-image" placeholder="https://exemple.com/mon-image.jpg" style="width:100%;padding:10px 14px;border-radius:10px;border:1px solid rgba(201,168,76,.15);background:rgba(255,255,255,.04);color:#E8E4DC;font-size:.88rem;">' +
+      '</div>' +
+      '<div style="margin-bottom:16px;">' +
+        '<label style="display:flex;align-items:center;gap:8px;font-size:.88rem;color:#E8E4DC;cursor:pointer;">' +
+          '<input type="checkbox" id="rub-visible" checked style="width:18px;height:18px;accent-color:#C9A84C;">' +
+          'Visible dans le menu du site public' +
+        '</label>' +
+      '</div>' +
+      '<div style="display:flex;gap:10px;">' +
+        '<button onclick="SPA_RUB.save()" style="padding:10px 24px;border-radius:10px;background:#C9A84C;color:#111;font-weight:700;border:none;cursor:pointer;font-size:.88rem;">Sauvegarder</button>' +
+        '<button onclick="SPA_RUB.previewForm()" style="padding:10px 24px;border-radius:10px;background:rgba(42,215,131,.15);color:#2AD783;font-weight:700;border:none;cursor:pointer;font-size:.88rem;">Apercu</button>' +
+        '<button onclick="SPA_RUB.cancelForm()" style="padding:10px 24px;border-radius:10px;background:rgba(255,255,255,.06);color:#9B978F;font-weight:600;border:none;cursor:pointer;font-size:.88rem;">Annuler</button>' +
+      '</div>' +
+      '<div id="rub-msg" style="margin-top:12px;display:none;padding:10px 16px;border-radius:10px;font-size:.85rem;font-weight:600;"></div>' +
+    '</div>';
+
+    var previewHtml = '<div id="rub-preview-area" style="display:none;margin-top:20px;background:#161822;border:1px solid rgba(201,168,76,.15);border-radius:16px;padding:24px;">' +
+      '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">' +
+        '<h3 style="color:#C9A84C;font-size:1rem;">Apercu de la rubrique</h3>' +
+        '<button onclick="document.getElementById(\'rub-preview-area\').style.display=\'none\'" style="background:rgba(255,255,255,.06);border:none;border-radius:8px;padding:6px 14px;color:#9B978F;cursor:pointer;font-size:.82rem;">Fermer</button>' +
+      '</div>' +
+      '<div id="rub-preview-content" style="background:#1a1a2e;border-radius:12px;padding:40px 32px;max-width:900px;margin:0 auto;"></div>' +
+    '</div>';
+
+    var addBtn = '';
+    if (sections.length < MAX_SECTIONS) {
+      addBtn = '<button onclick="SPA_RUB.showForm()" style="margin-top:16px;padding:12px 24px;border-radius:12px;background:#C9A84C;color:#111;font-weight:700;border:none;cursor:pointer;font-size:.9rem;">+ Ajouter une rubrique</button>';
+    } else {
+      addBtn = '<div style="margin-top:16px;padding:12px;background:rgba(245,158,11,.08);border-radius:10px;font-size:.82rem;color:#F59E0B;">Maximum de ' + MAX_SECTIONS + ' rubriques atteint.</div>';
+    }
+
+    el.innerHTML = adminWrap('Mes Rubriques', 'icon-programme.png',
+      '<p style="font-size:.88rem;color:#9B978F;margin-bottom:20px;">Creez vos propres rubriques qui apparaitront sur le site public du congres. ' +
+      'Vous pouvez ajouter jusqu\'a ' + MAX_SECTIONS + ' rubriques personnalisees.</p>' +
+      '<div style="font-size:.82rem;color:#5F5C55;margin-bottom:16px;">' + sections.length + ' / ' + MAX_SECTIONS + ' rubriques</div>' +
+      listHtml + addBtn + formHtml + previewHtml
+    );
+  }
+
+  window.SPA_RUB = {
+    showForm: function() {
+      document.getElementById('rub-form').style.display = 'block';
+      document.getElementById('rub-form-title').textContent = 'Nouvelle rubrique';
+      document.getElementById('rub-edit-idx').value = '-1';
+      document.getElementById('rub-titre').value = '';
+      document.getElementById('rub-icon').value = '📄';
+      document.getElementById('rub-contenu').value = '';
+      document.getElementById('rub-image').value = '';
+      document.getElementById('rub-visible').checked = true;
+      document.getElementById('rub-msg').style.display = 'none';
+      document.getElementById('rub-titre').focus();
+    },
+    cancelForm: function() {
+      document.getElementById('rub-form').style.display = 'none';
+      document.getElementById('rub-msg').style.display = 'none';
+    },
+    edit: function(idx) {
+      var sections = loadSections();
+      var sec = sections[idx];
+      if (!sec) return;
+      document.getElementById('rub-form').style.display = 'block';
+      document.getElementById('rub-form-title').textContent = 'Modifier la rubrique';
+      document.getElementById('rub-edit-idx').value = idx;
+      document.getElementById('rub-titre').value = sec.titre || '';
+      document.getElementById('rub-icon').value = sec.icon || '📄';
+      document.getElementById('rub-contenu').value = sec.contenu || '';
+      document.getElementById('rub-image').value = sec.image || '';
+      document.getElementById('rub-visible').checked = sec.visible !== false;
+      document.getElementById('rub-msg').style.display = 'none';
+      document.getElementById('rub-titre').focus();
+    },
+    save: function() {
+      var titre = document.getElementById('rub-titre').value.trim();
+      var icon = document.getElementById('rub-icon').value.trim() || '📄';
+      var contenu = document.getElementById('rub-contenu').value.trim();
+      var image = document.getElementById('rub-image').value.trim();
+      var visible = document.getElementById('rub-visible').checked;
+      var editIdx = parseInt(document.getElementById('rub-edit-idx').value);
+      var msgEl = document.getElementById('rub-msg');
+
+      if (!titre) { msgEl.style.display = 'block'; msgEl.style.background = 'rgba(220,38,38,.1)'; msgEl.style.color = '#DC2626'; msgEl.textContent = 'Le titre est obligatoire.'; return; }
+      if (!contenu) { msgEl.style.display = 'block'; msgEl.style.background = 'rgba(220,38,38,.1)'; msgEl.style.color = '#DC2626'; msgEl.textContent = 'Le contenu est obligatoire.'; return; }
+
+      if (typeof ContentFilter !== 'undefined') {
+        var fields = [titre, contenu];
+        for (var i = 0; i < fields.length; i++) {
+          var check = ContentFilter.check(fields[i]);
+          if (!check.ok) { msgEl.style.display = 'block'; msgEl.style.background = 'rgba(220,38,38,.1)'; msgEl.style.color = '#DC2626'; msgEl.textContent = check.reason; return; }
+        }
+      }
+
+      var sections = loadSections();
+      var entry = {
+        id: slugify(titre),
+        titre: titre,
+        icon: icon,
+        contenu: contenu,
+        image: image,
+        visible: visible,
+        date: new Date().toISOString()
+      };
+
+      if (editIdx >= 0 && editIdx < sections.length) {
+        entry.id = sections[editIdx].id;
+        sections[editIdx] = entry;
+      } else {
+        if (sections.length >= MAX_SECTIONS) { alert('Maximum ' + MAX_SECTIONS + ' rubriques.'); return; }
+        sections.push(entry);
+      }
+
+      saveSections(sections);
+      msgEl.style.display = 'block';
+      msgEl.style.background = 'rgba(34,197,94,.1)';
+      msgEl.style.color = '#22C55E';
+      msgEl.textContent = 'Rubrique sauvegardee avec succes !';
+      setTimeout(function() { render(); }, 800);
+    },
+    remove: function(idx) {
+      if (!confirm('Supprimer cette rubrique ? Cette action est irreversible.')) return;
+      var sections = loadSections();
+      sections.splice(idx, 1);
+      saveSections(sections);
+      render();
+    },
+    move: function(idx, direction) {
+      var sections = loadSections();
+      var newIdx = idx + direction;
+      if (newIdx < 0 || newIdx >= sections.length) return;
+      var tmp = sections[idx];
+      sections[idx] = sections[newIdx];
+      sections[newIdx] = tmp;
+      saveSections(sections);
+      render();
+    },
+    preview: function(idx) {
+      var sections = loadSections();
+      var sec = sections[idx];
+      if (!sec) return;
+      this._showPreview(sec);
+    },
+    previewForm: function() {
+      var sec = {
+        titre: document.getElementById('rub-titre').value.trim() || 'Titre',
+        icon: document.getElementById('rub-icon').value.trim() || '📄',
+        contenu: document.getElementById('rub-contenu').value.trim(),
+        image: document.getElementById('rub-image').value.trim()
+      };
+      this._showPreview(sec);
+    },
+    _showPreview: function(sec) {
+      var area = document.getElementById('rub-preview-area');
+      var content = document.getElementById('rub-preview-content');
+      var imgHtml = sec.image ? '<img src="' + sec.image + '" style="max-width:100%;border-radius:12px;margin-bottom:20px;" onerror="this.style.display=\'none\'">' : '';
+      var textHtml = (sec.contenu || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g, '<br>');
+      content.innerHTML =
+        '<div style="text-align:center;margin-bottom:24px;">' +
+          '<span style="font-size:2.5rem;">' + (sec.icon || '📄') + '</span>' +
+          '<h2 style="font-size:1.5rem;font-weight:800;color:#FFF;margin-top:8px;">' + sec.titre + '</h2>' +
+        '</div>' +
+        imgHtml +
+        '<div style="font-size:.95rem;color:#B8B8D0;line-height:1.8;">' + textHtml + '</div>';
+      area.style.display = 'block';
+      area.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
+  render();
+};
