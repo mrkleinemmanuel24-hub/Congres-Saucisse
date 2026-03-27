@@ -1229,6 +1229,127 @@ section[id] { scroll-margin-top: 80px; }
   color: #FFF;
   margin-bottom: 12px;
 }
+
+/* ═══ SECTION BANNER IMAGES ═══ */
+.section-banner-img {
+  width: 100%;
+  max-height: 300px;
+  object-fit: cover;
+  border-radius: var(--radius);
+  margin-bottom: 24px;
+}
+.card-img-cover {
+  width: 100%;
+  aspect-ratio: 16/9;
+  object-fit: cover;
+  border-radius: var(--radius) var(--radius) 0 0;
+}
+.plan-img {
+  width: 100%;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  cursor: pointer;
+  transition: opacity .2s;
+}
+.plan-img:hover { opacity: .85; }
+.salle-showcase {
+  background: var(--navy-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  margin-bottom: 20px;
+}
+.salle-showcase-img {
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+}
+.salle-showcase-body {
+  padding: 20px;
+}
+.salle-showcase-body h3 {
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  color: #FFF;
+  margin-bottom: 8px;
+}
+.salle-showcase-body .salle-meta {
+  font-size: .85rem;
+  color: var(--text-dim);
+  margin-bottom: 12px;
+  line-height: 1.6;
+}
+.capacity-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: .8rem;
+}
+.capacity-table th {
+  text-align: left;
+  color: var(--accent);
+  padding: 6px 10px;
+  border-bottom: 1px solid var(--border);
+  font-weight: 600;
+}
+.capacity-table td {
+  padding: 6px 10px;
+  color: var(--text-body);
+  border-bottom: 1px solid var(--border-light);
+}
+.plans-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-top: 24px;
+}
+@media (max-width: 768px) { .plans-grid { grid-template-columns: 1fr; } }
+.plan-card {
+  background: var(--navy-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+.plan-card h4 {
+  padding: 12px 16px;
+  font-size: .88rem;
+  color: #FFF;
+  border-bottom: 1px solid var(--border-light);
+}
+.plan-card img {
+  width: 100%;
+  cursor: pointer;
+}
+.salles-grid-3 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  margin-bottom: 28px;
+}
+@media (max-width: 900px) { .salles-grid-3 { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 580px) { .salles-grid-3 { grid-template-columns: 1fr; } }
+.discover-card-img {
+  width: 100%;
+  height: 140px;
+  object-fit: cover;
+  border-radius: var(--radius) var(--radius) 0 0;
+  margin-bottom: -10px;
+}
+.cafe-card-img {
+  width: 100%;
+  height: 160px;
+  object-fit: cover;
+  border-radius: var(--radius) var(--radius) 0 0;
+  margin: -24px -24px 16px -24px;
+  width: calc(100% + 48px);
+}
+.theme-card-img {
+  width: 100%;
+  height: 140px;
+  object-fit: cover;
+  border-radius: var(--radius) var(--radius) 0 0;
+  margin: -28px -24px 14px -24px;
+  width: calc(100% + 48px);
+}
 .card-inset {
   background: var(--navy-card);
   border: 1px solid var(--border);
@@ -1397,7 +1518,7 @@ section[id] { scroll-margin-top: 80px; }
 
   <div class="cards-grid-3">
     <div class="card-article" onclick="document.getElementById('congres').scrollIntoView({behavior:'smooth'})">
-      <div class="card-article-img"><img src="img/img-programme.png" alt="Programme"></div>
+      <div class="card-article-img"><img src="img/img-actualites.png" alt="Actualites du Congres"></div>
       <div class="card-article-body">
         <span class="card-article-cat cat-appel">Appel a communications</span>
         <h3 class="card-article-title">Appel a communications ouvert jusqu'au 30 avril</h3>
@@ -1407,7 +1528,7 @@ section[id] { scroll-margin-top: 80px; }
     </div>
 
     <div class="card-article" onclick="document.getElementById('congres-prix').scrollIntoView({behavior:'smooth'})">
-      <div class="card-article-img"><img src="img/img-badge.png" alt="Grand Prix"></div>
+      <div class="card-article-img"><img src="img/img-prix.png" alt="Grand Prix de la Saucisse"></div>
       <div class="card-article-body">
         <span class="card-article-cat cat-concours">Concours</span>
         <h3 class="card-article-title">Le Grand Prix de la Saucisse : les nomines 2026</h3>
@@ -1427,7 +1548,7 @@ section[id] { scroll-margin-top: 80px; }
     </div>
 
     <div class="card-article" onclick="document.getElementById('infos').scrollIntoView({behavior:'smooth'})">
-      <div class="card-article-img"><img src="img/img-petite-france.png" alt="Parcours gastronomique"></div>
+      <div class="card-article-img"><img src="img/img-winstub.png" alt="Parcours gastronomique dans les winstubs"></div>
       <div class="card-article-body">
         <span class="card-article-cat cat-parcours">Parcours gastronomique</span>
         <h3 class="card-article-title">La Route de la Saucisse : parcours dans Strasbourg</h3>
@@ -1437,7 +1558,7 @@ section[id] { scroll-margin-top: 80px; }
     </div>
 
     <div class="card-article" onclick="document.getElementById('programme').scrollIntoView({behavior:'smooth'})">
-      <div class="card-article-img"><img src="img/img-networking.png" alt="Table ronde"></div>
+      <div class="card-article-img"><img src="img/img-professionnel.png" alt="Table ronde professionnelle"></div>
       <div class="card-article-body">
         <span class="card-article-cat cat-debat">Table ronde</span>
         <h3 class="card-article-title">L'avenir de la charcuterie artisanale face a l'industrie</h3>
@@ -1447,7 +1568,7 @@ section[id] { scroll-margin-top: 80px; }
     </div>
 
     <div class="card-article" onclick="document.getElementById('congres').scrollIntoView({behavior:'smooth'})">
-      <div class="card-article-img"><img src="img/img-choucroute.png" alt="Concours knack"></div>
+      <div class="card-article-img"><img src="img/img-knack.png" alt="Concours du meilleur knack"></div>
       <div class="card-article-body">
         <span class="card-article-cat cat-knack">Concours</span>
         <h3 class="card-article-title">Concours du meilleur knack d'Alsace — inscriptions ouvertes</h3>
@@ -1470,31 +1591,37 @@ section[id] { scroll-margin-top: 80px; }
 
   <div class="themes-grid">
     <div class="theme-card">
+      <img src="img/img-cervelas.png" alt="Science et Nutrition" class="theme-card-img">
       <span class="theme-card-icon">🔬</span>
       <h3>Science &amp; Nutrition</h3>
       <p>Recherche, ferments lactiques, impact nutritionnel, etudes comparatives artisanal vs industriel. Conferences avec l'INRAE.</p>
     </div>
     <div class="theme-card">
+      <img src="img/img-knack.png" alt="Artisanat et Savoir-faire" class="theme-card-img">
       <span class="theme-card-icon">🏭</span>
       <h3>Artisanat &amp; Savoir-faire</h3>
       <p>Fabrication, fumage, maturation, terroir, Label Rouge, traditions ancestrales. Demos live par des MOF.</p>
     </div>
     <div class="theme-card">
+      <img src="img/img-expo.png" alt="International" class="theme-card-img">
       <span class="theme-card-icon">🌍</span>
       <h3>International</h3>
       <p>Bratwurst, mortadella, chorizo, bangers, arabiki — les saucisses du monde entier. Experts de 8 pays.</p>
     </div>
     <div class="theme-card">
+      <img src="img/img-marche-noel.png" alt="Histoire et Patrimoine" class="theme-card-img">
       <span class="theme-card-icon">📜</span>
       <h3>Histoire &amp; Patrimoine</h3>
       <p>De Rome a Strasbourg, 3000 ans de charcuterie. Christkindelsmaerik et musee de la charcuterie.</p>
     </div>
     <div class="theme-card">
+      <img src="img/img-riesling.png" alt="Gastronomie et Degustation" class="theme-card-img">
       <span class="theme-card-icon">🍽️</span>
       <h3>Gastronomie &amp; Degustation</h3>
       <p>Accords biere-saucisse, haute gastronomie charcutiere, recettes de chefs etoiles. 30+ degustations.</p>
     </div>
     <div class="theme-card">
+      <img src="img/img-professionnel.png" alt="Business et Innovation" class="theme-card-img">
       <span class="theme-card-icon">💼</span>
       <h3>Business &amp; Innovation</h3>
       <p>FoodTech, IA, saucisse vegetale hybride, food design, tendances marche. Espace B2B dedicate.</p>
@@ -1542,6 +1669,8 @@ section[id] { scroll-margin-top: 80px; }
   <span class="section-eyebrow eyebrow-green">Mediatheque</span>
   <h2 class="section-heading">🌭 Mediatheque</h2>
   <p class="section-subheading">Photos, videos et documents du Congres de la Saucisse.</p>
+
+  <img src="img/img-mediatheque.png" alt="Centre media du Congres" class="section-banner-img">
 
   <div class="themes-grid">
     <div class="theme-card" style="text-align:center;">
@@ -1619,6 +1748,7 @@ section[id] { scroll-margin-top: 80px; }
     <span class="section-eyebrow eyebrow-red">Expositions</span>
     <h2>Les expositions</h2>
     <p style="color:var(--text-dim);font-size:.88rem;margin-bottom:20px;">Explorez nos expositions permanentes pendant les 3 jours du Congres.</p>
+    <img src="img/img-expo.png" alt="Hall d'exposition" class="section-banner-img">
     <div class="themes-grid">
       <div class="theme-card"><span class="theme-card-icon">🎨</span><h3>Saucisse : 3000 ans d'histoire</h3><p>En partenariat avec le Musee de la Charcuterie de Strasbourg. Objets, documents et reconstitutions de la Rome antique a nos jours.</p></div>
       <div class="theme-card"><span class="theme-card-icon">🌍</span><h3>Saucisses du Monde</h3><p>247 varietes de saucisses des 5 continents. Collection rassemblee par Roberto Gonzalez de la Real Academia de Gastronomia.</p></div>
@@ -1631,6 +1761,7 @@ section[id] { scroll-margin-top: 80px; }
     <span class="section-eyebrow eyebrow-gold">Prix</span>
     <h2>🌭 Les prix 2026</h2>
     <p style="color:var(--text-dim);font-size:.88rem;margin-bottom:20px;">3 prix decernes lors de la ceremonie de cloture du samedi 14 juin.</p>
+    <img src="img/img-prix.png" alt="Ceremonie de remise des prix" class="section-banner-img">
     <div class="prix-grid">
       <div class="prix-card"><div class="prix-icon">🏆</div><h3>Grand Prix de la Saucisse</h3><p>Recompense la meilleure saucisse artisanale parmi 12 candidats de 8 pays. Jury international de 5 experts preside par Jean-Marc Schaller, MOF 2018.</p></div>
       <div class="prix-card"><div class="prix-icon">🌟</div><h3>Prix du Meilleur Knack</h3><p>Concours reserve aux artisans charcutiers alsaciens. Evaluation sur le gout, la texture, la tenue et le respect de la tradition. 5 000 euros.</p></div>
@@ -1643,7 +1774,79 @@ section[id] { scroll-margin-top: 80px; }
     <span class="section-eyebrow eyebrow-green">Lieux</span>
     <h2>Les lieux</h2>
     <p style="color:var(--text-dim);font-size:.88rem;margin-bottom:20px;">Le Palais des Congres de Strasbourg — 10 salles sur 2 etages.</p>
+
+    <!-- Photo exterieure du Palais -->
+    <img src="img/plans/palais-exterieur.jpg" alt="Palais des Congres de Strasbourg — Vue exterieure" class="section-banner-img" style="margin-bottom:32px;">
+
+    <!-- Les Salles — Photos + Capacites -->
+    <h2 class="sub-heading" style="margin-bottom:20px;">🌭 Les salles</h2>
+    <div class="salles-grid-3">
+      <div class="salle-showcase">
+        <img src="img/img-salle-erasme.png" alt="Salle Erasme — Auditorium principal" class="salle-showcase-img">
+        <div class="salle-showcase-body">
+          <h3>Salle Erasme <span class="room-type-badge type-auditorium">Auditorium</span></h3>
+          <div class="salle-meta">Rez-de-chaussee — Ceremonies d'ouverture et de cloture, pleniere, Grand Prix</div>
+          <table class="capacity-table">
+            <tr><th>Configuration</th><th>Capacite</th></tr>
+            <tr><td>Theatre</td><td>1 800 places</td></tr>
+            <tr><td>Conference</td><td>1 500 places</td></tr>
+            <tr><td>Banquet</td><td>1 000 places</td></tr>
+          </table>
+        </div>
+      </div>
+      <div class="salle-showcase">
+        <img src="img/img-salle-workshop.png" alt="Salles de conference — Format atelier" class="salle-showcase-img">
+        <div class="salle-showcase-body">
+          <h3>Salles Gutenberg / Schweitzer <span class="room-type-badge type-conference">Conference</span></h3>
+          <div class="salle-meta">1er etage — Conferences thematiques, masterclasses, ateliers</div>
+          <table class="capacity-table">
+            <tr><th>Configuration</th><th>Capacite</th></tr>
+            <tr><td>Theatre</td><td>100 — 300 places</td></tr>
+            <tr><td>Classe</td><td>80 — 200 places</td></tr>
+            <tr><td>U-shape</td><td>40 — 80 places</td></tr>
+          </table>
+        </div>
+      </div>
+      <div class="salle-showcase">
+        <img src="img/img-salle-reunion.png" alt="Salle de reunion — Format U" class="salle-showcase-img">
+        <div class="salle-showcase-body">
+          <h3>Salles de commission <span class="room-type-badge type-reunion">Reunion</span></h3>
+          <div class="salle-meta">1er etage — Reunions B2B, jurys, comites scientifiques</div>
+          <table class="capacity-table">
+            <tr><th>Configuration</th><th>Capacite</th></tr>
+            <tr><td>U-shape</td><td>20 — 30 places</td></tr>
+            <tr><td>Boardroom</td><td>15 — 25 places</td></tr>
+            <tr><td>Cocktail</td><td>40 — 50 places</td></tr>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Liste complete des salles (generee par JS) -->
+    <h2 class="sub-heading" style="margin-top:32px;margin-bottom:16px;">Toutes les salles</h2>
     <div class="lieux-grid" id="lieux-grid"></div>
+
+    <!-- Plans des etages -->
+    <h2 class="sub-heading" style="margin-top:36px;margin-bottom:16px;">🌭 Plans du Palais des Congres</h2>
+    <p style="color:var(--text-dim);font-size:.88rem;margin-bottom:16px;">Cliquez sur un plan pour l'agrandir.</p>
+    <div class="plans-grid">
+      <div class="plan-card">
+        <h4>Rez-de-chaussee — Plan general</h4>
+        <a href="img/plans/plan-rdc.jpg" target="_blank"><img src="img/plans/plan-rdc.jpg" alt="Plan RDC" class="plan-img"></a>
+      </div>
+      <div class="plan-card">
+        <h4>Rez-de-chaussee — Salles</h4>
+        <a href="img/plans/plan-rdc-salles.jpg" target="_blank"><img src="img/plans/plan-rdc-salles.jpg" alt="Plan RDC Salles" class="plan-img"></a>
+      </div>
+      <div class="plan-card">
+        <h4>1er etage — Plan general</h4>
+        <a href="img/plans/plan-etage1.jpg" target="_blank"><img src="img/plans/plan-etage1.jpg" alt="Plan Etage 1" class="plan-img"></a>
+      </div>
+      <div class="plan-card">
+        <h4>1er etage — Salles</h4>
+        <a href="img/plans/plan-etage1-salles.jpg" target="_blank"><img src="img/plans/plan-etage1-salles.jpg" alt="Plan Etage 1 Salles" class="plan-img"></a>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -1656,6 +1859,8 @@ section[id] { scroll-margin-top: 80px; }
   <span class="section-eyebrow eyebrow-gold">Cafes Gourmands</span>
   <h2 class="section-heading">🌭 Cafes Gourmands</h2>
   <p class="section-subheading">Rencontres conviviales autour d'une biere et d'une saucisse. Animees par nos experts.</p>
+
+  <img src="img/img-cafe-gourmand.png" alt="Cafes Gourmands du Congres" class="section-banner-img">
 
   <div class="cafes-grid">
     <div class="cafe-card">
@@ -1708,6 +1913,8 @@ section[id] { scroll-margin-top: 80px; }
   <h2 class="section-heading">🌭 Espace Professionnel</h2>
   <p class="section-subheading">Exposez vos produits, rencontrez des acheteurs, developpez votre reseau.</p>
 
+  <img src="img/img-professionnel.png" alt="Networking professionnel" class="section-banner-img">
+
   <div class="themes-grid" style="grid-template-columns: repeat(2, 1fr);">
     <div class="theme-card" style="text-align:center;">
       <span class="theme-card-icon">🏪</span>
@@ -1741,6 +1948,11 @@ section[id] { scroll-margin-top: 80px; }
   <span class="section-eyebrow eyebrow-green">Pratique</span>
   <h2 class="section-heading">🌭 Infos pratiques</h2>
   <p class="section-subheading">Tout pour preparer votre venue au Congres de la Saucisse 2026.</p>
+  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:32px;">
+    <img src="img/img-knack.png" alt="Knack artisanale" style="width:100%;height:160px;object-fit:cover;border-radius:var(--radius);">
+    <img src="img/img-cervelas.png" alt="Salade de cervelas" style="width:100%;height:160px;object-fit:cover;border-radius:var(--radius);">
+    <img src="img/img-riesling.png" alt="Riesling d'Alsace" style="width:100%;height:160px;object-fit:cover;border-radius:var(--radius);">
+  </div>
 
   <!-- Carte -->
   <div class="info-subsection">
@@ -1769,6 +1981,7 @@ section[id] { scroll-margin-top: 80px; }
   <!-- Se Restaurer -->
   <div id="infos-restaurer" class="info-subsection">
     <h2>🌭 Se restaurer — Winstubs recommandees</h2>
+    <img src="img/img-winstub.png" alt="Winstub alsacienne typique" class="section-banner-img">
     <div class="cafes-grid">
       <div class="cafe-card"><h3>Maison Kammerzell</h3><div class="type">Winstub historique (1427)</div><p>Place de la Cathedrale. La plus ancienne maison de Strasbourg. Choucroute royale, saucisses, foie gras.</p></div>
       <div class="cafe-card"><h3>Chez Yvonne</h3><div class="type">Winstub traditionnelle</div><p>Rue du Sanglier. Saucisses grillees, choucroute, presskopf. Institution strasbourgeoise depuis 1873.</p></div>
@@ -1782,6 +1995,10 @@ section[id] { scroll-margin-top: 80px; }
   <!-- Decouvrir -->
   <div id="infos-decouvrir" class="info-subsection">
     <h2>🌭 Decouvrir Strasbourg</h2>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:24px;">
+      <img src="img/img-marche-noel.png" alt="Marche de Noel de Strasbourg" style="width:100%;height:200px;object-fit:cover;border-radius:var(--radius);">
+      <img src="img/img-vignoble.png" alt="Vignoble alsacien" style="width:100%;height:200px;object-fit:cover;border-radius:var(--radius);">
+    </div>
     <div class="discover-grid">
       <div class="discover-card"><div class="icon">⛪</div><h4>Cathedrale Notre-Dame</h4><p>Chef-d'oeuvre gothique, plateforme panoramique a 66m. Horloge astronomique.</p></div>
       <div class="discover-card"><div class="icon">🏘️</div><h4>Petite France</h4><p>Quartier pittoresque au bord de l'Ill. Maisons a colombages, ponts couverts.</p></div>
