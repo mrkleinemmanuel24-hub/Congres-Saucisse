@@ -428,9 +428,9 @@ SPA_INIT.rubriques = function() {
       addBtn = '<div style="margin-top:16px;padding:12px;background:rgba(245,158,11,.08);border-radius:10px;font-size:.82rem;color:#F59E0B;">Maximum de ' + MAX_SECTIONS + ' rubriques atteint.</div>';
     }
 
-    el.innerHTML = adminWrap('Mes Rubriques', 'icon-programme.png',
-      '<p style="font-size:.88rem;color:#9B978F;margin-bottom:20px;">Creez vos propres rubriques qui apparaitront sur le site public du congres. ' +
-      'Vous pouvez ajouter jusqu\'a ' + MAX_SECTIONS + ' rubriques personnalisees.</p>' +
+    el.innerHTML = adminWrap('Recommandations de St\u00e9phanie', 'icon-invitations.png',
+      '<p style="font-size:.88rem;color:#9B978F;margin-bottom:20px;">Stéphanie, ajoutez vos id\u00e9es, suggestions et demandes d\'am\u00e9lioration ici. ' +
+      'Vous pouvez cr\u00e9er jusqu\'a ' + MAX_SECTIONS + ' rubriques qui apparaitront sur le site public.</p>' +
       '<div style="font-size:.82rem;color:#5F5C55;margin-bottom:16px;">' + sections.length + ' / ' + MAX_SECTIONS + ' rubriques</div>' +
       listHtml + addBtn + formHtml + previewHtml
     );
