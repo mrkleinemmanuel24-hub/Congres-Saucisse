@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Congres de la Saucisse — Strasbourg 2026</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+  <link rel="stylesheet" href="css/front.css">
+  <link rel="stylesheet" href="css/admin.css">
+  <style>
+    /* ═══ SPA LAYOUT ═══ */
+    body { margin: 0; display: flex; min-height: 100vh; background: #1a1a2e; }
+
+    /* Reset conflicting admin styles */
+    body.spa-body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+
+    .sidebar {
+      width: 260px; min-height: 100vh; background: #0e0e20;
+      border-right: 1px solid rgba(255,255,255,.06);
+      position: fixed; top: 0; left: 0; bottom: 0; z-index: 1000;
+      overflow-y: auto; transition: transform .3s ease;
+      display: flex; flex-direction: column;
+    }
+    .sidebar-header {
+      padding: 20px 16px; font-size: 1.05rem; font-weight: 800;
+      color: #FFF; border-bottom: 1px solid rgba(255,255,255,.06);
+      display: flex; align-items: center; gap: 8px;
+    }
+    .sidebar-header img { width: 32px; height: 32px; border-radius: 8px; object-fit: contain; }
+    .sidebar-section {
+      padding: 16px 16px 6px; font-size: .68rem; font-weight: 700;
+      color: #5a5a80; text-transform: uppercase; letter-spacing: 1.5px;
+    }
+    .sidebar-link {
+      display: flex; align-items: center; gap: 10px;
+      padding: 10px 16px; font-size: .82rem; font-weight: 600;
+      color: #8888b0; cursor: pointer; transition: all .2s;
+      text-decoration: none; border: none; background: none; width: 100%; text-align: left;
+    }
+    .sidebar-link:hover { background: rgba(42,215,131,.06); color: #c0c0e0; }
+    .sidebar-link.active { background: rgba(42,215,131,.1); color: #2AD783; }
+    .sidebar-link img { width: 20px; height: 20px; border-radius: 4px; object-fit: contain; }
+    .sidebar-footer {
+      margin-top: auto; padding: 16px;
+      border-top: 1px solid rgba(255,255,255,.04);
+      font-size: .7rem; color: #5a5a80; text-align: center;
+    }
+
+    .spa-content {
+      margin-left: 260px; flex: 1; min-height: 100vh;
+      background: #1a1a2e; width: calc(100% - 260px);
+    }
+
+    .section-page { display: none; }
+    .section-page.active { display: block; }
+
+    /* Admin sections get admin bg */
+    .section-page.admin-section { background: #0F1118; }
+
+    .hamburger {
+      display: none; position: fixed; top: 12px; left: 12px; z-index: 1001;
+      background: rgba(14,14,32,.9); border: 1px solid rgba(42,215,131,.15);
+      color: #2AD783; font-size: 1.4rem; padding: 8px 12px; border-radius: 10px;
+      cursor: pointer; backdrop-filter: blur(8px);
+    }
+    .sidebar-overlay {
+      display: none; position: fixed; inset: 0; background: rgba(0,0,0,.6);
+      z-index: 999;
+    }
+
+    @media (max-width: 900px) {
+      .hamburger { display: block; }
+      .sidebar { transform: translateX(-100%); }
+      .sidebar.open { transform: translateX(0); }
+      .sidebar-overlay.open { display: block; }
+      .spa-content { margin-left: 0; width: 100%; padding-top: 50px; }
+    }
+
+    /* Hide original navbars and footers — we use sidebar */
+    .section-page .navbar, .section-page .footer, .section-page .admin-header { display: none !important; }
+    .section-page .login-overlay { display: none !important; }
+    .section-page .admin-content { display: block !important; padding: 32px 24px; max-width: 1400px; margin: 0 auto; }
+
+    /* Admin section inner styles: override admin-content that was hidden */
+    .admin-section .admin-content { display: block !important; }
+
+    /* Admin-specific inline additions from original */
+    .template-grid-inv { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; margin-bottom: 32px; }
+    .template-card-inv { background: #161822; border: 1px solid rgba(201,168,76,.1); border-radius: 14px; padding: 20px; cursor: pointer; transition: all .25s; }
+    .template-card-inv:hover { border-color: #C9A84C; transform: translateY(-2px); }
+    .template-card-inv.selected { border-color: #C9A84C; box-shadow: 0 0 20px rgba(201,168,76,.15); }
+    .template-card-inv h3 { font-size: .95rem; margin-bottom: 4px; }
+    .template-card-inv .type-badge { display: inline-block; padding: 3px 10px; border-radius: 6px; font-size: .72rem; font-weight: 700; margin-bottom: 8px; }
+    .template-card-inv p { font-size: .8rem; color: #9B978F; line-height: 1.6; }
+    .preview-area { background: #161822; border: 1px solid rgba(201,168,76,.1); border-radius: 14px; padding: 24px; margin-bottom: 20px; }
+    .preview-area h3 { color: #C9A84C; font-size: .95rem; margin-bottom: 16px; }
+    .inv-preview { background: #FFF; color: #111; border-radius: 16px; padding: 40px 32px; max-width: 600px; margin: 0 auto; font-family: Georgia, serif; line-height: 1.8; }
+    .inv-preview.luxury { background: linear-gradient(135deg, #1A1A2E, #16213E); color: #E8D48B; border: 2px solid rgba(201,168,76,.3); }
+    .inv-preview.press { background: #F8F9FA; color: #1A1A2E; border: 2px solid #2AD783; }
+    .inv-preview h2 { font-size: 1.2rem; margin-bottom: 16px; text-align: center; }
+    .inv-preview .inv-logo { text-align: center; font-size: 2.5rem; margin-bottom: 12px; }
+    .inv-preview .inv-footer { text-align: center; font-size: .75rem; margin-top: 20px; padding-top: 16px; border-top: 1px solid rgba(0,0,0,.1); color: #999; }
+  </style>
+</head>
+<body class="spa-body">
+
+<!-- HAMBURGER -->
+<button class="hamburger" onclick="toggleSidebar()">&#9776;</button>
+<div class="sidebar-overlay" id="sidebar-overlay" onclick="toggleSidebar()"></div>
+
+<!-- SIDEBAR -->
+<nav class="sidebar" id="sidebar">
+  <div class="sidebar-header">
+    <img src="img/icons/icon-saucisse.png" alt="Saucisse"> Congres de la Saucisse
+  </div>
+
+  <div class="sidebar-section">PUBLIC</div>
+  <a class="sidebar-link active" onclick="show('accueil')"><img src="img/icons/icon-home.png" alt=""> Accueil</a>
+  <a class="sidebar-link" onclick="show('programme')"><img src="img/icons/icon-programme.png" alt=""> Programme</a>
+  <a class="sidebar-link" onclick="show('intervenants')"><img src="img/icons/icon-intervenants.png" alt=""> Intervenants</a>
+  <a class="sidebar-link" onclick="show('inscription')"><img src="img/icons/icon-inscription.png" alt=""> Inscription</a>
+  <a class="sidebar-link" onclick="show('congres')"><img src="img/icons/icon-saucisse.png" alt=""> Le Congres</a>
+  <a class="sidebar-link" onclick="show('plan')"><img src="img/icons/icon-plan.png" alt=""> Plan</a>
+  <a class="sidebar-link" onclick="show('infos')"><img src="img/icons/icon-transport.png" alt=""> Infos pratiques</a>
+  <a class="sidebar-link" onclick="show('presse')"><img src="img/icons/icon-presse.png" alt=""> Presse</a>
+
+  <div class="sidebar-section">ADMINISTRATION</div>
+  <a class="sidebar-link" onclick="showAdmin('dashboard')"><img src="img/icons/icon-dashboard.png" alt=""> Dashboard</a>
+  <a class="sidebar-link" onclick="showAdmin('participants')"><img src="img/icons/icon-participants.png" alt=""> Participants</a>
+  <a class="sidebar-link" onclick="showAdmin('invitations')"><img src="img/icons/icon-invitations.png" alt=""> Invitations</a>
+  <a class="sidebar-link" onclick="showAdmin('traiteur')"><img src="img/icons/icon-traiteur.png" alt=""> Traiteur</a>
+  <a class="sidebar-link" onclick="showAdmin('salles')"><img src="img/icons/icon-salles.png" alt=""> Salles</a>
+  <a class="sidebar-link" onclick="showAdmin('checkin')"><img src="img/icons/icon-checkin.png" alt=""> Check-in</a>
+  <a class="sidebar-link" onclick="showAdmin('emails')"><img src="img/icons/icon-emails.png" alt=""> Emails</a>
+  <a class="sidebar-link" onclick="showAdmin('checklist')"><img src="img/icons/icon-checkin.png" alt=""> Checklist</a>
+  <a class="sidebar-link" onclick="showAdmin('speakers')"><img src="img/icons/icon-participants.png" alt=""> Speakers</a>
+  <a class="sidebar-link" onclick="showAdmin('staff')"><img src="img/icons/icon-participants.png" alt=""> Staff</a>
+  <a class="sidebar-link" onclick="showAdmin('securite')"><img src="img/icons/icon-salles.png" alt=""> Securite</a>
+  <a class="sidebar-link" onclick="showAdmin('budget')"><img src="img/icons/icon-traiteur.png" alt=""> Budget</a>
+  <a class="sidebar-link" onclick="showAdmin('postevent')"><img src="img/icons/icon-emails.png" alt=""> Post-event</a>
+
+  <div class="sidebar-footer">Evenement fictif - demo<br>Strasbourg 2026</div>
+</nav>
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- MAIN CONTENT -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<main class="spa-content">
+
+<!-- ══════ ACCUEIL ══════ -->
+<div id="section-accueil" class="section-page active">
+
+  <!-- HERO -->
+  <section class="hero">
+    <span class="hero-edition">1ere Edition</span>
+    <div class="hero-badge">12 — 14 juin 2026 &middot; Palais des Congres de Strasbourg</div>
+    <h1>Le Congres<br>de la Saucisse</h1>
+    <p class="subtitle">Le plus grand rassemblement europeen dedie a la saucisse artisanale.<br>3 jours de conferences, degustations, ateliers et rencontres.</p>
+    <div class="stats">
+      <div class="stat"><div class="stat-val">50+</div><div class="stat-label">Intervenants</div></div>
+      <div class="stat"><div class="stat-val">30+</div><div class="stat-label">Sessions</div></div>
+      <div class="stat"><div class="stat-val">3</div><div class="stat-label">Jours</div></div>
+      <div class="stat"><div class="stat-val">1800</div><div class="stat-label">Places</div></div>
+    </div>
+    <div class="hero-ctas">
+      <a href="javascript:show('inscription')" class="btn btn-green">S'inscrire</a>
+      <a href="javascript:show('programme')" class="btn btn-outline">Voir le programme</a>
+    </div>
+  </section>
+
+  <!-- A LA UNE -->
+  <section class="section">
+    <span class="section-label section-label-red">A la une</span>
+    <h2 class="section-title">Actualites du Congres</h2>
+    <p class="section-subtitle">Retrouvez les dernieres nouvelles du Congres de la Saucisse 2026.</p>
+    <div class="articles-grid">
+      <div class="article-card" onclick="show('congres')">
+        <div class="article-card-img">&#128220;</div>
+        <div class="article-card-body">
+          <span class="article-card-cat cat-business">Appel</span>
+          <h3 class="article-card-title">Appel a communications ouvert jusqu'au 30 avril</h3>
+          <p class="article-card-excerpt">Chercheurs, artisans et professionnels : soumettez vos propositions pour le premier Congres de la Saucisse. 6 thematiques, formats conference ou atelier.</p>
+          <p class="article-card-date">14 mars 2026</p>
+        </div>
+      </div>
+      <div class="article-card" onclick="show('congres')">
+        <div class="article-card-img">&#127942;</div>
+        <div class="article-card-body">
+          <span class="article-card-cat cat-concours">Concours</span>
+          <h3 class="article-card-title">Le Grand Prix de la Saucisse : les nomines 2026</h3>
+          <p class="article-card-excerpt">12 charcutiers artisanaux de 8 pays en lice pour le tout premier Grand Prix de la Saucisse. Jury preside par Jean-Marc Schaller, MOF 2018.</p>
+          <p class="article-card-date">10 mars 2026</p>
+        </div>
+      </div>
+      <div class="article-card" onclick="show('intervenants')">
+        <div class="article-card-img">&#127860;</div>
+        <div class="article-card-body">
+          <span class="article-card-cat cat-gastronomie">Masterclass</span>
+          <h3 class="article-card-title">Masterclass avec Hans Gruber, maitre fumeur de Foret-Noire</h3>
+          <p class="article-card-excerpt">5e generation de maitres fumeurs, Hans Gruber revelera les secrets du fumage traditionnel au bois de hetre. Places limitees.</p>
+          <p class="article-card-date">8 mars 2026</p>
+        </div>
+      </div>
+      <div class="article-card" onclick="show('infos')">
+        <div class="article-card-img">&#128205;</div>
+        <div class="article-card-body">
+          <span class="article-card-cat cat-gastronomie">Parcours</span>
+          <h3 class="article-card-title">La Route de la Saucisse : parcours gastronomique dans Strasbourg</h3>
+          <p class="article-card-excerpt">Decouvrez 12 etapes dans les rues de Strasbourg : winstubs, charcutiers, ateliers de degustation. Carte interactive incluse dans le pass.</p>
+          <p class="article-card-date">5 mars 2026</p>
+        </div>
+      </div>
+      <div class="article-card" onclick="show('programme')">
+        <div class="article-card-img">&#128172;</div>
+        <div class="article-card-body">
+          <span class="article-card-cat cat-artisanat">Table ronde</span>
+          <h3 class="article-card-title">L'avenir de la charcuterie artisanale face a l'industrie</h3>
+          <p class="article-card-excerpt">Jean-Marc Schaller, Francois Heim et Marc Bertrand debattront des defis et opportunites pour la saucisse artisanale en 2026.</p>
+          <p class="article-card-date">1 mars 2026</p>
+        </div>
+      </div>
+      <div class="article-card" onclick="show('congres')">
+        <div class="article-card-img">&#127775;</div>
+        <div class="article-card-body">
+          <span class="article-card-cat cat-concours">Concours</span>
+          <h3 class="article-card-title">Concours du meilleur knack d'Alsace — inscriptions ouvertes</h3>
+          <p class="article-card-excerpt">Artisans charcutiers alsaciens, inscrivez votre knack avant le 15 mai. Jury professionnel, prix de 5 000 euros et vitrine internationale.</p>
+          <p class="article-card-date">25 fevrier 2026</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="section-divider"></div>
+
+  <!-- 6 THEMATIQUES -->
+  <section class="section">
+    <span class="section-label section-label-green">6 thematiques</span>
+    <h2 class="section-title">Les axes du Congres</h2>
+    <p class="section-subtitle">Explorez les six grandes thematiques qui structurent le programme 2026.</p>
+    <div class="thematics-grid">
+      <div class="thematic-card" data-theme="science">
+        <div class="thematic-card-icon">&#128300;</div>
+        <h3>Science &amp; Nutrition</h3>
+        <p>Recherche sur la composition, l'impact nutritionnel et les bienfaits des saucisses artisanales. Ferments lactiques, micro-organismes et innovation alimentaire.</p>
+      </div>
+      <div class="thematic-card" data-theme="artisanat">
+        <div class="thematic-card-icon">&#127981;</div>
+        <h3>Artisanat &amp; Savoir-faire</h3>
+        <p>Fabrication traditionnelle, techniques de fumage, maturation et terroir. Les gestes ancestraux des maitres charcutiers d'Alsace et d'Europe.</p>
+      </div>
+      <div class="thematic-card" data-theme="international">
+        <div class="thematic-card-icon">&#127758;</div>
+        <h3>International</h3>
+        <p>Saucisses du monde : Bratwurst, mortadella, chorizo, bangers, arabiki. Echanges entre traditions et exportation des savoir-faire.</p>
+      </div>
+      <div class="thematic-card" data-theme="histoire">
+        <div class="thematic-card-icon">&#128220;</div>
+        <h3>Histoire &amp; Patrimoine</h3>
+        <p>3000 ans d'histoire de la charcuterie, de Rome a Strasbourg. Le Christkindelsmaerik, le Musee de la Charcuterie et le patrimoine alsacien.</p>
+      </div>
+      <div class="thematic-card" data-theme="gastronomie">
+        <div class="thematic-card-icon">&#127869;</div>
+        <h3>Gastronomie &amp; Degustation</h3>
+        <p>Accords mets-bieres, haute gastronomie charcutiere, recettes de chefs etoiles. Degustations commentees et ateliers pratiques.</p>
+      </div>
+      <div class="thematic-card" data-theme="business">
+        <div class="thematic-card-icon">&#128188;</div>
+        <h3>Business &amp; Innovation</h3>
+        <p>Food design, IA et recettes, saucisse vegetale hybride, startups foodtech. Distribution, marketing et tendances du marche 2026.</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="section-divider"></div>
+
+  <!-- PROGRAMME EN UN COUP D'OEIL -->
+  <section class="section">
+    <span class="section-label section-label-green">Programme</span>
+    <h2 class="section-title">Programme en un coup d'oeil</h2>
+    <p class="section-subtitle">3 jours de conferences, tables rondes et ateliers pratiques.</p>
+    <div class="programme-summary" id="programme-summary"></div>
+    <div class="text-center mt-3"><a href="javascript:show('programme')" class="btn btn-outline btn-sm">Programme complet</a></div>
+  </section>
+
+  <div class="section-divider"></div>
+
+  <!-- INTERVENANTS VEDETTES -->
+  <section class="section">
+    <span class="section-label section-label-green">Speakers</span>
+    <h2 class="section-title">Intervenants vedettes</h2>
+    <p class="section-subtitle">Des experts internationaux de la saucisse artisanale.</p>
+    <div class="highlight-speakers" id="featured-speakers"></div>
+    <div class="text-center mt-3"><a href="javascript:show('intervenants')" class="btn btn-outline btn-sm">Tous les intervenants</a></div>
+  </section>
+
+  <div class="section-divider"></div>
+
+  <!-- PARTENAIRES -->
+  <section class="section">
+    <span class="section-label section-label-gold">Partenaires</span>
+    <h2 class="section-title">Nos partenaires</h2>
+    <p class="section-subtitle">Ils rendent cet evenement possible.</p>
+    <div class="partners-grid">
+      <div class="partner-card"><div class="partner-logo">&#127963;</div><div class="partner-name">Ville de Strasbourg</div><div class="partner-type">Partenaire institutionnel</div></div>
+      <div class="partner-card"><div class="partner-logo">&#127470;&#127466;</div><div class="partner-name">Region Grand Est</div><div class="partner-type">Partenaire institutionnel</div></div>
+      <div class="partner-card"><div class="partner-logo">&#128218;</div><div class="partner-name">IFCC</div><div class="partner-type">Partenaire scientifique</div></div>
+      <div class="partner-card"><div class="partner-logo">&#127866;</div><div class="partner-name">Brasserie Meteor</div><div class="partner-type">Partenaire degustation</div></div>
+      <div class="partner-card"><div class="partner-logo">&#127941;</div><div class="partner-name">Alsace Qualite</div><div class="partner-type">Label qualite</div></div>
+      <div class="partner-card"><div class="partner-logo">&#128300;</div><div class="partner-name">INRAE</div><div class="partner-type">Partenaire recherche</div></div>
+      <div class="partner-card"><div class="partner-logo">&#128187;</div><div class="partner-name">SausageTech</div><div class="partner-type">Partenaire innovation</div></div>
+      <div class="partner-card"><div class="partner-logo">&#127942;</div><div class="partner-name">Fleischwerke</div><div class="partner-type">Sponsor Or</div></div>
+    </div>
+  </section>
+
+  <div class="section-divider"></div>
+
+  <!-- INFOS RAPIDES -->
+  <section class="section">
+    <span class="section-label section-label-green">Pratique</span>
+    <h2 class="section-title">Infos pratiques</h2>
+    <p class="section-subtitle">Tout ce qu'il faut savoir pour venir.</p>
+    <div class="quick-info-grid">
+      <div class="quick-info-card"><div class="icon"><img src="img/icons/icon-transport.png" alt="Transport" title="TGV Paris-Strasbourg"></div><h4>TGV Paris &rarr; Strasbourg</h4><p>1h46 depuis Paris Gare de l'Est. Navette gare &rarr; Palais en 10 min.</p></div>
+      <div class="quick-info-card"><div class="icon"><img src="img/icons/icon-transport.png" alt="Transport aerien" title="Aeroport d'Entzheim"></div><h4>Aeroport d'Entzheim</h4><p>Navette train 9 minutes vers Strasbourg centre.</p></div>
+      <div class="quick-info-card"><div class="icon"><img src="img/icons/icon-hotel.png" alt="Hotel" title="Hotels a proximite"></div><h4>8 hotels a proximite</h4><p>De 85 a 220 euros/nuit, tous a moins de 600m du Palais.</p></div>
+      <div class="quick-info-card"><div class="icon"><img src="img/icons/icon-transport.png" alt="Tram" title="Tram B ou E - Arret Wacken"></div><h4>Tram B ou E</h4><p>Arret "Wacken" — directement devant le Palais des Congres.</p></div>
+    </div>
+    <div class="text-center mt-3"><a href="javascript:show('infos')" class="btn btn-outline btn-sm">Toutes les infos pratiques</a></div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer" style="display:block !important;">
+    <div class="footer-brand"><img src="img/icons/icon-saucisse.png" alt="Saucisse" style="width:28px;height:28px;border-radius:6px;object-fit:contain;vertical-align:middle;display:inline"> Le Congres de la Saucisse — Strasbourg 2026</div>
+    <p>12 — 14 juin 2026 &middot; Palais des Congres de Strasbourg</p>
+    <div class="footer-links">
+      <a href="javascript:show('programme')">Programme</a>
+      <a href="javascript:show('intervenants')">Intervenants</a>
+      <a href="javascript:show('inscription')">Inscription</a>
+      <a href="javascript:show('infos')">Infos pratiques</a>
+      <a href="javascript:show('presse')">Presse</a>
+      <a href="javascript:show('congres')">Le Congres</a>
+    </div>
+    <div class="footer-social">
+      <a href="#" title="Facebook">f</a>
+      <a href="#" title="Twitter / X">X</a>
+      <a href="#" title="Instagram">ig</a>
+      <a href="#" title="LinkedIn">in</a>
+      <a href="#" title="YouTube">yt</a>
+      <a href="#" title="TikTok">tk</a>
+    </div>
+    <p style="margin-top:16px;font-size:.72rem;color:rgba(255,255,255,.3);">Evenement fictif a but de demonstration.</p>
+  </footer>
+</div>
+
+<!-- Section containers for SPA pages -->
+<div id="section-programme" class="section-page"></div>
+<div id="section-intervenants" class="section-page"></div>
+<div id="section-inscription" class="section-page"></div>
+<div id="section-congres" class="section-page"></div>
+<div id="section-plan" class="section-page"></div>
+<div id="section-infos" class="section-page"></div>
+<div id="section-presse" class="section-page"></div>
+<div id="section-dashboard" class="section-page admin-section"></div>
+<div id="section-participants" class="section-page admin-section"></div>
+<div id="section-invitations" class="section-page admin-section"></div>
+<div id="section-traiteur" class="section-page admin-section"></div>
+<div id="section-salles" class="section-page admin-section"></div>
+<div id="section-checkin" class="section-page admin-section"></div>
+<div id="section-emails" class="section-page admin-section"></div>
+<div id="section-checklist" class="section-page admin-section"></div>
+<div id="section-speakers" class="section-page admin-section"></div>
+<div id="section-staff" class="section-page admin-section"></div>
+<div id="section-securite" class="section-page admin-section"></div>
+<div id="section-budget" class="section-page admin-section"></div>
+<div id="section-postevent" class="section-page admin-section"></div>
+
+</main>
+
+<!-- MODAL for intervenants -->
+<div class="modal-overlay" id="speaker-modal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal()">&times;</button>
+    <div id="modal-content"></div>
+  </div>
+</div>
+
+<!-- MODAL for participants detail -->
+<div class="modal-overlay" id="detail-modal" style="display:none;">
+  <div class="modal" style="background:#161822;max-width:700px;border:1px solid rgba(201,168,76,.1);">
+    <button class="modal-close" onclick="closeDetail()" style="color:#9B978F;">&times;</button>
+    <div id="detail-content"></div>
+  </div>
+</div>
+
+<!-- SCRIPTS -->
+<script src="js/data.js"></script>
+<script src="js/qrcode.js"></script>
+<script src="js/content-filter.js"></script>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="js/spa-sections.js"></script>
+
+<script>
+/* ═══════════════════════════════════════════════════════
+   SPA NAVIGATION
+   ═══════════════════════════════════════════════════════ */
+var ADMIN_PWD = 'SAUCISSE2026';
+var adminUnlocked = !!localStorage.getItem('congress_admin_unlocked');
+var initializedSections = {};
+
+function show(id) {
+  document.querySelectorAll('.section-page').forEach(function(s) { s.classList.remove('active'); });
+  var el = document.getElementById('section-' + id);
+  if (el) {
+    el.classList.add('active');
+    // Initialize section content if not yet done
+    if (!initializedSections[id] && typeof SPA_INIT !== 'undefined' && SPA_INIT[id]) {
+      SPA_INIT[id]();
+      initializedSections[id] = true;
+    }
+  }
+  // Update active link
+  document.querySelectorAll('.sidebar-link').forEach(function(a) { a.classList.remove('active'); });
+  var links = document.querySelectorAll('.sidebar-link');
+  links.forEach(function(a) {
+    if (a.getAttribute('onclick') && a.getAttribute('onclick').indexOf("'" + id + "'") !== -1) {
+      a.classList.add('active');
+    }
+  });
+  // Close mobile sidebar
+  document.getElementById('sidebar').classList.remove('open');
+  document.getElementById('sidebar-overlay').classList.remove('open');
+  // Update hash
+  history.replaceState(null, '', '#' + id);
+  // Scroll to top
+  window.scrollTo({ top: 0 });
+}
+
+function showAdmin(id) {
+  if (!adminUnlocked) {
+    var pwd = prompt('Mot de passe administration :');
+    if (pwd !== ADMIN_PWD) { alert('Mot de passe incorrect'); return; }
+    localStorage.setItem('congress_admin_unlocked', '1');
+    adminUnlocked = true;
+  }
+  show(id);
+}
+
+function toggleSidebar() {
+  document.getElementById('sidebar').classList.toggle('open');
+  document.getElementById('sidebar-overlay').classList.toggle('open');
+}
+
+// Handle hash on load
+window.addEventListener('DOMContentLoaded', function() {
+  // Init accueil always
+  if (typeof SPA_INIT !== 'undefined' && SPA_INIT['accueil']) {
+    SPA_INIT['accueil']();
+    initializedSections['accueil'] = true;
+  }
+  if (window.location.hash) {
+    var h = window.location.hash.substring(1);
+    var adminSections = ['dashboard','participants','invitations','traiteur','salles','checkin','emails','checklist','speakers','staff','securite','budget','postevent'];
+    if (adminSections.indexOf(h) !== -1) {
+      showAdmin(h);
+    } else {
+      show(h);
+    }
+  }
+});
+</script>
+</body>
+</html>
