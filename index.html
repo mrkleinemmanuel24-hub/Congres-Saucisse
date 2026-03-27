@@ -9,46 +9,46 @@
   <link rel="stylesheet" href="css/admin.css">
   <style>
     /* ═══ SPA LAYOUT ═══ */
-    body { margin: 0; display: flex; min-height: 100vh; background: #FFFFFF; }
+    body { margin: 0; display: flex; min-height: 100vh; background: #1a1a2e; }
 
     /* Reset conflicting admin styles */
-    body.spa-body { font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', sans-serif; }
+    body.spa-body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
 
     .sidebar {
-      width: 260px; min-height: 100vh; background: #0F1118;
-      border-right: 1px solid rgba(201,168,76,.15);
+      width: 260px; min-height: 100vh; background: #0e0e20;
+      border-right: 1px solid rgba(255,255,255,.06);
       position: fixed; top: 0; left: 0; bottom: 0; z-index: 1000;
       overflow-y: auto; transition: transform .3s ease;
       display: flex; flex-direction: column;
     }
     .sidebar-header {
-      padding: 20px 16px; font-size: 1.1rem; font-weight: 800;
-      color: #C9A84C; border-bottom: 1px solid rgba(201,168,76,.15);
+      padding: 20px 16px; font-size: 1.05rem; font-weight: 800;
+      color: #FFF; border-bottom: 1px solid rgba(255,255,255,.06);
       display: flex; align-items: center; gap: 8px;
     }
     .sidebar-header img { width: 32px; height: 32px; border-radius: 8px; object-fit: contain; }
     .sidebar-section {
       padding: 16px 16px 6px; font-size: .68rem; font-weight: 700;
-      color: #5F5C55; text-transform: uppercase; letter-spacing: 1px;
+      color: #5a5a80; text-transform: uppercase; letter-spacing: 1.5px;
     }
     .sidebar-link {
       display: flex; align-items: center; gap: 10px;
       padding: 10px 16px; font-size: .82rem; font-weight: 600;
-      color: #9B978F; cursor: pointer; transition: all .2s;
+      color: #8888b0; cursor: pointer; transition: all .2s;
       text-decoration: none; border: none; background: none; width: 100%; text-align: left;
     }
-    .sidebar-link:hover { background: rgba(201,168,76,.08); color: #E8D48B; }
-    .sidebar-link.active { background: rgba(201,168,76,.15); color: #C9A84C; }
+    .sidebar-link:hover { background: rgba(42,215,131,.06); color: #c0c0e0; }
+    .sidebar-link.active { background: rgba(42,215,131,.1); color: #2AD783; }
     .sidebar-link img { width: 20px; height: 20px; border-radius: 4px; object-fit: contain; }
     .sidebar-footer {
       margin-top: auto; padding: 16px;
-      border-top: 1px solid rgba(201,168,76,.1);
-      font-size: .7rem; color: #5F5C55; text-align: center;
+      border-top: 1px solid rgba(255,255,255,.04);
+      font-size: .7rem; color: #5a5a80; text-align: center;
     }
 
     .spa-content {
       margin-left: 260px; flex: 1; min-height: 100vh;
-      background: #FFFFFF; width: calc(100% - 260px);
+      background: #1a1a2e; width: calc(100% - 260px);
     }
 
     .section-page { display: none; }
@@ -59,8 +59,8 @@
 
     .hamburger {
       display: none; position: fixed; top: 12px; left: 12px; z-index: 1001;
-      background: rgba(15,17,24,.9); border: 1px solid rgba(201,168,76,.2);
-      color: #C9A84C; font-size: 1.4rem; padding: 8px 12px; border-radius: 10px;
+      background: rgba(14,14,32,.9); border: 1px solid rgba(42,215,131,.15);
+      color: #2AD783; font-size: 1.4rem; padding: 8px 12px; border-radius: 10px;
       cursor: pointer; backdrop-filter: blur(8px);
     }
     .sidebar-overlay {
@@ -76,118 +76,15 @@
       .spa-content { margin-left: 0; width: 100%; padding-top: 50px; }
     }
 
-    /* Page-specific inline styles from original pages */
-    .partners-grid { display: flex; flex-wrap: wrap; gap: 16px; justify-content: center; }
-    .partner-card { background: #FFF; border: 1px solid #E2E8F0; border-radius: 12px; padding: 20px 28px; text-align: center; min-width: 180px; box-shadow: 0 2px 8px rgba(0,0,0,.04); transition: all .2s; }
-    .partner-card:hover { box-shadow: 0 4px 16px rgba(0,0,0,.08); transform: translateY(-2px); }
-    .partner-card .partner-name { font-weight: 700; font-size: .9rem; color: #171C22; }
-    .partner-card .partner-type { font-size: .75rem; color: #718096; }
-    .highlight-speakers { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 16px; }
-    .programme-summary { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 16px; }
-    .day-summary { background: #FFF; border: 1px solid #E2E8F0; border-radius: 14px; padding: 24px; box-shadow: 0 2px 8px rgba(0,0,0,.04); }
-    .day-summary h3 { color: #171C22; font-size: 1rem; margin-bottom: 12px; font-weight: 800; }
-    .day-summary ul { list-style: none; }
-    .day-summary li { padding: 6px 0; font-size: .85rem; color: #4A5568; border-bottom: 1px solid #EDF2F7; }
-    .day-summary li:last-child { border-bottom: none; }
-    .day-summary li strong { color: #22B06C; }
-    .infos-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 16px; }
-    .info-card { background: #FFF; border: 1px solid #E2E8F0; border-radius: 14px; padding: 20px; text-align: center; box-shadow: 0 2px 8px rgba(0,0,0,.04); transition: all .2s; }
-    .info-card:hover { box-shadow: 0 4px 16px rgba(0,0,0,.08); transform: translateY(-2px); }
-    .info-card .icon { font-size: 2rem; margin-bottom: 8px; }
-    .info-card h4 { font-size: .95rem; margin-bottom: 6px; color: #171C22; }
-    .info-card p { font-size: .82rem; color: #4A5568; }
+    /* Hide original navbars and footers — we use sidebar */
+    .section-page .navbar, .section-page .footer, .section-page .admin-header { display: none !important; }
+    .section-page .login-overlay { display: none !important; }
+    .section-page .admin-content { display: block !important; padding: 32px 24px; max-width: 1400px; margin: 0 auto; }
 
-    /* Inscription styles */
-    .step-content { display: none; }
-    .step-content.active { display: block; }
-    .session-check { display: flex; align-items: center; gap: 10px; padding: 10px; background: #F8F9FA; border-radius: 10px; margin-bottom: 6px; cursor: pointer; border: 1px solid transparent; transition: all .2s; }
-    .session-check:hover { border-color: rgba(42,215,131,.3); }
-    .session-check.checked { border-color: #2AD783; background: rgba(42,215,131,.06); }
-    .session-check input { width: 18px; height: 18px; accent-color: #2AD783; }
-    .hotel-option { display: flex; align-items: center; gap: 16px; padding: 14px; background: #FFF; border: 2px solid #E2E8F0; border-radius: 14px; margin-bottom: 10px; cursor: pointer; transition: all .2s; }
-    .hotel-option.selected { border-color: #2AD783; background: rgba(42,215,131,.03); }
-    .recap-section { background: #F8F9FA; border: 1px solid #E2E8F0; border-radius: 14px; padding: 20px; margin-bottom: 16px; }
-    .recap-section h4 { color: #22B06C; font-size: .9rem; margin-bottom: 10px; }
-    .recap-row { display: flex; justify-content: space-between; padding: 6px 0; font-size: .85rem; color: #4A5568; border-bottom: 1px solid #EDF2F7; }
-    .recap-row:last-child { border-bottom: none; }
-    .recap-total { font-size: 1.3rem; font-weight: 900; color: #171C22; text-align: right; padding: 16px 0; }
-    .repas-option { display: flex; align-items: center; gap: 12px; padding: 12px; background: #FFF; border: 2px solid #E2E8F0; border-radius: 12px; margin-bottom: 8px; cursor: pointer; transition: all .2s; }
-    .repas-option.selected { border-color: #2AD783; }
-    .repas-option input { width: 18px; height: 18px; accent-color: #2AD783; }
-    .pass-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 16px; }
-    .staff-code { display: none; margin-top: 12px; }
-    .staff-code.visible { display: block; }
-    .confirmation-box { text-align: center; padding: 40px 24px; }
-    .confirmation-box .check-icon { width: 80px; height: 80px; border-radius: 50%; background: rgba(42,215,131,.08); border: 3px solid #2AD783; display: flex; align-items: center; justify-content: center; font-size: 2.5rem; margin: 0 auto 20px; }
+    /* Admin section inner styles: override admin-content that was hidden */
+    .admin-section .admin-content { display: block !important; }
 
-    /* Plan styles */
-    .floor-tabs { margin-bottom: 24px; }
-    .plan-wrapper { position: relative; background: #FFF; border: 1px solid #E2E8F0; border-radius: 14px; padding: 24px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,.04); }
-    .plan-floor { display: none; }
-    .plan-floor.active { display: block; }
-    .plan-svg-container { width: 100%; max-width: 900px; margin: 0 auto; }
-    .room-popup { position: absolute; background: #FFF; border: 1px solid #2AD783; border-radius: 12px; padding: 16px; max-width: 280px; z-index: 10; box-shadow: 0 8px 32px rgba(0,0,0,.15); display: none; }
-    .room-popup.visible { display: block; }
-    .room-popup h4 { color: #22B06C; font-size: .95rem; margin-bottom: 6px; }
-    .room-popup p { font-size: .82rem; color: #4A5568; margin-bottom: 4px; }
-    .room-popup .close-popup { position: absolute; top: 8px; right: 12px; background: none; border: none; color: #718096; font-size: 1.2rem; cursor: pointer; }
-    .legend { display: flex; flex-wrap: wrap; gap: 16px; margin-top: 20px; justify-content: center; }
-    .legend-item { display: flex; align-items: center; gap: 6px; font-size: .8rem; color: #4A5568; }
-    .legend-color { width: 16px; height: 16px; border-radius: 4px; }
-    .room-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 12px; margin-top: 24px; }
-    .room-info-card { background: #FFF; border: 1px solid #E2E8F0; border-radius: 12px; padding: 16px; cursor: pointer; transition: all .2s; box-shadow: 0 1px 4px rgba(0,0,0,.04); }
-    .room-info-card:hover { border-color: rgba(42,215,131,.4); box-shadow: 0 4px 12px rgba(0,0,0,.08); }
-    .room-info-card h4 { font-size: .9rem; margin-bottom: 4px; color: #171C22; }
-    .room-info-card .room-meta { font-size: .78rem; color: #718096; }
-    .room-type-badge { display: inline-block; padding: 2px 8px; border-radius: 6px; font-size: .7rem; font-weight: 600; }
-    .type-auditorium { background: rgba(59,130,246,.1); color: #2563EB; }
-    .type-conference { background: rgba(42,215,131,.1); color: #22B06C; }
-    .type-atelier { background: rgba(245,158,11,.1); color: #D97706; }
-    .type-reunion { background: rgba(168,85,247,.1); color: #7C3AED; }
-    .type-expo { background: rgba(156,163,175,.1); color: #6B7280; }
-    .type-restauration { background: rgba(249,115,22,.1); color: #EA580C; }
-
-    /* Infos pratiques */
-    .info-section { margin-bottom: 40px; }
-    .info-section h2 { font-size: 1.2rem; color: #171C22; margin-bottom: 16px; display: flex; align-items: center; gap: 10px; font-weight: 800; }
-    .transport-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; }
-    .transport-card { background: #FFF; border: 1px solid #E2E8F0; border-radius: 14px; padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,.04); transition: all .2s; }
-    .transport-card:hover { box-shadow: 0 4px 16px rgba(0,0,0,.08); }
-    .transport-card h3 { font-size: .95rem; margin-bottom: 8px; display: flex; align-items: center; gap: 8px; color: #171C22; }
-    .transport-card p { font-size: .85rem; color: #4A5568; line-height: 1.6; }
-    .resto-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 14px; }
-    .resto-card { background: #FFF; border: 1px solid #E2E8F0; border-radius: 12px; padding: 16px; box-shadow: 0 2px 8px rgba(0,0,0,.04); }
-    .resto-card h4 { font-size: .9rem; margin-bottom: 4px; color: #171C22; }
-    .resto-card .type { color: #D97706; font-size: .78rem; font-weight: 600; }
-    .resto-card p { font-size: .82rem; color: #4A5568; margin-top: 4px; }
-    .discover-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 14px; }
-    .discover-card { background: #FFF; border: 1px solid #E2E8F0; border-radius: 12px; padding: 20px; text-align: center; box-shadow: 0 2px 8px rgba(0,0,0,.04); transition: all .2s; }
-    .discover-card:hover { box-shadow: 0 4px 16px rgba(0,0,0,.08); transform: translateY(-2px); }
-    .discover-card .icon { font-size: 2.5rem; margin-bottom: 8px; }
-    .discover-card h4 { font-size: .9rem; margin-bottom: 6px; color: #171C22; }
-    .discover-card p { font-size: .8rem; color: #4A5568; }
-    .emergency-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; }
-    .emergency-card { background: rgba(220,38,38,.04); border: 1px solid rgba(220,38,38,.15); border-radius: 12px; padding: 16px; text-align: center; }
-    .emergency-card .number { font-size: 1.6rem; font-weight: 900; color: #DC2626; }
-    .emergency-card .label { font-size: .82rem; color: #4A5568; }
-
-    /* Presse */
-    .press-section { margin-bottom: 40px; }
-    .press-section h2 { font-size: 1.2rem; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; color: #171C22; font-weight: 800; }
-    .press-doc { display: flex; align-items: center; gap: 16px; background: #FFF; border: 1px solid #E2E8F0; border-radius: 12px; padding: 16px; margin-bottom: 10px; transition: all .2s; box-shadow: 0 1px 4px rgba(0,0,0,.04); }
-    .press-doc:hover { border-color: rgba(42,215,131,.3); box-shadow: 0 4px 12px rgba(0,0,0,.08); }
-    .press-doc .doc-icon { width: 48px; height: 48px; border-radius: 10px; background: rgba(220,38,38,.06); display: flex; align-items: center; justify-content: center; font-size: 1.5rem; }
-    .press-doc .doc-info h4 { font-size: .9rem; margin-bottom: 2px; color: #171C22; }
-    .press-doc .doc-info p { font-size: .78rem; color: #718096; }
-    .press-doc .doc-dl { margin-left: auto; }
-    .media-kit { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; }
-    .media-item { background: #FFF; border: 1px solid #E2E8F0; border-radius: 12px; padding: 20px; text-align: center; box-shadow: 0 1px 4px rgba(0,0,0,.04); }
-    .media-item .icon { font-size: 2rem; margin-bottom: 8px; }
-    .media-item h4 { font-size: .85rem; margin-bottom: 4px; color: #171C22; }
-    .media-item p { font-size: .75rem; color: #718096; }
-    .contact-press { background: #FFF; border: 1px solid #E2E8F0; border-radius: 14px; padding: 24px; max-width: 500px; box-shadow: 0 2px 8px rgba(0,0,0,.04); }
-
-    /* Admin page-specific styles are loaded from admin.css, adding extras here */
+    /* Admin-specific inline additions from original */
     .template-grid-inv { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; margin-bottom: 32px; }
     .template-card-inv { background: #161822; border: 1px solid rgba(201,168,76,.1); border-radius: 14px; padding: 20px; cursor: pointer; transition: all .25s; }
     .template-card-inv:hover { border-color: #C9A84C; transform: translateY(-2px); }
@@ -203,71 +100,6 @@
     .inv-preview h2 { font-size: 1.2rem; margin-bottom: 16px; text-align: center; }
     .inv-preview .inv-logo { text-align: center; font-size: 2.5rem; margin-bottom: 12px; }
     .inv-preview .inv-footer { text-align: center; font-size: .75rem; margin-top: 20px; padding-top: 16px; border-top: 1px solid rgba(0,0,0,.1); color: #999; }
-
-    /* Hide original navbars and footers — we use sidebar */
-    .section-page .navbar, .section-page .footer, .section-page .admin-header { display: none !important; }
-    .section-page .login-overlay { display: none !important; }
-    .section-page .admin-content { display: block !important; padding: 32px 24px; max-width: 1400px; margin: 0 auto; }
-
-    /* Admin section inner styles: override admin-content that was hidden */
-    .admin-section .admin-content { display: block !important; }
-
-    /* ═══ ADMIN SECTIONS: KEEP DARK NOIR ET OR ═══ */
-    .section-page.admin-section { background: #0F1118; color: #E8E6E1; }
-    .section-page.admin-section * { --bg-card: #161822; --border: rgba(201,168,76,.1); --text: #E8E6E1; --text-dim: #9B978F; --text-muted: #5F5C55; }
-    .section-page.admin-section h1,
-    .section-page.admin-section h2,
-    .section-page.admin-section h3 { color: #C9A84C; }
-    .section-page.admin-section .card,
-    .section-page.admin-section .session-card { background: #161822; border-color: rgba(201,168,76,.1); color: #E8E6E1; }
-    .section-page.admin-section input,
-    .section-page.admin-section select,
-    .section-page.admin-section textarea { background: rgba(255,255,255,.04); color: #E8E6E1; border-color: rgba(201,168,76,.15); }
-    .section-page.admin-section .btn-green { background: #C9A84C; color: #111; }
-    .section-page.admin-section .btn-green:hover { background: #E8D48B; }
-    .section-page.admin-section table th { background: rgba(201,168,76,.08); color: #C9A84C; }
-    .section-page.admin-section table td { color: #9B978F; border-color: rgba(201,168,76,.08); }
-    .section-page.admin-section .tabs { background: rgba(201,168,76,.05); border-color: rgba(201,168,76,.1); }
-    .section-page.admin-section .tab-btn { color: #9B978F; }
-    .section-page.admin-section .tab-btn.active { background: #C9A84C; color: #111; }
-
-    /* ═══ SECTION HERO IMAGE BANNERS ═══ */
-    .section-banner {
-      width: 100%; height: 200px; object-fit: cover;
-      border-radius: 0 0 16px 16px; margin-bottom: 32px;
-      box-shadow: 0 4px 16px rgba(0,0,0,.1);
-    }
-    .section-banner-wrapper {
-      position: relative; width: 100%; height: 200px;
-      overflow: hidden; border-radius: 0 0 16px 16px; margin-bottom: 32px;
-    }
-    .section-banner-wrapper img {
-      width: 100%; height: 100%; object-fit: cover;
-    }
-    .section-banner-wrapper .banner-overlay {
-      position: absolute; inset: 0;
-      background: linear-gradient(180deg, rgba(23,28,34,.3) 0%, rgba(23,28,34,.6) 100%);
-      display: flex; align-items: flex-end; padding: 24px 32px;
-    }
-    .section-banner-wrapper .banner-title {
-      color: #FFF; font-size: 1.8rem; font-weight: 800;
-      text-shadow: 0 2px 8px rgba(0,0,0,.3);
-    }
-
-    /* Gallery images for infos pratiques */
-    .gallery-grid {
-      display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; margin-bottom: 32px;
-    }
-    .gallery-card {
-      border-radius: 14px; overflow: hidden; box-shadow: 0 4px 16px rgba(0,0,0,.08);
-      transition: all .25s;
-    }
-    .gallery-card:hover { transform: translateY(-4px); box-shadow: 0 8px 32px rgba(0,0,0,.12); }
-    .gallery-card img { width: 100%; height: 200px; object-fit: cover; }
-    .gallery-card .caption {
-      padding: 12px 16px; background: #FFF; font-size: .85rem;
-      font-weight: 600; color: #171C22;
-    }
   </style>
 </head>
 <body class="spa-body">
@@ -287,6 +119,7 @@
   <a class="sidebar-link" onclick="show('programme')"><img src="img/icons/icon-programme.png" alt=""> Programme</a>
   <a class="sidebar-link" onclick="show('intervenants')"><img src="img/icons/icon-intervenants.png" alt=""> Intervenants</a>
   <a class="sidebar-link" onclick="show('inscription')"><img src="img/icons/icon-inscription.png" alt=""> Inscription</a>
+  <a class="sidebar-link" onclick="show('congres')"><img src="img/icons/icon-saucisse.png" alt=""> Le Congres</a>
   <a class="sidebar-link" onclick="show('plan')"><img src="img/icons/icon-plan.png" alt=""> Plan</a>
   <a class="sidebar-link" onclick="show('infos')"><img src="img/icons/icon-transport.png" alt=""> Infos pratiques</a>
   <a class="sidebar-link" onclick="show('presse')"><img src="img/icons/icon-presse.png" alt=""> Presse</a>
@@ -316,74 +149,215 @@
 
 <!-- ══════ ACCUEIL ══════ -->
 <div id="section-accueil" class="section-page active">
+
+  <!-- HERO -->
   <section class="hero">
-    <div class="hero-badge">12 — 14 juin 2026 · Palais des Congres de Strasbourg</div>
-    <h1>Le Congres de la Saucisse</h1>
+    <span class="hero-edition">1ere Edition</span>
+    <div class="hero-badge">12 — 14 juin 2026 &middot; Palais des Congres de Strasbourg</div>
+    <h1>Le Congres<br>de la Saucisse</h1>
     <p class="subtitle">Le plus grand rassemblement europeen dedie a la saucisse artisanale.<br>3 jours de conferences, degustations, ateliers et rencontres.</p>
     <div class="stats">
       <div class="stat"><div class="stat-val">50+</div><div class="stat-label">Intervenants</div></div>
+      <div class="stat"><div class="stat-val">30+</div><div class="stat-label">Sessions</div></div>
       <div class="stat"><div class="stat-val">3</div><div class="stat-label">Jours</div></div>
-      <div class="stat"><div class="stat-val">23</div><div class="stat-label">Salles</div></div>
       <div class="stat"><div class="stat-val">1800</div><div class="stat-label">Places</div></div>
     </div>
-    <a href="javascript:show('inscription')" class="btn btn-green">S'inscrire maintenant</a>
-    <a href="javascript:show('programme')" class="btn btn-outline" style="margin-left:12px;">Voir le programme</a>
+    <div class="hero-ctas">
+      <a href="javascript:show('inscription')" class="btn btn-green">S'inscrire</a>
+      <a href="javascript:show('programme')" class="btn btn-outline">Voir le programme</a>
+    </div>
   </section>
-  <div class="section-divider"></div>
+
+  <!-- A LA UNE -->
   <section class="section">
+    <span class="section-label section-label-red">A la une</span>
+    <h2 class="section-title">Actualites du Congres</h2>
+    <p class="section-subtitle">Retrouvez les dernieres nouvelles du Congres de la Saucisse 2026.</p>
+    <div class="articles-grid">
+      <div class="article-card" onclick="show('congres')">
+        <div class="article-card-img">&#128220;</div>
+        <div class="article-card-body">
+          <span class="article-card-cat cat-business">Appel</span>
+          <h3 class="article-card-title">Appel a communications ouvert jusqu'au 30 avril</h3>
+          <p class="article-card-excerpt">Chercheurs, artisans et professionnels : soumettez vos propositions pour le premier Congres de la Saucisse. 6 thematiques, formats conference ou atelier.</p>
+          <p class="article-card-date">14 mars 2026</p>
+        </div>
+      </div>
+      <div class="article-card" onclick="show('congres')">
+        <div class="article-card-img">&#127942;</div>
+        <div class="article-card-body">
+          <span class="article-card-cat cat-concours">Concours</span>
+          <h3 class="article-card-title">Le Grand Prix de la Saucisse : les nomines 2026</h3>
+          <p class="article-card-excerpt">12 charcutiers artisanaux de 8 pays en lice pour le tout premier Grand Prix de la Saucisse. Jury preside par Jean-Marc Schaller, MOF 2018.</p>
+          <p class="article-card-date">10 mars 2026</p>
+        </div>
+      </div>
+      <div class="article-card" onclick="show('intervenants')">
+        <div class="article-card-img">&#127860;</div>
+        <div class="article-card-body">
+          <span class="article-card-cat cat-gastronomie">Masterclass</span>
+          <h3 class="article-card-title">Masterclass avec Hans Gruber, maitre fumeur de Foret-Noire</h3>
+          <p class="article-card-excerpt">5e generation de maitres fumeurs, Hans Gruber revelera les secrets du fumage traditionnel au bois de hetre. Places limitees.</p>
+          <p class="article-card-date">8 mars 2026</p>
+        </div>
+      </div>
+      <div class="article-card" onclick="show('infos')">
+        <div class="article-card-img">&#128205;</div>
+        <div class="article-card-body">
+          <span class="article-card-cat cat-gastronomie">Parcours</span>
+          <h3 class="article-card-title">La Route de la Saucisse : parcours gastronomique dans Strasbourg</h3>
+          <p class="article-card-excerpt">Decouvrez 12 etapes dans les rues de Strasbourg : winstubs, charcutiers, ateliers de degustation. Carte interactive incluse dans le pass.</p>
+          <p class="article-card-date">5 mars 2026</p>
+        </div>
+      </div>
+      <div class="article-card" onclick="show('programme')">
+        <div class="article-card-img">&#128172;</div>
+        <div class="article-card-body">
+          <span class="article-card-cat cat-artisanat">Table ronde</span>
+          <h3 class="article-card-title">L'avenir de la charcuterie artisanale face a l'industrie</h3>
+          <p class="article-card-excerpt">Jean-Marc Schaller, Francois Heim et Marc Bertrand debattront des defis et opportunites pour la saucisse artisanale en 2026.</p>
+          <p class="article-card-date">1 mars 2026</p>
+        </div>
+      </div>
+      <div class="article-card" onclick="show('congres')">
+        <div class="article-card-img">&#127775;</div>
+        <div class="article-card-body">
+          <span class="article-card-cat cat-concours">Concours</span>
+          <h3 class="article-card-title">Concours du meilleur knack d'Alsace — inscriptions ouvertes</h3>
+          <p class="article-card-excerpt">Artisans charcutiers alsaciens, inscrivez votre knack avant le 15 mai. Jury professionnel, prix de 5 000 euros et vitrine internationale.</p>
+          <p class="article-card-date">25 fevrier 2026</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="section-divider"></div>
+
+  <!-- 6 THEMATIQUES -->
+  <section class="section">
+    <span class="section-label section-label-green">6 thematiques</span>
+    <h2 class="section-title">Les axes du Congres</h2>
+    <p class="section-subtitle">Explorez les six grandes thematiques qui structurent le programme 2026.</p>
+    <div class="thematics-grid">
+      <div class="thematic-card" data-theme="science">
+        <div class="thematic-card-icon">&#128300;</div>
+        <h3>Science &amp; Nutrition</h3>
+        <p>Recherche sur la composition, l'impact nutritionnel et les bienfaits des saucisses artisanales. Ferments lactiques, micro-organismes et innovation alimentaire.</p>
+      </div>
+      <div class="thematic-card" data-theme="artisanat">
+        <div class="thematic-card-icon">&#127981;</div>
+        <h3>Artisanat &amp; Savoir-faire</h3>
+        <p>Fabrication traditionnelle, techniques de fumage, maturation et terroir. Les gestes ancestraux des maitres charcutiers d'Alsace et d'Europe.</p>
+      </div>
+      <div class="thematic-card" data-theme="international">
+        <div class="thematic-card-icon">&#127758;</div>
+        <h3>International</h3>
+        <p>Saucisses du monde : Bratwurst, mortadella, chorizo, bangers, arabiki. Echanges entre traditions et exportation des savoir-faire.</p>
+      </div>
+      <div class="thematic-card" data-theme="histoire">
+        <div class="thematic-card-icon">&#128220;</div>
+        <h3>Histoire &amp; Patrimoine</h3>
+        <p>3000 ans d'histoire de la charcuterie, de Rome a Strasbourg. Le Christkindelsmaerik, le Musee de la Charcuterie et le patrimoine alsacien.</p>
+      </div>
+      <div class="thematic-card" data-theme="gastronomie">
+        <div class="thematic-card-icon">&#127869;</div>
+        <h3>Gastronomie &amp; Degustation</h3>
+        <p>Accords mets-bieres, haute gastronomie charcutiere, recettes de chefs etoiles. Degustations commentees et ateliers pratiques.</p>
+      </div>
+      <div class="thematic-card" data-theme="business">
+        <div class="thematic-card-icon">&#128188;</div>
+        <h3>Business &amp; Innovation</h3>
+        <p>Food design, IA et recettes, saucisse vegetale hybride, startups foodtech. Distribution, marketing et tendances du marche 2026.</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="section-divider"></div>
+
+  <!-- PROGRAMME EN UN COUP D'OEIL -->
+  <section class="section">
+    <span class="section-label section-label-green">Programme</span>
     <h2 class="section-title">Programme en un coup d'oeil</h2>
     <p class="section-subtitle">3 jours de conferences, tables rondes et ateliers pratiques.</p>
     <div class="programme-summary" id="programme-summary"></div>
     <div class="text-center mt-3"><a href="javascript:show('programme')" class="btn btn-outline btn-sm">Programme complet</a></div>
   </section>
+
   <div class="section-divider"></div>
+
+  <!-- INTERVENANTS VEDETTES -->
   <section class="section">
+    <span class="section-label section-label-green">Speakers</span>
     <h2 class="section-title">Intervenants vedettes</h2>
     <p class="section-subtitle">Des experts internationaux de la saucisse artisanale.</p>
     <div class="highlight-speakers" id="featured-speakers"></div>
     <div class="text-center mt-3"><a href="javascript:show('intervenants')" class="btn btn-outline btn-sm">Tous les intervenants</a></div>
   </section>
+
   <div class="section-divider"></div>
-  <section class="section" style="background:#F8F9FA;max-width:100%;padding:60px 24px;">
-    <div style="max-width:1200px;margin:0 auto;">
-    <h2 class="section-title" style="color:#171C22;">Nos partenaires</h2>
+
+  <!-- PARTENAIRES -->
+  <section class="section">
+    <span class="section-label section-label-gold">Partenaires</span>
+    <h2 class="section-title">Nos partenaires</h2>
     <p class="section-subtitle">Ils rendent cet evenement possible.</p>
     <div class="partners-grid">
-      <div class="partner-card"><div class="partner-name">Ville de Strasbourg</div><div class="partner-type">Partenaire institutionnel</div></div>
-      <div class="partner-card"><div class="partner-name">Region Grand Est</div><div class="partner-type">Partenaire institutionnel</div></div>
-      <div class="partner-card"><div class="partner-name">IFCC</div><div class="partner-type">Partenaire scientifique</div></div>
-      <div class="partner-card"><div class="partner-name">Brasserie Meteor</div><div class="partner-type">Partenaire degustation</div></div>
-      <div class="partner-card"><div class="partner-name">Alsace Qualite</div><div class="partner-type">Label qualite</div></div>
-      <div class="partner-card"><div class="partner-name">INRAE</div><div class="partner-type">Partenaire recherche</div></div>
-      <div class="partner-card"><div class="partner-name">SausageTech</div><div class="partner-type">Partenaire innovation</div></div>
-      <div class="partner-card"><div class="partner-name">Fleischwerke</div><div class="partner-type">Sponsor Or</div></div>
-    </div>
+      <div class="partner-card"><div class="partner-logo">&#127963;</div><div class="partner-name">Ville de Strasbourg</div><div class="partner-type">Partenaire institutionnel</div></div>
+      <div class="partner-card"><div class="partner-logo">&#127470;&#127466;</div><div class="partner-name">Region Grand Est</div><div class="partner-type">Partenaire institutionnel</div></div>
+      <div class="partner-card"><div class="partner-logo">&#128218;</div><div class="partner-name">IFCC</div><div class="partner-type">Partenaire scientifique</div></div>
+      <div class="partner-card"><div class="partner-logo">&#127866;</div><div class="partner-name">Brasserie Meteor</div><div class="partner-type">Partenaire degustation</div></div>
+      <div class="partner-card"><div class="partner-logo">&#127941;</div><div class="partner-name">Alsace Qualite</div><div class="partner-type">Label qualite</div></div>
+      <div class="partner-card"><div class="partner-logo">&#128300;</div><div class="partner-name">INRAE</div><div class="partner-type">Partenaire recherche</div></div>
+      <div class="partner-card"><div class="partner-logo">&#128187;</div><div class="partner-name">SausageTech</div><div class="partner-type">Partenaire innovation</div></div>
+      <div class="partner-card"><div class="partner-logo">&#127942;</div><div class="partner-name">Fleischwerke</div><div class="partner-type">Sponsor Or</div></div>
     </div>
   </section>
+
   <div class="section-divider"></div>
+
+  <!-- INFOS RAPIDES -->
   <section class="section">
+    <span class="section-label section-label-green">Pratique</span>
     <h2 class="section-title">Infos pratiques</h2>
     <p class="section-subtitle">Tout ce qu'il faut savoir pour venir.</p>
-    <div class="infos-grid">
-      <div class="info-card"><div class="icon"><img src="img/icons/icon-transport.png" alt="Transport" style="width:64px;height:64px;border-radius:12px;object-fit:contain" title="TGV Paris-Strasbourg"></div><h4>TGV Paris → Strasbourg</h4><p>1h46 depuis Paris Gare de l'Est. Navette gare → Palais en 10 min.</p></div>
-      <div class="info-card"><div class="icon"><img src="img/icons/icon-transport.png" alt="Transport aerien" style="width:64px;height:64px;border-radius:12px;object-fit:contain" title="Aeroport d'Entzheim"></div><h4>Aeroport d'Entzheim</h4><p>Navette train 9 minutes vers Strasbourg centre.</p></div>
-      <div class="info-card"><div class="icon"><img src="img/icons/icon-hotel.png" alt="Hotel" style="width:64px;height:64px;border-radius:12px;object-fit:contain" title="Hotels a proximite"></div><h4>8 hotels a proximite</h4><p>De 85 a 220 euros/nuit, tous a moins de 600m du Palais.</p></div>
-      <div class="info-card"><div class="icon"><img src="img/icons/icon-transport.png" alt="Tram" style="width:64px;height:64px;border-radius:12px;object-fit:contain" title="Tram B ou E - Arret Wacken"></div><h4>Tram B ou E</h4><p>Arret "Wacken" — directement devant le Palais des Congres.</p></div>
+    <div class="quick-info-grid">
+      <div class="quick-info-card"><div class="icon"><img src="img/icons/icon-transport.png" alt="Transport" title="TGV Paris-Strasbourg"></div><h4>TGV Paris &rarr; Strasbourg</h4><p>1h46 depuis Paris Gare de l'Est. Navette gare &rarr; Palais en 10 min.</p></div>
+      <div class="quick-info-card"><div class="icon"><img src="img/icons/icon-transport.png" alt="Transport aerien" title="Aeroport d'Entzheim"></div><h4>Aeroport d'Entzheim</h4><p>Navette train 9 minutes vers Strasbourg centre.</p></div>
+      <div class="quick-info-card"><div class="icon"><img src="img/icons/icon-hotel.png" alt="Hotel" title="Hotels a proximite"></div><h4>8 hotels a proximite</h4><p>De 85 a 220 euros/nuit, tous a moins de 600m du Palais.</p></div>
+      <div class="quick-info-card"><div class="icon"><img src="img/icons/icon-transport.png" alt="Tram" title="Tram B ou E - Arret Wacken"></div><h4>Tram B ou E</h4><p>Arret "Wacken" — directement devant le Palais des Congres.</p></div>
     </div>
     <div class="text-center mt-3"><a href="javascript:show('infos')" class="btn btn-outline btn-sm">Toutes les infos pratiques</a></div>
   </section>
+
+  <!-- FOOTER -->
   <footer class="footer" style="display:block !important;">
-    <div class="footer-brand"><img src="img/icons/icon-saucisse.png" alt="Saucisse" style="width:28px;height:28px;border-radius:6px;object-fit:contain;vertical-align:middle;display:inline-block" title="Congres de la Saucisse"> Le Congres de la Saucisse — Strasbourg 2026</div>
-    <p>12 — 14 juin 2026 · Palais des Congres de Strasbourg</p>
-    <p style="margin-top:12px;font-size:.72rem;color:rgba(255,255,255,.4);">Evenement fictif a but de demonstration.</p>
+    <div class="footer-brand"><img src="img/icons/icon-saucisse.png" alt="Saucisse" style="width:28px;height:28px;border-radius:6px;object-fit:contain;vertical-align:middle;display:inline"> Le Congres de la Saucisse — Strasbourg 2026</div>
+    <p>12 — 14 juin 2026 &middot; Palais des Congres de Strasbourg</p>
+    <div class="footer-links">
+      <a href="javascript:show('programme')">Programme</a>
+      <a href="javascript:show('intervenants')">Intervenants</a>
+      <a href="javascript:show('inscription')">Inscription</a>
+      <a href="javascript:show('infos')">Infos pratiques</a>
+      <a href="javascript:show('presse')">Presse</a>
+      <a href="javascript:show('congres')">Le Congres</a>
+    </div>
+    <div class="footer-social">
+      <a href="#" title="Facebook">f</a>
+      <a href="#" title="Twitter / X">X</a>
+      <a href="#" title="Instagram">ig</a>
+      <a href="#" title="LinkedIn">in</a>
+      <a href="#" title="YouTube">yt</a>
+      <a href="#" title="TikTok">tk</a>
+    </div>
+    <p style="margin-top:16px;font-size:.72rem;color:rgba(255,255,255,.3);">Evenement fictif a but de demonstration.</p>
   </footer>
 </div>
 
-<!-- The remaining 19 sections are loaded dynamically via spa-sections.js -->
-<!-- Each section div will be injected by the SPA script -->
+<!-- Section containers for SPA pages -->
 <div id="section-programme" class="section-page"></div>
 <div id="section-intervenants" class="section-page"></div>
 <div id="section-inscription" class="section-page"></div>
+<div id="section-congres" class="section-page"></div>
 <div id="section-plan" class="section-page"></div>
 <div id="section-infos" class="section-page"></div>
 <div id="section-presse" class="section-page"></div>
