@@ -1291,6 +1291,7 @@ footer {
       <a href="#partenaires">Partenaires</a>
       <a href="#infos">Infos pratiques</a>
       <a href="#mediatheque">Mediatheque</a>
+      <button onclick="openSearch()" style="background:none;border:1px solid var(--border,rgba(255,255,255,.15));color:var(--text-dim,#9494b8);padding:6px 14px;border-radius:8px;cursor:pointer;font-family:var(--font);font-size:13px;display:flex;align-items:center;gap:6px;transition:all .2s" onmouseover="this.style.borderColor='var(--accent,#c8a44e)';this.style.color='var(--accent,#c8a44e)'" onmouseout="this.style.borderColor='var(--border,rgba(255,255,255,.15))';this.style.color='var(--text-dim,#9494b8)'">&loupe; Rechercher <kbd style="font-size:10px;padding:1px 5px;border-radius:4px;background:rgba(255,255,255,.1);margin-left:4px">⌘K</kbd></button>
       <div style="position:relative;">
         <button class="theme-toggle" onclick="toggleThemePanel()" aria-label="Changer de theme">&#127912;</button>
         <div class="theme-panel" id="themePanel">
@@ -2873,6 +2874,170 @@ function openFeedback(section) {
     if (sel) sel.value = section;
   }
 }
+
+// ===== RECHERCHE FUSE.JS =====
+(function() {
+  // Load Fuse.js from CDN
+  var s = document.createElement('script');
+  s.src = 'https://cdn.jsdelivr.net/npm/fuse.js@7.0.0/dist/fuse.min.js';
+  s.onload = function() {
+    // Build search index from all page content
+    var searchData = [];
+
+    // Speakers
+    document.querySelectorAll('.speaker-card, [data-speaker]').forEach(function(el) {
+      searchData.push({
+        type: 'Intervenant',
+        name: el.querySelector('h4,h3,.speaker-name')?.textContent || '',
+        desc: el.querySelector('p,.speaker-title,.speaker-inst')?.textContent || '',
+        section: 'intervenants'
+      });
+    });
+
+    // Sessions from programme
+    document.querySelectorAll('.session-card, .prog-session, [data-session]').forEach(function(el) {
+      searchData.push({
+        type: 'Session',
+        name: el.querySelector('h4,h3,.session-title')?.textContent || '',
+        desc: el.querySelector('p,.session-speaker,.session-desc')?.textContent || '',
+        section: 'programme'
+      });
+    });
+
+    // Themes
+    document.querySelectorAll('.theme-card, [data-theme-card]').forEach(function(el) {
+      searchData.push({
+        type: 'Thématique',
+        name: el.querySelector('h3')?.textContent || '',
+        desc: el.querySelector('p')?.textContent || '',
+        section: 'thematiques'
+      });
+    });
+
+    // News
+    document.querySelectorAll('.news-card, .actu-card, [data-news]').forEach(function(el) {
+      searchData.push({
+        type: 'Actualité',
+        name: el.querySelector('h4,h3')?.textContent || '',
+        desc: el.querySelector('p')?.textContent || '',
+        section: 'actualites'
+      });
+    });
+
+    // Partners
+    document.querySelectorAll('.partner-item, .partner-card, [data-partner]').forEach(function(el) {
+      searchData.push({
+        type: 'Partenaire',
+        name: el.querySelector('h4,h3,.partner-name,span')?.textContent || el.textContent.trim().substring(0,50),
+        desc: '',
+        section: 'partenaires'
+      });
+    });
+
+    // Also add static searchable items
+    var staticItems = [
+      {type:'Info',name:'Palais de la Musique et des Congrès',desc:'Place de Bordeaux, 67000 Strasbourg',section:'infos'},
+      {type:'Info',name:'Tram B ou E — Arrêt Wacken',desc:'Accès direct au Palais des Congrès',section:'infos'},
+      {type:'Info',name:'TGV Paris-Strasbourg',desc:'1h46, Gare de l\'Est',section:'infos'},
+      {type:'Info',name:'Tarifs',desc:'Gratuit (conférences), 15€ (ateliers), Pass 3 jours 35€',section:'infos'},
+      {type:'Contact',name:'Contact organisation',desc:'contact@rencontres-strasbourg.fr',section:'infos'},
+      {type:'Info',name:'Appel à communications',desc:'Date limite 30 juin 2026',section:'appel'},
+    ];
+    searchData = searchData.concat(staticItems);
+
+    if (searchData.length === 0) {
+      // Fallback: generate from visible text sections
+      document.querySelectorAll('section[id]').forEach(function(sec) {
+        sec.querySelectorAll('h3,h4').forEach(function(h) {
+          searchData.push({
+            type: 'Contenu',
+            name: h.textContent.trim(),
+            desc: h.nextElementSibling ? h.nextElementSibling.textContent.trim().substring(0,100) : '',
+            section: sec.id
+          });
+        });
+      });
+    }
+
+    window._congressFuse = new Fuse(searchData, {
+      keys: [{name:'name',weight:2},{name:'desc',weight:1},{name:'type',weight:0.5}],
+      threshold: 0.35,
+      includeMatches: true,
+      includeScore: true,
+      minMatchCharLength: 2
+    });
+    window._congressSearchData = searchData;
+  };
+  document.head.appendChild(s);
+
+  // Search overlay
+  var overlay = document.createElement('div');
+  overlay.id = 'searchOverlay';
+  overlay.style.cssText = 'display:none;position:fixed;inset:0;z-index:999999;background:rgba(0,0,0,0.7);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);padding:20px;overflow-y:auto';
+  overlay.onclick = function(e){ if(e.target===overlay) closeSearch(); };
+  overlay.innerHTML = '<div style="max-width:640px;margin:60px auto 20px">' +
+    '<div style="display:flex;gap:8px;margin-bottom:20px">' +
+    '<input type="text" id="searchInput" placeholder="Rechercher un intervenant, une session, un thème..." style="flex:1;padding:16px 20px;border:2px solid var(--accent,#c8a44e);border-radius:14px;font-size:17px;font-family:var(--font);background:rgba(255,255,255,0.95);color:#1a1a1a;outline:none" oninput="doSearch(this.value)" autofocus>' +
+    '<button onclick="closeSearch()" style="padding:16px;background:none;border:2px solid rgba(255,255,255,0.3);border-radius:14px;color:#fff;font-size:20px;cursor:pointer;width:54px">&times;</button>' +
+    '</div>' +
+    '<div id="searchResults" style="max-height:60vh;overflow-y:auto"></div>' +
+    '<p style="text-align:center;font-size:12px;color:rgba(255,255,255,0.4);margin-top:16px">Appuyez sur Echap pour fermer · Recherche propulsée par Fuse.js</p>' +
+    '</div>';
+  document.body.appendChild(overlay);
+
+  // Keyboard shortcut Ctrl+K
+  document.addEventListener('keydown', function(e) {
+    if ((e.ctrlKey || e.metaKey) && e.key === 'k') { e.preventDefault(); openSearch(); }
+    if (e.key === 'Escape' && document.getElementById('searchOverlay').style.display !== 'none') { closeSearch(); }
+  });
+
+  window.openSearch = function() {
+    document.getElementById('searchOverlay').style.display = 'block';
+    setTimeout(function(){ document.getElementById('searchInput').focus(); }, 100);
+  };
+
+  window.closeSearch = function() {
+    document.getElementById('searchOverlay').style.display = 'none';
+    document.getElementById('searchInput').value = '';
+    document.getElementById('searchResults').innerHTML = '';
+  };
+
+  window.doSearch = function(q) {
+    var results = document.getElementById('searchResults');
+    if (!q || q.length < 2 || !window._congressFuse) {
+      results.innerHTML = q && q.length < 2 ? '<p style="text-align:center;color:rgba(255,255,255,0.5);padding:20px">Tapez au moins 2 caractères</p>' : '';
+      return;
+    }
+    var found = window._congressFuse.search(q);
+    if (found.length === 0) {
+      results.innerHTML = '<p style="text-align:center;color:rgba(255,255,255,0.5);padding:20px">Aucun résultat pour "' + q + '"</p>';
+      return;
+    }
+    var html = '<p style="font-size:13px;color:rgba(255,255,255,0.5);margin-bottom:12px">' + found.length + ' résultat(s)</p>';
+    var typeColors = {Intervenant:'#c8a44e',Session:'#2AD783',Thématique:'#5B9BD5',Actualité:'#E05A6D',Partenaire:'#9B59B6',Info:'#888',Contact:'#E8793A',Contenu:'#666'};
+    found.slice(0, 15).forEach(function(r) {
+      var item = r.item;
+      var color = typeColors[item.type] || '#888';
+      html += '<div onclick="closeSearch();navigateToSection(\'' + item.section + '\')" style="background:rgba(255,255,255,0.08);border-radius:12px;padding:16px;margin-bottom:8px;cursor:pointer;transition:background .2s;border:1px solid rgba(255,255,255,0.06)" onmouseover="this.style.background=\'rgba(255,255,255,0.15)\'" onmouseout="this.style.background=\'rgba(255,255,255,0.08)\'">' +
+        '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">' +
+        '<strong style="color:#fff;font-size:15px">' + item.name + '</strong>' +
+        '<span style="font-size:11px;padding:2px 8px;border-radius:20px;background:' + color + ';color:#fff;font-weight:600">' + item.type + '</span>' +
+        '</div>' +
+        (item.desc ? '<p style="font-size:13px;color:rgba(255,255,255,0.5);line-height:1.5;margin:0">' + item.desc.substring(0,120) + (item.desc.length>120?'...':'') + '</p>' : '') +
+        '</div>';
+    });
+    results.innerHTML = html;
+  };
+
+  window.navigateToSection = function(section) {
+    var el = document.getElementById(section);
+    if (el) { el.scrollIntoView({behavior:'smooth'}); }
+    // Also try hash navigation
+    if (window.location.hash !== '#' + section) {
+      window.location.hash = section;
+    }
+  };
+})();
 
 </script>
 </body>
