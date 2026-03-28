@@ -100,6 +100,156 @@
     .inv-preview h2 { font-size: 1.2rem; margin-bottom: 16px; text-align: center; }
     .inv-preview .inv-logo { text-align: center; font-size: 2.5rem; margin-bottom: 12px; }
     .inv-preview .inv-footer { text-align: center; font-size: .75rem; margin-top: 20px; padding-top: 16px; border-top: 1px solid rgba(0,0,0,.1); color: #999; }
+
+    /* ═══════════════════════════════════════════════════════
+       ERP STYLES (merged from erp.html)
+       ═══════════════════════════════════════════════════════ */
+    .erp-section-page { --bg-card: #161822; --bg-card-hover: #1C1F2E; --bg-input: #1a1c2a; --gold: #C9A84C; --gold-light: #E8D48B; --gold-dim: rgba(201,168,76,.15); --text: #E8E4DC; --text-dim: #9B978F; --text-muted: #5F5C55; --border: rgba(201,168,76,.1); --red: #DC2626; --green: #22C55E; --orange: #F59E0B; --blue: #3B82F6; --purple: #8B5CF6; --radius: 14px; --radius-sm: 10px; }
+
+    /* ERP tabs bar inside section */
+    .erp-tabs-bar {
+      display: flex; gap: 2px; padding: 12px 24px; background: rgba(22,24,34,.8);
+      border-bottom: 1px solid var(--border); overflow-x: auto; -webkit-overflow-scrolling: touch;
+    }
+    .erp-tab-btn {
+      padding: 10px 18px; border-radius: 10px 10px 0 0; font-size: .82rem;
+      font-weight: 600; color: #9B978F; background: transparent;
+      border: 1px solid transparent; border-bottom: none;
+      cursor: pointer; transition: all .2s; white-space: nowrap;
+      display: flex; align-items: center; gap: 6px;
+    }
+    .erp-tab-btn:hover { color: #E8E4DC; background: rgba(255,255,255,.03); }
+    .erp-tab-btn.active { color: #C9A84C; background: #0F1118; border-color: rgba(201,168,76,.1); }
+    .erp-tab-btn .tab-icon { font-size: 1rem; }
+
+    .erp-content { padding: 28px 24px; max-width: 1400px; margin: 0 auto; }
+    .erp-tab-panel { display: none; }
+    .erp-tab-panel.active { display: block; }
+
+    .panel-title { font-size: 1.3rem; font-weight: 800; color: #C9A84C; margin-bottom: 20px; }
+    .panel-subtitle { font-size: .85rem; color: #9B978F; margin-bottom: 24px; }
+
+    .kpi-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 16px; margin-bottom: 28px; }
+    .kpi-card { background: #161822; border: 1px solid rgba(201,168,76,.1); border-radius: 14px; padding: 20px; text-align: center; transition: border-color .2s; }
+    .kpi-card:hover { border-color: #C9A84C; }
+    .kpi-card .kpi-icon { font-size: 1.6rem; margin-bottom: 6px; }
+    .kpi-card .kpi-value { font-size: 1.8rem; font-weight: 900; color: #C9A84C; }
+    .kpi-card .kpi-label { font-size: .75rem; color: #9B978F; margin-top: 2px; }
+    .kpi-card.danger .kpi-value { color: #DC2626; }
+    .kpi-card.success .kpi-value { color: #22C55E; }
+
+    .progress-wrap { margin-bottom: 24px; }
+    .progress-label { display: flex; justify-content: space-between; font-size: .82rem; margin-bottom: 6px; }
+    .progress-label .label-name { color: #E8E4DC; font-weight: 600; }
+    .progress-label .label-val { color: #C9A84C; font-weight: 700; }
+    .progress-track { height: 14px; background: rgba(255,255,255,.06); border-radius: 8px; overflow: hidden; }
+    .progress-fill { height: 100%; border-radius: 8px; transition: width .6s ease; }
+    .progress-fill.green { background: linear-gradient(90deg, #22C55E, #16A34A); }
+    .progress-fill.gold { background: linear-gradient(90deg, #C9A84C, #E8D48B); }
+    .progress-fill.red { background: linear-gradient(90deg, #DC2626, #EF4444); }
+    .progress-fill.blue { background: linear-gradient(90deg, #3B82F6, #60A5FA); }
+
+    .alerts-box { margin-bottom: 24px; }
+    .alert-item { display: flex; align-items: center; gap: 10px; padding: 12px 16px; border-radius: 10px; margin-bottom: 8px; font-size: .82rem; }
+    .alert-item.warn { background: rgba(245,158,11,.08); border-left: 3px solid #F59E0B; color: #F59E0B; }
+    .alert-item.error { background: rgba(220,38,38,.08); border-left: 3px solid #DC2626; color: #DC2626; }
+    .alert-item.info { background: rgba(59,130,246,.08); border-left: 3px solid #3B82F6; color: #3B82F6; }
+    .alert-item.ok { background: rgba(34,197,94,.08); border-left: 3px solid #22C55E; color: #22C55E; }
+
+    .erp-table-wrap { overflow-x: auto; border-radius: 14px; border: 1px solid rgba(201,168,76,.1); background: #161822; margin-bottom: 20px; }
+    .erp-table { width: 100%; border-collapse: collapse; font-size: .82rem; }
+    .erp-table th { background: rgba(201,168,76,.06); padding: 12px 14px; text-align: left; font-weight: 700; font-size: .73rem; color: #C9A84C; text-transform: uppercase; letter-spacing: .5px; border-bottom: 1px solid rgba(201,168,76,.1); white-space: nowrap; }
+    .erp-table td { padding: 10px 14px; border-bottom: 1px solid rgba(201,168,76,.05); color: #9B978F; }
+    .erp-table tr:hover td { background: rgba(201,168,76,.03); }
+    .erp-table .editable { cursor: text; }
+    .erp-table .editable:focus { outline: 1px solid #C9A84C; border-radius: 4px; background: #1a1c2a; }
+    .erp-table tr.total-row td { font-weight: 800; color: #C9A84C; border-top: 2px solid rgba(201,168,76,.15); background: rgba(201,168,76,.04); }
+
+    .erp-badge { display: inline-block; padding: 3px 10px; border-radius: 6px; font-size: .72rem; font-weight: 700; }
+    .badge-paid { background: rgba(34,197,94,.12); color: #22C55E; }
+    .badge-pending { background: rgba(245,158,11,.12); color: #F59E0B; }
+    .badge-overdue { background: rgba(220,38,38,.12); color: #DC2626; }
+    .badge-prospect { background: rgba(139,92,246,.12); color: #8B5CF6; }
+    .badge-contacted { background: rgba(59,130,246,.12); color: #3B82F6; }
+    .badge-confirmed { background: rgba(34,197,94,.12); color: #22C55E; }
+    .badge-cdi { background: rgba(59,130,246,.12); color: #3B82F6; }
+    .badge-cdd { background: rgba(245,158,11,.12); color: #F59E0B; }
+    .badge-extra { background: rgba(139,92,246,.12); color: #8B5CF6; }
+    .badge-intermittent { background: rgba(201,168,76,.12); color: #C9A84C; }
+    .badge-benevole { background: rgba(34,197,94,.12); color: #22C55E; }
+
+    .erp-btn { display: inline-flex; align-items: center; gap: 6px; padding: 10px 20px; border-radius: 10px; font-size: .82rem; font-weight: 700; border: none; cursor: pointer; transition: all .2s; }
+    .erp-btn-gold { background: #C9A84C; color: #111; }
+    .erp-btn-gold:hover { background: #E8D48B; }
+    .erp-btn-outline { background: transparent; border: 1px solid rgba(201,168,76,.1); color: #9B978F; }
+    .erp-btn-outline:hover { border-color: #C9A84C; color: #C9A84C; }
+    .erp-btn-red { background: rgba(220,38,38,.12); color: #DC2626; border: 1px solid rgba(220,38,38,.2); }
+    .erp-btn-red:hover { background: rgba(220,38,38,.2); }
+    .erp-btn-green { background: rgba(34,197,94,.12); color: #22C55E; border: 1px solid rgba(34,197,94,.2); }
+    .erp-btn-green:hover { background: rgba(34,197,94,.2); }
+    .erp-btn-blue { background: rgba(59,130,246,.12); color: #3B82F6; border: 1px solid rgba(59,130,246,.2); }
+    .erp-btn-blue:hover { background: rgba(59,130,246,.2); }
+    .erp-btn-sm { padding: 6px 14px; font-size: .75rem; }
+    .erp-btn + .erp-btn { margin-left: 6px; }
+
+    .erp-toolbar { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; align-items: center; }
+    .erp-toolbar select, .erp-toolbar input { padding: 8px 14px; border-radius: 10px; border: 1px solid rgba(201,168,76,.1); background: #1a1c2a; color: #E8E4DC; font-size: .82rem; }
+    .erp-toolbar select:focus, .erp-toolbar input:focus { outline: none; border-color: #C9A84C; }
+    .erp-toolbar input[type="text"], .erp-toolbar input[type="search"] { min-width: 200px; }
+
+    .drop-zone { border: 2px dashed rgba(201,168,76,.1); border-radius: 14px; padding: 40px 20px; text-align: center; margin-bottom: 20px; transition: all .3s; cursor: pointer; }
+    .drop-zone:hover, .drop-zone.dragover { border-color: #C9A84C; background: rgba(201,168,76,.04); }
+    .drop-zone .dz-icon { font-size: 2.5rem; margin-bottom: 8px; }
+    .drop-zone .dz-text { font-size: .88rem; color: #9B978F; }
+    .drop-zone .dz-sub { font-size: .75rem; color: #5F5C55; margin-top: 4px; }
+
+    .erp-modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.7); z-index: 10000; align-items: center; justify-content: center; backdrop-filter: blur(4px); }
+    .erp-modal-overlay.open { display: flex; }
+    .erp-modal { background: #161822; border: 1px solid rgba(201,168,76,.1); border-radius: 14px; padding: 28px; max-width: 650px; width: 92%; max-height: 90vh; overflow-y: auto; }
+    .erp-modal h2 { font-size: 1.1rem; font-weight: 800; color: #C9A84C; margin-bottom: 16px; }
+    .erp-modal .form-group { margin-bottom: 14px; }
+    .erp-modal label { display: block; font-size: .78rem; font-weight: 600; color: #C9A84C; margin-bottom: 4px; }
+    .erp-modal input, .erp-modal select, .erp-modal textarea { width: 100%; padding: 10px 14px; border-radius: 10px; border: 1px solid rgba(201,168,76,.1); background: #1a1c2a; color: #E8E4DC; font-size: .85rem; }
+    .erp-modal input:focus, .erp-modal select:focus, .erp-modal textarea:focus { outline: none; border-color: #C9A84C; }
+    .erp-modal textarea { resize: vertical; min-height: 80px; }
+    .erp-modal-actions { display: flex; gap: 10px; justify-content: flex-end; margin-top: 20px; }
+
+    .pipeline { display: flex; gap: 16px; margin-bottom: 24px; overflow-x: auto; padding-bottom: 8px; }
+    .pipeline-col { flex: 1; min-width: 220px; background: rgba(255,255,255,.02); border-radius: 14px; padding: 14px; border: 1px solid rgba(201,168,76,.1); }
+    .pipeline-col-title { font-size: .78rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; display: flex; align-items: center; gap: 6px; }
+    .pipeline-col-title .count { background: rgba(201,168,76,.15); color: #C9A84C; padding: 2px 8px; border-radius: 6px; font-size: .7rem; }
+    .pipeline-card { background: #161822; border: 1px solid rgba(201,168,76,.1); border-radius: 10px; padding: 12px; margin-bottom: 8px; cursor: pointer; transition: all .2s; }
+    .pipeline-card:hover { border-color: #C9A84C; transform: translateY(-1px); }
+    .pipeline-card .pc-name { font-size: .82rem; font-weight: 700; color: #E8E4DC; }
+    .pipeline-card .pc-amount { font-size: .88rem; font-weight: 800; color: #C9A84C; margin-top: 2px; }
+    .pipeline-card .pc-info { font-size: .72rem; color: #5F5C55; margin-top: 4px; }
+
+    .pie-chart-wrap { display: flex; align-items: center; gap: 24px; flex-wrap: wrap; margin-bottom: 24px; }
+    .pie-legend { flex: 1; min-width: 180px; }
+    .pie-legend-item { display: flex; align-items: center; gap: 8px; font-size: .78rem; margin-bottom: 6px; }
+    .pie-legend-dot { width: 12px; height: 12px; border-radius: 3px; flex-shrink: 0; }
+
+    .erp-section-card { background: #161822; border: 1px solid rgba(201,168,76,.1); border-radius: 14px; padding: 20px; margin-bottom: 20px; }
+    .erp-section-card h3 { font-size: .95rem; font-weight: 700; color: #C9A84C; margin-bottom: 14px; }
+
+    .ecart-neg { color: #22C55E; }
+    .ecart-pos { color: #DC2626; }
+    .ecart-zero { color: #5F5C55; }
+
+    @media (max-width: 768px) {
+      .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+      .erp-content { padding: 16px; }
+      .pipeline { flex-direction: column; }
+      .pie-chart-wrap { flex-direction: column; align-items: flex-start; }
+    }
+    @media print {
+      .sidebar, .hamburger, .sidebar-overlay, .erp-tabs-bar, .erp-toolbar, .erp-btn, .drop-zone, .erp-modal-overlay { display: none !important; }
+      body { background: #FFF; color: #111; }
+      .erp-content { padding: 20px; }
+      .kpi-card, .erp-table-wrap { border: 1px solid #DDD; }
+      .kpi-card .kpi-value, .panel-title { color: #111; }
+      .erp-table th { background: #F5F5F5; color: #333; }
+    }
   </style>
 </head>
 <body class="spa-body">
@@ -141,7 +291,15 @@
   <a class="sidebar-link" onclick="showAdmin('budget')"><img src="img/icons/icon-traiteur.png" alt=""> Budget</a>
   <a class="sidebar-link" onclick="showAdmin('postevent')"><img src="img/icons/icon-emails.png" alt=""> Post-event</a>
   <a class="sidebar-link" onclick="showAdmin('rubriques')"><img src="img/icons/icon-invitations.png" alt=""> Recommandations de Stéphanie</a>
-  <a class="sidebar-link" href="erp.html" style="color:#C9A84C;font-weight:700;">&#128202; ERP Financier</a>
+
+  <div class="sidebar-section">ERP FINANCIER</div>
+  <a class="sidebar-link" onclick="showAdmin('erp-dashboard')" style="color:#C9A84C;font-weight:700;">&#128202; Dashboard ERP</a>
+  <a class="sidebar-link" onclick="showAdmin('erp-factures')">&#128196; Factures</a>
+  <a class="sidebar-link" onclick="showAdmin('erp-recettes')">&#128176; Recettes</a>
+  <a class="sidebar-link" onclick="showAdmin('erp-rh')">&#128101; RH & Paie</a>
+  <a class="sidebar-link" onclick="showAdmin('erp-budget')">&#128203; Budget</a>
+  <a class="sidebar-link" onclick="showAdmin('erp-sponsors')">&#129309; Sponsors</a>
+  <a class="sidebar-link" onclick="showAdmin('erp-export')">&#128202; Export & Bilan</a>
 
   <div class="sidebar-footer">Evenement fictif - demo<br>Strasbourg 2026</div>
 </nav>
@@ -382,6 +540,201 @@
 <div id="section-postevent" class="section-page admin-section"></div>
 <div id="section-rubriques" class="section-page admin-section"></div>
 
+<!-- ═══════════════════════════════════════════════════════
+     ERP SECTIONS (merged from erp.html)
+     ═══════════════════════════════════════════════════════ -->
+
+<!-- ERP: Dashboard -->
+<div id="section-erp-dashboard" class="section-page admin-section erp-section-page">
+  <div class="erp-content">
+    <h2 class="panel-title">Tableau de bord financier</h2>
+    <div class="kpi-grid" id="dash-kpis"></div>
+    <div class="progress-wrap" id="dash-budget-progress"></div>
+    <div class="alerts-box" id="dash-alerts"></div>
+    <div class="erp-section-card">
+      <h3>Factures en attente de paiement</h3>
+      <div id="dash-pending-invoices"></div>
+    </div>
+    <div class="erp-section-card">
+      <h3>Dernieres operations</h3>
+      <div id="dash-recent-ops"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ERP: Factures -->
+<div id="section-erp-factures" class="section-page admin-section erp-section-page">
+  <div class="erp-content">
+    <h2 class="panel-title">Factures & Depenses</h2>
+    <div class="drop-zone" id="invoice-dropzone">
+      <div class="dz-icon">&#128206;</div>
+      <div class="dz-text">Glissez vos factures PDF ici ou cliquez pour importer</div>
+      <div class="dz-sub">Formats acceptes : PDF, JPG, PNG</div>
+      <input type="file" id="invoice-file" accept=".pdf,.jpg,.jpeg,.png" style="display:none" multiple>
+    </div>
+    <div class="erp-toolbar">
+      <select id="filter-cat">
+        <option value="">Toutes categories</option>
+        <option value="Salle">Salle</option>
+        <option value="Traiteur">Traiteur</option>
+        <option value="Transport">Transport</option>
+        <option value="Hebergement">Hebergement</option>
+        <option value="Technique">Technique</option>
+        <option value="Impression">Impression</option>
+        <option value="Communication">Communication</option>
+        <option value="Assurance">Assurance</option>
+        <option value="SACEM">SACEM</option>
+        <option value="Divers">Divers</option>
+      </select>
+      <select id="filter-status">
+        <option value="">Tous statuts</option>
+        <option value="payee">Payee</option>
+        <option value="en_attente">En attente</option>
+        <option value="en_retard">En retard</option>
+      </select>
+      <input type="search" id="filter-search" placeholder="Rechercher fournisseur...">
+      <button class="erp-btn erp-btn-gold" onclick="erpOpenInvoiceModal()">+ Ajouter facture</button>
+    </div>
+    <div class="erp-table-wrap">
+      <table class="erp-table" id="invoices-table">
+        <thead><tr><th>Fournisseur</th><th>Montant TTC</th><th>Date</th><th>Echeance</th><th>Categorie</th><th>Statut</th><th>Actions</th></tr></thead>
+        <tbody id="invoices-body"></tbody>
+        <tfoot><tr class="total-row"><td colspan="7" id="invoices-total"></td></tr></tfoot>
+      </table>
+    </div>
+    <div class="erp-section-card">
+      <h3>Total par categorie</h3>
+      <div id="cat-totals"></div>
+    </div>
+    <button class="erp-btn erp-btn-outline" onclick="erpExportCSV('factures')">Exporter CSV factures</button>
+  </div>
+</div>
+
+<!-- ERP: Recettes -->
+<div id="section-erp-recettes" class="section-page admin-section erp-section-page">
+  <div class="erp-content">
+    <h2 class="panel-title">Recettes</h2>
+    <div class="kpi-grid" id="recettes-kpis"></div>
+    <div class="erp-section-card">
+      <h3>Inscriptions participants</h3>
+      <div class="erp-toolbar">
+        <button class="erp-btn erp-btn-gold" onclick="erpOpenRecetteModal('inscription')">+ Ajouter inscription</button>
+      </div>
+      <div class="erp-table-wrap">
+        <table class="erp-table"><thead><tr><th>Nom</th><th>Email</th><th>Montant</th><th>Date</th><th>Statut</th><th>Actions</th></tr></thead>
+        <tbody id="inscriptions-body"></tbody></table>
+      </div>
+    </div>
+    <div class="erp-section-card">
+      <h3>Sponsors</h3>
+      <div class="erp-table-wrap">
+        <table class="erp-table"><thead><tr><th>Sponsor</th><th>Montant engage</th><th>Montant recu</th><th>Statut</th></tr></thead>
+        <tbody id="recettes-sponsors-body"></tbody></table>
+      </div>
+    </div>
+    <div class="erp-section-card">
+      <h3>Subventions</h3>
+      <div class="erp-toolbar">
+        <button class="erp-btn erp-btn-gold" onclick="erpOpenRecetteModal('subvention')">+ Ajouter subvention</button>
+      </div>
+      <div class="erp-table-wrap">
+        <table class="erp-table"><thead><tr><th>Organisme</th><th>Demande</th><th>Accorde</th><th>Date</th><th>Statut</th><th>Actions</th></tr></thead>
+        <tbody id="subventions-body"></tbody></table>
+      </div>
+    </div>
+    <div class="erp-section-card">
+      <h3>Ventes stands exposants</h3>
+      <div class="erp-toolbar">
+        <button class="erp-btn erp-btn-gold" onclick="erpOpenRecetteModal('stand')">+ Ajouter stand</button>
+      </div>
+      <div class="erp-table-wrap">
+        <table class="erp-table"><thead><tr><th>Exposant</th><th>Type stand</th><th>Montant</th><th>Statut</th><th>Actions</th></tr></thead>
+        <tbody id="stands-body"></tbody></table>
+      </div>
+    </div>
+    <button class="erp-btn erp-btn-outline" onclick="erpExportCSV('recettes')">Exporter CSV recettes</button>
+  </div>
+</div>
+
+<!-- ERP: RH & Paie -->
+<div id="section-erp-rh" class="section-page admin-section erp-section-page">
+  <div class="erp-content">
+    <h2 class="panel-title">RH & Paie</h2>
+    <p class="panel-subtitle">Gestion du personnel evenementiel : contrats, DPAE, fiches de paie.</p>
+    <div class="erp-toolbar">
+      <button class="erp-btn erp-btn-gold" onclick="erpOpenStaffModal()">+ Ajouter personnel</button>
+    </div>
+    <div class="erp-table-wrap">
+      <table class="erp-table"><thead><tr><th>Nom</th><th>Role</th><th>Type contrat</th><th>Dates</th><th>Documents</th><th>Actions</th></tr></thead>
+      <tbody id="staff-body"></tbody></table>
+    </div>
+  </div>
+</div>
+
+<!-- ERP: Budget previsionnel -->
+<div id="section-erp-budget" class="section-page admin-section erp-section-page">
+  <div class="erp-content">
+    <h2 class="panel-title">Budget previsionnel</h2>
+    <p class="panel-subtitle">Le montant "Realise" se met a jour automatiquement depuis les factures importees.</p>
+    <div class="pie-chart-wrap">
+      <canvas id="budget-pie" width="220" height="220"></canvas>
+      <div class="pie-legend" id="budget-legend"></div>
+    </div>
+    <div class="erp-table-wrap">
+      <table class="erp-table" id="budget-table">
+        <thead><tr><th>Poste</th><th>Prevu</th><th>Realise</th><th>Ecart</th><th>%</th><th>Statut</th></tr></thead>
+        <tbody id="budget-body"></tbody>
+        <tfoot><tr class="total-row" id="budget-total-row"></tr></tfoot>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ERP: Sponsors CRM -->
+<div id="section-erp-sponsors" class="section-page admin-section erp-section-page">
+  <div class="erp-content">
+    <h2 class="panel-title">CRM Sponsors</h2>
+    <div class="pipeline" id="sponsor-pipeline"></div>
+    <div class="erp-toolbar">
+      <button class="erp-btn erp-btn-gold" onclick="erpOpenSponsorModal()">+ Ajouter sponsor</button>
+    </div>
+    <div class="erp-table-wrap">
+      <table class="erp-table"><thead><tr><th>Sponsor</th><th>Contact</th><th>Email</th><th>Telephone</th><th>Montant engage</th><th>Contreparties</th><th>Statut</th><th>Actions</th></tr></thead>
+      <tbody id="sponsors-body"></tbody></table>
+    </div>
+  </div>
+</div>
+
+<!-- ERP: Export & Bilan -->
+<div id="section-erp-export" class="section-page admin-section erp-section-page">
+  <div class="erp-content">
+    <h2 class="panel-title">Export & Bilan financier</h2>
+    <div class="kpi-grid" id="bilan-kpis"></div>
+    <div class="erp-section-card">
+      <h3>TVA</h3>
+      <div id="bilan-tva"></div>
+    </div>
+    <div class="erp-section-card">
+      <h3>Resultat net de l'evenement</h3>
+      <div id="bilan-resultat"></div>
+    </div>
+    <div class="erp-section-card">
+      <h3>Grand livre des operations</h3>
+      <div class="erp-table-wrap">
+        <table class="erp-table"><thead><tr><th>Date</th><th>Type</th><th>Libelle</th><th>Debit</th><th>Credit</th><th>Solde</th></tr></thead>
+        <tbody id="grand-livre-body"></tbody></table>
+      </div>
+    </div>
+    <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:20px;">
+      <button class="erp-btn erp-btn-gold" onclick="erpExportCSV('grand-livre')">Export Grand Livre CSV</button>
+      <button class="erp-btn erp-btn-outline" onclick="erpExportCSV('factures')">Export factures CSV</button>
+      <button class="erp-btn erp-btn-outline" onclick="erpExportCSV('recettes')">Export recettes CSV</button>
+      <button class="erp-btn erp-btn-blue" onclick="erpPrintBilan()">Imprimer bilan final</button>
+      <button class="erp-btn erp-btn-green" onclick="erpGenerateRapportFinal()">Generer le rapport final</button>
+    </div>
+  </div>
+</div>
+
 </main>
 
 <!-- MODAL for intervenants -->
@@ -397,6 +750,116 @@
   <div class="modal" style="background:#161822;max-width:700px;border:1px solid rgba(201,168,76,.1);">
     <button class="modal-close" onclick="closeDetail()" style="color:#9B978F;">&times;</button>
     <div id="detail-content"></div>
+  </div>
+</div>
+
+<!-- ═══ ERP MODALS ═══ -->
+
+<!-- Modal Facture -->
+<div class="erp-modal-overlay" id="erp-modal-invoice">
+  <div class="erp-modal">
+    <h2 id="erp-invoice-modal-title">Ajouter une facture</h2>
+    <input type="hidden" id="inv-edit-id">
+    <div class="form-group"><label>Fournisseur</label><input type="text" id="inv-fournisseur" placeholder="Nom du fournisseur"></div>
+    <div class="form-group"><label>Montant TTC (EUR)</label><input type="number" id="inv-montant" step="0.01" placeholder="0.00"></div>
+    <div class="form-group"><label>Montant HT (EUR)</label><input type="number" id="inv-montant-ht" step="0.01" placeholder="0.00"></div>
+    <div class="form-group"><label>Date facture</label><input type="date" id="inv-date"></div>
+    <div class="form-group"><label>Date echeance</label><input type="date" id="inv-echeance"></div>
+    <div class="form-group"><label>Categorie</label>
+      <select id="inv-categorie"><option value="Salle">Salle</option><option value="Traiteur">Traiteur</option><option value="Transport">Transport</option><option value="Hebergement">Hebergement</option><option value="Technique">Technique</option><option value="Impression">Impression</option><option value="Communication">Communication</option><option value="Assurance">Assurance</option><option value="SACEM">SACEM</option><option value="Divers">Divers</option></select>
+    </div>
+    <div class="form-group"><label>Statut</label>
+      <select id="inv-statut"><option value="en_attente">En attente</option><option value="payee">Payee</option><option value="en_retard">En retard</option></select>
+    </div>
+    <div class="form-group"><label>Notes</label><textarea id="inv-notes" placeholder="Notes optionnelles..."></textarea></div>
+    <div class="erp-modal-actions">
+      <button class="erp-btn erp-btn-outline" onclick="erpCloseModal('erp-modal-invoice')">Annuler</button>
+      <button class="erp-btn erp-btn-gold" onclick="erpSaveInvoice()">Enregistrer</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Recette -->
+<div class="erp-modal-overlay" id="erp-modal-recette">
+  <div class="erp-modal">
+    <h2 id="erp-recette-modal-title">Ajouter une recette</h2>
+    <input type="hidden" id="rec-edit-id">
+    <input type="hidden" id="rec-type">
+    <div class="form-group" id="rec-group-nom"><label id="rec-label-nom">Nom</label><input type="text" id="rec-nom" placeholder="Nom"></div>
+    <div class="form-group" id="rec-group-email" style="display:none"><label>Email</label><input type="email" id="rec-email" placeholder="email@exemple.fr"></div>
+    <div class="form-group"><label id="rec-label-montant">Montant (EUR)</label><input type="number" id="rec-montant" step="0.01" placeholder="0.00"></div>
+    <div class="form-group" id="rec-group-montant2" style="display:none"><label id="rec-label-montant2">Montant accorde (EUR)</label><input type="number" id="rec-montant2" step="0.01" placeholder="0.00"></div>
+    <div class="form-group" id="rec-group-type-stand" style="display:none"><label>Type de stand</label>
+      <select id="rec-type-stand"><option value="Standard (6m2)">Standard (6m2)</option><option value="Premium (12m2)">Premium (12m2)</option><option value="XXL (24m2)">XXL (24m2)</option><option value="Espace exterieur">Espace exterieur</option></select>
+    </div>
+    <div class="form-group"><label>Date</label><input type="date" id="rec-date"></div>
+    <div class="form-group"><label>Statut</label><select id="rec-statut"><option value="en_attente">En attente</option><option value="payee">Paye</option></select></div>
+    <div class="erp-modal-actions">
+      <button class="erp-btn erp-btn-outline" onclick="erpCloseModal('erp-modal-recette')">Annuler</button>
+      <button class="erp-btn erp-btn-gold" onclick="erpSaveRecette()">Enregistrer</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Staff -->
+<div class="erp-modal-overlay" id="erp-modal-staff">
+  <div class="erp-modal">
+    <h2>Ajouter du personnel</h2>
+    <input type="hidden" id="staff-edit-id">
+    <div class="form-group"><label>Nom complet</label><input type="text" id="staff-nom" placeholder="Prenom NOM"></div>
+    <div class="form-group"><label>Role</label><input type="text" id="staff-role" placeholder="Ex: Regisseur son, Hotesse accueil..."></div>
+    <div class="form-group"><label>Type de contrat</label>
+      <select id="staff-type"><option value="CDD">CDD evenementiel</option><option value="CDI">CDI</option><option value="Extra">Extra</option><option value="Intermittent">Intermittent du spectacle</option><option value="Benevole">Benevole</option></select>
+    </div>
+    <div class="form-group"><label>Date debut</label><input type="date" id="staff-debut"></div>
+    <div class="form-group"><label>Date fin</label><input type="date" id="staff-fin"></div>
+    <div class="form-group"><label>Taux horaire brut (EUR)</label><input type="number" id="staff-taux" step="0.01" placeholder="12.50"></div>
+    <div class="form-group"><label>Heures prevues</label><input type="number" id="staff-heures" placeholder="35"></div>
+    <div class="erp-modal-actions">
+      <button class="erp-btn erp-btn-outline" onclick="erpCloseModal('erp-modal-staff')">Annuler</button>
+      <button class="erp-btn erp-btn-gold" onclick="erpSaveStaff()">Enregistrer</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Sponsor -->
+<div class="erp-modal-overlay" id="erp-modal-sponsor">
+  <div class="erp-modal">
+    <h2>Ajouter un sponsor</h2>
+    <input type="hidden" id="sp-edit-id">
+    <div class="form-group"><label>Nom societe</label><input type="text" id="sp-nom" placeholder="Nom du sponsor"></div>
+    <div class="form-group"><label>Contact</label><input type="text" id="sp-contact" placeholder="Prenom NOM du contact"></div>
+    <div class="form-group"><label>Email</label><input type="email" id="sp-email" placeholder="contact@societe.fr"></div>
+    <div class="form-group"><label>Telephone</label><input type="tel" id="sp-tel" placeholder="06 XX XX XX XX"></div>
+    <div class="form-group"><label>Montant engage (EUR)</label><input type="number" id="sp-montant" step="0.01" placeholder="0.00"></div>
+    <div class="form-group"><label>Contreparties</label>
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:6px; font-size:.82rem;">
+        <label style="color:#9B978F;display:flex;align-items:center;gap:6px;"><input type="checkbox" id="sp-cp-logo-site"> Logo sur site</label>
+        <label style="color:#9B978F;display:flex;align-items:center;gap:6px;"><input type="checkbox" id="sp-cp-logo-prog"> Logo sur programme</label>
+        <label style="color:#9B978F;display:flex;align-items:center;gap:6px;"><input type="checkbox" id="sp-cp-stand"> Stand</label>
+        <label style="color:#9B978F;display:flex;align-items:center;gap:6px;"><input type="checkbox" id="sp-cp-parole"> Prise de parole</label>
+      </div>
+    </div>
+    <div class="form-group"><label>Nombre invitations VIP</label><input type="number" id="sp-invitations" placeholder="0"></div>
+    <div class="form-group"><label>Statut</label>
+      <select id="sp-statut"><option value="prospect">Prospect</option><option value="contacte">Contacte</option><option value="confirme">Confirme</option><option value="paye">Paye</option></select>
+    </div>
+    <div class="erp-modal-actions">
+      <button class="erp-btn erp-btn-outline" onclick="erpCloseModal('erp-modal-sponsor')">Annuler</button>
+      <button class="erp-btn erp-btn-gold" onclick="erpSaveSponsor()">Enregistrer</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Document RH (impression) -->
+<div class="erp-modal-overlay" id="erp-modal-doc">
+  <div class="erp-modal" style="max-width:800px;">
+    <h2 id="erp-doc-title">Document</h2>
+    <div id="erp-doc-content"></div>
+    <div class="erp-modal-actions">
+      <button class="erp-btn erp-btn-outline" onclick="erpCloseModal('erp-modal-doc')">Fermer</button>
+      <button class="erp-btn erp-btn-gold" onclick="window.print()">Imprimer</button>
+    </div>
   </div>
 </div>
 
@@ -471,7 +934,7 @@ window.addEventListener('DOMContentLoaded', function() {
   }
   if (window.location.hash) {
     var h = window.location.hash.substring(1);
-    var adminSections = ['stephanie','simulateur','dashboard','participants','invitations','traiteur','salles','checkin','emails','checklist','speakers','staff','securite','budget','postevent','rubriques'];
+    var adminSections = ['stephanie','simulateur','dashboard','participants','invitations','traiteur','salles','checkin','emails','checklist','speakers','staff','securite','budget','postevent','rubriques','erp-dashboard','erp-factures','erp-recettes','erp-rh','erp-budget','erp-sponsors','erp-export'];
     if (adminSections.indexOf(h) !== -1) {
       showAdmin(h);
     } else {
@@ -479,6 +942,590 @@ window.addEventListener('DOMContentLoaded', function() {
     }
   }
 });
+
+/* ═══════════════════════════════════════════════════════
+   ERP MODULE — DATA LAYER (localStorage persistence)
+   ═══════════════════════════════════════════════════════ */
+var ERP_STORAGE_KEY = 'congres_erp_data';
+
+var ERP_DEFAULT_BUDGET = [
+  { poste: 'Location salle', prevu: 5000 },
+  { poste: 'Traiteur', prevu: 8000 },
+  { poste: 'Transport intervenants', prevu: 3000 },
+  { poste: 'Hebergement', prevu: 4000 },
+  { poste: 'Technique (sono, video)', prevu: 2000 },
+  { poste: 'Impression (badges, prog)', prevu: 1500 },
+  { poste: 'Communication', prevu: 2000 },
+  { poste: 'Assurance', prevu: 500 },
+  { poste: 'SACEM', prevu: 300 },
+  { poste: 'Cadeaux/goodies', prevu: 1000 },
+  { poste: 'Divers/imprevu (10%)', prevu: 2700 }
+];
+
+var ERP_BUDGET_CAT_MAP = {
+  'Location salle': 'Salle', 'Traiteur': 'Traiteur', 'Transport intervenants': 'Transport',
+  'Hebergement': 'Hebergement', 'Technique (sono, video)': 'Technique',
+  'Impression (badges, prog)': 'Impression', 'Communication': 'Communication',
+  'Assurance': 'Assurance', 'SACEM': 'SACEM', 'Cadeaux/goodies': 'Divers', 'Divers/imprevu (10%)': 'Divers'
+};
+
+var ERP_DEMO_INVOICES = [
+  { id: 'inv_1', fournisseur: 'Palais des Congres Strasbourg', montant: 4800, montantHT: 4000, date: '2026-03-01', echeance: '2026-04-01', categorie: 'Salle', statut: 'payee', notes: 'Location 3 jours + installation' },
+  { id: 'inv_2', fournisseur: 'Traiteur Alsace Gourmande', montant: 3200, montantHT: 2666.67, date: '2026-03-15', echeance: '2026-04-15', categorie: 'Traiteur', statut: 'en_attente', notes: 'Acompte 40% — cocktail J1' },
+  { id: 'inv_3', fournisseur: 'SNCF Groupes', montant: 1850, montantHT: 1541.67, date: '2026-03-10', echeance: '2026-03-30', categorie: 'Transport', statut: 'en_retard', notes: 'Billets intervenants Paris-Strasbourg' },
+  { id: 'inv_4', fournisseur: 'Hotel Regent Petite France', montant: 2400, montantHT: 2000, date: '2026-03-20', echeance: '2026-05-01', categorie: 'Hebergement', statut: 'en_attente', notes: '12 chambres x 2 nuits' },
+  { id: 'inv_5', fournisseur: 'SonoVision 67', montant: 1800, montantHT: 1500, date: '2026-03-05', echeance: '2026-04-05', categorie: 'Technique', statut: 'payee', notes: 'Sonorisation + videoprojecteurs' },
+  { id: 'inv_6', fournisseur: 'Imprimerie Istra', montant: 950, montantHT: 791.67, date: '2026-04-01', echeance: '2026-05-01', categorie: 'Impression', statut: 'en_attente', notes: 'Badges, programmes, affiches' }
+];
+
+var ERP_DEMO_INSCRIPTIONS = [
+  { id: 'ins_1', nom: 'Pierre Dupont', email: 'pierre.dupont@gmail.com', montant: 150, date: '2026-02-15', statut: 'payee' },
+  { id: 'ins_2', nom: 'Marie Schneider', email: 'marie.schneider@free.fr', montant: 150, date: '2026-02-20', statut: 'payee' },
+  { id: 'ins_3', nom: 'Hans Muller', email: 'hans.muller@web.de', montant: 200, date: '2026-03-01', statut: 'en_attente' },
+  { id: 'ins_4', nom: 'Sophie Laurent', email: 'sophie.laurent@orange.fr', montant: 150, date: '2026-03-10', statut: 'payee' },
+  { id: 'ins_5', nom: 'Jean-Marc Schaller', email: 'jm.schaller@aol.com', montant: 0, date: '2026-01-15', statut: 'payee' }
+];
+
+var ERP_DEMO_SPONSORS = [
+  { id: 'sp_1', nom: 'Herta / Nestle', contact: 'Claire Martin', email: 'c.martin@herta.fr', tel: '01 45 67 89 00', montant: 8000, statut: 'paye', contreparties: ['Logo sur site', 'Logo sur programme', 'Stand', 'Prise de parole'], invitations: 10 },
+  { id: 'sp_2', nom: 'Brasserie Kronenbourg', contact: 'Marc Dupuis', email: 'm.dupuis@kronenbourg.fr', tel: '03 88 12 34 56', montant: 5000, statut: 'confirme', contreparties: ['Logo sur site', 'Stand'], invitations: 5 },
+  { id: 'sp_3', nom: 'Maison Stoeffler', contact: 'Francois Stoeffler', email: 'f.stoeffler@stoeffler.fr', tel: '03 88 99 88 77', montant: 3000, statut: 'contacte', contreparties: ['Logo sur programme'], invitations: 2 },
+  { id: 'sp_4', nom: 'Ville de Strasbourg', contact: 'Anne Weber', email: 'a.weber@strasbourg.eu', tel: '03 88 60 90 90', montant: 10000, statut: 'prospect', contreparties: [], invitations: 0 }
+];
+
+var ERP_DEMO_SUBVENTIONS = [
+  { id: 'sub_1', organisme: 'Region Grand Est', montant: 5000, accorde: 3500, date: '2026-01-20', statut: 'payee' },
+  { id: 'sub_2', organisme: 'CCI Alsace Eurometropole', montant: 3000, accorde: 0, date: '2026-02-10', statut: 'en_attente' }
+];
+
+var ERP_DEMO_STANDS = [
+  { id: 'std_1', exposant: 'Saucisse Bio Alsace', type: 'Standard (6m2)', montant: 800, statut: 'payee' },
+  { id: 'std_2', exposant: 'Fumoir Artisanal Colmar', type: 'Premium (12m2)', montant: 1500, statut: 'en_attente' },
+  { id: 'std_3', exposant: 'La Petite Boucherie', type: 'Standard (6m2)', montant: 800, statut: 'payee' }
+];
+
+var ERP_DEMO_STAFF = [
+  { id: 'stf_1', nom: 'Julie Koenig', role: 'Regisseuse generale', type: 'CDD', debut: '2026-06-10', fin: '2026-06-15', taux: 18, heures: 60 },
+  { id: 'stf_2', nom: 'Marc Bauer', role: 'Technicien son', type: 'Intermittent', debut: '2026-06-11', fin: '2026-06-14', taux: 22, heures: 36 },
+  { id: 'stf_3', nom: 'Emma Roth', role: 'Hotesse accueil', type: 'Extra', debut: '2026-06-12', fin: '2026-06-14', taux: 12.50, heures: 24 },
+  { id: 'stf_4', nom: 'Thomas Klein', role: 'Securite', type: 'CDD', debut: '2026-06-11', fin: '2026-06-14', taux: 14, heures: 40 },
+  { id: 'stf_5', nom: 'Lucie Vogel', role: 'Benevole accueil', type: 'Benevole', debut: '2026-06-12', fin: '2026-06-14', taux: 0, heures: 20 }
+];
+
+function erpLoadData() {
+  var saved = localStorage.getItem(ERP_STORAGE_KEY);
+  if (saved) { try { return JSON.parse(saved); } catch(e) {} }
+  var data = {
+    invoices: ERP_DEMO_INVOICES, inscriptions: ERP_DEMO_INSCRIPTIONS,
+    sponsors: ERP_DEMO_SPONSORS, subventions: ERP_DEMO_SUBVENTIONS,
+    stands: ERP_DEMO_STANDS, staff: ERP_DEMO_STAFF,
+    budget: ERP_DEFAULT_BUDGET.map(function(b) { return { poste: b.poste, prevu: b.prevu }; })
+  };
+  erpSaveData(data);
+  return data;
+}
+function erpSaveData(data) { localStorage.setItem(ERP_STORAGE_KEY, JSON.stringify(data)); }
+var ERP = erpLoadData();
+
+/* ERP Helpers */
+function erpFmt(n) { return n.toLocaleString('fr-FR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' EUR'; }
+function erpFmtN(n) { return n.toLocaleString('fr-FR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }); }
+function erpUid() { return 'id_' + Date.now() + '_' + Math.random().toString(36).substr(2, 6); }
+function erpToday() { return new Date().toISOString().split('T')[0]; }
+function erpStatusBadge(s) {
+  var map = { payee: 'badge-paid', paye: 'badge-paid', en_attente: 'badge-pending', en_retard: 'badge-overdue', prospect: 'badge-prospect', contacte: 'badge-contacted', confirme: 'badge-confirmed' };
+  var labels = { payee: 'Payee', paye: 'Paye', en_attente: 'En attente', en_retard: 'En retard', prospect: 'Prospect', contacte: 'Contacte', confirme: 'Confirme' };
+  return '<span class="erp-badge ' + (map[s] || 'badge-pending') + '">' + (labels[s] || s) + '</span>';
+}
+function erpTypeBadge(t) {
+  var map = { CDI: 'badge-cdi', CDD: 'badge-cdd', Extra: 'badge-extra', Intermittent: 'badge-intermittent', Benevole: 'badge-benevole' };
+  return '<span class="erp-badge ' + (map[t] || 'badge-pending') + '">' + t + '</span>';
+}
+function erpOpenModal(id) { document.getElementById(id).classList.add('open'); }
+function erpCloseModal(id) { document.getElementById(id).classList.remove('open'); }
+
+/* ERP Computed Values */
+function erpTotalDepenses() { return ERP.invoices.reduce(function(s, i) { return s + (i.montant || 0); }, 0); }
+function erpTotalRecettes() {
+  var ins = ERP.inscriptions.reduce(function(s, i) { return s + (i.statut === 'payee' ? (i.montant || 0) : 0); }, 0);
+  var sp = ERP.sponsors.reduce(function(s, i) { return s + (['paye', 'confirme'].indexOf(i.statut) >= 0 ? (i.montant || 0) : 0); }, 0);
+  var sub = ERP.subventions.reduce(function(s, i) { return s + (i.accorde || 0); }, 0);
+  var std = ERP.stands.reduce(function(s, i) { return s + (i.statut === 'payee' ? (i.montant || 0) : 0); }, 0);
+  return ins + sp + sub + std;
+}
+function erpTotalRecettesAll() {
+  var ins = ERP.inscriptions.reduce(function(s, i) { return s + (i.montant || 0); }, 0);
+  var sp = ERP.sponsors.reduce(function(s, i) { return s + (i.montant || 0); }, 0);
+  var sub = ERP.subventions.reduce(function(s, i) { return s + (i.accorde || 0); }, 0);
+  var std = ERP.stands.reduce(function(s, i) { return s + (i.montant || 0); }, 0);
+  return ins + sp + sub + std;
+}
+function erpTotalBudgetPrevu() { return ERP.budget.reduce(function(s, b) { return s + b.prevu; }, 0); }
+function erpPendingInvoices() { return ERP.invoices.filter(function(i) { return i.statut !== 'payee'; }); }
+function erpOverdueInvoices() { var t = erpToday(); return ERP.invoices.filter(function(i) { return i.statut !== 'payee' && i.echeance && i.echeance < t; }); }
+function erpRealiseByCategory(cat) { return ERP.invoices.filter(function(i) { return i.categorie === cat; }).reduce(function(s, i) { return s + (i.montant || 0); }, 0); }
+function erpTotalTVACollectee() { return erpTotalRecettesAll() * 0.2 / 1.2; }
+function erpTotalTVADeductible() { return ERP.invoices.reduce(function(s, i) { return s + ((i.montant || 0) - (i.montantHT || (i.montant || 0) / 1.2)); }, 0); }
+
+/* ═══ ERP RENDER: DASHBOARD ═══ */
+function erpRenderDashboard() {
+  var dep = erpTotalDepenses(), rec = erpTotalRecettes(), solde = rec - dep;
+  var pending = erpPendingInvoices(), overdue = erpOverdueInvoices(), budgetPrevu = erpTotalBudgetPrevu();
+  document.getElementById('dash-kpis').innerHTML =
+    '<div class="kpi-card"><div class="kpi-icon">&#128178;</div><div class="kpi-value">' + erpFmt(dep) + '</div><div class="kpi-label">Total depenses</div></div>' +
+    '<div class="kpi-card success"><div class="kpi-icon">&#128176;</div><div class="kpi-value">' + erpFmt(rec) + '</div><div class="kpi-label">Total recettes encaissees</div></div>' +
+    '<div class="kpi-card' + (solde >= 0 ? ' success' : ' danger') + '"><div class="kpi-icon">&#128200;</div><div class="kpi-value">' + erpFmt(solde) + '</div><div class="kpi-label">Solde</div></div>' +
+    '<div class="kpi-card' + (pending.length > 3 ? ' danger' : '') + '"><div class="kpi-icon">&#128196;</div><div class="kpi-value">' + pending.length + '</div><div class="kpi-label">Factures en attente</div></div>';
+  var pct = budgetPrevu > 0 ? Math.round(dep / budgetPrevu * 100) : 0;
+  var barClass = pct > 100 ? 'red' : pct > 80 ? 'gold' : 'green';
+  document.getElementById('dash-budget-progress').innerHTML =
+    '<div class="progress-label"><span class="label-name">Budget : depenses vs previsionnel</span><span class="label-val">' + erpFmt(dep) + ' / ' + erpFmt(budgetPrevu) + ' (' + pct + '%)</span></div>' +
+    '<div class="progress-track"><div class="progress-fill ' + barClass + '" style="width:' + Math.min(pct, 100) + '%"></div></div>';
+  var alerts = '';
+  if (overdue.length > 0) alerts += '<div class="alert-item error">&#9888; ' + overdue.length + ' facture(s) en retard — Total : ' + erpFmt(overdue.reduce(function(s, i) { return s + i.montant; }, 0)) + '</div>';
+  ERP.budget.forEach(function(b) { var cat = ERP_BUDGET_CAT_MAP[b.poste]; if (!cat) return; var r = erpRealiseByCategory(cat); if (r > b.prevu) alerts += '<div class="alert-item warn">&#9888; Depassement "' + b.poste + '" : ' + erpFmt(r) + ' / ' + erpFmt(b.prevu) + '</div>'; });
+  if (pending.length === 0) alerts += '<div class="alert-item ok">&#10003; Toutes les factures sont payees</div>';
+  if (solde >= 0) alerts += '<div class="alert-item ok">&#10003; Tresorerie positive : ' + erpFmt(solde) + '</div>';
+  document.getElementById('dash-alerts').innerHTML = alerts;
+  if (pending.length > 0) {
+    var html = '<div class="erp-table-wrap"><table class="erp-table"><thead><tr><th>Fournisseur</th><th>Montant</th><th>Echeance</th><th>Statut</th></tr></thead><tbody>';
+    pending.forEach(function(inv) { html += '<tr><td>' + inv.fournisseur + '</td><td style="font-weight:700;color:#C9A84C">' + erpFmt(inv.montant) + '</td><td>' + (inv.echeance || '-') + '</td><td>' + erpStatusBadge(inv.statut) + '</td></tr>'; });
+    html += '</tbody></table></div>';
+    document.getElementById('dash-pending-invoices').innerHTML = html;
+  } else { document.getElementById('dash-pending-invoices').innerHTML = '<p style="color:#5F5C55;font-size:.85rem;">Aucune facture en attente.</p>'; }
+  var ops = [];
+  ERP.invoices.forEach(function(i) { ops.push({ date: i.date, type: 'Depense', libelle: i.fournisseur, montant: -i.montant }); });
+  ERP.inscriptions.filter(function(i) { return i.statut === 'payee'; }).forEach(function(i) { ops.push({ date: i.date, type: 'Inscription', libelle: i.nom, montant: i.montant }); });
+  ERP.sponsors.filter(function(i) { return i.statut === 'paye'; }).forEach(function(i) { ops.push({ date: '2026-03-01', type: 'Sponsor', libelle: i.nom, montant: i.montant }); });
+  ops.sort(function(a, b) { return b.date.localeCompare(a.date); });
+  var opsHtml = '<div class="erp-table-wrap"><table class="erp-table"><thead><tr><th>Date</th><th>Type</th><th>Libelle</th><th>Montant</th></tr></thead><tbody>';
+  ops.slice(0, 10).forEach(function(op) { opsHtml += '<tr><td>' + op.date + '</td><td>' + op.type + '</td><td>' + op.libelle + '</td><td style="font-weight:700;color:' + (op.montant >= 0 ? '#22C55E' : '#DC2626') + '">' + (op.montant >= 0 ? '+' : '') + erpFmt(op.montant) + '</td></tr>'; });
+  opsHtml += '</tbody></table></div>';
+  document.getElementById('dash-recent-ops').innerHTML = opsHtml;
+}
+
+/* ═══ ERP RENDER: FACTURES ═══ */
+function erpRenderInvoices() {
+  var catFilter = document.getElementById('filter-cat').value;
+  var statusFilter = document.getElementById('filter-status').value;
+  var searchFilter = (document.getElementById('filter-search').value || '').toLowerCase();
+  var filtered = ERP.invoices.filter(function(inv) {
+    if (catFilter && inv.categorie !== catFilter) return false;
+    if (statusFilter && inv.statut !== statusFilter) return false;
+    if (searchFilter && inv.fournisseur.toLowerCase().indexOf(searchFilter) < 0) return false;
+    return true;
+  });
+  var tbody = document.getElementById('invoices-body');
+  tbody.innerHTML = '';
+  var total = 0;
+  filtered.forEach(function(inv) {
+    total += inv.montant || 0;
+    var tr = document.createElement('tr');
+    tr.innerHTML =
+      '<td style="font-weight:600;color:#E8E4DC">' + inv.fournisseur + '</td>' +
+      '<td style="font-weight:700;color:#C9A84C">' + erpFmt(inv.montant) + '</td>' +
+      '<td>' + (inv.date || '-') + '</td><td>' + (inv.echeance || '-') + '</td>' +
+      '<td>' + inv.categorie + '</td><td>' + erpStatusBadge(inv.statut) + '</td><td>' +
+      (inv.statut !== 'payee' ? '<button class="erp-btn erp-btn-green erp-btn-sm" onclick="erpMarkPaid(\'' + inv.id + '\')">Marquer payee</button> ' : '') +
+      '<button class="erp-btn erp-btn-outline erp-btn-sm" onclick="erpEditInvoice(\'' + inv.id + '\')">Modifier</button> ' +
+      '<button class="erp-btn erp-btn-red erp-btn-sm" onclick="erpDeleteInvoice(\'' + inv.id + '\')">Suppr.</button></td>';
+    tbody.appendChild(tr);
+  });
+  document.getElementById('invoices-total').textContent = 'Total : ' + erpFmt(total) + ' (' + filtered.length + ' facture' + (filtered.length > 1 ? 's' : '') + ')';
+  var cats = {};
+  ERP.invoices.forEach(function(inv) { if (!cats[inv.categorie]) cats[inv.categorie] = 0; cats[inv.categorie] += inv.montant || 0; });
+  var catHtml = '<div class="erp-table-wrap"><table class="erp-table"><thead><tr><th>Categorie</th><th>Total</th><th>Nb factures</th></tr></thead><tbody>';
+  Object.keys(cats).sort().forEach(function(c) { var count = ERP.invoices.filter(function(i) { return i.categorie === c; }).length; catHtml += '<tr><td style="font-weight:600">' + c + '</td><td style="font-weight:700;color:#C9A84C">' + erpFmt(cats[c]) + '</td><td>' + count + '</td></tr>'; });
+  catHtml += '</tbody></table></div>';
+  document.getElementById('cat-totals').innerHTML = catHtml;
+}
+
+function erpOpenInvoiceModal() {
+  document.getElementById('erp-invoice-modal-title').textContent = 'Ajouter une facture';
+  document.getElementById('inv-edit-id').value = '';
+  document.getElementById('inv-fournisseur').value = '';
+  document.getElementById('inv-montant').value = '';
+  document.getElementById('inv-montant-ht').value = '';
+  document.getElementById('inv-date').value = erpToday();
+  document.getElementById('inv-echeance').value = '';
+  document.getElementById('inv-categorie').value = 'Salle';
+  document.getElementById('inv-statut').value = 'en_attente';
+  document.getElementById('inv-notes').value = '';
+  erpOpenModal('erp-modal-invoice');
+}
+function erpEditInvoice(id) {
+  var inv = ERP.invoices.find(function(i) { return i.id === id; });
+  if (!inv) return;
+  document.getElementById('erp-invoice-modal-title').textContent = 'Modifier la facture';
+  document.getElementById('inv-edit-id').value = id;
+  document.getElementById('inv-fournisseur').value = inv.fournisseur;
+  document.getElementById('inv-montant').value = inv.montant;
+  document.getElementById('inv-montant-ht').value = inv.montantHT || '';
+  document.getElementById('inv-date').value = inv.date;
+  document.getElementById('inv-echeance').value = inv.echeance || '';
+  document.getElementById('inv-categorie').value = inv.categorie;
+  document.getElementById('inv-statut').value = inv.statut;
+  document.getElementById('inv-notes').value = inv.notes || '';
+  erpOpenModal('erp-modal-invoice');
+}
+function erpSaveInvoice() {
+  var editId = document.getElementById('inv-edit-id').value;
+  var obj = { id: editId || erpUid(), fournisseur: document.getElementById('inv-fournisseur').value.trim(), montant: parseFloat(document.getElementById('inv-montant').value) || 0, montantHT: parseFloat(document.getElementById('inv-montant-ht').value) || 0, date: document.getElementById('inv-date').value, echeance: document.getElementById('inv-echeance').value, categorie: document.getElementById('inv-categorie').value, statut: document.getElementById('inv-statut').value, notes: document.getElementById('inv-notes').value.trim() };
+  if (!obj.fournisseur) { alert('Veuillez saisir un fournisseur.'); return; }
+  if (editId) { var idx = ERP.invoices.findIndex(function(i) { return i.id === editId; }); if (idx >= 0) ERP.invoices[idx] = obj; }
+  else { ERP.invoices.push(obj); }
+  erpSaveData(ERP); erpCloseModal('erp-modal-invoice'); erpRefreshAll();
+}
+function erpMarkPaid(id) { var inv = ERP.invoices.find(function(i) { return i.id === id; }); if (inv) { inv.statut = 'payee'; erpSaveData(ERP); erpRefreshAll(); } }
+function erpDeleteInvoice(id) { if (!confirm('Supprimer cette facture ?')) return; ERP.invoices = ERP.invoices.filter(function(i) { return i.id !== id; }); erpSaveData(ERP); erpRefreshAll(); }
+
+/* Drag & drop for invoices */
+var erpInitDragDrop = false;
+function erpSetupDragDrop() {
+  if (erpInitDragDrop) return; erpInitDragDrop = true;
+  var dz = document.getElementById('invoice-dropzone');
+  var fi = document.getElementById('invoice-file');
+  if (!dz || !fi) return;
+  dz.addEventListener('click', function() { fi.click(); });
+  dz.addEventListener('dragover', function(e) { e.preventDefault(); dz.classList.add('dragover'); });
+  dz.addEventListener('dragleave', function() { dz.classList.remove('dragover'); });
+  dz.addEventListener('drop', function(e) { e.preventDefault(); dz.classList.remove('dragover'); erpHandleFiles(e.dataTransfer.files); });
+  fi.addEventListener('change', function() { erpHandleFiles(fi.files); fi.value = ''; });
+}
+function erpHandleFiles(files) {
+  for (var i = 0; i < files.length; i++) {
+    var f = files[i];
+    ERP.invoices.push({ id: erpUid(), fournisseur: f.name.replace(/\.\w+$/, '').replace(/[-_]/g, ' '), montant: 0, montantHT: 0, date: erpToday(), echeance: '', categorie: 'Divers', statut: 'en_attente', notes: 'Importe depuis fichier : ' + f.name });
+  }
+  erpSaveData(ERP); erpRefreshAll(); alert(files.length + ' fichier(s) importe(s). Completez les montants.');
+}
+
+/* Filters */
+var erpFiltersInit = false;
+function erpSetupFilters() {
+  if (erpFiltersInit) return; erpFiltersInit = true;
+  ['filter-cat', 'filter-status', 'filter-search'].forEach(function(id) {
+    var el = document.getElementById(id);
+    if (el) { el.addEventListener('input', erpRenderInvoices); el.addEventListener('change', erpRenderInvoices); }
+  });
+}
+
+/* ═══ ERP RENDER: RECETTES ═══ */
+function erpRenderRecettes() {
+  var insTotal = ERP.inscriptions.reduce(function(s, i) { return s + (i.montant || 0); }, 0);
+  var spTotal = ERP.sponsors.reduce(function(s, i) { return s + (i.montant || 0); }, 0);
+  var subTotal = ERP.subventions.reduce(function(s, i) { return s + (i.accorde || 0); }, 0);
+  var stdTotal = ERP.stands.reduce(function(s, i) { return s + (i.montant || 0); }, 0);
+  document.getElementById('recettes-kpis').innerHTML =
+    '<div class="kpi-card"><div class="kpi-icon">&#127915;</div><div class="kpi-value">' + erpFmt(insTotal) + '</div><div class="kpi-label">Inscriptions (' + ERP.inscriptions.length + ')</div></div>' +
+    '<div class="kpi-card"><div class="kpi-icon">&#129309;</div><div class="kpi-value">' + erpFmt(spTotal) + '</div><div class="kpi-label">Sponsors (' + ERP.sponsors.length + ')</div></div>' +
+    '<div class="kpi-card"><div class="kpi-icon">&#127970;</div><div class="kpi-value">' + erpFmt(subTotal) + '</div><div class="kpi-label">Subventions (' + ERP.subventions.length + ')</div></div>' +
+    '<div class="kpi-card"><div class="kpi-icon">&#127978;</div><div class="kpi-value">' + erpFmt(stdTotal) + '</div><div class="kpi-label">Stands (' + ERP.stands.length + ')</div></div>';
+  var insBody = document.getElementById('inscriptions-body'); insBody.innerHTML = '';
+  ERP.inscriptions.forEach(function(ins) {
+    insBody.innerHTML += '<tr><td style="font-weight:600;color:#E8E4DC">' + ins.nom + '</td><td>' + (ins.email || '') + '</td><td style="font-weight:700;color:#C9A84C">' + erpFmt(ins.montant) + '</td><td>' + ins.date + '</td><td>' + erpStatusBadge(ins.statut) + '</td><td>' +
+      (ins.statut !== 'payee' ? '<button class="erp-btn erp-btn-green erp-btn-sm" onclick="erpMarkRecettePaid(\'inscriptions\',\'' + ins.id + '\')">Encaisser</button> ' : '') +
+      (ins.statut !== 'payee' ? '<button class="erp-btn erp-btn-blue erp-btn-sm" onclick="erpRelancer(\'' + ins.email + '\', \'' + ins.nom + '\')">Relancer</button> ' : '') +
+      '<button class="erp-btn erp-btn-red erp-btn-sm" onclick="erpDeleteRecette(\'inscriptions\',\'' + ins.id + '\')">Suppr.</button></td></tr>';
+  });
+  var spBody = document.getElementById('recettes-sponsors-body'); spBody.innerHTML = '';
+  ERP.sponsors.forEach(function(sp) { var recu = sp.statut === 'paye' ? sp.montant : 0; spBody.innerHTML += '<tr><td style="font-weight:600;color:#E8E4DC">' + sp.nom + '</td><td style="font-weight:700">' + erpFmt(sp.montant) + '</td><td style="color:#22C55E;font-weight:700">' + erpFmt(recu) + '</td><td>' + erpStatusBadge(sp.statut) + '</td></tr>'; });
+  var subBody = document.getElementById('subventions-body'); subBody.innerHTML = '';
+  ERP.subventions.forEach(function(sub) { subBody.innerHTML += '<tr><td style="font-weight:600;color:#E8E4DC">' + sub.organisme + '</td><td>' + erpFmt(sub.montant) + '</td><td style="font-weight:700;color:#C9A84C">' + erpFmt(sub.accorde || 0) + '</td><td>' + sub.date + '</td><td>' + erpStatusBadge(sub.statut) + '</td><td><button class="erp-btn erp-btn-red erp-btn-sm" onclick="erpDeleteRecette(\'subventions\',\'' + sub.id + '\')">Suppr.</button></td></tr>'; });
+  var stdBody = document.getElementById('stands-body'); stdBody.innerHTML = '';
+  ERP.stands.forEach(function(std) { stdBody.innerHTML += '<tr><td style="font-weight:600;color:#E8E4DC">' + std.exposant + '</td><td>' + (std.type || '') + '</td><td style="font-weight:700;color:#C9A84C">' + erpFmt(std.montant) + '</td><td>' + erpStatusBadge(std.statut) + '</td><td>' + (std.statut !== 'payee' ? '<button class="erp-btn erp-btn-green erp-btn-sm" onclick="erpMarkRecettePaid(\'stands\',\'' + std.id + '\')">Encaisser</button> ' : '') + '<button class="erp-btn erp-btn-red erp-btn-sm" onclick="erpDeleteRecette(\'stands\',\'' + std.id + '\')">Suppr.</button></td></tr>'; });
+}
+function erpOpenRecetteModal(type) {
+  document.getElementById('rec-edit-id').value = ''; document.getElementById('rec-type').value = type;
+  document.getElementById('rec-nom').value = ''; document.getElementById('rec-email').value = '';
+  document.getElementById('rec-montant').value = ''; document.getElementById('rec-montant2').value = '';
+  document.getElementById('rec-date').value = erpToday(); document.getElementById('rec-statut').value = 'en_attente';
+  document.getElementById('rec-group-email').style.display = (type === 'inscription') ? 'block' : 'none';
+  document.getElementById('rec-group-montant2').style.display = (type === 'subvention') ? 'block' : 'none';
+  document.getElementById('rec-group-type-stand').style.display = (type === 'stand') ? 'block' : 'none';
+  var titles = { inscription: 'Ajouter une inscription', subvention: 'Ajouter une subvention', stand: 'Ajouter un stand' };
+  var labels = { inscription: 'Participant', subvention: 'Organisme', stand: 'Exposant' };
+  var mlabels = { inscription: 'Montant (EUR)', subvention: 'Montant demande (EUR)', stand: 'Montant (EUR)' };
+  document.getElementById('erp-recette-modal-title').textContent = titles[type] || 'Ajouter';
+  document.getElementById('rec-label-nom').textContent = labels[type] || 'Nom';
+  document.getElementById('rec-label-montant').textContent = mlabels[type] || 'Montant';
+  erpOpenModal('erp-modal-recette');
+}
+function erpSaveRecette() {
+  var type = document.getElementById('rec-type').value;
+  var nom = document.getElementById('rec-nom').value.trim();
+  if (!nom) { alert('Veuillez saisir un nom.'); return; }
+  if (type === 'inscription') { ERP.inscriptions.push({ id: erpUid(), nom: nom, email: document.getElementById('rec-email').value.trim(), montant: parseFloat(document.getElementById('rec-montant').value) || 0, date: document.getElementById('rec-date').value, statut: document.getElementById('rec-statut').value }); }
+  else if (type === 'subvention') { ERP.subventions.push({ id: erpUid(), organisme: nom, montant: parseFloat(document.getElementById('rec-montant').value) || 0, accorde: parseFloat(document.getElementById('rec-montant2').value) || 0, date: document.getElementById('rec-date').value, statut: document.getElementById('rec-statut').value }); }
+  else if (type === 'stand') { ERP.stands.push({ id: erpUid(), exposant: nom, type: document.getElementById('rec-type-stand').value, montant: parseFloat(document.getElementById('rec-montant').value) || 0, statut: document.getElementById('rec-statut').value }); }
+  erpSaveData(ERP); erpCloseModal('erp-modal-recette'); erpRefreshAll();
+}
+function erpMarkRecettePaid(collection, id) { var item = ERP[collection].find(function(i) { return i.id === id; }); if (item) { item.statut = 'payee'; erpSaveData(ERP); erpRefreshAll(); } }
+function erpDeleteRecette(collection, id) { if (!confirm('Supprimer cet element ?')) return; ERP[collection] = ERP[collection].filter(function(i) { return i.id !== id; }); erpSaveData(ERP); erpRefreshAll(); }
+function erpRelancer(email, nom) {
+  if (!email) { alert('Pas d\'email pour ce participant.'); return; }
+  var subject = encodeURIComponent('Relance inscription — Congres de la Saucisse 2026');
+  var body = encodeURIComponent('Bonjour ' + nom + ',\n\nNous nous permettons de vous relancer concernant votre inscription au Congres de la Saucisse (12-14 juin 2026, Strasbourg).\n\nVotre paiement est en attente. Pourriez-vous proceder au reglement ?\n\nCordialement,\nL\'equipe du Congres de la Saucisse');
+  window.open('mailto:' + email + '?subject=' + subject + '&body=' + body);
+}
+
+/* ═══ ERP RENDER: RH & PAIE ═══ */
+function erpRenderStaff() {
+  var tbody = document.getElementById('staff-body'); tbody.innerHTML = '';
+  ERP.staff.forEach(function(s) {
+    tbody.innerHTML += '<tr><td style="font-weight:600;color:#E8E4DC">' + s.nom + '</td><td>' + s.role + '</td><td>' + erpTypeBadge(s.type) + '</td><td>' + (s.debut || '') + ' au ' + (s.fin || '') + '</td><td>' +
+      '<button class="erp-btn erp-btn-outline erp-btn-sm" onclick="erpGenDPAE(\'' + s.id + '\')">DPAE</button> ' +
+      '<button class="erp-btn erp-btn-outline erp-btn-sm" onclick="erpGenFichePaie(\'' + s.id + '\')">Fiche paie</button> ' +
+      '<button class="erp-btn erp-btn-outline erp-btn-sm" onclick="erpGenContrat(\'' + s.id + '\')">Contrat</button> ' +
+      '<button class="erp-btn erp-btn-outline erp-btn-sm" onclick="erpGenAttestation(\'' + s.id + '\')">Attestation</button></td><td>' +
+      '<button class="erp-btn erp-btn-outline erp-btn-sm" onclick="erpEditStaff(\'' + s.id + '\')">Modifier</button> ' +
+      '<button class="erp-btn erp-btn-red erp-btn-sm" onclick="erpDeleteStaff(\'' + s.id + '\')">Suppr.</button></td></tr>';
+  });
+}
+function erpOpenStaffModal() {
+  document.getElementById('staff-edit-id').value = ''; document.getElementById('staff-nom').value = '';
+  document.getElementById('staff-role').value = ''; document.getElementById('staff-type').value = 'CDD';
+  document.getElementById('staff-debut').value = ''; document.getElementById('staff-fin').value = '';
+  document.getElementById('staff-taux').value = ''; document.getElementById('staff-heures').value = '';
+  erpOpenModal('erp-modal-staff');
+}
+function erpEditStaff(id) {
+  var s = ERP.staff.find(function(i) { return i.id === id; }); if (!s) return;
+  document.getElementById('staff-edit-id').value = id; document.getElementById('staff-nom').value = s.nom;
+  document.getElementById('staff-role').value = s.role; document.getElementById('staff-type').value = s.type;
+  document.getElementById('staff-debut').value = s.debut; document.getElementById('staff-fin').value = s.fin;
+  document.getElementById('staff-taux').value = s.taux; document.getElementById('staff-heures').value = s.heures;
+  erpOpenModal('erp-modal-staff');
+}
+function erpSaveStaff() {
+  var editId = document.getElementById('staff-edit-id').value;
+  var obj = { id: editId || erpUid(), nom: document.getElementById('staff-nom').value.trim(), role: document.getElementById('staff-role').value.trim(), type: document.getElementById('staff-type').value, debut: document.getElementById('staff-debut').value, fin: document.getElementById('staff-fin').value, taux: parseFloat(document.getElementById('staff-taux').value) || 0, heures: parseFloat(document.getElementById('staff-heures').value) || 0 };
+  if (!obj.nom) { alert('Veuillez saisir un nom.'); return; }
+  if (editId) { var idx = ERP.staff.findIndex(function(i) { return i.id === editId; }); if (idx >= 0) ERP.staff[idx] = obj; } else { ERP.staff.push(obj); }
+  erpSaveData(ERP); erpCloseModal('erp-modal-staff'); erpRefreshAll();
+}
+function erpDeleteStaff(id) { if (!confirm('Supprimer ce membre ?')) return; ERP.staff = ERP.staff.filter(function(i) { return i.id !== id; }); erpSaveData(ERP); erpRefreshAll(); }
+
+/* Document generators */
+function erpGenDPAE(id) {
+  var s = ERP.staff.find(function(i) { return i.id === id; }); if (!s) return;
+  var parts = s.nom.split(' '); var prenom = parts[0] || ''; var nomF = parts.slice(1).join(' ') || '';
+  document.getElementById('erp-doc-title').textContent = 'DPAE — ' + s.nom;
+  document.getElementById('erp-doc-content').innerHTML = '<div style="background:#FFF;color:#111;padding:30px;border-radius:12px;font-family:Georgia,serif;line-height:2;"><h1 style="text-align:center;font-size:1.2rem;margin-bottom:20px;">DECLARATION PREALABLE A L\'EMBAUCHE</h1><table style="width:100%;border-collapse:collapse;"><tr><td style="padding:8px;font-weight:700;width:40%;">Employeur</td><td style="padding:8px;">Association Congres de la Saucisse</td></tr><tr><td style="padding:8px;font-weight:700;">SIRET</td><td style="padding:8px;">___ ___ ___ _____</td></tr><tr><td style="padding:8px;font-weight:700;">Nom</td><td style="padding:8px;">' + nomF + '</td></tr><tr><td style="padding:8px;font-weight:700;">Prenom</td><td style="padding:8px;">' + prenom + '</td></tr><tr><td style="padding:8px;font-weight:700;">Date de naissance</td><td style="padding:8px;">__/__/____</td></tr><tr><td style="padding:8px;font-weight:700;">N. Securite Sociale</td><td style="padding:8px;">_ __ __ __ ___ ___ __</td></tr><tr><td style="padding:8px;font-weight:700;">Date d\'embauche</td><td style="padding:8px;">' + (s.debut || '___') + '</td></tr><tr><td style="padding:8px;font-weight:700;">Date fin</td><td style="padding:8px;">' + (s.fin || '___') + '</td></tr><tr><td style="padding:8px;font-weight:700;">Poste</td><td style="padding:8px;">' + s.role + '</td></tr><tr><td style="padding:8px;font-weight:700;">Type</td><td style="padding:8px;">' + s.type + '</td></tr></table><p style="margin-top:24px;font-size:.85rem;color:#666;">A transmettre a l\'URSSAF avant l\'embauche.</p></div>';
+  erpOpenModal('erp-modal-doc');
+}
+function erpGenFichePaie(id) {
+  var s = ERP.staff.find(function(i) { return i.id === id; }); if (!s) return;
+  var brut = s.taux * s.heures, cotSal = brut * 0.22, cotPat = brut * 0.42, net = brut - cotSal;
+  document.getElementById('erp-doc-title').textContent = 'Fiche de paie — ' + s.nom;
+  document.getElementById('erp-doc-content').innerHTML = '<div style="background:#FFF;color:#111;padding:30px;border-radius:12px;font-family:Georgia,serif;line-height:1.8;"><h1 style="text-align:center;font-size:1.1rem;margin-bottom:4px;">BULLETIN DE PAIE</h1><p style="text-align:center;font-size:.85rem;color:#666;margin-bottom:20px;">Congres de la Saucisse — Strasbourg 2026</p><table style="width:100%;border-collapse:collapse;margin-bottom:16px;"><tr><td style="padding:6px;font-weight:700;">Salarie</td><td style="padding:6px;">' + s.nom + '</td></tr><tr><td style="padding:6px;font-weight:700;">Emploi</td><td style="padding:6px;">' + s.role + '</td></tr><tr><td style="padding:6px;font-weight:700;">Periode</td><td style="padding:6px;">' + s.debut + ' au ' + s.fin + '</td></tr><tr><td style="padding:6px;font-weight:700;">Type</td><td style="padding:6px;">' + s.type + '</td></tr></table><table style="width:100%;border-collapse:collapse;border:1px solid #333;"><thead><tr style="background:#F5F5F5;"><th style="padding:8px;text-align:left;border:1px solid #333;">Rubrique</th><th style="padding:8px;text-align:right;border:1px solid #333;">Base</th><th style="padding:8px;text-align:right;border:1px solid #333;">Taux</th><th style="padding:8px;text-align:right;border:1px solid #333;">Montant</th></tr></thead><tbody><tr><td style="padding:8px;border:1px solid #DDD;">Salaire de base</td><td style="padding:8px;text-align:right;border:1px solid #DDD;">' + s.heures + 'h x ' + erpFmtN(s.taux) + ' EUR</td><td style="padding:8px;text-align:right;border:1px solid #DDD;"></td><td style="padding:8px;text-align:right;border:1px solid #DDD;font-weight:700;">' + erpFmtN(brut) + ' EUR</td></tr><tr><td style="padding:8px;border:1px solid #DDD;">Cot. salariales</td><td style="padding:8px;text-align:right;border:1px solid #DDD;">' + erpFmtN(brut) + '</td><td style="padding:8px;text-align:right;border:1px solid #DDD;">22%</td><td style="padding:8px;text-align:right;border:1px solid #DDD;color:red;">-' + erpFmtN(cotSal) + ' EUR</td></tr><tr><td style="padding:8px;border:1px solid #DDD;">Cot. patronales</td><td style="padding:8px;text-align:right;border:1px solid #DDD;">' + erpFmtN(brut) + '</td><td style="padding:8px;text-align:right;border:1px solid #DDD;">42%</td><td style="padding:8px;text-align:right;border:1px solid #DDD;color:#666;">' + erpFmtN(cotPat) + ' EUR</td></tr></tbody><tfoot><tr style="background:#F5F5F5;font-weight:700;"><td style="padding:8px;border:1px solid #333;" colspan="3">NET A PAYER</td><td style="padding:8px;text-align:right;border:1px solid #333;font-size:1.1rem;">' + erpFmtN(net) + ' EUR</td></tr></tfoot></table><p style="margin-top:16px;font-size:.75rem;color:#999;">Estimation — taux reels selon convention collective.</p></div>';
+  erpOpenModal('erp-modal-doc');
+}
+function erpGenContrat(id) {
+  var s = ERP.staff.find(function(i) { return i.id === id; }); if (!s) return;
+  document.getElementById('erp-doc-title').textContent = 'Contrat — ' + s.nom;
+  document.getElementById('erp-doc-content').innerHTML = '<div style="background:#FFF;color:#111;padding:30px;border-radius:12px;font-family:Georgia,serif;line-height:2;"><h1 style="text-align:center;font-size:1.1rem;margin-bottom:4px;">CONTRAT DE TRAVAIL A DUREE DETERMINEE</h1><p style="text-align:center;font-size:.85rem;color:#666;margin-bottom:24px;">Art. L.1242-2 du Code du travail</p><h3 style="font-size:.95rem;">ENTRE</h3><p><strong>L\'employeur</strong> : Association Congres de la Saucisse, Palais des Congres, Strasbourg.</p><h3 style="font-size:.95rem;margin-top:16px;">ET</h3><p><strong>Le salarie</strong> : ' + s.nom + ', ne(e) le __/__/____, demeurant ________________</p><p><strong>Article 1 — Objet</strong><br>CDD pour le Congres de la Saucisse (12-14 juin 2026).</p><p><strong>Article 2 — Poste</strong> : <strong>' + s.role + '</strong></p><p><strong>Article 3 — Duree</strong> : du <strong>' + (s.debut || '___') + '</strong> au <strong>' + (s.fin || '___') + '</strong></p><p><strong>Article 4 — Remuneration</strong> : ' + erpFmtN(s.taux) + ' EUR/h brut, ' + s.heures + 'h prevues</p><p><strong>Article 5 — Lieu</strong> : Palais des Congres de Strasbourg</p><p style="margin-top:32px;">Fait a Strasbourg, le ___/___/2026, en deux exemplaires.</p><div style="display:flex;justify-content:space-between;margin-top:24px;"><div><strong>L\'employeur</strong><br><br><br>________________</div><div><strong>Le salarie</strong><br><br><br>________________</div></div></div>';
+  erpOpenModal('erp-modal-doc');
+}
+function erpGenAttestation(id) {
+  var s = ERP.staff.find(function(i) { return i.id === id; }); if (!s) return;
+  document.getElementById('erp-doc-title').textContent = 'Attestation — ' + s.nom;
+  document.getElementById('erp-doc-content').innerHTML = '<div style="background:#FFF;color:#111;padding:30px;border-radius:12px;font-family:Georgia,serif;line-height:2;"><h1 style="text-align:center;font-size:1.1rem;margin-bottom:20px;">ATTESTATION EMPLOYEUR</h1><p>Je soussigne(e), ________________, President de l\'Association Congres de la Saucisse, certifie que :</p><p style="margin:16px 0;padding:12px 16px;background:#F5F5F5;border-radius:8px;"><strong>' + s.nom + '</strong> a ete employe(e) en qualite de <strong>' + s.role + '</strong> du <strong>' + (s.debut || '___') + '</strong> au <strong>' + (s.fin || '___') + '</strong>.</p><p>Type : <strong>' + s.type + '</strong></p><p>Pour servir et valoir ce que de droit.</p><p style="margin-top:32px;">Fait a Strasbourg, le ___/___/2026</p><p style="margin-top:24px;"><strong>Le President</strong><br><br><br>________________</p></div>';
+  erpOpenModal('erp-modal-doc');
+}
+
+/* ═══ ERP RENDER: BUDGET ═══ */
+var ERP_PIE_COLORS = ['#C9A84C', '#22C55E', '#3B82F6', '#8B5CF6', '#F59E0B', '#EC4899', '#14B8A6', '#EF4444', '#6366F1', '#F97316', '#64748B'];
+function erpRenderBudget() {
+  var tbody = document.getElementById('budget-body'); tbody.innerHTML = '';
+  var totalPrevu = 0, totalRealise = 0;
+  ERP.budget.forEach(function(b, idx) {
+    var cat = ERP_BUDGET_CAT_MAP[b.poste]; var realise = cat ? erpRealiseByCategory(cat) : 0;
+    if (b.poste === 'Cadeaux/goodies') realise = 0;
+    if (b.poste === 'Divers/imprevu (10%)') realise = erpRealiseByCategory('Divers');
+    if (b.poste === 'Cadeaux/goodies') realise = 0;
+    totalPrevu += b.prevu; totalRealise += realise;
+    var ecart = realise - b.prevu, pct = b.prevu > 0 ? Math.round((ecart / b.prevu) * 100) : 0;
+    var ecartClass = ecart > 0 ? 'ecart-pos' : ecart < 0 ? 'ecart-neg' : 'ecart-zero';
+    var statusHtml = realise > b.prevu ? '<span class="erp-badge badge-overdue">Depasse</span>' : realise > b.prevu * 0.8 ? '<span class="erp-badge badge-pending">Attention</span>' : realise > 0 ? '<span class="erp-badge badge-paid">OK</span>' : '<span class="erp-badge" style="background:rgba(255,255,255,.05);color:#5F5C55;">—</span>';
+    tbody.innerHTML += '<tr><td style="font-weight:600;color:#E8E4DC">' + b.poste + '</td><td contenteditable="true" class="editable" data-idx="' + idx + '" data-field="prevu" style="font-weight:700;">' + erpFmtN(b.prevu) + ' EUR</td><td style="font-weight:700;color:#C9A84C">' + (realise > 0 ? erpFmtN(realise) + ' EUR' : '—') + '</td><td class="' + ecartClass + '" style="font-weight:700;">' + (ecart !== 0 ? (ecart > 0 ? '+' : '') + erpFmtN(ecart) + ' EUR' : '—') + '</td><td class="' + ecartClass + '">' + (realise > 0 ? (pct > 0 ? '+' : '') + pct + '%' : '—') + '</td><td>' + statusHtml + '</td></tr>';
+  });
+  var totalEcart = totalRealise - totalPrevu;
+  document.getElementById('budget-total-row').innerHTML = '<td style="font-weight:900;">TOTAL</td><td style="font-weight:900;">' + erpFmt(totalPrevu) + '</td><td style="font-weight:900;color:#C9A84C">' + erpFmt(totalRealise) + '</td><td style="font-weight:900;" class="' + (totalEcart > 0 ? 'ecart-pos' : 'ecart-neg') + '">' + (totalEcart > 0 ? '+' : '') + erpFmt(totalEcart) + '</td><td style="font-weight:900;">' + (totalPrevu > 0 ? Math.round(totalEcart / totalPrevu * 100) : 0) + '%</td><td></td>';
+  document.querySelectorAll('#budget-body .editable').forEach(function(cell) {
+    cell.addEventListener('blur', function() { var idx = parseInt(this.getAttribute('data-idx')); var val = parseFloat(this.textContent.replace(/[^\d.,\-]/g, '').replace(',', '.')) || 0; ERP.budget[idx].prevu = val; erpSaveData(ERP); erpRefreshAll(); });
+    cell.addEventListener('keydown', function(e) { if (e.key === 'Enter') { e.preventDefault(); this.blur(); } });
+  });
+  erpDrawPieChart();
+}
+function erpDrawPieChart() {
+  var canvas = document.getElementById('budget-pie'); if (!canvas) return;
+  var ctx = canvas.getContext('2d'); var w = canvas.width, h = canvas.height, cx = w / 2, cy = h / 2, r = Math.min(cx, cy) - 10;
+  ctx.clearRect(0, 0, w, h);
+  var total = ERP.budget.reduce(function(s, b) { return s + b.prevu; }, 0); if (total === 0) return;
+  var startAngle = -Math.PI / 2, legendHtml = '';
+  ERP.budget.forEach(function(b, i) {
+    var slice = (b.prevu / total) * 2 * Math.PI;
+    ctx.beginPath(); ctx.moveTo(cx, cy); ctx.arc(cx, cy, r, startAngle, startAngle + slice); ctx.closePath();
+    ctx.fillStyle = ERP_PIE_COLORS[i % ERP_PIE_COLORS.length]; ctx.fill();
+    legendHtml += '<div class="pie-legend-item"><div class="pie-legend-dot" style="background:' + ERP_PIE_COLORS[i % ERP_PIE_COLORS.length] + '"></div>' + b.poste + ' — ' + erpFmt(b.prevu) + ' (' + Math.round(b.prevu / total * 100) + '%)</div>';
+    startAngle += slice;
+  });
+  document.getElementById('budget-legend').innerHTML = legendHtml;
+}
+
+/* ═══ ERP RENDER: SPONSORS CRM ═══ */
+function erpRenderSponsors() {
+  var stages = ['prospect', 'contacte', 'confirme', 'paye'];
+  var stageLabels = { prospect: 'Prospects', contacte: 'Contactes', confirme: 'Confirmes', paye: 'Payes' };
+  var stageColors = { prospect: '#8B5CF6', contacte: '#3B82F6', confirme: '#F59E0B', paye: '#22C55E' };
+  var pipelineHtml = '';
+  stages.forEach(function(stage) {
+    var items = ERP.sponsors.filter(function(s) { return s.statut === stage; });
+    var total = items.reduce(function(s, i) { return s + (i.montant || 0); }, 0);
+    pipelineHtml += '<div class="pipeline-col"><div class="pipeline-col-title" style="color:' + stageColors[stage] + ';">' + stageLabels[stage] + ' <span class="count">' + items.length + '</span></div>';
+    items.forEach(function(sp) { pipelineHtml += '<div class="pipeline-card" onclick="erpEditSponsor(\'' + sp.id + '\')"><div class="pc-name">' + sp.nom + '</div><div class="pc-amount">' + erpFmt(sp.montant) + '</div><div class="pc-info">' + (sp.contact || '') + '</div></div>'; });
+    if (items.length === 0) pipelineHtml += '<div style="font-size:.78rem;color:#5F5C55;text-align:center;padding:12px;">Aucun sponsor</div>';
+    pipelineHtml += '<div style="font-size:.75rem;color:' + stageColors[stage] + ';font-weight:700;margin-top:8px;">Total : ' + erpFmt(total) + '</div></div>';
+  });
+  document.getElementById('sponsor-pipeline').innerHTML = pipelineHtml;
+  var tbody = document.getElementById('sponsors-body'); tbody.innerHTML = '';
+  ERP.sponsors.forEach(function(sp) {
+    var cp = (sp.contreparties || []).join(', ') || '—';
+    tbody.innerHTML += '<tr><td style="font-weight:600;color:#E8E4DC">' + sp.nom + '</td><td>' + (sp.contact || '') + '</td><td>' + (sp.email || '') + '</td><td>' + (sp.tel || '') + '</td><td style="font-weight:700;color:#C9A84C">' + erpFmt(sp.montant) + '</td><td style="font-size:.75rem;">' + cp + '</td><td>' + erpStatusBadge(sp.statut) + '</td><td>' +
+      '<button class="erp-btn erp-btn-outline erp-btn-sm" onclick="erpEditSponsor(\'' + sp.id + '\')">Modifier</button> ' +
+      '<button class="erp-btn erp-btn-blue erp-btn-sm" onclick="erpRelancerSponsor(\'' + sp.id + '\')">Relancer</button> ' +
+      '<button class="erp-btn erp-btn-outline erp-btn-sm" onclick="erpGenContratSponsor(\'' + sp.id + '\')">Contrat</button> ' +
+      '<button class="erp-btn erp-btn-outline erp-btn-sm" onclick="erpGenFactureSponsor(\'' + sp.id + '\')">Facture</button> ' +
+      '<button class="erp-btn erp-btn-red erp-btn-sm" onclick="erpDeleteSponsor(\'' + sp.id + '\')">Suppr.</button></td></tr>';
+  });
+}
+function erpOpenSponsorModal() {
+  document.getElementById('sp-edit-id').value = ''; document.getElementById('sp-nom').value = '';
+  document.getElementById('sp-contact').value = ''; document.getElementById('sp-email').value = '';
+  document.getElementById('sp-tel').value = ''; document.getElementById('sp-montant').value = '';
+  document.getElementById('sp-cp-logo-site').checked = false; document.getElementById('sp-cp-logo-prog').checked = false;
+  document.getElementById('sp-cp-stand').checked = false; document.getElementById('sp-cp-parole').checked = false;
+  document.getElementById('sp-invitations').value = ''; document.getElementById('sp-statut').value = 'prospect';
+  erpOpenModal('erp-modal-sponsor');
+}
+function erpEditSponsor(id) {
+  var sp = ERP.sponsors.find(function(i) { return i.id === id; }); if (!sp) return;
+  document.getElementById('sp-edit-id').value = id; document.getElementById('sp-nom').value = sp.nom;
+  document.getElementById('sp-contact').value = sp.contact || ''; document.getElementById('sp-email').value = sp.email || '';
+  document.getElementById('sp-tel').value = sp.tel || ''; document.getElementById('sp-montant').value = sp.montant;
+  document.getElementById('sp-cp-logo-site').checked = (sp.contreparties || []).indexOf('Logo sur site') >= 0;
+  document.getElementById('sp-cp-logo-prog').checked = (sp.contreparties || []).indexOf('Logo sur programme') >= 0;
+  document.getElementById('sp-cp-stand').checked = (sp.contreparties || []).indexOf('Stand') >= 0;
+  document.getElementById('sp-cp-parole').checked = (sp.contreparties || []).indexOf('Prise de parole') >= 0;
+  document.getElementById('sp-invitations').value = sp.invitations || 0; document.getElementById('sp-statut').value = sp.statut;
+  erpOpenModal('erp-modal-sponsor');
+}
+function erpSaveSponsor() {
+  var editId = document.getElementById('sp-edit-id').value;
+  var contreparties = [];
+  if (document.getElementById('sp-cp-logo-site').checked) contreparties.push('Logo sur site');
+  if (document.getElementById('sp-cp-logo-prog').checked) contreparties.push('Logo sur programme');
+  if (document.getElementById('sp-cp-stand').checked) contreparties.push('Stand');
+  if (document.getElementById('sp-cp-parole').checked) contreparties.push('Prise de parole');
+  var obj = { id: editId || erpUid(), nom: document.getElementById('sp-nom').value.trim(), contact: document.getElementById('sp-contact').value.trim(), email: document.getElementById('sp-email').value.trim(), tel: document.getElementById('sp-tel').value.trim(), montant: parseFloat(document.getElementById('sp-montant').value) || 0, contreparties: contreparties, invitations: parseInt(document.getElementById('sp-invitations').value) || 0, statut: document.getElementById('sp-statut').value };
+  if (!obj.nom) { alert('Veuillez saisir un nom.'); return; }
+  if (editId) { var idx = ERP.sponsors.findIndex(function(i) { return i.id === editId; }); if (idx >= 0) ERP.sponsors[idx] = obj; } else { ERP.sponsors.push(obj); }
+  erpSaveData(ERP); erpCloseModal('erp-modal-sponsor'); erpRefreshAll();
+}
+function erpDeleteSponsor(id) { if (!confirm('Supprimer ce sponsor ?')) return; ERP.sponsors = ERP.sponsors.filter(function(i) { return i.id !== id; }); erpSaveData(ERP); erpRefreshAll(); }
+function erpRelancerSponsor(id) {
+  var sp = ERP.sponsors.find(function(i) { return i.id === id; }); if (!sp || !sp.email) { alert('Pas d\'email.'); return; }
+  var subject = encodeURIComponent('Partenariat — Congres de la Saucisse 2026');
+  var body = encodeURIComponent('Bonjour ' + (sp.contact || sp.nom) + ',\n\nNous revenons vers vous pour le partenariat du Congres de la Saucisse (12-14 juin 2026, Strasbourg).\n\nVotre engagement de ' + erpFmt(sp.montant) + ' serait precieux. Contreparties :\n' + (sp.contreparties || []).map(function(c) { return '- ' + c; }).join('\n') + '\n\nCordialement,\nL\'equipe du Congres de la Saucisse');
+  window.open('mailto:' + sp.email + '?subject=' + subject + '&body=' + body);
+}
+function erpGenContratSponsor(id) {
+  var sp = ERP.sponsors.find(function(i) { return i.id === id; }); if (!sp) return;
+  document.getElementById('erp-doc-title').textContent = 'Contrat de partenariat — ' + sp.nom;
+  document.getElementById('erp-doc-content').innerHTML = '<div style="background:#FFF;color:#111;padding:30px;border-radius:12px;font-family:Georgia,serif;line-height:2;"><h1 style="text-align:center;font-size:1.1rem;">CONTRAT DE PARTENARIAT</h1><p style="text-align:center;font-size:.85rem;color:#666;margin-bottom:24px;">Congres de la Saucisse — 1ere Edition — Strasbourg 2026</p><h3>ENTRE</h3><p>L\'Association Congres de la Saucisse (l\'Organisateur)</p><h3 style="margin-top:12px;">ET</h3><p><strong>' + sp.nom + '</strong>, representee par <strong>' + (sp.contact || '________________') + '</strong> (le Partenaire)</p><h3 style="margin-top:16px;">ARTICLE 1</h3><p>Soutien de <strong>' + erpFmt(sp.montant) + '</strong>.</p><h3>ARTICLE 2 — CONTREPARTIES</h3><ul>' + (sp.contreparties || []).map(function(c) { return '<li>' + c + '</li>'; }).join('') + '<li>' + (sp.invitations || 0) + ' invitation(s) VIP</li></ul><h3>ARTICLE 3 — PAIEMENT</h3><p>Virement avant le 30 avril 2026.</p><div style="display:flex;justify-content:space-between;margin-top:32px;"><div><strong>L\'Organisateur</strong><br><br><br>________________</div><div><strong>Le Partenaire</strong><br><br><br>________________</div></div></div>';
+  erpOpenModal('erp-modal-doc');
+}
+function erpGenFactureSponsor(id) {
+  var sp = ERP.sponsors.find(function(i) { return i.id === id; }); if (!sp) return;
+  var ht = sp.montant / 1.2, tva = sp.montant - ht;
+  document.getElementById('erp-doc-title').textContent = 'Facture sponsor — ' + sp.nom;
+  document.getElementById('erp-doc-content').innerHTML = '<div style="background:#FFF;color:#111;padding:30px;border-radius:12px;font-family:Georgia,serif;line-height:1.8;"><div style="display:flex;justify-content:space-between;margin-bottom:24px;"><div><strong style="font-size:1.1rem;">FACTURE</strong><br>N. FAC-SP-' + sp.id.replace('sp_', '') + '</div><div style="text-align:right;"><strong>Assoc. Congres de la Saucisse</strong><br>Palais des Congres<br>67000 Strasbourg</div></div><div style="background:#F5F5F5;padding:16px;border-radius:8px;margin-bottom:20px;"><strong>Destinataire :</strong><br>' + sp.nom + '<br>' + (sp.contact || '') + '<br>' + (sp.email || '') + '</div><table style="width:100%;border-collapse:collapse;border:1px solid #333;"><thead><tr style="background:#F5F5F5;"><th style="padding:8px;text-align:left;border:1px solid #333;">Description</th><th style="padding:8px;text-align:right;border:1px solid #333;">HT</th><th style="padding:8px;text-align:right;border:1px solid #333;">TVA 20%</th><th style="padding:8px;text-align:right;border:1px solid #333;">TTC</th></tr></thead><tbody><tr><td style="padding:8px;border:1px solid #DDD;">Partenariat Congres 2026<br><span style="font-size:.8rem;color:#666;">' + (sp.contreparties || []).join(', ') + '</span></td><td style="padding:8px;text-align:right;border:1px solid #DDD;">' + erpFmtN(ht) + ' EUR</td><td style="padding:8px;text-align:right;border:1px solid #DDD;">' + erpFmtN(tva) + ' EUR</td><td style="padding:8px;text-align:right;border:1px solid #DDD;font-weight:700;">' + erpFmtN(sp.montant) + ' EUR</td></tr></tbody><tfoot><tr style="background:#F5F5F5;font-weight:700;"><td colspan="3" style="padding:8px;border:1px solid #333;">TOTAL TTC</td><td style="padding:8px;text-align:right;border:1px solid #333;font-size:1.1rem;">' + erpFmt(sp.montant) + '</td></tr></tfoot></table><p style="margin-top:20px;font-size:.82rem;">Paiement a reception, par virement.</p></div>';
+  erpOpenModal('erp-modal-doc');
+}
+
+/* ═══ ERP RENDER: EXPORT & BILAN ═══ */
+function erpRenderExport() {
+  var dep = erpTotalDepenses(), rec = erpTotalRecettesAll(), solde = rec - dep;
+  var tvaCol = erpTotalTVACollectee(), tvaDed = erpTotalTVADeductible(), tvaNet = tvaCol - tvaDed;
+  document.getElementById('bilan-kpis').innerHTML =
+    '<div class="kpi-card"><div class="kpi-icon">&#128178;</div><div class="kpi-value">' + erpFmt(dep) + '</div><div class="kpi-label">Total depenses TTC</div></div>' +
+    '<div class="kpi-card success"><div class="kpi-icon">&#128176;</div><div class="kpi-value">' + erpFmt(rec) + '</div><div class="kpi-label">Total recettes TTC</div></div>' +
+    '<div class="kpi-card' + (solde >= 0 ? ' success' : ' danger') + '"><div class="kpi-icon">&#128200;</div><div class="kpi-value">' + erpFmt(solde) + '</div><div class="kpi-label">Resultat brut</div></div>' +
+    '<div class="kpi-card"><div class="kpi-icon">&#128203;</div><div class="kpi-value">' + erpFmt(solde - tvaNet) + '</div><div class="kpi-label">Resultat net (apres TVA)</div></div>';
+  document.getElementById('bilan-tva').innerHTML = '<div class="erp-table-wrap"><table class="erp-table"><tbody><tr><td style="font-weight:600;">TVA collectee</td><td style="font-weight:700;color:#C9A84C">' + erpFmt(tvaCol) + '</td></tr><tr><td style="font-weight:600;">TVA deductible</td><td style="font-weight:700;color:#22C55E">' + erpFmt(tvaDed) + '</td></tr><tr class="total-row"><td style="font-weight:800;">TVA nette a reverser</td><td style="font-weight:800;color:' + (tvaNet >= 0 ? '#DC2626' : '#22C55E') + '">' + erpFmt(tvaNet) + '</td></tr></tbody></table></div>';
+  document.getElementById('bilan-resultat').innerHTML = '<div style="text-align:center;padding:24px;"><div style="font-size:2.2rem;font-weight:900;color:' + (solde >= 0 ? '#22C55E' : '#DC2626') + ';">' + erpFmt(solde) + '</div><div style="font-size:.85rem;color:#9B978F;margin-top:4px;">' + (solde >= 0 ? 'Excedent' : 'Deficit') + ' avant impots et TVA</div></div>';
+  var ops = [], runningBalance = 0;
+  ERP.inscriptions.forEach(function(i) { ops.push({ date: i.date, type: 'Inscription', libelle: i.nom, debit: 0, credit: i.montant || 0 }); });
+  ERP.sponsors.forEach(function(i) { if (i.statut === 'paye' || i.statut === 'confirme') ops.push({ date: '2026-03-01', type: 'Sponsor', libelle: i.nom, debit: 0, credit: i.montant || 0 }); });
+  ERP.subventions.forEach(function(i) { if (i.accorde > 0) ops.push({ date: i.date, type: 'Subvention', libelle: i.organisme, debit: 0, credit: i.accorde }); });
+  ERP.stands.forEach(function(i) { ops.push({ date: '2026-03-01', type: 'Stand', libelle: i.exposant, debit: 0, credit: i.montant || 0 }); });
+  ERP.invoices.forEach(function(i) { ops.push({ date: i.date, type: 'Facture', libelle: i.fournisseur + ' (' + i.categorie + ')', debit: i.montant || 0, credit: 0 }); });
+  ops.sort(function(a, b) { return a.date.localeCompare(b.date); });
+  var glBody = document.getElementById('grand-livre-body'); glBody.innerHTML = '';
+  ops.forEach(function(op) { runningBalance += op.credit - op.debit; glBody.innerHTML += '<tr><td>' + op.date + '</td><td>' + op.type + '</td><td>' + op.libelle + '</td><td style="color:#DC2626;font-weight:700;">' + (op.debit > 0 ? erpFmtN(op.debit) + ' EUR' : '') + '</td><td style="color:#22C55E;font-weight:700;">' + (op.credit > 0 ? erpFmtN(op.credit) + ' EUR' : '') + '</td><td style="font-weight:800;color:' + (runningBalance >= 0 ? '#C9A84C' : '#DC2626') + '">' + erpFmtN(runningBalance) + ' EUR</td></tr>'; });
+}
+function erpPrintBilan() { window.print(); }
+function erpGenerateRapportFinal() {
+  var dep = erpTotalDepenses(), rec = erpTotalRecettesAll(), solde = rec - dep;
+  var w = window.open('', '_blank');
+  w.document.write('<html><head><title>Rapport Final — Congres de la Saucisse 2026</title><style>body{font-family:Georgia,serif;padding:40px;line-height:1.8;color:#111;}h1{text-align:center;}h2{color:#333;border-bottom:2px solid #C9A84C;padding-bottom:4px;margin-top:32px;}table{width:100%;border-collapse:collapse;margin:16px 0;}td,th{border:1px solid #333;padding:8px;font-size:.85rem;}th{background:#F5F5F5;text-align:left;}.total{font-weight:900;font-size:1.1rem;}.green{color:#16A34A;}.red{color:#DC2626;}</style></head><body>');
+  w.document.write('<h1>RAPPORT FINANCIER FINAL</h1><p style="text-align:center;color:#666;">Congres de la Saucisse — 12-14 juin 2026 — Strasbourg</p>');
+  w.document.write('<h2>1. Synthese</h2><table><tr><th>Indicateur</th><th>Montant</th></tr><tr><td>Total depenses</td><td class="red">' + erpFmt(dep) + '</td></tr><tr><td>Total recettes</td><td class="green">' + erpFmt(rec) + '</td></tr><tr><td class="total">Resultat</td><td class="total ' + (solde >= 0 ? 'green' : 'red') + '">' + erpFmt(solde) + '</td></tr></table>');
+  w.document.write('<h2>2. Depenses par categorie</h2><table><tr><th>Categorie</th><th>Montant</th></tr>');
+  var cats = {}; ERP.invoices.forEach(function(i) { cats[i.categorie] = (cats[i.categorie] || 0) + i.montant; });
+  Object.keys(cats).sort().forEach(function(c) { w.document.write('<tr><td>' + c + '</td><td>' + erpFmt(cats[c]) + '</td></tr>'); });
+  w.document.write('</table><h2>3. Recettes par source</h2><table><tr><th>Source</th><th>Montant</th></tr>');
+  w.document.write('<tr><td>Inscriptions</td><td>' + erpFmt(ERP.inscriptions.reduce(function(s, i) { return s + i.montant; }, 0)) + '</td></tr>');
+  w.document.write('<tr><td>Sponsors</td><td>' + erpFmt(ERP.sponsors.reduce(function(s, i) { return s + i.montant; }, 0)) + '</td></tr>');
+  w.document.write('<tr><td>Subventions</td><td>' + erpFmt(ERP.subventions.reduce(function(s, i) { return s + (i.accorde || 0); }, 0)) + '</td></tr>');
+  w.document.write('<tr><td>Stands</td><td>' + erpFmt(ERP.stands.reduce(function(s, i) { return s + i.montant; }, 0)) + '</td></tr>');
+  w.document.write('</table><h2>4. Personnel</h2><table><tr><th>Nom</th><th>Role</th><th>Type</th><th>Cout brut</th></tr>');
+  ERP.staff.forEach(function(s) { w.document.write('<tr><td>' + s.nom + '</td><td>' + s.role + '</td><td>' + s.type + '</td><td>' + erpFmt(s.taux * s.heures) + '</td></tr>'); });
+  w.document.write('</table><p style="margin-top:40px;text-align:center;color:#999;font-size:.8rem;">ERP Congres de la Saucisse — ' + new Date().toLocaleDateString('fr-FR') + '</p></body></html>');
+  w.document.close(); w.print();
+}
+
+/* ═══ ERP CSV EXPORT ═══ */
+function erpExportCSV(type) {
+  var rows = [], filename = 'export.csv';
+  if (type === 'factures') { filename = 'factures_congres_saucisse.csv'; rows.push(['Fournisseur', 'Montant TTC', 'Montant HT', 'Date', 'Echeance', 'Categorie', 'Statut', 'Notes']); ERP.invoices.forEach(function(i) { rows.push([i.fournisseur, i.montant, i.montantHT || '', i.date, i.echeance, i.categorie, i.statut, i.notes || '']); }); }
+  else if (type === 'recettes') { filename = 'recettes_congres_saucisse.csv'; rows.push(['Type', 'Nom', 'Email', 'Montant', 'Date', 'Statut']); ERP.inscriptions.forEach(function(i) { rows.push(['Inscription', i.nom, i.email, i.montant, i.date, i.statut]); }); ERP.sponsors.forEach(function(i) { rows.push(['Sponsor', i.nom, i.email, i.montant, '', i.statut]); }); ERP.subventions.forEach(function(i) { rows.push(['Subvention', i.organisme, '', i.accorde, i.date, i.statut]); }); ERP.stands.forEach(function(i) { rows.push(['Stand', i.exposant, '', i.montant, '', i.statut]); }); }
+  else if (type === 'grand-livre') { filename = 'grand_livre_congres_saucisse.csv'; rows.push(['Date', 'Type', 'Libelle', 'Debit', 'Credit']); ERP.inscriptions.forEach(function(i) { rows.push([i.date, 'Inscription', i.nom, '', i.montant]); }); ERP.sponsors.filter(function(i) { return i.statut === 'paye' || i.statut === 'confirme'; }).forEach(function(i) { rows.push(['', 'Sponsor', i.nom, '', i.montant]); }); ERP.subventions.forEach(function(i) { if (i.accorde > 0) rows.push([i.date, 'Subvention', i.organisme, '', i.accorde]); }); ERP.stands.forEach(function(i) { rows.push(['', 'Stand', i.exposant, '', i.montant]); }); ERP.invoices.forEach(function(i) { rows.push([i.date, 'Facture', i.fournisseur + ' (' + i.categorie + ')', i.montant, '']); }); }
+  var csv = rows.map(function(row) { return row.map(function(cell) { return '"' + String(cell).replace(/"/g, '""') + '"'; }).join(';'); }).join('\n');
+  var blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
+  var url = URL.createObjectURL(blob); var a = document.createElement('a'); a.href = url; a.download = filename;
+  document.body.appendChild(a); a.click(); document.body.removeChild(a); URL.revokeObjectURL(url);
+}
+
+/* ═══ ERP REFRESH ALL ═══ */
+var erpInitialized = false;
+function erpRefreshAll() {
+  var t = erpToday();
+  ERP.invoices.forEach(function(inv) { if (inv.statut === 'en_attente' && inv.echeance && inv.echeance < t) inv.statut = 'en_retard'; });
+  erpSaveData(ERP);
+  erpRenderDashboard(); erpRenderInvoices(); erpRenderRecettes(); erpRenderStaff(); erpRenderBudget(); erpRenderSponsors(); erpRenderExport();
+  if (!erpInitialized) { erpSetupDragDrop(); erpSetupFilters(); erpInitialized = true; }
+}
+
+/* Initialize ERP on first visit to any ERP section */
+var erpBooted = false;
+var origShow = show;
+show = function(id) {
+  origShow(id);
+  if (id.indexOf('erp-') === 0 && !erpBooted) { erpBooted = true; erpRefreshAll(); }
+  else if (id.indexOf('erp-') === 0 && erpBooted) { erpRefreshAll(); }
+};
 </script>
 
 <!-- Bouton retour vers lanceur Stéphanie -->
