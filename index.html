@@ -2740,6 +2740,107 @@ function declineCookies() {
   document.getElementById('cookieBanner').classList.remove('show');
 }
 
+// ===== FEEDBACK WIDGET =====
+(function() {
+  // Floating button
+  var btn = document.createElement('div');
+  btn.innerHTML = '<img src="img/icons/icon-saucisse.png" alt="" style="width:24px;height:24px" onerror="this.style.display=\'none\'">&nbsp;Remarques';
+  btn.style.cssText = 'position:fixed;bottom:20px;right:20px;z-index:9999;background:var(--accent,#c8a44e);color:#fff;padding:12px 20px;border-radius:50px;cursor:pointer;font-family:var(--font);font-size:14px;font-weight:700;box-shadow:0 4px 20px rgba(0,0,0,0.3);display:flex;align-items:center;transition:transform .2s';
+  btn.onmouseover = function(){this.style.transform='scale(1.05)'};
+  btn.onmouseout = function(){this.style.transform='scale(1)'};
+  btn.onclick = function(){ document.getElementById('feedbackPanel').style.display = 'flex'; };
+  document.body.appendChild(btn);
+
+  // Panel
+  var panel = document.createElement('div');
+  panel.id = 'feedbackPanel';
+  panel.style.cssText = 'display:none;position:fixed;inset:0;z-index:99999;background:rgba(0,0,0,0.6);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);align-items:center;justify-content:center;padding:20px';
+  panel.onclick = function(e){ if(e.target===panel) panel.style.display='none'; };
+
+  panel.innerHTML = '<div style="background:#fff;border-radius:20px;padding:32px;max-width:500px;width:100%;max-height:85vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,0.3)">' +
+    '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">' +
+    '<h3 style="font-family:var(--font-display);font-size:22px;color:#1a1a1a;margin:0">Vos remarques</h3>' +
+    '<button onclick="document.getElementById(\'feedbackPanel\').style.display=\'none\'" style="background:none;border:none;font-size:24px;cursor:pointer;color:#999">&times;</button></div>' +
+    '<p style="font-size:14px;color:#666;margin-bottom:20px;line-height:1.6">Vos retours sont pr\u00e9cieux pour am\u00e9liorer le site. Chaque remarque est envoy\u00e9e directement \u00e0 Emmanuel.</p>' +
+    '<label style="display:block;font-size:13px;font-weight:600;color:#333;margin-bottom:4px">Votre pr\u00e9nom</label>' +
+    '<input type="text" id="fb-name" placeholder="St\u00e9phanie, Pierre, Julie..." style="width:100%;padding:12px;border:2px solid #e5e5e5;border-radius:10px;font-size:15px;margin-bottom:14px;font-family:inherit">' +
+    '<label style="display:block;font-size:13px;font-weight:600;color:#333;margin-bottom:4px">Section concern\u00e9e</label>' +
+    '<select id="fb-section" style="width:100%;padding:12px;border:2px solid #e5e5e5;border-radius:10px;font-size:15px;margin-bottom:14px;font-family:inherit">' +
+    '<option value="general">G\u00e9n\u00e9ral</option>' +
+    '<option value="programme">Programme</option>' +
+    '<option value="intervenants">Intervenants</option>' +
+    '<option value="thematiques">Th\u00e9matiques</option>' +
+    '<option value="design">Design / Graphisme</option>' +
+    '<option value="navigation">Navigation / Ergonomie</option>' +
+    '<option value="partenaires">Partenaires</option>' +
+    '<option value="infos">Infos pratiques</option>' +
+    '<option value="autre">Autre</option></select>' +
+    '<label style="display:block;font-size:13px;font-weight:600;color:#333;margin-bottom:4px">Type de remarque</label>' +
+    '<div style="display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap">' +
+    '<label style="flex:1;min-width:100px;display:flex;align-items:center;gap:6px;padding:10px;border:2px solid #e5e5e5;border-radius:10px;cursor:pointer;font-size:13px"><input type="radio" name="fb-type" value="amelioration" checked style="accent-color:#c8a44e"> Am\u00e9lioration</label>' +
+    '<label style="flex:1;min-width:100px;display:flex;align-items:center;gap:6px;padding:10px;border:2px solid #e5e5e5;border-radius:10px;cursor:pointer;font-size:13px"><input type="radio" name="fb-type" value="bug" style="accent-color:#e74c3c"> Bug / Erreur</label>' +
+    '<label style="flex:1;min-width:100px;display:flex;align-items:center;gap:6px;padding:10px;border:2px solid #e5e5e5;border-radius:10px;cursor:pointer;font-size:13px"><input type="radio" name="fb-type" value="idee" style="accent-color:#2AD783"> Id\u00e9e</label></div>' +
+    '<label style="display:block;font-size:13px;font-weight:600;color:#333;margin-bottom:4px">Votre remarque</label>' +
+    '<textarea id="fb-text" placeholder="D\u00e9crivez votre remarque, suggestion ou id\u00e9e..." style="width:100%;min-height:100px;padding:12px;border:2px solid #e5e5e5;border-radius:10px;font-size:15px;margin-bottom:16px;font-family:inherit;resize:vertical"></textarea>' +
+    '<button onclick="sendFeedback()" style="width:100%;padding:14px;background:#c8a44e;color:#fff;border:none;border-radius:12px;font-size:16px;font-weight:700;cursor:pointer;font-family:inherit;transition:opacity .2s" onmouseover="this.style.opacity=0.85" onmouseout="this.style.opacity=1">Envoyer ma remarque</button>' +
+    '<p style="text-align:center;font-size:11px;color:#999;margin-top:8px">Envoy\u00e9 directement par email \u00e0 Emmanuel</p>' +
+    '<div id="fb-history" style="margin-top:20px"></div>' +
+    '</div>';
+  document.body.appendChild(panel);
+
+  // Load previous feedback
+  renderFbHistory();
+})();
+
+function sendFeedback() {
+  var name = document.getElementById('fb-name').value.trim();
+  var section = document.getElementById('fb-section').value;
+  var type = document.querySelector('input[name="fb-type"]:checked').value;
+  var text = document.getElementById('fb-text').value.trim();
+  if (!name || !text) { alert('Merci de remplir votre pr\u00e9nom et votre remarque'); return; }
+
+  // Save locally
+  var feedbacks = JSON.parse(localStorage.getItem('congres_feedbacks') || '[]');
+  var entry = { name: name, section: section, type: type, text: text, ts: new Date().toISOString() };
+  feedbacks.push(entry);
+  localStorage.setItem('congres_feedbacks', JSON.stringify(feedbacks));
+
+  // Send email
+  var subject = 'Congr\u00e8s Strasbourg — Remarque de ' + name + ' [' + type + '] ' + section;
+  var body = 'REMARQUE CONGR\u00c8S STRASBOURG\n' +
+    '========================\n\n' +
+    'De : ' + name + '\n' +
+    'Section : ' + section + '\n' +
+    'Type : ' + type + '\n' +
+    'Date : ' + new Date().toLocaleString('fr-FR') + '\n\n' +
+    'REMARQUE :\n' + text;
+  window.open('mailto:mr.klein.emmanuel24@gmail.com?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body));
+
+  // Reset
+  document.getElementById('fb-text').value = '';
+  renderFbHistory();
+  alert('Merci ' + name + ' ! Votre remarque a \u00e9t\u00e9 enregistr\u00e9e.');
+}
+
+function renderFbHistory() {
+  var feedbacks = JSON.parse(localStorage.getItem('congres_feedbacks') || '[]');
+  var el = document.getElementById('fb-history');
+  if (!el || feedbacks.length === 0) return;
+  var html = '<div style="border-top:1px solid #eee;padding-top:16px"><h4 style="font-size:14px;color:#333;margin-bottom:10px">Vos remarques pr\u00e9c\u00e9dentes (' + feedbacks.length + ')</h4>';
+  feedbacks.slice(-5).reverse().forEach(function(f) {
+    var colors = {amelioration:'#c8a44e',bug:'#e74c3c',idee:'#2AD783'};
+    var labels = {amelioration:'Am\u00e9lioration',bug:'Bug',idee:'Id\u00e9e'};
+    html += '<div style="background:#f9f9f9;border-radius:10px;padding:12px;margin-bottom:8px">' +
+      '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">' +
+      '<span style="font-size:12px;font-weight:700;color:#333">' + f.name + ' &middot; ' + f.section + '</span>' +
+      '<span style="font-size:10px;padding:2px 8px;border-radius:20px;background:' + (colors[f.type]||'#999') + ';color:#fff">' + (labels[f.type]||f.type) + '</span></div>' +
+      '<p style="font-size:13px;color:#666;line-height:1.5">' + f.text + '</p>' +
+      '<span style="font-size:10px;color:#bbb">' + new Date(f.ts).toLocaleString('fr-FR') + '</span></div>';
+  });
+  html += '</div>';
+  el.innerHTML = html;
+}
+
 </script>
 </body>
 </html>
