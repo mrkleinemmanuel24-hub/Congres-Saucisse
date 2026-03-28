@@ -243,12 +243,14 @@
       .pie-chart-wrap { flex-direction: column; align-items: flex-start; }
     }
     @media print {
-      .sidebar, .hamburger, .sidebar-overlay, .erp-tabs-bar, .erp-toolbar, .erp-btn, .drop-zone, .erp-modal-overlay { display: none !important; }
+      .sidebar, .hamburger, .sidebar-overlay, .erp-tabs-bar, .erp-toolbar, .erp-btn, .drop-zone, .erp-modal-overlay, #extra-modal-overlay { display: none !important; }
       body { background: #FFF; color: #111; }
       .erp-content { padding: 20px; }
       .kpi-card, .erp-table-wrap { border: 1px solid #DDD; }
       .kpi-card .kpi-value, .panel-title { color: #111; }
       .erp-table th { background: #F5F5F5; color: #333; }
+      .badge-card-print { page-break-inside: avoid; page-break-after: always; }
+      @page { size: A6; margin: 8mm; }
     }
   </style>
 </head>
@@ -291,6 +293,14 @@
   <a class="sidebar-link" onclick="showAdmin('budget')"><img src="img/icons/icon-traiteur.png" alt=""> Budget</a>
   <a class="sidebar-link" onclick="showAdmin('postevent')"><img src="img/icons/icon-emails.png" alt=""> Post-event</a>
   <a class="sidebar-link" onclick="showAdmin('rubriques')"><img src="img/icons/icon-invitations.png" alt=""> Recommandations de Stéphanie</a>
+
+  <div class="sidebar-section">MODULES EVENEMENT</div>
+  <a class="sidebar-link" onclick="showAdmin('reservations')">&#127915; Reservations</a>
+  <a class="sidebar-link" onclick="showAdmin('badges')">&#127903; Badges & QR</a>
+  <a class="sidebar-link" onclick="showAdmin('conferenciers')">&#127908; Conferenciers</a>
+  <a class="sidebar-link" onclick="showAdmin('benevoles')">&#128101; Benevoles</a>
+  <a class="sidebar-link" onclick="showAdmin('logistique')">&#9992; Logistique</a>
+  <a class="sidebar-link" onclick="showAdmin('prestataire')">&#128232; Portail Prestataire</a>
 
   <div class="sidebar-section">ERP FINANCIER</div>
   <a class="sidebar-link" onclick="showAdmin('erp-dashboard')" style="color:#C9A84C;font-weight:700;">&#128202; Dashboard ERP</a>
@@ -539,6 +549,16 @@
 <div id="section-budget" class="section-page admin-section"></div>
 <div id="section-postevent" class="section-page admin-section"></div>
 <div id="section-rubriques" class="section-page admin-section"></div>
+
+<!-- ═══════════════════════════════════════════════════════
+     MODULES EVENEMENT (reservations, badges, conferenciers, benevoles, logistique, prestataire)
+     ═══════════════════════════════════════════════════════ -->
+<div id="section-reservations" class="section-page admin-section erp-section-page"></div>
+<div id="section-badges" class="section-page admin-section erp-section-page"></div>
+<div id="section-conferenciers" class="section-page admin-section erp-section-page"></div>
+<div id="section-benevoles" class="section-page admin-section erp-section-page"></div>
+<div id="section-logistique" class="section-page admin-section erp-section-page"></div>
+<div id="section-prestataire" class="section-page admin-section erp-section-page"></div>
 
 <!-- ═══════════════════════════════════════════════════════
      ERP SECTIONS (merged from erp.html)
@@ -873,6 +893,8 @@
 <script src="js/securite.js"></script>
 <script src="js/dashboard-stephanie.js"></script>
 <script src="js/simulateur-financier.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js"></script>
+<script src="js/modules-extra.js"></script>
 
 <script>
 /* ═══════════════════════════════════════════════════════
@@ -934,7 +956,7 @@ window.addEventListener('DOMContentLoaded', function() {
   }
   if (window.location.hash) {
     var h = window.location.hash.substring(1);
-    var adminSections = ['stephanie','simulateur','dashboard','participants','invitations','traiteur','salles','checkin','emails','checklist','speakers','staff','securite','budget','postevent','rubriques','erp-dashboard','erp-factures','erp-recettes','erp-rh','erp-budget','erp-sponsors','erp-export'];
+    var adminSections = ['stephanie','simulateur','dashboard','participants','invitations','traiteur','salles','checkin','emails','checklist','speakers','staff','securite','budget','postevent','rubriques','reservations','badges','conferenciers','benevoles','logistique','prestataire','erp-dashboard','erp-factures','erp-recettes','erp-rh','erp-budget','erp-sponsors','erp-export'];
     if (adminSections.indexOf(h) !== -1) {
       showAdmin(h);
     } else {
