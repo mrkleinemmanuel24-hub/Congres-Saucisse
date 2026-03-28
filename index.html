@@ -1432,6 +1432,10 @@ footer {
       </div>
     </div>
   </div>
+
+  <div style="text-align:center;padding:16px 0 8px;opacity:0.6;transition:opacity .2s" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=0.6">
+    <a onclick="openFeedback('thematiques')" style="cursor:pointer;font-size:13px;color:var(--accent,#c8a44e);text-decoration:none;font-family:var(--font)">✏️ Une thématique à ajouter ?</a>
+  </div>
 </section>
 
 <!-- ============================================
@@ -1909,6 +1913,10 @@ footer {
     </div>
 
   </div>
+
+  <div style="text-align:center;padding:16px 0 8px;opacity:0.6;transition:opacity .2s" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=0.6">
+    <a onclick="openFeedback('programme')" style="cursor:pointer;font-size:13px;color:var(--accent,#c8a44e);text-decoration:none;font-family:var(--font)">✏️ Ce programme vous convient ?</a>
+  </div>
 </section>
 
 <!-- ============================================
@@ -1938,6 +1946,10 @@ footer {
       <button class="btn btn-outline" onclick="showAllSpeakers()">Voir tous les intervenants</button>
     </div>
   </div>
+
+  <div style="text-align:center;padding:16px 0 8px;opacity:0.6;transition:opacity .2s" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=0.6">
+    <a onclick="openFeedback('intervenants')" style="cursor:pointer;font-size:13px;color:var(--accent,#c8a44e);text-decoration:none;font-family:var(--font)">✏️ Il manque quelqu'un ?</a>
+  </div>
 </section>
 
 <!-- ============================================
@@ -1951,6 +1963,10 @@ footer {
       <p>Annonces, coulisses, partenariats — suivez la preparation de la 1ere edition des Rencontres de Strasbourg.</p>
     </div>
     <div class="news-grid" id="newsGrid"></div>
+  </div>
+
+  <div style="text-align:center;padding:16px 0 8px;opacity:0.6;transition:opacity .2s" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=0.6">
+    <a onclick="openFeedback('actualites')" style="cursor:pointer;font-size:13px;color:var(--accent,#c8a44e);text-decoration:none;font-family:var(--font)">✏️ Une actualité à signaler ?</a>
   </div>
 </section>
 
@@ -2018,6 +2034,10 @@ footer {
         <div class="partner-item">Fondation de France</div>
       </div>
     </div>
+  </div>
+
+  <div style="text-align:center;padding:16px 0 8px;opacity:0.6;transition:opacity .2s" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=0.6">
+    <a onclick="openFeedback('partenaires')" style="cursor:pointer;font-size:13px;color:var(--accent,#c8a44e);text-decoration:none;font-family:var(--font)">✏️ Un partenaire à suggérer ?</a>
   </div>
 </section>
 
@@ -2106,6 +2126,10 @@ footer {
         </ul>
       </div>
     </div>
+  </div>
+
+  <div style="text-align:center;padding:16px 0 8px;opacity:0.6;transition:opacity .2s" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=0.6">
+    <a onclick="openFeedback('infos')" style="cursor:pointer;font-size:13px;color:var(--accent,#c8a44e);text-decoration:none;font-family:var(--font)">✏️ Une info manquante ?</a>
   </div>
 </section>
 
@@ -2839,6 +2863,15 @@ function renderFbHistory() {
   });
   html += '</div>';
   el.innerHTML = html;
+}
+
+
+function openFeedback(section) {
+  document.getElementById('feedbackPanel').style.display = 'flex';
+  if (section) {
+    var sel = document.getElementById('fb-section');
+    if (sel) sel.value = section;
+  }
 }
 
 </script>
