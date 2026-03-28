@@ -12,8 +12,8 @@ var SPA_INIT = {};
 SPA_INIT.accueil = function() {
   var container = document.getElementById('programme-summary');
   if (!container) return;
-  var dayNames = ['', 'Jeudi 12 juin', 'Vendredi 13 juin', 'Samedi 14 juin'];
-  var dayThemes = ['', 'Histoire & Filiere', 'International & Innovation', 'Ateliers & Cloture'];
+  var dayNames = ['', 'Mercredi 19 mars', 'Jeudi 20 mars', 'Vendredi 21 mars'];
+  var dayThemes = ['', 'Ouverture & Diplomatie', 'Climat & Securite', 'Medias & Cloture'];
   for (var d = 1; d <= 3; d++) {
     var sessions = CONGRES.getSessionsByDay(d);
     var html = '<div class="day-summary"><h3>' + dayNames[d] + '</h3><p style="font-size:.8rem;color:var(--text-muted);margin-bottom:12px;">' + dayThemes[d] + '</p><ul>';
@@ -36,7 +36,25 @@ SPA_INIT.accueil = function() {
    ══════════════════════════════════════ */
 SPA_INIT.programme = function() {
   var el = document.getElementById('section-programme');
-  el.innerHTML = '<section class="section"><span class="section-label section-label-green">Programme</span><h1 class="section-title"><img src="img/icons/icon-programme.png" alt="Programme" style="width:48px;height:48px;border-radius:12px;object-fit:contain;vertical-align:middle" title="Programme du congres"> Programme complet</h1><p class="section-subtitle">32 sessions sur 3 jours — conferences, ateliers, degustations et tables rondes.</p><div class="tabs"><button class="tab-btn active" onclick="SPA_PROG.showDay(1)">Jour 1 — Jeu. 12 juin</button><button class="tab-btn" onclick="SPA_PROG.showDay(2)">Jour 2 — Ven. 13 juin</button><button class="tab-btn" onclick="SPA_PROG.showDay(3)">Jour 3 — Sam. 14 juin</button></div><div class="filters" id="prog-filters"></div><div id="prog-sessions-list"></div><div class="text-center mt-3" style="padding:20px;"><p style="color:var(--text-muted);font-size:.82rem;">Cliquez sur le coeur pour ajouter a votre programme personnel.</p></div></section>';
+  el.innerHTML = '<section class="section"><span class="section-label section-label-green">Programme</span><h1 class="section-title"><img src="img/icons/icon-programme.png" alt="Programme" style="width:48px;height:48px;border-radius:12px;object-fit:contain;vertical-align:middle" title="Programme RVGS 2027"> Programme complet</h1><p class="section-subtitle">100+ evenements sur 4 jours — conferences, tables rondes, projections, expositions et debats.</p>' +
+    '<div style="background:linear-gradient(135deg,rgba(212,168,67,.08),rgba(220,38,38,.06));border:1px solid rgba(212,168,67,.2);border-radius:16px;padding:20px;margin-bottom:24px;">' +
+      '<h3 style="color:#C9A84C;margin-bottom:12px;">Evenements speciaux</h3>' +
+      '<div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">' +
+        '<div style="background:rgba(0,0,0,.2);border-radius:12px;padding:16px;border-left:4px solid #D4A843;">' +
+          '<div style="font-size:.72rem;color:#D4A843;font-weight:700;margin-bottom:4px;">VENDREDI 21 MARS — 19h30</div>' +
+          '<div style="font-weight:800;color:#FFF;margin-bottom:4px;">Soiree de Gala</div>' +
+          '<div style="font-size:.82rem;color:#B8B8D0;">Hotel de Ville de Strasbourg — 120 convives</div>' +
+          '<div style="font-size:.78rem;color:#9B978F;margin-top:6px;">Cocktail, diner de gala, remise du Prix RVGS, concert du Conservatoire</div>' +
+        '</div>' +
+        '<div style="background:rgba(0,0,0,.2);border-radius:12px;padding:16px;border-left:4px solid #3B82F6;">' +
+          '<div style="font-size:.72rem;color:#3B82F6;font-weight:700;margin-bottom:4px;">SAMEDI 22 MARS — 10h-12h</div>' +
+          '<div style="font-weight:800;color:#FFF;margin-bottom:4px;">Grand Finale — Journee mondiale de l\'eau</div>' +
+          '<div style="font-size:.82rem;color:#B8B8D0;">Parlement europeen</div>' +
+          '<div style="font-size:.78rem;color:#9B978F;margin-top:6px;">Projection Water Wars, table ronde, Declaration de Strasbourg sur l\'eau</div>' +
+        '</div>' +
+      '</div>' +
+    '</div>' +
+    '<div class="tabs"><button class="tab-btn active" onclick="SPA_PROG.showDay(1)">Jour 1 — Mer. 19 mars</button><button class="tab-btn" onclick="SPA_PROG.showDay(2)">Jour 2 — Jeu. 20 mars</button><button class="tab-btn" onclick="SPA_PROG.showDay(3)">Jour 3 — Ven. 21 mars</button></div><div class="filters" id="prog-filters"></div><div id="prog-sessions-list"></div><div class="text-center mt-3" style="padding:20px;"><p style="color:var(--text-muted);font-size:.82rem;">Cliquez sur le coeur pour ajouter a votre programme personnel.</p></div></section>';
 
   window.SPA_PROG = {
     currentDay: 1, currentTheme: null, currentSalle: null,
@@ -153,8 +171,8 @@ document.addEventListener('keydown', function(e) { if (e.key === 'Escape') { clo
    ══════════════════════════════════════ */
 SPA_INIT.inscription = function() {
   var el = document.getElementById('section-inscription');
-  el.innerHTML = '<section class="section" style="max-width:800px;"><span class="section-label section-label-green">Inscription</span><h1 class="section-title"><img src="img/icons/icon-inscription.png" alt="Inscription" style="width:48px;height:48px;border-radius:12px;object-fit:contain;vertical-align:middle"> Inscription</h1><p class="section-subtitle">Reservez votre place au Congres de la Saucisse 2026.</p><div class="stepper"><div class="step-indicator active" data-step="1">1. Infos</div><div class="step-indicator" data-step="2">2. Pass</div><div class="step-indicator" data-step="3">3. Sessions</div><div class="step-indicator" data-step="4">4. Repas</div><div class="step-indicator" data-step="5">5. Hotel</div><div class="step-indicator" data-step="6">6. Recap</div><div class="step-indicator" data-step="7">7. OK</div></div>' +
-    '<div class="step-content active" data-step="1"><h2 style="font-size:1.1rem;margin-bottom:20px;color:#FFF;">Informations personnelles</h2><div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;"><div class="form-group"><label>Prenom *</label><input type="text" id="f-prenom" placeholder="Votre prenom"></div><div class="form-group"><label>Nom *</label><input type="text" id="f-nom" placeholder="Votre nom"></div></div><div class="form-group"><label>Email *</label><input type="email" id="f-email" placeholder="votre@email.com"></div><div class="form-group"><label>Telephone</label><input type="tel" id="f-tel" placeholder="06 12 34 56 78"></div><div class="form-group"><label>Entreprise</label><input type="text" id="f-entreprise" placeholder="Nom entreprise"></div><div class="form-group"><label>Regime alimentaire</label><select id="f-regime" style="width:100%;padding:10px;border-radius:10px;border:1px solid rgba(255,255,255,.08);background:#252547;color:#FFF;font-size:.88rem;"><option value="standard">Standard</option><option value="vegetarien">Vegetarien</option><option value="vegan">Vegan</option><option value="sans-gluten">Sans gluten</option><option value="halal">Halal</option></select></div><label style="display:flex;align-items:flex-start;gap:8px;font-size:.82rem;color:#B8B8D0;margin-top:16px;"><input type="checkbox" id="f-rgpd" style="width:18px;height:18px;accent-color:#2AD783;flex-shrink:0;margin-top:2px;"> J\'accepte le traitement de mes donnees (RGPD) *</label><div style="text-align:right;margin-top:20px;"><button class="btn btn-green" onclick="SPA_REG.nextStep(2)">Suivant</button></div></div>' +
+  el.innerHTML = '<section class="section" style="max-width:800px;"><span class="section-label section-label-green">Inscription</span><h1 class="section-title"><img src="img/icons/icon-inscription.png" alt="Inscription" style="width:48px;height:48px;border-radius:12px;object-fit:contain;vertical-align:middle"> Inscription</h1><p class="section-subtitle">Reservez votre place aux Rendez-vous Geopolitiques de Strasbourg 2027.</p><div class="stepper"><div class="step-indicator active" data-step="1">1. Infos</div><div class="step-indicator" data-step="2">2. Pass</div><div class="step-indicator" data-step="3">3. Sessions</div><div class="step-indicator" data-step="4">4. Repas</div><div class="step-indicator" data-step="5">5. Hotel</div><div class="step-indicator" data-step="6">6. Recap</div><div class="step-indicator" data-step="7">7. OK</div></div>' +
+    '<div class="step-content active" data-step="1"><h2 style="font-size:1.1rem;margin-bottom:20px;color:#FFF;">Informations personnelles</h2><div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;"><div class="form-group"><label>Prenom *</label><input type="text" id="f-prenom" placeholder="Votre prenom"></div><div class="form-group"><label>Nom *</label><input type="text" id="f-nom" placeholder="Votre nom"></div></div><div class="form-group"><label>Email *</label><input type="email" id="f-email" placeholder="votre@email.com"></div><div class="form-group"><label>Telephone</label><input type="tel" id="f-tel" placeholder="06 12 34 56 78"></div><div class="form-group"><label>Entreprise</label><input type="text" id="f-entreprise" placeholder="Nom entreprise"></div><div class="form-group"><label>Regime alimentaire</label><select id="f-regime" style="width:100%;padding:10px;border-radius:10px;border:1px solid rgba(255,255,255,.08);background:#252547;color:#FFF;font-size:.88rem;"><option value="standard">Normal</option><option value="vegetarien">Vegetarien</option><option value="vegan">Vegan</option><option value="sans-gluten">Sans gluten</option><option value="halal">Halal</option><option value="casher">Casher</option><option value="autre">Autre</option></select></div><div class="form-group"><label>Allergies</label><input type="text" id="f-allergies" placeholder="Arachides, lactose, gluten..." style="width:100%;padding:10px;border-radius:10px;border:1px solid rgba(255,255,255,.08);background:#252547;color:#FFF;font-size:.88rem;"></div><label style="display:flex;align-items:flex-start;gap:8px;font-size:.82rem;color:#B8B8D0;margin-top:16px;"><input type="checkbox" id="f-rgpd" style="width:18px;height:18px;accent-color:#2AD783;flex-shrink:0;margin-top:2px;"> J\'accepte le traitement de mes donnees (RGPD) *</label><div style="text-align:right;margin-top:20px;"><button class="btn btn-green" onclick="SPA_REG.nextStep(2)">Suivant</button></div></div>' +
     '<div class="step-content" data-step="2"><h2 style="font-size:1.1rem;margin-bottom:20px;color:#FFF;">Choisissez votre pass</h2><div class="pass-grid" id="ins-pass-grid"></div><div style="display:flex;justify-content:space-between;margin-top:20px;"><button class="btn btn-outline" onclick="SPA_REG.nextStep(1)">Retour</button><button class="btn btn-green" onclick="SPA_REG.nextStep(3)">Suivant</button></div></div>' +
     '<div class="step-content" data-step="3"><h2 style="font-size:1.1rem;margin-bottom:20px;color:#FFF;">Vos sessions</h2><div class="tabs" style="margin-bottom:16px;"><button class="tab-btn active" onclick="SPA_REG.showSessionDay(1,this)">Jour 1</button><button class="tab-btn" onclick="SPA_REG.showSessionDay(2,this)">Jour 2</button><button class="tab-btn" onclick="SPA_REG.showSessionDay(3,this)">Jour 3</button></div><div id="ins-session-choices"></div><div style="display:flex;justify-content:space-between;margin-top:20px;"><button class="btn btn-outline" onclick="SPA_REG.nextStep(2)">Retour</button><button class="btn btn-green" onclick="SPA_REG.nextStep(4)">Suivant</button></div></div>' +
     '<div class="step-content" data-step="4"><h2 style="font-size:1.1rem;margin-bottom:20px;color:#FFF;">Option repas</h2><div id="ins-repas-choices"></div><div style="display:flex;justify-content:space-between;margin-top:20px;"><button class="btn btn-outline" onclick="SPA_REG.nextStep(3)">Retour</button><button class="btn btn-green" onclick="SPA_REG.nextStep(5)">Suivant</button></div></div>' +
@@ -192,7 +210,7 @@ SPA_INIT.inscription = function() {
     initHotels: function() { var self=this,html=''; CONGRES.HOTELS.forEach(function(h){var sel=self.reg.hotel===h.id;html+='<div class="hotel-option'+(sel?' selected':'')+'" onclick="SPA_REG.selectHotel('+h.id+')" data-hotel="'+h.id+'"><div style="flex:1;"><strong style="color:#FFF;">'+h.nom+'</strong><br><span style="font-size:.82rem;color:#7878A0;">'+h.distance+'</span></div><div style="text-align:right;"><div style="font-size:1.1rem;font-weight:800;color:#2AD783;">'+h.prix+' &euro;</div><div style="font-size:.75rem;color:#7878A0;">/nuit</div></div></div>';}); document.getElementById('ins-hotel-choices').innerHTML=html; },
     selectHotel: function(id) { this.reg.hotel=id; document.querySelectorAll('.hotel-option').forEach(function(e){e.classList.remove('selected');}); if(id===null){document.getElementById('hotel-none').classList.add('selected');}else{var e=document.querySelector('[data-hotel="'+id+'"]');if(e)e.classList.add('selected');document.getElementById('hotel-none').classList.remove('selected');} },
     buildRecap: function() { var pass=CONGRES.getPass(this.reg.pass),repas=CONGRES.REPAS_OPTIONS.find(function(r){return r.id===SPA_REG.reg.repas;}),hotel=this.reg.hotel?CONGRES.getHotel(this.reg.hotel):null;var pp=pass?pass.prix:0,rp=repas?repas.prix*3:0,hp=hotel?hotel.prix*3:0;if(this.reg.pass==='platinum')hp=0;var total=pp+rp+hp;var html='<div class="recap-section"><h4>Informations</h4><div class="recap-row"><span>Nom</span><span style="color:#FFF;">'+this.reg.prenom+' '+this.reg.nom+'</span></div><div class="recap-row"><span>Email</span><span style="color:#FFF;">'+this.reg.email+'</span></div></div><div class="recap-section"><h4>Pass</h4><div class="recap-row"><span>'+(pass?pass.nom:'')+'</span><span style="color:#FFF;">'+pp+' &euro;</span></div></div><div class="recap-section"><h4>Sessions ('+this.reg.sessions.length+')</h4>';this.reg.sessions.forEach(function(sid){var s=CONGRES.getSession(sid);if(s)html+='<div class="recap-row"><span style="color:#B8B8D0;">J'+s.jour+' '+s.debut+' — '+s.titre+'</span><span></span></div>';});html+='</div><div class="recap-total">Total : '+total+' &euro;</div><p style="font-size:.78rem;color:#7878A0;text-align:center;">Mode demo.</p>';document.getElementById('ins-recap-content').innerHTML=html; },
-    confirm: function() { var id='INS-'+String(Date.now()).slice(-6);var ins={id:id,nom:this.reg.nom,prenom:this.reg.prenom,email:this.reg.email,tel:this.reg.tel,entreprise:this.reg.entreprise,pass:this.reg.pass,sessions:this.reg.sessions,repas:this.reg.repas,hotel:this.reg.hotel,jours:[1,2,3],regime:this.reg.regime,rgpd:this.reg.rgpd,statut:'confirmed',date:new Date().toISOString().split('T')[0]};var list=CONGRES.loadInscriptions();list.push(ins);CONGRES.saveInscriptions(list);document.getElementById('ins-badge-container').innerHTML=generateBadge(ins);this.nextStep(7); }
+    confirm: function() { var id='RVGS-'+String(Date.now()).slice(-6);var allergiesVal='';try{allergiesVal=document.getElementById('f-allergies').value.trim();}catch(e){}var ins={id:id,nom:this.reg.nom,prenom:this.reg.prenom,email:this.reg.email,tel:this.reg.tel,entreprise:this.reg.entreprise,pass:this.reg.pass,sessions:this.reg.sessions,repas:this.reg.repas,hotel:this.reg.hotel,jours:[1,2,3],regime:this.reg.regime,allergies:allergiesVal,rgpd:this.reg.rgpd,statut:'confirmed',date:new Date().toISOString().split('T')[0],checkedIn:false,scanTime:null};var list=CONGRES.loadInscriptions();list.push(ins);CONGRES.saveInscriptions(list);document.getElementById('ins-badge-container').innerHTML=generateBadge(ins);this.nextStep(7); }
   };
   SPA_REG.nextStep(1);
 };
@@ -209,12 +227,12 @@ SPA_INIT.congres = function() {
   });
 
   el.innerHTML = '<section class="section">' +
-    '<span class="section-label section-label-green">Le Congres</span>' +
-    '<h1 class="section-title"><img src="img/icons/icon-saucisse.png" alt="" style="width:48px;height:48px;border-radius:12px;object-fit:contain;vertical-align:middle"> Le Congres de la Saucisse</h1>' +
-    '<p class="section-subtitle">Tout savoir sur le plus grand evenement europeen dedie a la saucisse artisanale.</p>' +
-    '<div class="congress-about"><div class="congress-about-text"><h2>A propos</h2><p>Le Congres de la Saucisse est ne d\'une idee simple : reunir pour la premiere fois en un seul lieu tous les acteurs de la saucisse artisanale — charcutiers, chercheurs, chefs, eleveurs, innovateurs et passionnes.</p><p>Organise au coeur de Strasbourg, capitale europeenne et berceau de la knack, cet evenement inedit rassemble 22 experts de 8 pays pour 3 jours de conferences, ateliers pratiques, degustations et debats autour de l\'avenir de la charcuterie.</p><p>Le Congres est porte par l\'Institut Francais de la Charcuterie-Cuisine (IFCC), en partenariat avec la Ville de Strasbourg, la Region Grand Est et l\'INRAE.</p></div><div class="congress-sidebar-info"><h3>Informations cles</h3><div class="info-row"><span class="info-label">Edition</span><span class="info-value">1ere edition</span></div><div class="info-row"><span class="info-label">Dates</span><span class="info-value">12 — 14 juin 2026</span></div><div class="info-row"><span class="info-label">Lieu</span><span class="info-value">Palais des Congres</span></div><div class="info-row"><span class="info-label">Ville</span><span class="info-value">Strasbourg</span></div><div class="info-row"><span class="info-label">Intervenants</span><span class="info-value">22 experts</span></div><div class="info-row"><span class="info-label">Sessions</span><span class="info-value">32 sessions</span></div><div class="info-row"><span class="info-label">Capacite</span><span class="info-value">1 800 places</span></div><div class="info-row"><span class="info-label">Pays</span><span class="info-value">8 pays representes</span></div></div></div>' +
+    '<span class="section-label section-label-green">Le Festival</span>' +
+    '<h1 class="section-title"><img src="img/icons/icon-saucisse.png" alt="" style="width:48px;height:48px;border-radius:12px;object-fit:contain;vertical-align:middle"> Les Rendez-vous Geopolitiques de Strasbourg</h1>' +
+    '<p class="section-subtitle">Le festival international de geopolitique — Les batailles de l\'eau.</p>' +
+    '<div class="congress-about"><div class="congress-about-text"><h2>A propos</h2><p>Les Rendez-vous Geopolitiques de Strasbourg sont nes d\'une conviction : dans un monde en mutation, il est urgent de s\'informer, de comprendre et de debattre. Ce festival international de geopolitique rassemble geopolitologues, diplomates, journalistes, militaires, historiens et artistes.</p><p>Organise au coeur de Strasbourg, ville europeenne par excellence, siege du Parlement europeen et du Conseil de l\'Europe, le festival propose 100 evenements en 4 jours : conferences, tables rondes, projections, expositions et ateliers.</p><p>Le theme 2027 : les batailles de l\'eau. Des nappes phreatiques aux oceans, l\'eau trace de nouvelles lignes de fracture geopolitiques.</p></div><div class="congress-sidebar-info"><h3>Informations cles</h3><div class="info-row"><span class="info-label">Edition</span><span class="info-value">2027</span></div><div class="info-row"><span class="info-label">Dates</span><span class="info-value">19 — 22 mars 2027</span></div><div class="info-row"><span class="info-label">Lieu</span><span class="info-value">Palais de la Musique et des Congres</span></div><div class="info-row"><span class="info-label">Ville</span><span class="info-value">Strasbourg</span></div><div class="info-row"><span class="info-label">Intervenants</span><span class="info-value">80+ experts</span></div><div class="info-row"><span class="info-label">Evenements</span><span class="info-value">100+</span></div><div class="info-row"><span class="info-label">Capacite</span><span class="info-value">2 500 places</span></div><div class="info-row"><span class="info-label">Pays invite</span><span class="info-value">Danemark / Estonie</span></div></div></div>' +
     '<div class="section-divider" style="margin:40px 0;"></div>' +
-    '<span class="section-label section-label-green">Thematiques</span><h2 class="section-title">Les thematiques 2026</h2><p class="section-subtitle">6 axes de reflexion pour couvrir tous les aspects de la saucisse artisanale.</p>' +
+    '<span class="section-label section-label-green">Thematiques</span><h2 class="section-title">Les thematiques 2027</h2><p class="section-subtitle">6 axes de reflexion pour comprendre les enjeux geopolitiques contemporains.</p>' +
     '<div class="thematics-grid"><div class="thematic-card" data-theme="science"><div class="thematic-card-icon">&#128300;</div><h3>Science &amp; Nutrition</h3><p>Recherche, ferments lactiques, impact nutritionnel, etudes comparatives artisanal vs industriel.</p></div><div class="thematic-card" data-theme="artisanat"><div class="thematic-card-icon">&#127981;</div><h3>Artisanat &amp; Savoir-faire</h3><p>Fabrication, fumage, maturation, terroir, Label Rouge, traditions ancestrales.</p></div><div class="thematic-card" data-theme="international"><div class="thematic-card-icon">&#127758;</div><h3>International</h3><p>Bratwurst, mortadella, chorizo, bangers, arabiki — les saucisses du monde entier.</p></div><div class="thematic-card" data-theme="histoire"><div class="thematic-card-icon">&#128220;</div><h3>Histoire &amp; Patrimoine</h3><p>De Rome a Strasbourg, 3000 ans de charcuterie. Christkindelsmaerik et musee.</p></div><div class="thematic-card" data-theme="gastronomie"><div class="thematic-card-icon">&#127869;</div><h3>Gastronomie &amp; Degustation</h3><p>Accords biere-saucisse, haute gastronomie charcutiere, recettes de chefs.</p></div><div class="thematic-card" data-theme="business"><div class="thematic-card-icon">&#128188;</div><h3>Business &amp; Innovation</h3><p>FoodTech, IA, saucisse vegetale hybride, food design, tendances marche.</p></div></div>' +
     '<div class="section-divider" style="margin:40px 0;"></div>' +
     '<span class="section-label section-label-gold">Prix</span><h2 class="section-title">Les prix 2026</h2><p class="section-subtitle">3 prix decernes lors de la ceremonie de cloture du samedi 14 juin.</p>' +
@@ -257,7 +275,7 @@ SPA_INIT.infos = function() {
     hotelsHtml += '<div class="hotel-card"><h4>' + h.nom + ' <span style="color:#FFD300;font-size:.8rem;">' + stars + '</span></h4><div class="hotel-meta">' + h.adresse + ' &middot; ' + h.distance + ' du Palais</div><div class="hotel-price">' + h.prix + ' &euro; / nuit</div></div>';
   });
 
-  el.innerHTML = '<section class="section"><span class="section-label section-label-green">Pratique</span><h1 class="section-title">Infos pratiques</h1><p class="section-subtitle">Tout pour preparer votre venue au Congres de la Saucisse 2026.</p>' +
+  el.innerHTML = '<section class="section"><span class="section-label section-label-green">Pratique</span><h1 class="section-title">Infos pratiques</h1><p class="section-subtitle">Tout pour preparer votre venue aux RVGS 2027.</p>' +
     '<div class="info-section"><h2><img src="img/icons/icon-plan.png" alt="" style="width:48px;height:48px;border-radius:12px;object-fit:contain;vertical-align:middle"> Plan du quartier</h2><div id="spa-map" class="map-container" style="margin-bottom:12px;"></div></div>' +
     '<div class="info-section"><h2><img src="img/icons/icon-transport.png" alt="" style="width:48px;height:48px;border-radius:12px;object-fit:contain;vertical-align:middle"> Venir a Strasbourg</h2><div class="transport-grid"><div class="transport-card"><h3>&#128645; TGV</h3><p><strong>Paris &rarr; Strasbourg : 1h46</strong><br>Gare de l\'Est. Tram B arret Wacken (20 min depuis la gare). Trains directs depuis Lyon, Marseille, Lille.</p></div><div class="transport-card"><h3>&#9992; Avion</h3><p><strong>Aeroport Entzheim (SXB)</strong><br>Navette train 9 min vers centre. Vols directs depuis 40+ villes europeennes.</p></div><div class="transport-card"><h3>&#128663; Voiture</h3><p><strong>A4 depuis Paris (4h30)</strong><br>Parking Wacken 800 places, 12 &euro;/jour. A35 depuis Colmar/Bale.</p></div><div class="transport-card"><h3>&#128651; Tram</h3><p>Lignes <strong>B</strong> et <strong>E</strong>, arret <strong>Wacken</strong> — directement devant le Palais des Congres.</p></div></div></div>' +
     '<div class="info-section"><h2><img src="img/icons/icon-hotel.png" alt="" style="width:48px;height:48px;border-radius:12px;object-fit:contain;vertical-align:middle"> Se loger</h2><p style="color:var(--text-dim);font-size:.88rem;margin-bottom:16px;">8 hotels a proximite du Palais des Congres, de 85 &euro; a 220 &euro;/nuit. Tarifs negocies pour les congressistes.</p><div class="hotel-grid">' + hotelsHtml + '</div></div>' +
@@ -278,7 +296,7 @@ SPA_INIT.presse = function() {
     '<div class="press-section"><h2>Communiques de presse</h2><div class="press-doc"><div class="doc-icon">&#128196;</div><div class="doc-info"><h4>Communique de lancement</h4><p>PDF &middot; 2.4 Mo &middot; 15 mars 2026</p></div><div class="doc-dl"><button class="btn btn-outline btn-xs" onclick="alert(\'Telechargement demo\')">Telecharger</button></div></div><div class="press-doc"><div class="doc-icon">&#128196;</div><div class="doc-info"><h4>Programme detaille</h4><p>PDF &middot; 4.1 Mo &middot; 20 mars 2026</p></div><div class="doc-dl"><button class="btn btn-outline btn-xs" onclick="alert(\'Telechargement demo\')">Telecharger</button></div></div><div class="press-doc"><div class="doc-icon">&#128196;</div><div class="doc-info"><h4>Biographies des intervenants</h4><p>PDF &middot; 3.2 Mo &middot; 22 mars 2026</p></div><div class="doc-dl"><button class="btn btn-outline btn-xs" onclick="alert(\'Telechargement demo\')">Telecharger</button></div></div></div>' +
     '<div class="press-section"><h2>Kit medias</h2><div class="media-kit"><div class="media-item"><div class="icon">&#128247;</div><h4>Photos HD</h4><p>25 photos, ZIP 45 Mo</p></div><div class="media-item"><div class="icon">&#127912;</div><h4>Logos</h4><p>PNG, SVG, AI</p></div><div class="media-item"><div class="icon">&#127909;</div><h4>Teaser video</h4><p>MP4, 30 sec</p></div><div class="media-item"><div class="icon">&#128200;</div><h4>Infographie</h4><p>Chiffres cles 2026</p></div></div></div>' +
     '<div class="press-section"><h2>Accreditation presse</h2><div class="card" style="padding:24px;"><form id="press-form" onsubmit="SPA_PRESSE.submit(event)"><div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;"><div class="form-group"><label>Prenom *</label><input type="text" id="p-prenom" required></div><div class="form-group"><label>Nom *</label><input type="text" id="p-nom" required></div></div><div class="form-group"><label>Email *</label><input type="email" id="p-email" required></div><div class="form-group"><label>Media *</label><input type="text" id="p-media" required></div><button type="submit" class="btn btn-green" style="width:100%;">Demander l\'accreditation</button></form><div id="press-success" class="hidden" style="text-align:center;padding:24px;"><h3 style="color:#2AD783;">Demande envoyee ! (demo)</h3><p style="color:#B8B8D0;font-size:.88rem;margin-top:8px;">Vous recevrez une confirmation sous 48h.</p></div></div></div>' +
-    '<div class="press-section"><h2>Contact presse</h2><div class="contact-press"><p style="font-size:.9rem;line-height:1.8;color:#B8B8D0;"><strong style="color:#FFF;">Monique Pfleger</strong><br>Responsable communication<br><br><span style="color:#2AD783;">presse@congres-saucisse.fr</span><br>03 88 37 67 67 (poste 3)</p></div></div>' +
+    '<div class="press-section"><h2>Contact presse</h2><div class="contact-press"><p style="font-size:.9rem;line-height:1.8;color:#B8B8D0;"><strong style="color:#FFF;">Service Communication RVGS</strong><br>Relations presse et medias<br><br><span style="color:#2AD783;">presse@rvgs-strasbourg.fr</span><br>03 88 37 67 67</p></div></div>' +
   '</section>';
   window.SPA_PRESSE = { submit: function(e) { e.preventDefault(); document.getElementById('press-form').classList.add('hidden'); document.getElementById('press-success').classList.remove('hidden'); } };
 };
@@ -293,10 +311,10 @@ function adminWrap(title, icon, inner) {
 SPA_INIT.dashboard = function() {
   var el = document.getElementById('section-dashboard');
   var stats = CONGRES.getStats(), ins = CONGRES.loadInscriptions();
-  var pn = {standard:'Standard',bronze:'VIP Bronze',gold:'VIP Gold',platinum:'VIP Platinum',staff:'Staff'};
+  var pn = {vip:'VIP',speaker:'Speaker',invite:'Invite',spectateur:'Spectateur',standard:'Standard',bronze:'VIP Bronze',gold:'VIP Gold',platinum:'VIP Platinum',staff:'Staff'};
   var sh = '<div class="stat-card"><div class="stat-value">'+stats.total+'</div><div class="stat-label">Inscrits</div></div><div class="stat-card"><div class="stat-value">'+stats.revenue.toLocaleString('fr-FR')+' &euro;</div><div class="stat-label">Revenus</div></div>';
   Object.keys(pn).forEach(function(k){sh+='<div class="stat-card"><div class="stat-value">'+(stats.byPass[k]||0)+'</div><div class="stat-label">'+pn[k]+'</div></div>';});
-  var pc = {standard:'#9CA3AF',bronze:'#CD7F32',gold:'#FFD300',platinum:'#C8C8DC',staff:'#DC2626'};
+  var pc = {vip:'#DC2626',speaker:'#F59E0B',invite:'#3B82F6',spectateur:'#9CA3AF',standard:'#9CA3AF',bronze:'#CD7F32',gold:'#FFD300',platinum:'#C8C8DC',staff:'#DC2626'};
   var maxP = Math.max.apply(null,Object.values(stats.byPass).concat([1]));
   var ph='';Object.keys(pn).forEach(function(k){var v=stats.byPass[k]||0;ph+='<div class="chart-bar"><div class="chart-bar-label">'+pn[k]+'</div><div class="chart-bar-track"><div class="chart-bar-fill" style="width:'+(v/maxP*100)+'%;background:'+pc[k]+';">'+v+'</div></div></div>';});
   var ah='';CONGRES.SESSIONS.forEach(function(s){var sl=CONGRES.getSalle(s.salle);if(sl&&(s.inscrits/sl.capacite)>=.8){var p=Math.round(s.inscrits/sl.capacite*100);ah+='<div style="padding:8px 12px;background:rgba(245,158,11,.06);border-radius:8px;margin-bottom:6px;font-size:.82rem;"><span style="color:'+(p>=100?'#DC2626':'#F59E0B')+';font-weight:700;">'+p+'%</span> '+sl.nom+' — '+s.titre+'</div>';}});
@@ -306,7 +324,7 @@ SPA_INIT.dashboard = function() {
 
 SPA_INIT.participants = function() {
   var el = document.getElementById('section-participants');
-  el.innerHTML = adminWrap('Participants','icon-participants.png','<div class="search-bar"><input type="text" id="adm-search" placeholder="Rechercher..." oninput="SPA_PART.render()"><select id="adm-fpass" onchange="SPA_PART.render()"><option value="">Tous passes</option><option value="standard">Standard</option><option value="bronze">Bronze</option><option value="gold">Gold</option><option value="platinum">Platinum</option></select><button onclick="SPA_PART.csv()">Export CSV</button></div><div id="adm-cnt" style="font-size:.82rem;color:#9B978F;margin-bottom:12px;"></div><div class="admin-table-wrap"><table class="admin-table"><thead><tr><th>ID</th><th>Nom</th><th>Email</th><th>Pass</th><th>Sessions</th><th>Statut</th></tr></thead><tbody id="adm-ptable"></tbody></table></div>');
+  el.innerHTML = adminWrap('Participants','icon-participants.png','<div class="search-bar"><input type="text" id="adm-search" placeholder="Rechercher..." oninput="SPA_PART.render()"><select id="adm-fpass" onchange="SPA_PART.render()"><option value="">Tous passes</option><option value="vip">VIP</option><option value="speaker">Speaker</option><option value="invite">Invite</option><option value="spectateur">Spectateur</option></select><button onclick="SPA_PART.csv()">Export CSV</button></div><div id="adm-cnt" style="font-size:.82rem;color:#9B978F;margin-bottom:12px;"></div><div class="admin-table-wrap"><table class="admin-table"><thead><tr><th>ID</th><th>Nom</th><th>Email</th><th>Pass</th><th>Sessions</th><th>Statut</th></tr></thead><tbody id="adm-ptable"></tbody></table></div>');
   window.SPA_PART={render:function(){var ins=CONGRES.loadInscriptions(),s=document.getElementById('adm-search').value.toLowerCase(),pf=document.getElementById('adm-fpass').value;var f=ins.filter(function(i){if(s&&!(i.nom.toLowerCase().includes(s)||i.prenom.toLowerCase().includes(s)||i.email.toLowerCase().includes(s)))return false;if(pf&&i.pass!==pf)return false;return true;});document.getElementById('adm-cnt').textContent=f.length+' participant(s)';var h='';f.forEach(function(i){var p=CONGRES.getPass(i.pass);h+='<tr><td>'+i.id+'</td><td><strong>'+i.prenom+' '+i.nom+'</strong></td><td>'+i.email+'</td><td><span class="tag tag-'+i.pass+'">'+(p?p.nom:i.pass)+'</span></td><td>'+(i.sessions?i.sessions.length:0)+'</td><td><span class="tag tag-'+i.statut+'">'+i.statut+'</span></td></tr>';});document.getElementById('adm-ptable').innerHTML=h;},csv:function(){var ins=CONGRES.loadInscriptions(),csv='ID,Prenom,Nom,Email,Pass,Statut\n';ins.forEach(function(i){csv+=[i.id,i.prenom,i.nom,i.email,i.pass,i.statut].join(',')+'\n';});var b=new Blob([csv],{type:'text/csv'});var a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='participants.csv';a.click();}};
   SPA_PART.render();
 };
@@ -474,10 +492,19 @@ SPA_INIT.checkin = function() {
         qr = generateQRSVG(f.id + '-' + f.nom + '-' + f.pass, 160);
       }
 
+      // Use RVGS badge generator if available
+      if (typeof generateRVGSBadge === 'function') {
+        var badgeHtml = generateRVGSBadge(f);
+        badgeEl.innerHTML = badgeHtml +
+          '<div style="margin-top:16px;text-align:center;">' +
+          '<button onclick="SPA_CI.printBadge()" style="padding:10px 24px;border-radius:10px;background:#C9A84C;color:#111;font-weight:700;border:none;cursor:pointer;font-size:.88rem;">Imprimer le badge</button>' +
+          '</div>';
+        return;
+      }
       var html = '<div style="background:#FFF;border-radius:20px;padding:32px 24px;max-width:400px;margin:0 auto;text-align:center;position:relative;" id="badge-print-area">' +
         '<div style="background:#171C22;padding:14px;border-radius:12px;margin-bottom:16px;">' +
-          '<div style="color:#FFD300;font-size:1rem;font-weight:800;">Le Congres de la Saucisse</div>' +
-          '<div style="color:#B1B9C3;font-size:.72rem;">Strasbourg 2026 — Palais des Congres</div>' +
+          '<div style="color:#FFD300;font-size:1rem;font-weight:800;">RVGS 2027</div>' +
+          '<div style="color:#B1B9C3;font-size:.72rem;">Strasbourg — Palais de la Musique et des Congres</div>' +
         '</div>' +
         '<div style="width:72px;height:72px;border-radius:50%;background:linear-gradient(135deg,#2AD783,#FFD300);margin:0 auto 10px;display:flex;align-items:center;justify-content:center;font-size:1.6rem;font-weight:800;color:#111;">' +
           f.prenom[0] + f.nom[0] +
@@ -513,7 +540,12 @@ SPA_INIT.checkin = function() {
       if(!f){el.innerHTML='<div style="padding:20px;background:rgba(220,38,38,.08);border:2px solid #DC2626;border-radius:16px;"><h3 style="color:#DC2626;text-align:center;">Badge inconnu</h3></div>';document.getElementById('adm-ci-badge').innerHTML='';return;}
       if(this.ck.indexOf(f.id)!==-1){el.innerHTML='<div style="padding:20px;background:rgba(220,38,38,.08);border:2px solid #DC2626;border-radius:16px;"><h3 style="color:#DC2626;text-align:center;">Deja scanne</h3></div>';this.showBadge(f.id);return;}
       this.ck.push(f.id);localStorage.setItem('congres_checkins',JSON.stringify(this.ck));
-      el.innerHTML='<div style="padding:20px;background:rgba(34,197,94,.08);border:2px solid #22C55E;border-radius:16px;"><h3 style="color:#22C55E;text-align:center;">&#10003; ' +f.prenom+' '+f.nom+'</h3><p style="text-align:center;font-size:.82rem;color:#22C55E;margin-top:6px;">Check-in valide !</p></div>';
+      // Add notification
+      if (window.RVGS_NOTIF && window.RVGS_NOTIF.add) { window.RVGS_NOTIF.add(f); }
+      var pass = CONGRES.getPass(f.pass);
+      var passEmoji = pass && pass.emoji ? pass.emoji : '';
+      var passNom = pass ? pass.nom : f.pass;
+      el.innerHTML='<div style="padding:20px;background:rgba(34,197,94,.08);border:2px solid #22C55E;border-radius:16px;"><h3 style="color:#22C55E;text-align:center;">&#10003; ' +f.prenom+' '+f.nom+'</h3><p style="text-align:center;font-size:.82rem;color:#22C55E;margin-top:6px;">Check-in valide !</p><p style="text-align:center;font-size:.85rem;color:#C9A84C;margin-top:8px;">' + passEmoji + ' ' + passNom + '</p></div>';
       this.showBadge(f.id);
       document.getElementById('adm-code').value='';
     },
@@ -521,7 +553,7 @@ SPA_INIT.checkin = function() {
       var area = document.getElementById('badge-print-area');
       if (!area) return;
       var w = window.open('', '_blank', 'width=500,height=700');
-      w.document.write('<!DOCTYPE html><html><head><title>Badge Congres</title><style>body{margin:0;padding:20px;font-family:-apple-system,BlinkMacSystemFont,Inter,sans-serif;background:#FFF;}@media print{body{padding:0;}button{display:none!important;}}</style></head><body>');
+      w.document.write('<!DOCTYPE html><html><head><title>Badge RVGS 2027</title><style>body{margin:0;padding:20px;font-family:-apple-system,BlinkMacSystemFont,Inter,sans-serif;background:#FFF;}@media print{body{padding:0;}button{display:none!important;}}</style></head><body>');
       w.document.write(area.outerHTML);
       w.document.write('<div style="text-align:center;margin-top:20px;"><button onclick="window.print()" style="padding:12px 28px;border-radius:10px;background:#C9A84C;color:#111;font-weight:700;border:none;cursor:pointer;font-size:1rem;">Imprimer</button></div>');
       w.document.write('</body></html>');
@@ -541,9 +573,9 @@ SPA_INIT.emails = function() {
       icon: '&#127775;',
       color: '#FFD300',
       desc: 'Traitement VIP — voiture avec chauffeur, green room privee',
-      subject: 'Congres de la Saucisse 2026 — Confirmation Keynote VIP',
+      subject: 'RVGS 2027 — Confirmation Keynote VIP',
       body: 'Cher/Chere [PRENOM] [NOM],\n\n' +
-        'C\'est un immense honneur de vous confirmer votre participation en tant que Keynote Speaker au Congres de la Saucisse 2026.\n\n' +
+        'C\'est un immense honneur de vous confirmer votre participation en tant que Keynote Speaker au RVGS 2027.\n\n' +
         'DETAILS DE VOTRE SESSION :\n' +
         '  Session : [TITRE_SESSION]\n' +
         '  Date : [DATE_SESSION]\n' +
@@ -562,17 +594,17 @@ SPA_INIT.emails = function() {
         '  Contact sur place : Stephanie Martin — 06 12 34 56 78\n\n' +
         'Votre badge QR sera joint a cet email.\n\n' +
         'Avec nos plus sinceres remerciements,\n' +
-        'Le Comite d\'Organisation du Congres de la Saucisse\n' +
-        'congres-saucisse.pages.dev'
+        'Le Comite d\'Organisation du RVGS\n' +
+        'rvgs.pages.dev'
     },
     {
       level: 'Conferencier',
       icon: '&#127908;',
       color: '#2AD783',
       desc: 'Speaker standard — places reservees, badge intervenant',
-      subject: 'Congres de la Saucisse 2026 — Confirmation Conferencier',
+      subject: 'RVGS 2027 — Confirmation Conferencier',
       body: 'Cher/Chere [PRENOM] [NOM],\n\n' +
-        'Nous avons le plaisir de vous confirmer votre intervention en tant que conferencier(e) au Congres de la Saucisse 2026.\n\n' +
+        'Nous avons le plaisir de vous confirmer votre intervention en tant que conferencier(e) au RVGS 2027.\n\n' +
         'VOTRE SESSION :\n' +
         '  Session : [TITRE_SESSION]\n' +
         '  Date : [DATE_SESSION]\n' +
@@ -591,16 +623,16 @@ SPA_INIT.emails = function() {
         '  Contact regie : Thomas Becker — 06 23 45 67 89\n\n' +
         'Votre badge QR est joint a cet email.\n\n' +
         'Cordialement,\n' +
-        'Le Comite d\'Organisation du Congres de la Saucisse'
+        'Le Comite d\'Organisation du RVGS'
     },
     {
       level: 'Paneliste',
       icon: '&#128101;',
       color: '#3B82F6',
       desc: 'Participant de table ronde — briefing groupe',
-      subject: 'Congres de la Saucisse 2026 — Confirmation Paneliste',
+      subject: 'RVGS 2027 — Confirmation Paneliste',
       body: 'Cher/Chere [PRENOM] [NOM],\n\n' +
-        'Nous sommes ravis de vous confirmer votre participation en tant que paneliste au Congres de la Saucisse 2026.\n\n' +
+        'Nous sommes ravis de vous confirmer votre participation en tant que paneliste au RVGS 2027.\n\n' +
         'VOTRE TABLE RONDE :\n' +
         '  Session : [TITRE_SESSION]\n' +
         '  Date : [DATE_SESSION]\n' +
@@ -620,16 +652,16 @@ SPA_INIT.emails = function() {
         '  Adresse : Place Adrien Zeller, 67000 Strasbourg\n' +
         '  Contact : Pierre Keller — 06 34 56 78 90\n\n' +
         'Cordialement,\n' +
-        'Le Comite d\'Organisation du Congres de la Saucisse'
+        'Le Comite d\'Organisation du RVGS'
     },
     {
       level: 'Moderateur',
       icon: '&#127897;',
       color: '#A855F7',
       desc: 'Moderateur de session — briefing technique',
-      subject: 'Congres de la Saucisse 2026 — Confirmation Moderateur',
+      subject: 'RVGS 2027 — Confirmation Moderateur',
       body: 'Cher/Chere [PRENOM] [NOM],\n\n' +
-        'Merci d\'avoir accepte de moderer une session au Congres de la Saucisse 2026.\n\n' +
+        'Merci d\'avoir accepte de moderer une session au RVGS 2027.\n\n' +
         'VOTRE SESSION :\n' +
         '  Session : [TITRE_SESSION]\n' +
         '  Date : [DATE_SESSION]\n' +
@@ -653,7 +685,7 @@ SPA_INIT.emails = function() {
         '  Adresse : Place Adrien Zeller, 67000 Strasbourg\n' +
         '  Contact regie : Thomas Becker — 06 23 45 67 89\n\n' +
         'Cordialement,\n' +
-        'Le Comite d\'Organisation du Congres de la Saucisse'
+        'Le Comite d\'Organisation du RVGS'
     }
   ];
 
@@ -864,7 +896,7 @@ SPA_INIT.staff = function() {
       allPhones.forEach(function(tel) {
         var intl = '33' + tel.replace(/\s/g, '').substring(1);
         setTimeout(function() {
-          window.open('https://wa.me/' + intl + '?text=ALERTE%20GENERALE%20Congr%C3%A8s%20Saucisse%20%E2%80%94%20Merci%20de%20vous%20presenter%20imm%C3%A9diatement%20au%20PC%20securite.', '_blank');
+          window.open('https://wa.me/' + intl + '?text=ALERTE%20GENERALE%20RVGS%202027%20%E2%80%94%20Merci%20de%20vous%20presenter%20imm%C3%A9diatement%20au%20PC%20securite.', '_blank');
         }, delay);
         delay += 500;
       });

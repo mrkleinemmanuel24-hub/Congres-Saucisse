@@ -13,11 +13,11 @@ var LS_KEY = 'congres_extra_data';
 // ─── DEMO DATA ───
 var DEMO = {
   events: [
-    { id:'E001', name:'Masterclass Fumage Traditionnel', date:'2026-06-12', time:'10:00', lieu:'Salle Curie', max:80, reservations:[] },
-    { id:'E002', name:'Degustation Biere & Saucisse', date:'2026-06-12', time:'14:00', lieu:'Salle Gutenberg', max:60, reservations:[] },
-    { id:'E003', name:'Table Ronde Saucisse Artisanale', date:'2026-06-13', time:'16:30', lieu:'Salle Erasme', max:400, reservations:[] },
-    { id:'E004', name:'Atelier Chorizo Iberique', date:'2026-06-13', time:'11:00', lieu:'Salle Curie', max:50, reservations:[] },
-    { id:'E005', name:'Grand Prix de la Saucisse 2026', date:'2026-06-14', time:'14:00', lieu:'Salle Erasme', max:450, reservations:[] }
+    { id:'E001', name:'Ouverture — Les batailles de l\'eau', date:'2027-03-19', time:'09:00', lieu:'Salle Erasme', max:450, reservations:[] },
+    { id:'E002', name:'Table ronde — Defense europeenne', date:'2027-03-19', time:'14:00', lieu:'Salle Schweitzer', max:320, reservations:[] },
+    { id:'E003', name:'Debat — Cyberguerre et souverainete', date:'2027-03-20', time:'10:00', lieu:'Salle Erasme', max:450, reservations:[] },
+    { id:'E004', name:'Atelier — Geopolitique de l\'eau', date:'2027-03-20', time:'14:00', lieu:'Salle Curie', max:100, reservations:[] },
+    { id:'E005', name:'Conference — Migrations et climat', date:'2027-03-21', time:'10:00', lieu:'Salle Erasme', max:450, reservations:[] }
   ],
   reservations: [
     { id:'R001', name:'Pierre Martin', email:'pierre.martin@email.fr', phone:'06 12 34 56 78', eventId:'E001', scanned:false, scanTime:null },
@@ -200,7 +200,7 @@ SPA_INIT['reservations'] = function() {
       render();
       // Auto-confirmation mailto
       var subject = encodeURIComponent('Confirmation reservation — ' + (ev?ev.name:''));
-      var body = encodeURIComponent('Bonjour ' + r.name + ',\n\nVotre reservation pour "' + (ev?ev.name:'') + '" le ' + (ev?fmtDate(ev.date):'') + ' a ' + (ev?ev.time:'') + ' est confirmee.\n\nLieu : ' + (ev?ev.lieu:'') + '\n\nA bientot !\nCongres de la Saucisse 2026');
+      var body = encodeURIComponent('Bonjour ' + r.name + ',\n\nVotre reservation pour "' + (ev?ev.name:'') + '" le ' + (ev?fmtDate(ev.date):'') + ' a ' + (ev?ev.time:'') + ' est confirmee.\n\nLieu : ' + (ev?ev.lieu:'') + '\n\nA bientot !\nRVGS 2027');
       window.open('mailto:' + r.email + '?subject=' + subject + '&body=' + body, '_blank');
     });
     showExtraModal(modal);
@@ -374,7 +374,7 @@ SPA_INIT['badges'] = function() {
         qrDiv.innerHTML = '<div style="width:120px;height:120px;background:#EEE;display:flex;align-items:center;justify-content:center;font-size:.7rem;color:#999;">QR ' + r.id + '</div>';
       }
 
-      card.innerHTML = '<div style="font-size:.65rem;color:#999;margin-bottom:4px;">CONGRES DE LA SAUCISSE 2026</div>' +
+      card.innerHTML = '<div style="font-size:.65rem;color:#999;margin-bottom:4px;">RVGS — STRASBOURG 2027</div>' +
         '<div style="font-size:1.1rem;font-weight:700;margin-bottom:4px;">' + esc(r.name) + '</div>' +
         '<div style="font-size:.75rem;color:#666;margin-bottom:8px;">' + (ev?esc(ev.name):'') + '</div>' +
         '<div style="font-size:.72rem;color:#999;">' + (ev?fmtDate(ev.date)+' — '+ev.time:'') + '</div>' +
@@ -391,7 +391,7 @@ SPA_INIT['badges'] = function() {
       alert('Generez d\'abord les badges.'); return;
     }
     var w = window.open('','','width=800,height=600');
-    w.document.write('<html><head><title>Badges — Congres de la Saucisse</title><style>');
+    w.document.write('<html><head><title>Badges — RVGS 2027</title><style>');
     w.document.write('@page { size: A6; margin: 8mm; } body { font-family: Georgia, serif; } .badge-card-print { width: 90mm; height: 120mm; page-break-inside: avoid; page-break-after: always; border: 1px solid #DDD; border-radius: 8px; padding: 12px; text-align: center; display: inline-block; margin: 4px; box-sizing: border-box; }');
     w.document.write('</style></head><body>');
     w.document.write(container.innerHTML);
@@ -604,7 +604,7 @@ SPA_INIT['conferenciers'] = function() {
     if (!sp) return;
     var w = window.open('','','width=600,height=400');
     w.document.write('<html><head><title>Fiche conferencier — ' + esc(sp.name) + '</title><style>body{font-family:Georgia,serif;padding:40px;max-width:600px;margin:auto;} h1{font-size:1.4rem;} .meta{color:#666;font-size:.88rem;} .bio{line-height:1.8;margin-top:16px;}</style></head><body>');
-    w.document.write('<p style="text-align:center;color:#999;font-size:.8rem;">CONGRES DE LA SAUCISSE — STRASBOURG 2026</p>');
+    w.document.write('<p style="text-align:center;color:#999;font-size:.8rem;">RVGS — STRASBOURG 2027</p>');
     w.document.write('<h1 style="text-align:center;">' + esc(sp.name) + '</h1>');
     w.document.write('<p class="meta" style="text-align:center;">' + esc(sp.title) + '<br>' + esc(sp.org) + '</p>');
     w.document.write('<p class="bio">' + esc(sp.bio) + '</p>');
@@ -973,8 +973,8 @@ SPA_INIT['logistique'] = function() {
     data = loadData();
     var l = data.logistics.find(function(x){return x.id===id;});
     if (!l) return;
-    var subject = encodeURIComponent('Congres de la Saucisse 2026 — Logistique voyage');
-    var body = encodeURIComponent('Bonjour ' + l.speakerName + ',\n\nNous organisons votre voyage pour le Congres de la Saucisse 2026.\n\nTrajet : ' + l.departure + ' → ' + l.arrival + '\nDates : ' + l.dates + '\nHotel : ' + l.hotelNights + ' nuitees\n\nStatut train : ' + l.trainStatus + '\nStatut hotel : ' + l.hotelStatus + '\n\nMerci de confirmer ces informations.\n\nCordialement,\nEquipe logistique');
+    var subject = encodeURIComponent('RVGS 2027 — Logistique voyage');
+    var body = encodeURIComponent('Bonjour ' + l.speakerName + ',\n\nNous organisons votre voyage pour le RVGS 2027.\n\nTrajet : ' + l.departure + ' → ' + l.arrival + '\nDates : ' + l.dates + '\nHotel : ' + l.hotelNights + ' nuitees\n\nStatut train : ' + l.trainStatus + '\nStatut hotel : ' + l.hotelStatus + '\n\nMerci de confirmer ces informations.\n\nCordialement,\nEquipe logistique');
     window.open('mailto:?subject=' + subject + '&body=' + body, '_blank');
   };
 
@@ -1134,7 +1134,7 @@ SPA_INIT['prestataire'] = function() {
     xml += '<Document xmlns="urn:iso:std:iso:20022:tech:xsd:pain.001.001.03">\n';
     xml += '  <CstmrCdtTrfInitn>\n';
     xml += '    <GrpHdr>\n';
-    xml += '      <MsgId>CONGRES-SAUCISSE-' + Date.now() + '</MsgId>\n';
+    xml += '      <MsgId>RVGS-2027-' + Date.now() + '</MsgId>\n';
     xml += '      <CreDtTm>' + new Date().toISOString() + '</CreDtTm>\n';
     xml += '      <NbOfTxs>' + payable.length + '</NbOfTxs>\n';
     xml += '      <CtrlSum>' + payable.reduce(function(s,f){return s+f.amount;},0).toFixed(2) + '</CtrlSum>\n';

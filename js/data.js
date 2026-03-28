@@ -1,5 +1,5 @@
 /* ═══════════════════════════════════════════════════════
-   CONGRES DE LA SAUCISSE — DATA
+   RVGS 2027 — DATA
    Speakers, Sessions, Rooms, Hotels, Demo registrations
    ═══════════════════════════════════════════════════════ */
 
@@ -117,10 +117,12 @@ window.CONGRES = (function() {
 
   // ─── REPAS ───
   var REPAS_OPTIONS = [
-    { id: 'standard', nom: 'Menu standard', prix: 15, desc: 'Charcuterie alsacienne, plat chaud, dessert' },
-    { id: 'veggie', nom: 'Menu végétarien', prix: 15, desc: 'Salade composée, plat végétal, dessert' },
-    { id: 'halal', nom: 'Menu halal', prix: 15, desc: 'Viande halal certifiée, plat chaud, dessert' },
-    { id: 'gluten', nom: 'Menu sans gluten', prix: 15, desc: 'Plat sans gluten certifié, dessert adapté' }
+    { id: 'standard', nom: 'Menu normal', prix: 0, desc: 'Entree, plat, dessert — cuisine alsacienne' },
+    { id: 'veggie', nom: 'Menu vegetarien', prix: 0, desc: 'Entree, plat vegetal, dessert' },
+    { id: 'vegan', nom: 'Menu vegan', prix: 0, desc: 'Entierement vegetal, sans produit animal' },
+    { id: 'halal', nom: 'Menu halal', prix: 0, desc: 'Viande halal certifiee, plat chaud, dessert' },
+    { id: 'casher', nom: 'Menu casher', prix: 0, desc: 'Preparation casher certifiee' },
+    { id: 'gluten', nom: 'Menu sans gluten', prix: 0, desc: 'Plat sans gluten certifie, dessert adapte' }
   ];
 
   // ─── DEMO INSCRIPTIONS (5) ───

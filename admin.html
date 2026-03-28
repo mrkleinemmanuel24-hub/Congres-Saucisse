@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Congres de la Saucisse — Strasbourg 2026</title>
+  <title>RVGS — Rendez-vous Géopolitiques de Strasbourg 2027</title>
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
   <link rel="stylesheet" href="css/front.css">
   <link rel="stylesheet" href="css/admin.css">
@@ -263,7 +263,7 @@
 <!-- SIDEBAR -->
 <nav class="sidebar" id="sidebar">
   <div class="sidebar-header">
-    <img src="img/icons/icon-saucisse.png" alt="Saucisse"> Congres de la Saucisse
+    <img src="img/icons/icon-saucisse.png" alt="RVGS"> RVGS 2027
   </div>
 
   <div class="sidebar-section">PUBLIC</div>
@@ -271,7 +271,9 @@
   <a class="sidebar-link" onclick="show('programme')"><img src="img/icons/icon-programme.png" alt=""> Programme</a>
   <a class="sidebar-link" onclick="show('intervenants')"><img src="img/icons/icon-intervenants.png" alt=""> Intervenants</a>
   <a class="sidebar-link" onclick="show('inscription')"><img src="img/icons/icon-inscription.png" alt=""> Inscription</a>
-  <a class="sidebar-link" onclick="show('congres')"><img src="img/icons/icon-saucisse.png" alt=""> Le Congres</a>
+  <a class="sidebar-link" onclick="show('congres')"><img src="img/icons/icon-saucisse.png" alt=""> Le Festival</a>
+  <a class="sidebar-link" onclick="show('social')">&#128172; Mur social</a>
+  <a class="sidebar-link" onclick="show('enquete-public')">&#128203; Enquête</a>
   <a class="sidebar-link" onclick="show('plan')"><img src="img/icons/icon-plan.png" alt=""> Plan</a>
   <a class="sidebar-link" onclick="show('infos')"><img src="img/icons/icon-transport.png" alt=""> Infos pratiques</a>
   <a class="sidebar-link" onclick="show('presse')"><img src="img/icons/icon-presse.png" alt=""> Presse</a>
@@ -292,6 +294,10 @@
   <a class="sidebar-link" onclick="showAdmin('securite')"><img src="img/icons/icon-salles.png" alt=""> Securite</a>
   <a class="sidebar-link" onclick="showAdmin('budget')"><img src="img/icons/icon-traiteur.png" alt=""> Budget</a>
   <a class="sidebar-link" onclick="showAdmin('postevent')"><img src="img/icons/icon-emails.png" alt=""> Post-event</a>
+  <a class="sidebar-link" onclick="showAdmin('enquete')">&#128203; Enquête post-event</a>
+  <a class="sidebar-link" onclick="showAdmin('social-admin')">&#128172; Mur social (modération)</a>
+  <a class="sidebar-link" onclick="showAdmin('regimes')">&#127869; Régimes alimentaires</a>
+  <a class="sidebar-link" onclick="showAdmin('notifications')">&#128276; Notifications live</a>
   <a class="sidebar-link" onclick="showAdmin('rubriques')"><img src="img/icons/icon-invitations.png" alt=""> Recommandations de Stéphanie</a>
 
   <div class="sidebar-section">SITE PUBLIC</div>
@@ -328,15 +334,15 @@
 
   <!-- HERO -->
   <section class="hero">
-    <span class="hero-edition">1ere Edition</span>
-    <div class="hero-badge">12 — 14 juin 2026 &middot; Palais des Congres de Strasbourg</div>
-    <h1>Le Congres<br>de la Saucisse</h1>
-    <p class="subtitle">Le plus grand rassemblement europeen dedie a la saucisse artisanale.<br>3 jours de conferences, degustations, ateliers et rencontres.</p>
+    <span class="hero-edition">Edition 2027</span>
+    <div class="hero-badge">19 — 22 mars 2027 &middot; Strasbourg — Palais de la Musique et des Congres</div>
+    <h1>Rendez-vous Geopolitiques<br>de Strasbourg</h1>
+    <p class="subtitle">Festival international de geopolitique — Les batailles de l'eau.<br>4 jours de conferences, tables rondes, projections, expositions et debats.</p>
     <div class="stats">
-      <div class="stat"><div class="stat-val">50+</div><div class="stat-label">Intervenants</div></div>
-      <div class="stat"><div class="stat-val">30+</div><div class="stat-label">Sessions</div></div>
-      <div class="stat"><div class="stat-val">3</div><div class="stat-label">Jours</div></div>
-      <div class="stat"><div class="stat-val">1800</div><div class="stat-label">Places</div></div>
+      <div class="stat"><div class="stat-val">80+</div><div class="stat-label">Intervenants</div></div>
+      <div class="stat"><div class="stat-val">100+</div><div class="stat-label">Evenements</div></div>
+      <div class="stat"><div class="stat-val">4</div><div class="stat-label">Jours</div></div>
+      <div class="stat"><div class="stat-val">2500</div><div class="stat-label">Places</div></div>
     </div>
     <div class="hero-ctas">
       <a href="javascript:show('inscription')" class="btn btn-green">S'inscrire</a>
@@ -347,61 +353,61 @@
   <!-- A LA UNE -->
   <section class="section">
     <span class="section-label section-label-red">A la une</span>
-    <h2 class="section-title">Actualites du Congres</h2>
-    <p class="section-subtitle">Retrouvez les dernieres nouvelles du Congres de la Saucisse 2026.</p>
+    <h2 class="section-title">Actualites du Festival</h2>
+    <p class="section-subtitle">Retrouvez les dernieres nouvelles des RVGS 2027.</p>
     <div class="articles-grid">
       <div class="article-card" onclick="show('congres')">
-        <div class="article-card-img">&#128220;</div>
+        <div class="article-card-img">&#127758;</div>
         <div class="article-card-body">
-          <span class="article-card-cat cat-business">Appel</span>
-          <h3 class="article-card-title">Appel a communications ouvert jusqu'au 30 avril</h3>
-          <p class="article-card-excerpt">Chercheurs, artisans et professionnels : soumettez vos propositions pour le premier Congres de la Saucisse. 6 thematiques, formats conference ou atelier.</p>
-          <p class="article-card-date">14 mars 2026</p>
-        </div>
-      </div>
-      <div class="article-card" onclick="show('congres')">
-        <div class="article-card-img">&#127942;</div>
-        <div class="article-card-body">
-          <span class="article-card-cat cat-concours">Concours</span>
-          <h3 class="article-card-title">Le Grand Prix de la Saucisse : les nomines 2026</h3>
-          <p class="article-card-excerpt">12 charcutiers artisanaux de 8 pays en lice pour le tout premier Grand Prix de la Saucisse. Jury preside par Jean-Marc Schaller, MOF 2018.</p>
-          <p class="article-card-date">10 mars 2026</p>
-        </div>
-      </div>
-      <div class="article-card" onclick="show('intervenants')">
-        <div class="article-card-img">&#127860;</div>
-        <div class="article-card-body">
-          <span class="article-card-cat cat-gastronomie">Masterclass</span>
-          <h3 class="article-card-title">Masterclass avec Hans Gruber, maitre fumeur de Foret-Noire</h3>
-          <p class="article-card-excerpt">5e generation de maitres fumeurs, Hans Gruber revelera les secrets du fumage traditionnel au bois de hetre. Places limitees.</p>
-          <p class="article-card-date">8 mars 2026</p>
-        </div>
-      </div>
-      <div class="article-card" onclick="show('infos')">
-        <div class="article-card-img">&#128205;</div>
-        <div class="article-card-body">
-          <span class="article-card-cat cat-gastronomie">Parcours</span>
-          <h3 class="article-card-title">La Route de la Saucisse : parcours gastronomique dans Strasbourg</h3>
-          <p class="article-card-excerpt">Decouvrez 12 etapes dans les rues de Strasbourg : winstubs, charcutiers, ateliers de degustation. Carte interactive incluse dans le pass.</p>
-          <p class="article-card-date">5 mars 2026</p>
+          <span class="article-card-cat cat-business">Theme 2027</span>
+          <h3 class="article-card-title">Les batailles de l'eau — Theme central RVGS 2027</h3>
+          <p class="article-card-excerpt">Des nappes phreatiques aux oceans, l'eau trace de nouvelles lignes de fracture geopolitiques. 100 evenements en 4 jours.</p>
+          <p class="article-card-date">15 janvier 2027</p>
         </div>
       </div>
       <div class="article-card" onclick="show('programme')">
-        <div class="article-card-img">&#128172;</div>
+        <div class="article-card-img">&#127919;</div>
         <div class="article-card-body">
-          <span class="article-card-cat cat-artisanat">Table ronde</span>
-          <h3 class="article-card-title">L'avenir de la charcuterie artisanale face a l'industrie</h3>
-          <p class="article-card-excerpt">Jean-Marc Schaller, Francois Heim et Marc Bertrand debattront des defis et opportunites pour la saucisse artisanale en 2026.</p>
-          <p class="article-card-date">1 mars 2026</p>
+          <span class="article-card-cat cat-concours">Soiree</span>
+          <h3 class="article-card-title">Soiree de Gala — Hotel de Ville, vendredi 21 mars</h3>
+          <p class="article-card-excerpt">Cocktail, diner de gala, remise du Prix RVGS du meilleur livre geopolitique, concert du Conservatoire. Sur invitation, 120 convives.</p>
+          <p class="article-card-date">10 fevrier 2027</p>
+        </div>
+      </div>
+      <div class="article-card" onclick="show('intervenants')">
+        <div class="article-card-img">&#127908;</div>
+        <div class="article-card-body">
+          <span class="article-card-cat cat-gastronomie">Intervenants</span>
+          <h3 class="article-card-title">Pierre Haski, president de RSF, cofondateur du festival</h3>
+          <p class="article-card-excerpt">Journaliste, editorialiste a France Inter, Pierre Haski est l'un des fondateurs des Rendez-vous Geopolitiques de Strasbourg.</p>
+          <p class="article-card-date">5 fevrier 2027</p>
+        </div>
+      </div>
+      <div class="article-card" onclick="show('programme')">
+        <div class="article-card-img">&#127754;</div>
+        <div class="article-card-body">
+          <span class="article-card-cat cat-gastronomie">Finale</span>
+          <h3 class="article-card-title">Grand Finale au Parlement europeen — Journee mondiale de l'eau</h3>
+          <p class="article-card-excerpt">Projection du documentaire Water Wars, table ronde, signature de la Declaration de Strasbourg sur l'eau. Samedi 22 mars.</p>
+          <p class="article-card-date">1 fevrier 2027</p>
         </div>
       </div>
       <div class="article-card" onclick="show('congres')">
-        <div class="article-card-img">&#127775;</div>
+        <div class="article-card-img">&#127961;</div>
         <div class="article-card-body">
-          <span class="article-card-cat cat-concours">Concours</span>
-          <h3 class="article-card-title">Concours du meilleur knack d'Alsace — inscriptions ouvertes</h3>
-          <p class="article-card-excerpt">Artisans charcutiers alsaciens, inscrivez votre knack avant le 15 mai. Jury professionnel, prix de 5 000 euros et vitrine internationale.</p>
-          <p class="article-card-date">25 fevrier 2026</p>
+          <span class="article-card-cat cat-artisanat">Pays invite</span>
+          <h3 class="article-card-title">Danemark & Estonie — Nations invitees 2027</h3>
+          <p class="article-card-excerpt">Securite, environnement et ressources naturelles : deux nations strategiques mises a l'honneur cette annee.</p>
+          <p class="article-card-date">20 janvier 2027</p>
+        </div>
+      </div>
+      <div class="article-card" onclick="show('inscription')">
+        <div class="article-card-img">&#127903;</div>
+        <div class="article-card-body">
+          <span class="article-card-cat cat-business">Inscriptions</span>
+          <h3 class="article-card-title">Inscriptions ouvertes — Gratuit pour les conferences</h3>
+          <p class="article-card-excerpt">Le festival est gratuit et ouvert a tous. Reservez votre pass pour acceder aux evenements speciaux et a la soiree de gala.</p>
+          <p class="article-card-date">1 janvier 2027</p>
         </div>
       </div>
     </div>
@@ -412,38 +418,38 @@
   <!-- 6 THEMATIQUES -->
   <section class="section">
     <span class="section-label section-label-green">6 thematiques</span>
-    <h2 class="section-title">Les axes du Congres</h2>
-    <p class="section-subtitle">Explorez les six grandes thematiques qui structurent le programme 2026.</p>
+    <h2 class="section-title">Les axes du Festival</h2>
+    <p class="section-subtitle">Explorez les six grandes thematiques qui structurent le programme 2027.</p>
     <div class="thematics-grid">
-      <div class="thematic-card" data-theme="science">
-        <div class="thematic-card-icon">&#128300;</div>
-        <h3>Science &amp; Nutrition</h3>
-        <p>Recherche sur la composition, l'impact nutritionnel et les bienfaits des saucisses artisanales. Ferments lactiques, micro-organismes et innovation alimentaire.</p>
+      <div class="thematic-card" data-theme="eau">
+        <div class="thematic-card-icon">&#127754;</div>
+        <h3>Batailles de l'eau</h3>
+        <p>Guerres de l'eau, nappes phreatiques, oceans, dessalement, diplomatie hydrique. Le theme central de l'edition 2027.</p>
       </div>
-      <div class="thematic-card" data-theme="artisanat">
-        <div class="thematic-card-icon">&#127981;</div>
-        <h3>Artisanat &amp; Savoir-faire</h3>
-        <p>Fabrication traditionnelle, techniques de fumage, maturation et terroir. Les gestes ancestraux des maitres charcutiers d'Alsace et d'Europe.</p>
+      <div class="thematic-card" data-theme="defense">
+        <div class="thematic-card-icon">&#128737;</div>
+        <h3>Defense &amp; Securite</h3>
+        <p>OTAN, defense europeenne, cyberguerre, renseignement. Enjeux strategiques et militaires contemporains.</p>
       </div>
       <div class="thematic-card" data-theme="international">
         <div class="thematic-card-icon">&#127758;</div>
-        <h3>International</h3>
-        <p>Saucisses du monde : Bratwurst, mortadella, chorizo, bangers, arabiki. Echanges entre traditions et exportation des savoir-faire.</p>
+        <h3>Relations internationales</h3>
+        <p>Diplomatie, ONU, Union europeenne, BRICS, recomposition de l'ordre mondial. Analyse des rapports de force.</p>
       </div>
-      <div class="thematic-card" data-theme="histoire">
-        <div class="thematic-card-icon">&#128220;</div>
-        <h3>Histoire &amp; Patrimoine</h3>
-        <p>3000 ans d'histoire de la charcuterie, de Rome a Strasbourg. Le Christkindelsmaerik, le Musee de la Charcuterie et le patrimoine alsacien.</p>
+      <div class="thematic-card" data-theme="environnement">
+        <div class="thematic-card-icon">&#127793;</div>
+        <h3>Environnement &amp; Climat</h3>
+        <p>Rechauffement climatique, biodiversite, transition energetique, justice environnementale. Enjeux planetaires.</p>
       </div>
-      <div class="thematic-card" data-theme="gastronomie">
-        <div class="thematic-card-icon">&#127869;</div>
-        <h3>Gastronomie &amp; Degustation</h3>
-        <p>Accords mets-bieres, haute gastronomie charcutiere, recettes de chefs etoiles. Degustations commentees et ateliers pratiques.</p>
+      <div class="thematic-card" data-theme="medias">
+        <div class="thematic-card-icon">&#128240;</div>
+        <h3>Medias &amp; Information</h3>
+        <p>Liberte de la presse, desinformation, IA et medias, lanceurs d'alerte. L'information au coeur de la geopolitique.</p>
       </div>
-      <div class="thematic-card" data-theme="business">
-        <div class="thematic-card-icon">&#128188;</div>
-        <h3>Business &amp; Innovation</h3>
-        <p>Food design, IA et recettes, saucisse vegetale hybride, startups foodtech. Distribution, marketing et tendances du marche 2026.</p>
+      <div class="thematic-card" data-theme="economie">
+        <div class="thematic-card-icon">&#128200;</div>
+        <h3>Economie &amp; Ressources</h3>
+        <p>Matieres premieres, semi-conducteurs, routes commerciales, souverainete economique. Les nerfs de la guerre.</p>
       </div>
     </div>
   </section>
@@ -454,7 +460,7 @@
   <section class="section">
     <span class="section-label section-label-green">Programme</span>
     <h2 class="section-title">Programme en un coup d'oeil</h2>
-    <p class="section-subtitle">3 jours de conferences, tables rondes et ateliers pratiques.</p>
+    <p class="section-subtitle">4 jours de conferences, tables rondes, projections et debats.</p>
     <div class="programme-summary" id="programme-summary"></div>
     <div class="text-center mt-3"><a href="javascript:show('programme')" class="btn btn-outline btn-sm">Programme complet</a></div>
   </section>
@@ -465,7 +471,7 @@
   <section class="section">
     <span class="section-label section-label-green">Speakers</span>
     <h2 class="section-title">Intervenants vedettes</h2>
-    <p class="section-subtitle">Des experts internationaux de la saucisse artisanale.</p>
+    <p class="section-subtitle">Geopolitologues, historiens, diplomates, journalistes, militaires, artistes...</p>
     <div class="highlight-speakers" id="featured-speakers"></div>
     <div class="text-center mt-3"><a href="javascript:show('intervenants')" class="btn btn-outline btn-sm">Tous les intervenants</a></div>
   </section>
@@ -507,8 +513,8 @@
 
   <!-- FOOTER -->
   <footer class="footer" style="display:block !important;">
-    <div class="footer-brand"><img src="img/icons/icon-saucisse.png" alt="Saucisse" style="width:28px;height:28px;border-radius:6px;object-fit:contain;vertical-align:middle;display:inline"> Le Congres de la Saucisse — Strasbourg 2026</div>
-    <p>12 — 14 juin 2026 &middot; Palais des Congres de Strasbourg</p>
+    <div class="footer-brand"><img src="img/icons/icon-saucisse.png" alt="RVGS" style="width:28px;height:28px;border-radius:6px;object-fit:contain;vertical-align:middle;display:inline"> Les Rendez-vous Geopolitiques de Strasbourg — 2027</div>
+    <p>19 — 22 mars 2027 &middot; Palais de la Musique et des Congres de Strasbourg</p>
     <div class="footer-links">
       <a href="javascript:show('programme')">Programme</a>
       <a href="javascript:show('intervenants')">Intervenants</a>
@@ -609,6 +615,12 @@
 <div id="section-benevoles" class="section-page admin-section erp-section-page"></div>
 <div id="section-logistique" class="section-page admin-section erp-section-page"></div>
 <div id="section-prestataire" class="section-page admin-section erp-section-page"></div>
+<div id="section-enquete" class="section-page admin-section erp-section-page"></div>
+<div id="section-social-admin" class="section-page admin-section erp-section-page"></div>
+<div id="section-regimes" class="section-page admin-section erp-section-page"></div>
+<div id="section-notifications" class="section-page admin-section erp-section-page"></div>
+<div id="section-social" class="section-page"></div>
+<div id="section-enquete-public" class="section-page"></div>
 
 <!-- ═══════════════════════════════════════════════════════
      ERP SECTIONS (merged from erp.html)
@@ -945,13 +957,14 @@
 <script src="js/simulateur-financier.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js"></script>
 <script src="js/modules-extra.js"></script>
+<script src="js/rvgs-upgrade.js"></script>
 
 <script>
 /* ═══════════════════════════════════════════════════════
    SPA NAVIGATION
    ═══════════════════════════════════════════════════════ */
-var ADMIN_PWD = 'admin';
-var adminUnlocked = !!localStorage.getItem('congress_admin_unlocked');
+/* Password removed — open access for demo */
+var adminUnlocked = true;
 var initializedSections = {};
 
 function show(id) {
@@ -983,12 +996,7 @@ function show(id) {
 }
 
 function showAdmin(id) {
-  if (!adminUnlocked) {
-    var pwd = prompt('Mot de passe administration :');
-    if (pwd !== ADMIN_PWD) { alert('Mot de passe incorrect'); return; }
-    localStorage.setItem('congress_admin_unlocked', '1');
-    adminUnlocked = true;
-  }
+  /* No password — open access */
   show(id);
 }
 
@@ -1006,7 +1014,7 @@ window.addEventListener('DOMContentLoaded', function() {
   }
   if (window.location.hash) {
     var h = window.location.hash.substring(1);
-    var adminSections = ['stephanie','simulateur','dashboard','participants','invitations','traiteur','salles','checkin','emails','checklist','speakers','staff','securite','budget','postevent','rubriques','reservations','badges','conferenciers','benevoles','logistique','prestataire','erp-dashboard','erp-factures','erp-recettes','erp-rh','erp-budget','erp-sponsors','erp-export'];
+    var adminSections = ['stephanie','simulateur','dashboard','participants','invitations','traiteur','salles','checkin','emails','checklist','speakers','staff','securite','budget','postevent','rubriques','reservations','badges','conferenciers','benevoles','logistique','prestataire','erp-dashboard','erp-factures','erp-recettes','erp-rh','erp-budget','erp-sponsors','erp-export','enquete','social-admin','regimes','notifications'];
     if (adminSections.indexOf(h) !== -1) {
       showAdmin(h);
     } else {
@@ -1071,7 +1079,7 @@ var ERP_DEMO_SUBVENTIONS = [
 ];
 
 var ERP_DEMO_STANDS = [
-  { id: 'std_1', exposant: 'Saucisse Bio Alsace', type: 'Standard (6m2)', montant: 800, statut: 'payee' },
+  { id: 'std_1', exposant: 'Stand Geopolitique UE', type: 'Standard (6m2)', montant: 800, statut: 'payee' },
   { id: 'std_2', exposant: 'Fumoir Artisanal Colmar', type: 'Premium (12m2)', montant: 1500, statut: 'en_attente' },
   { id: 'std_3', exposant: 'La Petite Boucherie', type: 'Standard (6m2)', montant: 800, statut: 'payee' }
 ];
@@ -1336,8 +1344,8 @@ function erpMarkRecettePaid(collection, id) { var item = ERP[collection].find(fu
 function erpDeleteRecette(collection, id) { if (!confirm('Supprimer cet element ?')) return; ERP[collection] = ERP[collection].filter(function(i) { return i.id !== id; }); erpSaveData(ERP); erpRefreshAll(); }
 function erpRelancer(email, nom) {
   if (!email) { alert('Pas d\'email pour ce participant.'); return; }
-  var subject = encodeURIComponent('Relance inscription — Congres de la Saucisse 2026');
-  var body = encodeURIComponent('Bonjour ' + nom + ',\n\nNous nous permettons de vous relancer concernant votre inscription au Congres de la Saucisse (12-14 juin 2026, Strasbourg).\n\nVotre paiement est en attente. Pourriez-vous proceder au reglement ?\n\nCordialement,\nL\'equipe du Congres de la Saucisse');
+  var subject = encodeURIComponent('Relance inscription — RVGS 2027');
+  var body = encodeURIComponent('Bonjour ' + nom + ',\n\nNous nous permettons de vous relancer concernant votre inscription au RVGS (19-22 mars 2027, Strasbourg).\n\nVotre paiement est en attente. Pourriez-vous proceder au reglement ?\n\nCordialement,\nL\'equipe du RVGS');
   window.open('mailto:' + email + '?subject=' + subject + '&body=' + body);
 }
 
@@ -1383,26 +1391,26 @@ function erpGenDPAE(id) {
   var s = ERP.staff.find(function(i) { return i.id === id; }); if (!s) return;
   var parts = s.nom.split(' '); var prenom = parts[0] || ''; var nomF = parts.slice(1).join(' ') || '';
   document.getElementById('erp-doc-title').textContent = 'DPAE — ' + s.nom;
-  document.getElementById('erp-doc-content').innerHTML = '<div style="background:#FFF;color:#111;padding:30px;border-radius:12px;font-family:Georgia,serif;line-height:2;"><h1 style="text-align:center;font-size:1.2rem;margin-bottom:20px;">DECLARATION PREALABLE A L\'EMBAUCHE</h1><table style="width:100%;border-collapse:collapse;"><tr><td style="padding:8px;font-weight:700;width:40%;">Employeur</td><td style="padding:8px;">Association Congres de la Saucisse</td></tr><tr><td style="padding:8px;font-weight:700;">SIRET</td><td style="padding:8px;">___ ___ ___ _____</td></tr><tr><td style="padding:8px;font-weight:700;">Nom</td><td style="padding:8px;">' + nomF + '</td></tr><tr><td style="padding:8px;font-weight:700;">Prenom</td><td style="padding:8px;">' + prenom + '</td></tr><tr><td style="padding:8px;font-weight:700;">Date de naissance</td><td style="padding:8px;">__/__/____</td></tr><tr><td style="padding:8px;font-weight:700;">N. Securite Sociale</td><td style="padding:8px;">_ __ __ __ ___ ___ __</td></tr><tr><td style="padding:8px;font-weight:700;">Date d\'embauche</td><td style="padding:8px;">' + (s.debut || '___') + '</td></tr><tr><td style="padding:8px;font-weight:700;">Date fin</td><td style="padding:8px;">' + (s.fin || '___') + '</td></tr><tr><td style="padding:8px;font-weight:700;">Poste</td><td style="padding:8px;">' + s.role + '</td></tr><tr><td style="padding:8px;font-weight:700;">Type</td><td style="padding:8px;">' + s.type + '</td></tr></table><p style="margin-top:24px;font-size:.85rem;color:#666;">A transmettre a l\'URSSAF avant l\'embauche.</p></div>';
+  document.getElementById('erp-doc-content').innerHTML = '<div style="background:#FFF;color:#111;padding:30px;border-radius:12px;font-family:Georgia,serif;line-height:2;"><h1 style="text-align:center;font-size:1.2rem;margin-bottom:20px;">DECLARATION PREALABLE A L\'EMBAUCHE</h1><table style="width:100%;border-collapse:collapse;"><tr><td style="padding:8px;font-weight:700;width:40%;">Employeur</td><td style="padding:8px;">Association RVGS</td></tr><tr><td style="padding:8px;font-weight:700;">SIRET</td><td style="padding:8px;">___ ___ ___ _____</td></tr><tr><td style="padding:8px;font-weight:700;">Nom</td><td style="padding:8px;">' + nomF + '</td></tr><tr><td style="padding:8px;font-weight:700;">Prenom</td><td style="padding:8px;">' + prenom + '</td></tr><tr><td style="padding:8px;font-weight:700;">Date de naissance</td><td style="padding:8px;">__/__/____</td></tr><tr><td style="padding:8px;font-weight:700;">N. Securite Sociale</td><td style="padding:8px;">_ __ __ __ ___ ___ __</td></tr><tr><td style="padding:8px;font-weight:700;">Date d\'embauche</td><td style="padding:8px;">' + (s.debut || '___') + '</td></tr><tr><td style="padding:8px;font-weight:700;">Date fin</td><td style="padding:8px;">' + (s.fin || '___') + '</td></tr><tr><td style="padding:8px;font-weight:700;">Poste</td><td style="padding:8px;">' + s.role + '</td></tr><tr><td style="padding:8px;font-weight:700;">Type</td><td style="padding:8px;">' + s.type + '</td></tr></table><p style="margin-top:24px;font-size:.85rem;color:#666;">A transmettre a l\'URSSAF avant l\'embauche.</p></div>';
   erpOpenModal('erp-modal-doc');
 }
 function erpGenFichePaie(id) {
   var s = ERP.staff.find(function(i) { return i.id === id; }); if (!s) return;
   var brut = s.taux * s.heures, cotSal = brut * 0.22, cotPat = brut * 0.42, net = brut - cotSal;
   document.getElementById('erp-doc-title').textContent = 'Fiche de paie — ' + s.nom;
-  document.getElementById('erp-doc-content').innerHTML = '<div style="background:#FFF;color:#111;padding:30px;border-radius:12px;font-family:Georgia,serif;line-height:1.8;"><h1 style="text-align:center;font-size:1.1rem;margin-bottom:4px;">BULLETIN DE PAIE</h1><p style="text-align:center;font-size:.85rem;color:#666;margin-bottom:20px;">Congres de la Saucisse — Strasbourg 2026</p><table style="width:100%;border-collapse:collapse;margin-bottom:16px;"><tr><td style="padding:6px;font-weight:700;">Salarie</td><td style="padding:6px;">' + s.nom + '</td></tr><tr><td style="padding:6px;font-weight:700;">Emploi</td><td style="padding:6px;">' + s.role + '</td></tr><tr><td style="padding:6px;font-weight:700;">Periode</td><td style="padding:6px;">' + s.debut + ' au ' + s.fin + '</td></tr><tr><td style="padding:6px;font-weight:700;">Type</td><td style="padding:6px;">' + s.type + '</td></tr></table><table style="width:100%;border-collapse:collapse;border:1px solid #333;"><thead><tr style="background:#F5F5F5;"><th style="padding:8px;text-align:left;border:1px solid #333;">Rubrique</th><th style="padding:8px;text-align:right;border:1px solid #333;">Base</th><th style="padding:8px;text-align:right;border:1px solid #333;">Taux</th><th style="padding:8px;text-align:right;border:1px solid #333;">Montant</th></tr></thead><tbody><tr><td style="padding:8px;border:1px solid #DDD;">Salaire de base</td><td style="padding:8px;text-align:right;border:1px solid #DDD;">' + s.heures + 'h x ' + erpFmtN(s.taux) + ' EUR</td><td style="padding:8px;text-align:right;border:1px solid #DDD;"></td><td style="padding:8px;text-align:right;border:1px solid #DDD;font-weight:700;">' + erpFmtN(brut) + ' EUR</td></tr><tr><td style="padding:8px;border:1px solid #DDD;">Cot. salariales</td><td style="padding:8px;text-align:right;border:1px solid #DDD;">' + erpFmtN(brut) + '</td><td style="padding:8px;text-align:right;border:1px solid #DDD;">22%</td><td style="padding:8px;text-align:right;border:1px solid #DDD;color:red;">-' + erpFmtN(cotSal) + ' EUR</td></tr><tr><td style="padding:8px;border:1px solid #DDD;">Cot. patronales</td><td style="padding:8px;text-align:right;border:1px solid #DDD;">' + erpFmtN(brut) + '</td><td style="padding:8px;text-align:right;border:1px solid #DDD;">42%</td><td style="padding:8px;text-align:right;border:1px solid #DDD;color:#666;">' + erpFmtN(cotPat) + ' EUR</td></tr></tbody><tfoot><tr style="background:#F5F5F5;font-weight:700;"><td style="padding:8px;border:1px solid #333;" colspan="3">NET A PAYER</td><td style="padding:8px;text-align:right;border:1px solid #333;font-size:1.1rem;">' + erpFmtN(net) + ' EUR</td></tr></tfoot></table><p style="margin-top:16px;font-size:.75rem;color:#999;">Estimation — taux reels selon convention collective.</p></div>';
+  document.getElementById('erp-doc-content').innerHTML = '<div style="background:#FFF;color:#111;padding:30px;border-radius:12px;font-family:Georgia,serif;line-height:1.8;"><h1 style="text-align:center;font-size:1.1rem;margin-bottom:4px;">BULLETIN DE PAIE</h1><p style="text-align:center;font-size:.85rem;color:#666;margin-bottom:20px;">RVGS — Strasbourg 2026</p><table style="width:100%;border-collapse:collapse;margin-bottom:16px;"><tr><td style="padding:6px;font-weight:700;">Salarie</td><td style="padding:6px;">' + s.nom + '</td></tr><tr><td style="padding:6px;font-weight:700;">Emploi</td><td style="padding:6px;">' + s.role + '</td></tr><tr><td style="padding:6px;font-weight:700;">Periode</td><td style="padding:6px;">' + s.debut + ' au ' + s.fin + '</td></tr><tr><td style="padding:6px;font-weight:700;">Type</td><td style="padding:6px;">' + s.type + '</td></tr></table><table style="width:100%;border-collapse:collapse;border:1px solid #333;"><thead><tr style="background:#F5F5F5;"><th style="padding:8px;text-align:left;border:1px solid #333;">Rubrique</th><th style="padding:8px;text-align:right;border:1px solid #333;">Base</th><th style="padding:8px;text-align:right;border:1px solid #333;">Taux</th><th style="padding:8px;text-align:right;border:1px solid #333;">Montant</th></tr></thead><tbody><tr><td style="padding:8px;border:1px solid #DDD;">Salaire de base</td><td style="padding:8px;text-align:right;border:1px solid #DDD;">' + s.heures + 'h x ' + erpFmtN(s.taux) + ' EUR</td><td style="padding:8px;text-align:right;border:1px solid #DDD;"></td><td style="padding:8px;text-align:right;border:1px solid #DDD;font-weight:700;">' + erpFmtN(brut) + ' EUR</td></tr><tr><td style="padding:8px;border:1px solid #DDD;">Cot. salariales</td><td style="padding:8px;text-align:right;border:1px solid #DDD;">' + erpFmtN(brut) + '</td><td style="padding:8px;text-align:right;border:1px solid #DDD;">22%</td><td style="padding:8px;text-align:right;border:1px solid #DDD;color:red;">-' + erpFmtN(cotSal) + ' EUR</td></tr><tr><td style="padding:8px;border:1px solid #DDD;">Cot. patronales</td><td style="padding:8px;text-align:right;border:1px solid #DDD;">' + erpFmtN(brut) + '</td><td style="padding:8px;text-align:right;border:1px solid #DDD;">42%</td><td style="padding:8px;text-align:right;border:1px solid #DDD;color:#666;">' + erpFmtN(cotPat) + ' EUR</td></tr></tbody><tfoot><tr style="background:#F5F5F5;font-weight:700;"><td style="padding:8px;border:1px solid #333;" colspan="3">NET A PAYER</td><td style="padding:8px;text-align:right;border:1px solid #333;font-size:1.1rem;">' + erpFmtN(net) + ' EUR</td></tr></tfoot></table><p style="margin-top:16px;font-size:.75rem;color:#999;">Estimation — taux reels selon convention collective.</p></div>';
   erpOpenModal('erp-modal-doc');
 }
 function erpGenContrat(id) {
   var s = ERP.staff.find(function(i) { return i.id === id; }); if (!s) return;
   document.getElementById('erp-doc-title').textContent = 'Contrat — ' + s.nom;
-  document.getElementById('erp-doc-content').innerHTML = '<div style="background:#FFF;color:#111;padding:30px;border-radius:12px;font-family:Georgia,serif;line-height:2;"><h1 style="text-align:center;font-size:1.1rem;margin-bottom:4px;">CONTRAT DE TRAVAIL A DUREE DETERMINEE</h1><p style="text-align:center;font-size:.85rem;color:#666;margin-bottom:24px;">Art. L.1242-2 du Code du travail</p><h3 style="font-size:.95rem;">ENTRE</h3><p><strong>L\'employeur</strong> : Association Congres de la Saucisse, Palais des Congres, Strasbourg.</p><h3 style="font-size:.95rem;margin-top:16px;">ET</h3><p><strong>Le salarie</strong> : ' + s.nom + ', ne(e) le __/__/____, demeurant ________________</p><p><strong>Article 1 — Objet</strong><br>CDD pour le Congres de la Saucisse (12-14 juin 2026).</p><p><strong>Article 2 — Poste</strong> : <strong>' + s.role + '</strong></p><p><strong>Article 3 — Duree</strong> : du <strong>' + (s.debut || '___') + '</strong> au <strong>' + (s.fin || '___') + '</strong></p><p><strong>Article 4 — Remuneration</strong> : ' + erpFmtN(s.taux) + ' EUR/h brut, ' + s.heures + 'h prevues</p><p><strong>Article 5 — Lieu</strong> : Palais des Congres de Strasbourg</p><p style="margin-top:32px;">Fait a Strasbourg, le ___/___/2026, en deux exemplaires.</p><div style="display:flex;justify-content:space-between;margin-top:24px;"><div><strong>L\'employeur</strong><br><br><br>________________</div><div><strong>Le salarie</strong><br><br><br>________________</div></div></div>';
+  document.getElementById('erp-doc-content').innerHTML = '<div style="background:#FFF;color:#111;padding:30px;border-radius:12px;font-family:Georgia,serif;line-height:2;"><h1 style="text-align:center;font-size:1.1rem;margin-bottom:4px;">CONTRAT DE TRAVAIL A DUREE DETERMINEE</h1><p style="text-align:center;font-size:.85rem;color:#666;margin-bottom:24px;">Art. L.1242-2 du Code du travail</p><h3 style="font-size:.95rem;">ENTRE</h3><p><strong>L\'employeur</strong> : Association RVGS, Palais des Congres, Strasbourg.</p><h3 style="font-size:.95rem;margin-top:16px;">ET</h3><p><strong>Le salarie</strong> : ' + s.nom + ', ne(e) le __/__/____, demeurant ________________</p><p><strong>Article 1 — Objet</strong><br>CDD pour le RVGS (19-22 mars 2027).</p><p><strong>Article 2 — Poste</strong> : <strong>' + s.role + '</strong></p><p><strong>Article 3 — Duree</strong> : du <strong>' + (s.debut || '___') + '</strong> au <strong>' + (s.fin || '___') + '</strong></p><p><strong>Article 4 — Remuneration</strong> : ' + erpFmtN(s.taux) + ' EUR/h brut, ' + s.heures + 'h prevues</p><p><strong>Article 5 — Lieu</strong> : Palais des Congres de Strasbourg</p><p style="margin-top:32px;">Fait a Strasbourg, le ___/___/2026, en deux exemplaires.</p><div style="display:flex;justify-content:space-between;margin-top:24px;"><div><strong>L\'employeur</strong><br><br><br>________________</div><div><strong>Le salarie</strong><br><br><br>________________</div></div></div>';
   erpOpenModal('erp-modal-doc');
 }
 function erpGenAttestation(id) {
   var s = ERP.staff.find(function(i) { return i.id === id; }); if (!s) return;
   document.getElementById('erp-doc-title').textContent = 'Attestation — ' + s.nom;
-  document.getElementById('erp-doc-content').innerHTML = '<div style="background:#FFF;color:#111;padding:30px;border-radius:12px;font-family:Georgia,serif;line-height:2;"><h1 style="text-align:center;font-size:1.1rem;margin-bottom:20px;">ATTESTATION EMPLOYEUR</h1><p>Je soussigne(e), ________________, President de l\'Association Congres de la Saucisse, certifie que :</p><p style="margin:16px 0;padding:12px 16px;background:#F5F5F5;border-radius:8px;"><strong>' + s.nom + '</strong> a ete employe(e) en qualite de <strong>' + s.role + '</strong> du <strong>' + (s.debut || '___') + '</strong> au <strong>' + (s.fin || '___') + '</strong>.</p><p>Type : <strong>' + s.type + '</strong></p><p>Pour servir et valoir ce que de droit.</p><p style="margin-top:32px;">Fait a Strasbourg, le ___/___/2026</p><p style="margin-top:24px;"><strong>Le President</strong><br><br><br>________________</p></div>';
+  document.getElementById('erp-doc-content').innerHTML = '<div style="background:#FFF;color:#111;padding:30px;border-radius:12px;font-family:Georgia,serif;line-height:2;"><h1 style="text-align:center;font-size:1.1rem;margin-bottom:20px;">ATTESTATION EMPLOYEUR</h1><p>Je soussigne(e), ________________, President de l\'Association RVGS, certifie que :</p><p style="margin:16px 0;padding:12px 16px;background:#F5F5F5;border-radius:8px;"><strong>' + s.nom + '</strong> a ete employe(e) en qualite de <strong>' + s.role + '</strong> du <strong>' + (s.debut || '___') + '</strong> au <strong>' + (s.fin || '___') + '</strong>.</p><p>Type : <strong>' + s.type + '</strong></p><p>Pour servir et valoir ce que de droit.</p><p style="margin-top:32px;">Fait a Strasbourg, le ___/___/2026</p><p style="margin-top:24px;"><strong>Le President</strong><br><br><br>________________</p></div>';
   erpOpenModal('erp-modal-doc');
 }
 
@@ -1508,21 +1516,21 @@ function erpSaveSponsor() {
 function erpDeleteSponsor(id) { if (!confirm('Supprimer ce sponsor ?')) return; ERP.sponsors = ERP.sponsors.filter(function(i) { return i.id !== id; }); erpSaveData(ERP); erpRefreshAll(); }
 function erpRelancerSponsor(id) {
   var sp = ERP.sponsors.find(function(i) { return i.id === id; }); if (!sp || !sp.email) { alert('Pas d\'email.'); return; }
-  var subject = encodeURIComponent('Partenariat — Congres de la Saucisse 2026');
-  var body = encodeURIComponent('Bonjour ' + (sp.contact || sp.nom) + ',\n\nNous revenons vers vous pour le partenariat du Congres de la Saucisse (12-14 juin 2026, Strasbourg).\n\nVotre engagement de ' + erpFmt(sp.montant) + ' serait precieux. Contreparties :\n' + (sp.contreparties || []).map(function(c) { return '- ' + c; }).join('\n') + '\n\nCordialement,\nL\'equipe du Congres de la Saucisse');
+  var subject = encodeURIComponent('Partenariat — RVGS 2027');
+  var body = encodeURIComponent('Bonjour ' + (sp.contact || sp.nom) + ',\n\nNous revenons vers vous pour le partenariat du RVGS (19-22 mars 2027, Strasbourg).\n\nVotre engagement de ' + erpFmt(sp.montant) + ' serait precieux. Contreparties :\n' + (sp.contreparties || []).map(function(c) { return '- ' + c; }).join('\n') + '\n\nCordialement,\nL\'equipe du RVGS');
   window.open('mailto:' + sp.email + '?subject=' + subject + '&body=' + body);
 }
 function erpGenContratSponsor(id) {
   var sp = ERP.sponsors.find(function(i) { return i.id === id; }); if (!sp) return;
   document.getElementById('erp-doc-title').textContent = 'Contrat de partenariat — ' + sp.nom;
-  document.getElementById('erp-doc-content').innerHTML = '<div style="background:#FFF;color:#111;padding:30px;border-radius:12px;font-family:Georgia,serif;line-height:2;"><h1 style="text-align:center;font-size:1.1rem;">CONTRAT DE PARTENARIAT</h1><p style="text-align:center;font-size:.85rem;color:#666;margin-bottom:24px;">Congres de la Saucisse — 1ere Edition — Strasbourg 2026</p><h3>ENTRE</h3><p>L\'Association Congres de la Saucisse (l\'Organisateur)</p><h3 style="margin-top:12px;">ET</h3><p><strong>' + sp.nom + '</strong>, representee par <strong>' + (sp.contact || '________________') + '</strong> (le Partenaire)</p><h3 style="margin-top:16px;">ARTICLE 1</h3><p>Soutien de <strong>' + erpFmt(sp.montant) + '</strong>.</p><h3>ARTICLE 2 — CONTREPARTIES</h3><ul>' + (sp.contreparties || []).map(function(c) { return '<li>' + c + '</li>'; }).join('') + '<li>' + (sp.invitations || 0) + ' invitation(s) VIP</li></ul><h3>ARTICLE 3 — PAIEMENT</h3><p>Virement avant le 30 avril 2026.</p><div style="display:flex;justify-content:space-between;margin-top:32px;"><div><strong>L\'Organisateur</strong><br><br><br>________________</div><div><strong>Le Partenaire</strong><br><br><br>________________</div></div></div>';
+  document.getElementById('erp-doc-content').innerHTML = '<div style="background:#FFF;color:#111;padding:30px;border-radius:12px;font-family:Georgia,serif;line-height:2;"><h1 style="text-align:center;font-size:1.1rem;">CONTRAT DE PARTENARIAT</h1><p style="text-align:center;font-size:.85rem;color:#666;margin-bottom:24px;">RVGS — 1ere Edition — Strasbourg 2026</p><h3>ENTRE</h3><p>L\'Association RVGS (l\'Organisateur)</p><h3 style="margin-top:12px;">ET</h3><p><strong>' + sp.nom + '</strong>, representee par <strong>' + (sp.contact || '________________') + '</strong> (le Partenaire)</p><h3 style="margin-top:16px;">ARTICLE 1</h3><p>Soutien de <strong>' + erpFmt(sp.montant) + '</strong>.</p><h3>ARTICLE 2 — CONTREPARTIES</h3><ul>' + (sp.contreparties || []).map(function(c) { return '<li>' + c + '</li>'; }).join('') + '<li>' + (sp.invitations || 0) + ' invitation(s) VIP</li></ul><h3>ARTICLE 3 — PAIEMENT</h3><p>Virement avant le 30 avril 2026.</p><div style="display:flex;justify-content:space-between;margin-top:32px;"><div><strong>L\'Organisateur</strong><br><br><br>________________</div><div><strong>Le Partenaire</strong><br><br><br>________________</div></div></div>';
   erpOpenModal('erp-modal-doc');
 }
 function erpGenFactureSponsor(id) {
   var sp = ERP.sponsors.find(function(i) { return i.id === id; }); if (!sp) return;
   var ht = sp.montant / 1.2, tva = sp.montant - ht;
   document.getElementById('erp-doc-title').textContent = 'Facture sponsor — ' + sp.nom;
-  document.getElementById('erp-doc-content').innerHTML = '<div style="background:#FFF;color:#111;padding:30px;border-radius:12px;font-family:Georgia,serif;line-height:1.8;"><div style="display:flex;justify-content:space-between;margin-bottom:24px;"><div><strong style="font-size:1.1rem;">FACTURE</strong><br>N. FAC-SP-' + sp.id.replace('sp_', '') + '</div><div style="text-align:right;"><strong>Assoc. Congres de la Saucisse</strong><br>Palais des Congres<br>67000 Strasbourg</div></div><div style="background:#F5F5F5;padding:16px;border-radius:8px;margin-bottom:20px;"><strong>Destinataire :</strong><br>' + sp.nom + '<br>' + (sp.contact || '') + '<br>' + (sp.email || '') + '</div><table style="width:100%;border-collapse:collapse;border:1px solid #333;"><thead><tr style="background:#F5F5F5;"><th style="padding:8px;text-align:left;border:1px solid #333;">Description</th><th style="padding:8px;text-align:right;border:1px solid #333;">HT</th><th style="padding:8px;text-align:right;border:1px solid #333;">TVA 20%</th><th style="padding:8px;text-align:right;border:1px solid #333;">TTC</th></tr></thead><tbody><tr><td style="padding:8px;border:1px solid #DDD;">Partenariat Congres 2026<br><span style="font-size:.8rem;color:#666;">' + (sp.contreparties || []).join(', ') + '</span></td><td style="padding:8px;text-align:right;border:1px solid #DDD;">' + erpFmtN(ht) + ' EUR</td><td style="padding:8px;text-align:right;border:1px solid #DDD;">' + erpFmtN(tva) + ' EUR</td><td style="padding:8px;text-align:right;border:1px solid #DDD;font-weight:700;">' + erpFmtN(sp.montant) + ' EUR</td></tr></tbody><tfoot><tr style="background:#F5F5F5;font-weight:700;"><td colspan="3" style="padding:8px;border:1px solid #333;">TOTAL TTC</td><td style="padding:8px;text-align:right;border:1px solid #333;font-size:1.1rem;">' + erpFmt(sp.montant) + '</td></tr></tfoot></table><p style="margin-top:20px;font-size:.82rem;">Paiement a reception, par virement.</p></div>';
+  document.getElementById('erp-doc-content').innerHTML = '<div style="background:#FFF;color:#111;padding:30px;border-radius:12px;font-family:Georgia,serif;line-height:1.8;"><div style="display:flex;justify-content:space-between;margin-bottom:24px;"><div><strong style="font-size:1.1rem;">FACTURE</strong><br>N. FAC-SP-' + sp.id.replace('sp_', '') + '</div><div style="text-align:right;"><strong>Assoc. RVGS</strong><br>Palais des Congres<br>67000 Strasbourg</div></div><div style="background:#F5F5F5;padding:16px;border-radius:8px;margin-bottom:20px;"><strong>Destinataire :</strong><br>' + sp.nom + '<br>' + (sp.contact || '') + '<br>' + (sp.email || '') + '</div><table style="width:100%;border-collapse:collapse;border:1px solid #333;"><thead><tr style="background:#F5F5F5;"><th style="padding:8px;text-align:left;border:1px solid #333;">Description</th><th style="padding:8px;text-align:right;border:1px solid #333;">HT</th><th style="padding:8px;text-align:right;border:1px solid #333;">TVA 20%</th><th style="padding:8px;text-align:right;border:1px solid #333;">TTC</th></tr></thead><tbody><tr><td style="padding:8px;border:1px solid #DDD;">Partenariat Congres 2026<br><span style="font-size:.8rem;color:#666;">' + (sp.contreparties || []).join(', ') + '</span></td><td style="padding:8px;text-align:right;border:1px solid #DDD;">' + erpFmtN(ht) + ' EUR</td><td style="padding:8px;text-align:right;border:1px solid #DDD;">' + erpFmtN(tva) + ' EUR</td><td style="padding:8px;text-align:right;border:1px solid #DDD;font-weight:700;">' + erpFmtN(sp.montant) + ' EUR</td></tr></tbody><tfoot><tr style="background:#F5F5F5;font-weight:700;"><td colspan="3" style="padding:8px;border:1px solid #333;">TOTAL TTC</td><td style="padding:8px;text-align:right;border:1px solid #333;font-size:1.1rem;">' + erpFmt(sp.montant) + '</td></tr></tfoot></table><p style="margin-top:20px;font-size:.82rem;">Paiement a reception, par virement.</p></div>';
   erpOpenModal('erp-modal-doc');
 }
 
@@ -1551,8 +1559,8 @@ function erpPrintBilan() { window.print(); }
 function erpGenerateRapportFinal() {
   var dep = erpTotalDepenses(), rec = erpTotalRecettesAll(), solde = rec - dep;
   var w = window.open('', '_blank');
-  w.document.write('<html><head><title>Rapport Final — Congres de la Saucisse 2026</title><style>body{font-family:Georgia,serif;padding:40px;line-height:1.8;color:#111;}h1{text-align:center;}h2{color:#333;border-bottom:2px solid #C9A84C;padding-bottom:4px;margin-top:32px;}table{width:100%;border-collapse:collapse;margin:16px 0;}td,th{border:1px solid #333;padding:8px;font-size:.85rem;}th{background:#F5F5F5;text-align:left;}.total{font-weight:900;font-size:1.1rem;}.green{color:#16A34A;}.red{color:#DC2626;}</style></head><body>');
-  w.document.write('<h1>RAPPORT FINANCIER FINAL</h1><p style="text-align:center;color:#666;">Congres de la Saucisse — 12-14 juin 2026 — Strasbourg</p>');
+  w.document.write('<html><head><title>Rapport Final — RVGS 2027</title><style>body{font-family:Georgia,serif;padding:40px;line-height:1.8;color:#111;}h1{text-align:center;}h2{color:#333;border-bottom:2px solid #C9A84C;padding-bottom:4px;margin-top:32px;}table{width:100%;border-collapse:collapse;margin:16px 0;}td,th{border:1px solid #333;padding:8px;font-size:.85rem;}th{background:#F5F5F5;text-align:left;}.total{font-weight:900;font-size:1.1rem;}.green{color:#16A34A;}.red{color:#DC2626;}</style></head><body>');
+  w.document.write('<h1>RAPPORT FINANCIER FINAL</h1><p style="text-align:center;color:#666;">RVGS — 19-22 mars 2027 — Strasbourg</p>');
   w.document.write('<h2>1. Synthese</h2><table><tr><th>Indicateur</th><th>Montant</th></tr><tr><td>Total depenses</td><td class="red">' + erpFmt(dep) + '</td></tr><tr><td>Total recettes</td><td class="green">' + erpFmt(rec) + '</td></tr><tr><td class="total">Resultat</td><td class="total ' + (solde >= 0 ? 'green' : 'red') + '">' + erpFmt(solde) + '</td></tr></table>');
   w.document.write('<h2>2. Depenses par categorie</h2><table><tr><th>Categorie</th><th>Montant</th></tr>');
   var cats = {}; ERP.invoices.forEach(function(i) { cats[i.categorie] = (cats[i.categorie] || 0) + i.montant; });
@@ -1564,16 +1572,16 @@ function erpGenerateRapportFinal() {
   w.document.write('<tr><td>Stands</td><td>' + erpFmt(ERP.stands.reduce(function(s, i) { return s + i.montant; }, 0)) + '</td></tr>');
   w.document.write('</table><h2>4. Personnel</h2><table><tr><th>Nom</th><th>Role</th><th>Type</th><th>Cout brut</th></tr>');
   ERP.staff.forEach(function(s) { w.document.write('<tr><td>' + s.nom + '</td><td>' + s.role + '</td><td>' + s.type + '</td><td>' + erpFmt(s.taux * s.heures) + '</td></tr>'); });
-  w.document.write('</table><p style="margin-top:40px;text-align:center;color:#999;font-size:.8rem;">ERP Congres de la Saucisse — ' + new Date().toLocaleDateString('fr-FR') + '</p></body></html>');
+  w.document.write('</table><p style="margin-top:40px;text-align:center;color:#999;font-size:.8rem;">ERP RVGS 2027 — ' + new Date().toLocaleDateString('fr-FR') + '</p></body></html>');
   w.document.close(); w.print();
 }
 
 /* ═══ ERP CSV EXPORT ═══ */
 function erpExportCSV(type) {
   var rows = [], filename = 'export.csv';
-  if (type === 'factures') { filename = 'factures_congres_saucisse.csv'; rows.push(['Fournisseur', 'Montant TTC', 'Montant HT', 'Date', 'Echeance', 'Categorie', 'Statut', 'Notes']); ERP.invoices.forEach(function(i) { rows.push([i.fournisseur, i.montant, i.montantHT || '', i.date, i.echeance, i.categorie, i.statut, i.notes || '']); }); }
-  else if (type === 'recettes') { filename = 'recettes_congres_saucisse.csv'; rows.push(['Type', 'Nom', 'Email', 'Montant', 'Date', 'Statut']); ERP.inscriptions.forEach(function(i) { rows.push(['Inscription', i.nom, i.email, i.montant, i.date, i.statut]); }); ERP.sponsors.forEach(function(i) { rows.push(['Sponsor', i.nom, i.email, i.montant, '', i.statut]); }); ERP.subventions.forEach(function(i) { rows.push(['Subvention', i.organisme, '', i.accorde, i.date, i.statut]); }); ERP.stands.forEach(function(i) { rows.push(['Stand', i.exposant, '', i.montant, '', i.statut]); }); }
-  else if (type === 'grand-livre') { filename = 'grand_livre_congres_saucisse.csv'; rows.push(['Date', 'Type', 'Libelle', 'Debit', 'Credit']); ERP.inscriptions.forEach(function(i) { rows.push([i.date, 'Inscription', i.nom, '', i.montant]); }); ERP.sponsors.filter(function(i) { return i.statut === 'paye' || i.statut === 'confirme'; }).forEach(function(i) { rows.push(['', 'Sponsor', i.nom, '', i.montant]); }); ERP.subventions.forEach(function(i) { if (i.accorde > 0) rows.push([i.date, 'Subvention', i.organisme, '', i.accorde]); }); ERP.stands.forEach(function(i) { rows.push(['', 'Stand', i.exposant, '', i.montant]); }); ERP.invoices.forEach(function(i) { rows.push([i.date, 'Facture', i.fournisseur + ' (' + i.categorie + ')', i.montant, '']); }); }
+  if (type === 'factures') { filename = 'factures_rvgs_2027.csv'; rows.push(['Fournisseur', 'Montant TTC', 'Montant HT', 'Date', 'Echeance', 'Categorie', 'Statut', 'Notes']); ERP.invoices.forEach(function(i) { rows.push([i.fournisseur, i.montant, i.montantHT || '', i.date, i.echeance, i.categorie, i.statut, i.notes || '']); }); }
+  else if (type === 'recettes') { filename = 'recettes_rvgs_2027.csv'; rows.push(['Type', 'Nom', 'Email', 'Montant', 'Date', 'Statut']); ERP.inscriptions.forEach(function(i) { rows.push(['Inscription', i.nom, i.email, i.montant, i.date, i.statut]); }); ERP.sponsors.forEach(function(i) { rows.push(['Sponsor', i.nom, i.email, i.montant, '', i.statut]); }); ERP.subventions.forEach(function(i) { rows.push(['Subvention', i.organisme, '', i.accorde, i.date, i.statut]); }); ERP.stands.forEach(function(i) { rows.push(['Stand', i.exposant, '', i.montant, '', i.statut]); }); }
+  else if (type === 'grand-livre') { filename = 'grand_livre_rvgs_2027.csv'; rows.push(['Date', 'Type', 'Libelle', 'Debit', 'Credit']); ERP.inscriptions.forEach(function(i) { rows.push([i.date, 'Inscription', i.nom, '', i.montant]); }); ERP.sponsors.filter(function(i) { return i.statut === 'paye' || i.statut === 'confirme'; }).forEach(function(i) { rows.push(['', 'Sponsor', i.nom, '', i.montant]); }); ERP.subventions.forEach(function(i) { if (i.accorde > 0) rows.push([i.date, 'Subvention', i.organisme, '', i.accorde]); }); ERP.stands.forEach(function(i) { rows.push(['', 'Stand', i.exposant, '', i.montant]); }); ERP.invoices.forEach(function(i) { rows.push([i.date, 'Facture', i.fournisseur + ' (' + i.categorie + ')', i.montant, '']); }); }
   var csv = rows.map(function(row) { return row.map(function(cell) { return '"' + String(cell).replace(/"/g, '""') + '"'; }).join(';'); }).join('\n');
   var blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
   var url = URL.createObjectURL(blob); var a = document.createElement('a'); a.href = url; a.download = filename;
