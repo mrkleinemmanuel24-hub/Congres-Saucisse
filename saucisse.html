@@ -1,0 +1,2613 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Congres de la Saucisse — La Saucisse Artisanale — 1ere Edition — Strasbourg 2026</title>
+  <meta name="description" content="Le plus grand rassemblement europeen dedie a la saucisse artisanale. 12-14 juin 2026, Palais des Congres de Strasbourg. 50 intervenants, 30 sessions, degustations.">
+  <meta name="theme-color" content="#0e0e20">
+  <link rel="icon" type="image/png" href="img/icons/icon-saucisse.png">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700;800;900&display=swap">
+  <style>
+/* ═══════════════════════════════════════════════════════════════
+   CONGRES DE LA SAUCISSE — Clone rdv-histoire.com
+   Dark navy theme, same structure & navigation
+   ═══════════════════════════════════════════════════════════════ */
+
+:root {
+  --navy: #0e0e20;
+  --navy-mid: #161632;
+  --navy-light: #1e1e3e;
+  --navy-card: #1a1a38;
+  --navy-card-hover: #222250;
+  --bg: #0e0e20;
+  --accent: #c8a44e;
+  --accent-light: #dabb6a;
+  --accent-dark: #a68836;
+  --green: #2AD783;
+  --red: #e74c3c;
+  --gold: #FFD300;
+  --text: #FFFFFF;
+  --text-body: #c5c5da;
+  --text-dim: #9494b8;
+  --text-muted: #6a6a90;
+  --border: rgba(255,255,255,.07);
+  --border-light: rgba(255,255,255,.04);
+  --shadow: 0 4px 24px rgba(0,0,0,.35);
+  --shadow-lg: 0 10px 40px rgba(0,0,0,.5);
+  --radius: 12px;
+  --radius-sm: 8px;
+  --font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-display: 'Playfair Display', Georgia, 'Times New Roman', serif;
+  --max-w: 1200px;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: var(--font);
+  background: var(--bg);
+  color: var(--text-body);
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+a { color: var(--accent); text-decoration: none; transition: color .2s; }
+a:hover { color: var(--accent-light); }
+img { max-width: 100%; height: auto; display: block; }
+section[id] { scroll-margin-top: 80px; }
+
+/* ═══ UTILITY BAR (top strip like rdv-histoire) ═══ */
+.utility-bar {
+  background: #080816;
+  border-bottom: 1px solid var(--border);
+  padding: 0 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 40px;
+  font-size: .72rem;
+}
+.utility-left {
+  display: flex; align-items: center; gap: 16px;
+}
+.utility-left a, .utility-left span {
+  color: var(--text-muted);
+  text-decoration: none;
+  transition: color .2s;
+}
+.utility-left a:hover { color: var(--accent); }
+.utility-right {
+  display: flex; align-items: center; gap: 12px;
+}
+.utility-right a {
+  color: var(--text-muted);
+  font-size: .72rem;
+  text-decoration: none;
+  padding: 4px 10px;
+  border-radius: 4px;
+  transition: all .2s;
+}
+.utility-right a:hover { color: var(--accent); }
+.utility-right .btn-reserve {
+  background: var(--accent);
+  color: #000;
+  font-weight: 700;
+  padding: 4px 14px;
+  border-radius: 4px;
+}
+.utility-right .btn-reserve:hover { background: var(--accent-light); }
+.utility-right .btn-don {
+  border: 1px solid var(--accent);
+  color: var(--accent);
+  padding: 3px 12px;
+  border-radius: 4px;
+}
+.utility-right .btn-don:hover { background: rgba(200,164,78,.1); }
+
+/* ═══ MAIN HEADER (rdv-histoire style) ═══ */
+.main-header {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  background: rgba(14,14,32,.97);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--border);
+}
+.header-inner {
+  max-width: var(--max-w);
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24px;
+  height: 70px;
+}
+.header-logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+  flex-shrink: 0;
+}
+.header-logo img {
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  object-fit: contain;
+}
+.header-logo-text {
+  display: flex;
+  flex-direction: column;
+}
+.header-logo-title {
+  font-family: var(--font-display);
+  font-size: 1rem;
+  font-weight: 700;
+  color: #FFF;
+  line-height: 1.2;
+}
+.header-logo-subtitle {
+  font-size: .65rem;
+  color: var(--text-muted);
+  letter-spacing: .5px;
+}
+
+/* Main nav */
+.main-nav {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+.main-nav > a, .main-nav > .nav-drop > a {
+  padding: 8px 13px;
+  font-size: .8rem;
+  font-weight: 600;
+  color: var(--text-dim);
+  text-decoration: none;
+  border-radius: 6px;
+  transition: all .2s;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+.main-nav > a:hover, .main-nav > .nav-drop > a:hover { background: rgba(200,164,78,.08); color: #FFF; }
+.main-nav > a.active { color: var(--accent); }
+
+/* Dropdowns */
+.nav-drop { position: relative; }
+.nav-drop > a::after { content: ' \25BE'; font-size: .6rem; opacity: .5; }
+.nav-drop-menu {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background: var(--navy);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 6px 0;
+  min-width: 210px;
+  box-shadow: var(--shadow-lg);
+  z-index: 100;
+}
+.nav-drop-menu a {
+  display: block;
+  padding: 9px 18px;
+  font-size: .8rem;
+  color: var(--text-dim);
+  border-radius: 0;
+}
+.nav-drop-menu a:hover { background: rgba(200,164,78,.08); color: #FFF; }
+.nav-drop:hover .nav-drop-menu { display: block; }
+
+/* Header CTAs */
+.header-ctas {
+  display: flex;
+  gap: 8px;
+  flex-shrink: 0;
+}
+.header-ctas .btn-cta {
+  padding: 7px 18px;
+  border-radius: 6px;
+  font-size: .78rem;
+  font-weight: 700;
+  text-decoration: none;
+  transition: all .2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+.btn-cta-gold { background: var(--accent); color: #000; }
+.btn-cta-gold:hover { background: var(--accent-light); color: #000; transform: translateY(-1px); }
+.btn-cta-outline { border: 1.5px solid rgba(255,255,255,.2); color: #FFF; }
+.btn-cta-outline:hover { border-color: var(--accent); color: var(--accent); }
+
+/* Mobile */
+.mobile-toggle {
+  display: none;
+  background: none;
+  border: none;
+  color: #FFF;
+  font-size: 1.4rem;
+  cursor: pointer;
+  padding: 6px;
+}
+
+@media (max-width: 1080px) {
+  .utility-bar { display: none; }
+  .main-nav, .header-ctas { display: none; }
+  .mobile-toggle { display: block; }
+  .main-nav.open {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 70px;
+    left: 0; right: 0;
+    background: rgba(14,14,32,.98);
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--border);
+    gap: 0;
+    max-height: 80vh;
+    overflow-y: auto;
+  }
+  .main-nav.open > a, .main-nav.open > .nav-drop > a {
+    padding: 12px 16px;
+    font-size: .88rem;
+    border-radius: 8px;
+  }
+  .nav-drop-menu {
+    position: static;
+    box-shadow: none;
+    border: none;
+    padding-left: 16px;
+    background: transparent;
+  }
+  .nav-drop:hover .nav-drop-menu { display: block; }
+  .header-ctas.open {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: auto;
+    left: 0; right: 0;
+    background: rgba(14,14,32,.98);
+    padding: 0 16px 16px;
+    gap: 8px;
+  }
+}
+
+/* ═══ HERO BANNER (rdv-histoire style: big visual) ═══ */
+.hero-banner {
+  position: relative;
+  min-height: 620px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: url('img/hero-congress.png') center/cover no-repeat;
+}
+.hero-banner::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg,
+    rgba(14,14,32,.88) 0%,
+    rgba(14,14,32,.7) 40%,
+    rgba(14,14,32,.92) 100%
+  );
+  z-index: 0;
+}
+.hero-banner > * { position: relative; z-index: 1; }
+.hero-content {
+  text-align: center;
+  padding: 60px 24px;
+  max-width: 800px;
+}
+.hero-edition {
+  display: inline-block;
+  font-size: .72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  color: var(--accent);
+  border: 1px solid var(--accent);
+  border-radius: 30px;
+  padding: 6px 20px;
+  margin-bottom: 24px;
+}
+.hero-theme {
+  font-family: var(--font-display);
+  font-size: clamp(2.4rem, 5.5vw, 4.2rem);
+  font-weight: 800;
+  color: #FFF;
+  line-height: 1.08;
+  margin-bottom: 16px;
+  letter-spacing: -1px;
+}
+.hero-date {
+  font-size: 1.05rem;
+  color: rgba(255,255,255,.65);
+  margin-bottom: 32px;
+  font-weight: 500;
+}
+.hero-stats-bar {
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  flex-wrap: wrap;
+  margin-bottom: 36px;
+  padding: 20px 28px;
+  background: rgba(255,255,255,.04);
+  border-radius: 14px;
+  border: 1px solid var(--border);
+}
+.hero-stat-val {
+  font-size: 2rem;
+  font-weight: 900;
+  color: #FFF;
+  font-family: var(--font-display);
+}
+.hero-stat-label {
+  font-size: .68rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+}
+.hero-ctas {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.hero-ctas .btn {
+  padding: 12px 28px;
+  border-radius: 8px;
+  font-size: .88rem;
+  font-weight: 700;
+  text-decoration: none;
+  transition: all .2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.btn-gold { background: var(--accent); color: #000; }
+.btn-gold:hover { background: var(--accent-light); transform: translateY(-2px); box-shadow: 0 6px 24px rgba(200,164,78,.3); }
+.btn-outline-light { border: 2px solid rgba(255,255,255,.25); color: #FFF; background: transparent; }
+.btn-outline-light:hover { border-color: #FFF; color: #FFF; }
+
+/* Floating sausages in hero */
+.hero-sausage {
+  position: absolute;
+  font-size: 36px;
+  opacity: .12;
+  pointer-events: none;
+  z-index: 0;
+}
+@keyframes sausageFloat { 0%,100%{transform:translateY(0) rotate(0deg)} 33%{transform:translateY(-18px) rotate(8deg)} 66%{transform:translateY(-6px) rotate(-6deg)} }
+@keyframes sausageBounce { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-22px)} }
+@keyframes sausageWiggle { 0%,100%{transform:rotate(-6deg)} 50%{transform:rotate(6deg)} }
+@keyframes sausageSpin { from{transform:rotate(0)} to{transform:rotate(360deg)} }
+@keyframes sausagePulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.18)} }
+
+/* ═══ SECTION SHARED STYLES ═══ */
+.site-section {
+  max-width: var(--max-w);
+  margin: 0 auto;
+  padding: 64px 24px;
+}
+.section-divider {
+  text-align: center;
+  padding: 6px 0;
+  font-size: 16px;
+  letter-spacing: 10px;
+  opacity: .4;
+  user-select: none;
+}
+.section-eyebrow {
+  display: inline-block;
+  font-size: .68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 2.5px;
+  padding: 5px 14px;
+  border-radius: 30px;
+  margin-bottom: 12px;
+}
+.eyebrow-gold { background: rgba(200,164,78,.12); color: var(--accent); border: 1px solid rgba(200,164,78,.2); }
+.eyebrow-red { background: rgba(231,76,60,.12); color: #e74c3c; border: 1px solid rgba(231,76,60,.2); }
+.eyebrow-green { background: rgba(42,215,131,.1); color: #2AD783; border: 1px solid rgba(42,215,131,.2); }
+.section-heading {
+  font-family: var(--font-display);
+  font-size: clamp(1.6rem, 3vw, 2.2rem);
+  font-weight: 700;
+  color: #FFF;
+  margin-bottom: 12px;
+  line-height: 1.2;
+}
+.section-subheading {
+  font-size: .92rem;
+  color: var(--text-dim);
+  max-width: 620px;
+  margin-bottom: 36px;
+}
+.sub-heading {
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #FFF;
+  margin-bottom: 8px;
+}
+
+/* ═══ "A LA UNE" CARDS (rdv-histoire style) ═══ */
+.cards-grid-3 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+.card-article {
+  background: var(--navy-card);
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  overflow: hidden;
+  transition: all .3s;
+  cursor: pointer;
+}
+.card-article:hover {
+  transform: translateY(-4px);
+  border-color: rgba(200,164,78,.2);
+  box-shadow: 0 12px 40px rgba(0,0,0,.4);
+}
+.card-article-img {
+  height: 180px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 3.5rem;
+  background: linear-gradient(135deg, var(--navy-mid), var(--navy-light));
+  position: relative;
+  overflow: hidden;
+}
+.card-article-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.card-article-body {
+  padding: 20px;
+}
+.card-article-cat {
+  display: inline-block;
+  font-size: .65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  padding: 3px 10px;
+  border-radius: 4px;
+  margin-bottom: 10px;
+}
+.cat-appel { background: rgba(200,164,78,.12); color: var(--accent); }
+.cat-concours { background: rgba(255,211,0,.1); color: #FFD300; }
+.cat-masterclass { background: rgba(42,215,131,.1); color: #2AD783; }
+.cat-parcours { background: rgba(52,152,219,.1); color: #3498db; }
+.cat-debat { background: rgba(155,89,182,.1); color: #9b59b6; }
+.cat-knack { background: rgba(231,76,60,.1); color: #e74c3c; }
+.card-article-title {
+  font-size: .95rem;
+  font-weight: 700;
+  color: #FFF;
+  margin-bottom: 8px;
+  line-height: 1.4;
+}
+.card-article-excerpt {
+  font-size: .82rem;
+  color: var(--text-dim);
+  line-height: 1.6;
+  margin-bottom: 10px;
+}
+.card-article-date {
+  font-size: .72rem;
+  color: var(--text-muted);
+}
+
+@media (max-width: 900px) { .cards-grid-3 { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 580px) { .cards-grid-3 { grid-template-columns: 1fr; } }
+
+/* ═══ THEMATIC SECTIONS (rdv-histoire 6-theme grid) ═══ */
+.themes-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+.theme-card {
+  background: var(--navy-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 28px 24px;
+  transition: all .3s;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+.theme-card::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 3px;
+  background: var(--accent);
+  transform: scaleX(0);
+  transition: transform .3s;
+}
+.theme-card:hover { transform: translateY(-3px); border-color: rgba(200,164,78,.15); }
+.theme-card:hover::after { transform: scaleX(1); }
+.theme-card-icon {
+  font-size: 2.2rem;
+  margin-bottom: 14px;
+  display: block;
+}
+.theme-card h3 {
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  color: #FFF;
+  margin-bottom: 8px;
+}
+.theme-card p {
+  font-size: .82rem;
+  color: var(--text-dim);
+  line-height: 1.6;
+}
+
+@media (max-width: 768px) { .themes-grid { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 480px) { .themes-grid { grid-template-columns: 1fr; } }
+
+/* ═══ NUMBERS BAR (like rdv-histoire key stats) ═══ */
+.numbers-bar {
+  background: var(--navy-mid);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  padding: 40px 24px;
+}
+.numbers-inner {
+  max-width: var(--max-w);
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  gap: 24px;
+  text-align: center;
+}
+.number-item-val {
+  font-family: var(--font-display);
+  font-size: 2.4rem;
+  font-weight: 800;
+  color: var(--accent);
+}
+.number-item-label {
+  font-size: .78rem;
+  color: var(--text-dim);
+  margin-top: 4px;
+}
+
+/* ═══ PROGRAMME (tabs + session cards) ═══ */
+.tabs-bar {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 20px;
+  overflow-x: auto;
+}
+.tab-btn {
+  padding: 9px 18px;
+  border-radius: var(--radius-sm);
+  font-size: .82rem;
+  font-weight: 600;
+  color: var(--text-dim);
+  background: var(--navy-card);
+  border: 1px solid var(--border);
+  cursor: pointer;
+  transition: all .2s;
+  white-space: nowrap;
+}
+.tab-btn:hover { color: #FFF; border-color: rgba(200,164,78,.2); }
+.tab-btn.active { background: var(--accent); color: #000; border-color: var(--accent); }
+.filters-bar {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+.filter-chip {
+  padding: 5px 14px;
+  border-radius: 20px;
+  font-size: .75rem;
+  font-weight: 600;
+  color: var(--text-dim);
+  background: var(--navy-card);
+  border: 1px solid var(--border);
+  cursor: pointer;
+  transition: all .2s;
+}
+.filter-chip:hover { color: #FFF; border-color: rgba(200,164,78,.15); }
+.filter-chip.active { background: rgba(200,164,78,.12); color: var(--accent); border-color: rgba(200,164,78,.3); }
+
+.session-card {
+  display: flex;
+  gap: 16px;
+  padding: 16px 20px;
+  background: var(--navy-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  margin-bottom: 10px;
+  transition: all .2s;
+  align-items: flex-start;
+}
+.session-card:hover { border-color: rgba(200,164,78,.15); }
+.session-time {
+  min-width: 56px;
+  font-weight: 700;
+  font-size: .88rem;
+  color: var(--accent);
+  text-align: center;
+}
+.session-info { flex: 1; }
+.session-info h3 { font-size: .92rem; color: #FFF; margin-bottom: 4px; }
+.session-info .speaker-name { font-size: .82rem; color: var(--accent-light); margin-bottom: 4px; }
+.session-info .meta { font-size: .75rem; color: var(--text-muted); }
+.session-actions { flex-shrink: 0; }
+.heart-btn {
+  background: none; border: none; font-size: 1.2rem;
+  color: var(--text-muted); cursor: pointer; padding: 4px;
+  transition: all .2s;
+}
+.heart-btn:hover, .heart-btn.active { color: #e74c3c; }
+.capacity-badge {
+  display: inline-block;
+  padding: 1px 8px;
+  border-radius: 10px;
+  font-size: .68rem;
+  font-weight: 600;
+}
+.capacity-ok { background: rgba(42,215,131,.12); color: #2AD783; }
+.capacity-warning { background: rgba(255,211,0,.12); color: #FFD300; }
+.capacity-full { background: rgba(231,76,60,.12); color: #e74c3c; }
+
+/* ═══ SPEAKERS GRID (rdv-histoire style) ═══ */
+.speakers-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+}
+.speaker-card {
+  background: var(--navy-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 24px 20px;
+  text-align: center;
+  transition: all .3s;
+  cursor: pointer;
+}
+.speaker-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(200,164,78,.2);
+  box-shadow: var(--shadow);
+}
+.speaker-avatar {
+  width: 72px; height: 72px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent), var(--accent-dark));
+  display: flex; align-items: center; justify-content: center;
+  color: #000;
+  font-weight: 800;
+  font-size: 1.2rem;
+  margin: 0 auto 14px;
+}
+.speaker-card h3 { font-size: .88rem; color: #FFF; margin-bottom: 4px; }
+.speaker-card .title { font-size: .78rem; color: var(--accent); margin-bottom: 2px; }
+.speaker-card .org { font-size: .72rem; color: var(--text-muted); }
+
+@media (max-width: 900px) { .speakers-grid { grid-template-columns: repeat(3, 1fr); } }
+@media (max-width: 600px) { .speakers-grid { grid-template-columns: repeat(2, 1fr); } }
+
+/* ═══ LE CONGRES (about + sidebar like rdv-histoire /le-festival) ═══ */
+.congres-layout {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 40px;
+  margin-bottom: 48px;
+}
+.congres-text p {
+  font-size: .92rem;
+  color: var(--text-body);
+  line-height: 1.8;
+  margin-bottom: 16px;
+}
+.congres-sidebar {
+  background: var(--navy-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 24px;
+}
+.congres-sidebar h3 {
+  font-family: var(--font-display);
+  font-size: 1rem;
+  color: var(--accent);
+  margin-bottom: 16px;
+}
+.info-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border-light);
+  font-size: .82rem;
+}
+.info-row:last-child { border-bottom: none; }
+.info-row .label { color: var(--text-muted); }
+.info-row .value { color: #FFF; font-weight: 600; }
+
+@media (max-width: 768px) { .congres-layout { grid-template-columns: 1fr; } }
+
+/* ═══ SUB-SECTIONS (Prix, Expos, Lieux) ═══ */
+.prix-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+.prix-card {
+  background: var(--navy-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 28px 24px;
+  text-align: center;
+  transition: all .3s;
+}
+.prix-card:hover { transform: translateY(-3px); border-color: rgba(255,211,0,.15); }
+.prix-icon { font-size: 2.5rem; margin-bottom: 12px; }
+.prix-card h3 { font-family: var(--font-display); font-size: 1rem; color: #FFF; margin-bottom: 8px; }
+.prix-card p { font-size: .82rem; color: var(--text-dim); line-height: 1.6; }
+
+.lieux-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 14px;
+}
+.lieu-card {
+  background: var(--navy-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 16px 18px;
+}
+.lieu-card h4 { font-size: .88rem; color: #FFF; margin-bottom: 4px; }
+.room-type-badge {
+  display: inline-block; padding: 1px 8px; border-radius: 10px;
+  font-size: .65rem; font-weight: 600; margin-left: 6px;
+}
+.type-auditorium { background: rgba(200,164,78,.12); color: var(--accent); }
+.type-conference { background: rgba(42,215,131,.1); color: #2AD783; }
+.type-atelier { background: rgba(52,152,219,.1); color: #3498db; }
+.type-reunion { background: rgba(155,89,182,.1); color: #9b59b6; }
+.type-expo { background: rgba(231,76,60,.1); color: #e74c3c; }
+.type-restauration { background: rgba(255,211,0,.1); color: #FFD300; }
+.lieu-meta { font-size: .78rem; color: var(--text-muted); margin-bottom: 4px; }
+.lieu-cap { font-size: .78rem; color: var(--accent); font-weight: 600; }
+
+@media (max-width: 768px) { .prix-grid { grid-template-columns: 1fr; } }
+
+/* ═══ CAFES GOURMANDS ═══ */
+.cafes-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+.cafe-card {
+  background: var(--navy-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 24px;
+  transition: all .3s;
+}
+.cafe-card:hover { border-color: rgba(200,164,78,.15); transform: translateY(-2px); }
+.cafe-card h3 { font-size: 1rem; color: #FFF; margin-bottom: 6px; }
+.cafe-card .type { font-size: .78rem; color: var(--accent); margin-bottom: 8px; font-weight: 600; }
+.cafe-card p { font-size: .82rem; color: var(--text-dim); line-height: 1.6; }
+
+@media (max-width: 600px) { .cafes-grid { grid-template-columns: 1fr; } }
+
+/* ═══ INFOS PRATIQUES ═══ */
+.transport-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+.transport-card {
+  background: var(--navy-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 22px 20px;
+}
+.transport-card h3 { font-size: 1rem; color: #FFF; margin-bottom: 8px; }
+.transport-card p { font-size: .84rem; color: var(--text-dim); line-height: 1.6; }
+
+.hotel-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 14px;
+}
+.hotel-card {
+  background: var(--navy-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 16px 18px;
+}
+.hotel-card h4 { font-size: .88rem; color: #FFF; margin-bottom: 4px; }
+.hotel-meta { font-size: .78rem; color: var(--text-muted); margin-bottom: 4px; }
+.hotel-price { font-size: .88rem; color: var(--accent); font-weight: 700; }
+
+.discover-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+}
+.discover-card {
+  background: var(--navy-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 24px 20px;
+  text-align: center;
+  transition: all .3s;
+}
+.discover-card:hover { transform: translateY(-2px); border-color: rgba(200,164,78,.1); }
+.discover-card .icon { font-size: 2rem; margin-bottom: 10px; }
+.discover-card h4 { font-size: .88rem; color: #FFF; margin-bottom: 6px; }
+.discover-card p { font-size: .78rem; color: var(--text-dim); line-height: 1.5; }
+
+.emergency-grid {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+.emergency-card {
+  background: var(--navy-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 16px 24px;
+  text-align: center;
+  min-width: 100px;
+}
+.emergency-card .number { font-size: 1.6rem; font-weight: 800; color: var(--red); }
+.emergency-card .elabel { font-size: .72rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
+
+@media (max-width: 768px) {
+  .transport-grid { grid-template-columns: 1fr; }
+  .discover-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+/* ═══ MAP ═══ */
+.map-container {
+  height: 350px;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  overflow: hidden;
+  margin-bottom: 20px;
+}
+
+/* ═══ PRESSE ═══ */
+.press-doc {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 14px 18px;
+  background: var(--navy-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  margin-bottom: 10px;
+}
+.press-doc .doc-icon { font-size: 1.8rem; flex-shrink: 0; }
+.press-doc .doc-info { flex: 1; }
+.press-doc .doc-info h4 { font-size: .88rem; color: #FFF; }
+.press-doc .doc-info p { font-size: .75rem; color: var(--text-muted); }
+.press-doc .btn-dl {
+  padding: 6px 14px; border-radius: 6px; font-size: .75rem; font-weight: 600;
+  background: transparent; border: 1px solid rgba(255,255,255,.15);
+  color: #FFF; cursor: pointer; transition: all .2s;
+}
+.press-doc .btn-dl:hover { border-color: var(--accent); color: var(--accent); }
+
+.media-kit {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+}
+.media-item {
+  background: var(--navy-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 20px 16px;
+  text-align: center;
+}
+.media-item .icon { font-size: 1.8rem; margin-bottom: 8px; }
+.media-item h4 { font-size: .82rem; color: #FFF; margin-bottom: 2px; }
+.media-item p { font-size: .72rem; color: var(--text-muted); }
+@media (max-width: 600px) { .media-kit { grid-template-columns: repeat(2, 1fr); } }
+
+/* Press accred form */
+.form-group { margin-bottom: 14px; }
+.form-group label { display: block; font-size: .78rem; color: var(--text-dim); margin-bottom: 4px; font-weight: 600; }
+.form-group input, .form-group select {
+  width: 100%; padding: 10px 14px; border-radius: var(--radius-sm);
+  border: 1px solid var(--border); background: var(--navy-card);
+  color: #FFF; font-size: .88rem; font-family: var(--font);
+  transition: border-color .2s;
+}
+.form-group input:focus, .form-group select:focus { outline: none; border-color: var(--accent); }
+.form-group input::placeholder { color: var(--text-muted); }
+
+/* ═══ INSCRIPTION ═══ */
+.stepper {
+  display: flex;
+  gap: 0;
+  margin-bottom: 28px;
+  overflow-x: auto;
+}
+.step-indicator {
+  flex: 1;
+  text-align: center;
+  padding: 10px 8px;
+  font-size: .75rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  border-bottom: 3px solid var(--border);
+  white-space: nowrap;
+  transition: all .2s;
+}
+.step-indicator.active { color: var(--accent); border-color: var(--accent); }
+.step-indicator.done { color: #2AD783; border-color: #2AD783; }
+.step-content { display: none; }
+.step-content.active { display: block; }
+
+/* Pass cards */
+.pass-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 14px;
+}
+.pass-card {
+  background: var(--navy-card);
+  border: 2px solid var(--border);
+  border-radius: var(--radius);
+  padding: 24px 20px;
+  text-align: center;
+  cursor: pointer;
+  transition: all .2s;
+}
+.pass-card:hover { border-color: rgba(200,164,78,.2); }
+.pass-card.selected { border-color: var(--accent); background: rgba(200,164,78,.05); }
+.pass-name { font-family: var(--font-display); font-size: 1.05rem; color: #FFF; margin-bottom: 8px; }
+.pass-price { font-size: 1.6rem; font-weight: 900; color: var(--accent); margin-bottom: 12px; }
+.pass-features { list-style: none; font-size: .78rem; color: var(--text-dim); line-height: 2; }
+.pass-features li::before { content: '✓ '; color: #2AD783; font-weight: 700; }
+
+/* Session check */
+.session-check {
+  display: flex; align-items: flex-start; gap: 12px;
+  padding: 12px 16px; background: var(--navy-card);
+  border: 1px solid var(--border); border-radius: var(--radius-sm);
+  margin-bottom: 8px; cursor: pointer; transition: all .2s;
+}
+.session-check:hover { border-color: rgba(200,164,78,.15); }
+.session-check.checked { border-color: var(--accent); background: rgba(200,164,78,.04); }
+.session-check input { width: 18px; height: 18px; accent-color: var(--accent); margin-top: 2px; }
+
+/* Hotel / repas options */
+.hotel-option, .repas-option {
+  display: flex; align-items: center; gap: 16px;
+  padding: 14px 18px; background: var(--navy-card);
+  border: 2px solid var(--border); border-radius: var(--radius-sm);
+  margin-bottom: 8px; cursor: pointer; transition: all .2s;
+}
+.hotel-option:hover, .repas-option:hover { border-color: rgba(200,164,78,.15); }
+.hotel-option.selected, .repas-option.selected { border-color: var(--accent); background: rgba(200,164,78,.04); }
+.repas-option input { accent-color: var(--accent); }
+
+/* Recap */
+.recap-section { margin-bottom: 16px; }
+.recap-section h4 { font-size: .85rem; color: var(--accent); margin-bottom: 8px; }
+.recap-row {
+  display: flex; justify-content: space-between;
+  padding: 6px 0; font-size: .82rem; color: var(--text-dim);
+  border-bottom: 1px solid var(--border-light);
+}
+.recap-total {
+  text-align: right; font-size: 1.3rem; font-weight: 800;
+  color: var(--accent); margin-top: 16px; padding-top: 16px;
+  border-top: 2px solid var(--accent);
+}
+
+/* Confirmation */
+.confirmation-box {
+  text-align: center; padding: 40px;
+  background: var(--navy-card); border-radius: var(--radius);
+  border: 1px solid var(--border);
+}
+.check-icon {
+  width: 64px; height: 64px; border-radius: 50%;
+  background: #2AD783; color: #FFF; font-size: 2rem;
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 16px;
+}
+
+/* Badge preview */
+.badge-preview {
+  display: inline-block; padding: 24px 32px;
+  background: #FFF; border-radius: 12px;
+  color: #000; text-align: center;
+}
+.badge-header { font-size: .72rem; font-weight: 700; color: var(--accent-dark); letter-spacing: 2px; text-transform: uppercase; }
+.badge-name { font-size: 1.3rem; font-weight: 800; margin: 8px 0 4px; }
+.badge-company { font-size: .82rem; color: #666; }
+.badge-pass { display: inline-block; padding: 4px 14px; border-radius: 20px; font-size: .75rem; font-weight: 700; margin-top: 10px; }
+.badge-pass-standard { background: #e5e5e5; color: #333; }
+.badge-pass-premium { background: #2AD783; color: #FFF; }
+.badge-pass-vip { background: #FFD300; color: #000; }
+.badge-pass-platinum { background: linear-gradient(90deg,#333,#666); color: #FFF; }
+
+/* ═══ PARTENAIRES (rdv-histoire 6 categories) ═══ */
+.partners-section { margin-bottom: 36px; }
+.partners-section h3 {
+  font-family: var(--font-display);
+  font-size: 1rem;
+  color: var(--accent);
+  margin-bottom: 14px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border);
+}
+.partners-logos {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  align-items: center;
+}
+.partner-logo-item {
+  background: var(--navy-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 14px 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: .82rem;
+  color: var(--text-body);
+  transition: all .2s;
+}
+.partner-logo-item:hover { border-color: rgba(200,164,78,.15); }
+.partner-logo-item .p-icon { font-size: 1.4rem; }
+.partner-logo-item .p-name { font-weight: 600; color: #FFF; }
+.partner-logo-item .p-type { font-size: .7rem; color: var(--text-muted); }
+
+/* ═══ NEWSLETTER ═══ */
+.newsletter-form {
+  display: flex;
+  gap: 8px;
+  max-width: 400px;
+}
+.newsletter-form input {
+  flex: 1; padding: 10px 14px; border-radius: 6px;
+  border: 1px solid var(--border); background: rgba(255,255,255,.04);
+  color: #FFF; font-size: .85rem;
+}
+.newsletter-form input::placeholder { color: var(--text-muted); }
+.newsletter-form button {
+  padding: 10px 18px; border-radius: 6px;
+  background: var(--accent); color: #000; font-weight: 700;
+  font-size: .82rem; border: none; cursor: pointer;
+  transition: all .2s;
+}
+.newsletter-form button:hover { background: var(--accent-light); }
+
+/* ═══ FOOTER (rdv-histoire style) ═══ */
+.site-footer {
+  background: #080816;
+  padding: 64px 24px 32px;
+  border-top: 1px solid var(--border);
+}
+.footer-grid {
+  max-width: var(--max-w);
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1.5fr;
+  gap: 40px;
+  margin-bottom: 40px;
+}
+.footer-col h4 {
+  font-family: var(--font-display);
+  color: #FFF;
+  font-size: .9rem;
+  margin-bottom: 16px;
+}
+.footer-col p, .footer-col a {
+  color: var(--text-muted);
+  font-size: .8rem;
+  line-height: 1.9;
+  text-decoration: none;
+  display: block;
+}
+.footer-col a:hover { color: var(--accent); }
+.footer-social-row {
+  display: flex;
+  gap: 10px;
+  margin-top: 16px;
+}
+.footer-social-row a {
+  width: 34px; height: 34px;
+  border-radius: 50%;
+  background: rgba(255,255,255,.04);
+  border: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  color: var(--text-muted);
+  font-size: .75rem;
+  transition: all .2s;
+}
+.footer-social-row a:hover { background: rgba(200,164,78,.1); color: var(--accent); border-color: rgba(200,164,78,.2); }
+.footer-bottom {
+  max-width: var(--max-w);
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 24px;
+  border-top: 1px solid var(--border);
+  flex-wrap: wrap;
+  gap: 16px;
+}
+.footer-bottom p { color: rgba(255,255,255,.2); font-size: .72rem; }
+.footer-bottom-links { display: flex; gap: 18px; }
+.footer-bottom-links a { color: rgba(255,255,255,.25); font-size: .72rem; text-decoration: none; }
+.footer-bottom-links a:hover { color: var(--accent); }
+
+@media (max-width: 768px) {
+  .footer-grid { grid-template-columns: 1fr; gap: 28px; }
+  .footer-bottom { flex-direction: column; text-align: center; }
+}
+
+/* ═══ MODAL ═══ */
+.modal-overlay {
+  display: none;
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,.7);
+  z-index: 9999;
+  align-items: center; justify-content: center;
+}
+.modal-overlay.active { display: flex; }
+.modal {
+  background: var(--navy-mid);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  max-width: 560px;
+  width: 90%;
+  max-height: 85vh;
+  overflow-y: auto;
+  padding: 32px;
+  position: relative;
+}
+.modal-close {
+  position: absolute; top: 12px; right: 16px;
+  background: none; border: none; color: var(--text-muted);
+  font-size: 1.5rem; cursor: pointer; padding: 4px;
+}
+.modal-close:hover { color: #FFF; }
+
+/* ═══ FLOATING CANDY SAUSAGES ═══ */
+.candy-sausage {
+  position: fixed;
+  font-size: 28px;
+  pointer-events: none;
+  z-index: 998;
+  opacity: .6;
+}
+.candy-sausage.bounce { animation: sausageBounce 2.2s ease-in-out infinite; }
+.candy-sausage.wiggle { animation: sausageWiggle 1.6s ease-in-out infinite; }
+.candy-sausage.float { animation: sausageFloat 3.2s ease-in-out infinite; }
+.candy-sausage.pulse { animation: sausagePulse 2s ease-in-out infinite; }
+.candy-sausage.spin { animation: sausageSpin 4s linear infinite; }
+
+@keyframes sausageRain { 0%{transform:translateY(-60px) rotate(0);opacity:1} 100%{transform:translateY(calc(100vh + 60px)) rotate(720deg);opacity:0} }
+.sausage-rain { position:fixed;top:-60px;font-size:32px;pointer-events:none;z-index:99999;animation:sausageRain 2.5s linear forwards; }
+@keyframes sausageParade { 0%{transform:translateX(-60px) rotate(-10deg)} 100%{transform:translateX(calc(100vw + 60px)) rotate(10deg)} }
+.sausage-parade { position:fixed;bottom:30px;left:-60px;font-size:36px;pointer-events:none;z-index:99998;animation:sausageParade 5s ease-in-out forwards; }
+
+/* Sausage cursor on gold buttons */
+.btn-gold:hover, .btn-cta-gold:hover {
+  cursor: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32'><text y='24' font-size='24'>🌭</text></svg>") 16 16, pointer;
+}
+
+/* ═══ MISC ═══ */
+.hidden { display: none !important; }
+.text-center { text-align: center; }
+.info-subsection { margin-bottom: 40px; }
+.info-subsection h2 {
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  color: #FFF;
+  margin-bottom: 12px;
+}
+
+/* ═══ SECTION BANNER IMAGES ═══ */
+.section-banner-img {
+  width: 100%;
+  max-height: 300px;
+  object-fit: cover;
+  border-radius: var(--radius);
+  margin-bottom: 24px;
+}
+.card-img-cover {
+  width: 100%;
+  aspect-ratio: 16/9;
+  object-fit: cover;
+  border-radius: var(--radius) var(--radius) 0 0;
+}
+.plan-img {
+  width: 100%;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  cursor: pointer;
+  transition: opacity .2s;
+}
+.plan-img:hover { opacity: .85; }
+.salle-showcase {
+  background: var(--navy-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  margin-bottom: 20px;
+}
+.salle-showcase-img {
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+}
+.salle-showcase-body {
+  padding: 20px;
+}
+.salle-showcase-body h3 {
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  color: #FFF;
+  margin-bottom: 8px;
+}
+.salle-showcase-body .salle-meta {
+  font-size: .85rem;
+  color: var(--text-dim);
+  margin-bottom: 12px;
+  line-height: 1.6;
+}
+.capacity-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: .8rem;
+}
+.capacity-table th {
+  text-align: left;
+  color: var(--accent);
+  padding: 6px 10px;
+  border-bottom: 1px solid var(--border);
+  font-weight: 600;
+}
+.capacity-table td {
+  padding: 6px 10px;
+  color: var(--text-body);
+  border-bottom: 1px solid var(--border-light);
+}
+.plans-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-top: 24px;
+}
+@media (max-width: 768px) { .plans-grid { grid-template-columns: 1fr; } }
+.plan-card {
+  background: var(--navy-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+.plan-card h4 {
+  padding: 12px 16px;
+  font-size: .88rem;
+  color: #FFF;
+  border-bottom: 1px solid var(--border-light);
+}
+.plan-card img {
+  width: 100%;
+  cursor: pointer;
+}
+.salles-grid-3 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  margin-bottom: 28px;
+}
+@media (max-width: 900px) { .salles-grid-3 { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 580px) { .salles-grid-3 { grid-template-columns: 1fr; } }
+.discover-card-img {
+  width: 100%;
+  height: 140px;
+  object-fit: cover;
+  border-radius: var(--radius) var(--radius) 0 0;
+  margin-bottom: -10px;
+}
+.cafe-card-img {
+  width: 100%;
+  height: 160px;
+  object-fit: cover;
+  border-radius: var(--radius) var(--radius) 0 0;
+  margin: -24px -24px 16px -24px;
+  width: calc(100% + 48px);
+}
+.theme-card-img {
+  width: 100%;
+  height: 140px;
+  object-fit: cover;
+  border-radius: var(--radius) var(--radius) 0 0;
+  margin: -28px -24px 14px -24px;
+  width: calc(100% + 48px);
+}
+.card-inset {
+  background: var(--navy-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 24px;
+}
+.btn-sm {
+  padding: 8px 18px;
+  border-radius: 6px;
+  font-size: .82rem;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  text-decoration: none;
+  transition: all .2s;
+}
+.btn-sm-gold { background: var(--accent); color: #000; }
+.btn-sm-gold:hover { background: var(--accent-light); }
+.btn-sm-outline { border: 1px solid rgba(255,255,255,.15); color: #FFF; background: transparent; }
+.btn-sm-outline:hover { border-color: var(--accent); color: var(--accent); }
+
+/* Contact presse */
+.contact-press {
+  background: var(--navy-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 24px;
+}
+  </style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<!-- FLOATING CANDY SAUSAGES                                       -->
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<div class="candy-sausage bounce" style="top:10%;left:2%;animation-delay:0s;font-size:24px;">🌭</div>
+<div class="candy-sausage wiggle" style="top:22%;right:3%;animation-delay:.4s;font-size:20px;">🌭</div>
+<div class="candy-sausage float" style="top:42%;left:1.5%;animation-delay:.9s;font-size:28px;">🌭</div>
+<div class="candy-sausage pulse" style="top:58%;right:2%;animation-delay:1.3s;font-size:22px;">🌭</div>
+<div class="candy-sausage bounce" style="top:75%;left:3%;animation-delay:1.7s;font-size:18px;">🌭</div>
+<div class="candy-sausage spin" style="top:33%;right:5%;animation-delay:2.1s;font-size:16px;">🌭</div>
+
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<!-- UTILITY BAR (top strip like rdv-histoire.com)                 -->
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<div class="utility-bar">
+  <div class="utility-left">
+    <span>🌭 12 — 14 juin 2026 &middot; Strasbourg</span>
+    <a href="#infos">Infos pratiques</a>
+    <a href="#">Contact</a>
+    <a href="#">PDF Programme</a>
+  </div>
+  <div class="utility-right">
+    <a href="#inscription" class="btn-reserve">Reservation</a>
+    <a href="#partenaires" class="btn-don">Faire un don</a>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<!-- MAIN HEADER + NAVIGATION (rdv-histoire.com structure)         -->
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<header class="main-header">
+  <div class="header-inner">
+    <a href="#accueil" class="header-logo">
+      <img src="img/icons/icon-saucisse.png" alt="Logo Congres de la Saucisse">
+      <div class="header-logo-text">
+        <span class="header-logo-title">Congres de la Saucisse</span>
+        <span class="header-logo-subtitle">Strasbourg &middot; 1ere Edition</span>
+      </div>
+    </a>
+
+    <button class="mobile-toggle" onclick="toggleMobileNav()" aria-label="Menu">&#9776;</button>
+
+    <nav class="main-nav" id="main-nav">
+      <a href="#accueil" class="active">Accueil</a>
+      <a href="#actualites">Actualites</a>
+      <a href="#intervenants">Intervenants</a>
+      <a href="#mediatheque">Mediatheque</a>
+      <a href="#partenaires">Partenaires</a>
+      <div class="nav-drop">
+        <a href="#congres">Le Congres</a>
+        <div class="nav-drop-menu">
+          <a href="#congres-about">A propos</a>
+          <a href="#congres-thematiques">Les Thematiques</a>
+          <a href="#congres-expositions">Les Expositions</a>
+          <a href="#congres-prix">Les Prix</a>
+          <a href="#congres-lieux">Les Lieux</a>
+        </div>
+      </div>
+      <div class="nav-drop">
+        <a href="#cafes">Cafes Gourmands</a>
+        <div class="nav-drop-menu">
+          <a href="#cafes">Tous les Cafes</a>
+          <a href="#cafes-degustation">Cafes Degustation</a>
+        </div>
+      </div>
+      <a href="#presse">Espace Presse</a>
+      <div class="nav-drop">
+        <a href="#pro">Espace Professionnel</a>
+        <div class="nav-drop-menu">
+          <a href="#pro">Exposer</a>
+          <a href="#pro">B2B Meetings</a>
+          <a href="#pro">Offres Partenaires</a>
+        </div>
+      </div>
+    </nav>
+
+    <div class="header-ctas" id="header-ctas">
+      <a href="#inscription" class="btn-cta btn-cta-gold" id="cta-inscrire">🌭 Reservation</a>
+      <a href="#partenaires" class="btn-cta btn-cta-outline">Faire un don</a>
+    </div>
+  </div>
+</header>
+
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<!-- HERO BANNER                                                    -->
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<section id="accueil" class="hero-banner">
+  <div class="hero-sausage" style="top:8%;left:7%;animation:sausageFloat 4s ease-in-out infinite;font-size:42px;">🌭</div>
+  <div class="hero-sausage" style="top:18%;right:9%;animation:sausageBounce 3s ease-in-out infinite;animation-delay:.5s;font-size:36px;">🌭</div>
+  <div class="hero-sausage" style="bottom:12%;left:12%;animation:sausageWiggle 2s ease-in-out infinite;font-size:32px;">🌭</div>
+  <div class="hero-sausage" style="bottom:22%;right:11%;animation:sausagePulse 2.5s ease-in-out infinite;animation-delay:1s;font-size:38px;">🌭</div>
+  <div class="hero-content">
+    <div class="hero-edition">🌭 1ere Edition</div>
+    <h1 class="hero-theme">La Saucisse<br>Artisanale</h1>
+    <p class="hero-date">12 — 14 juin 2026 &middot; Palais des Congres de Strasbourg</p>
+    <div class="hero-stats-bar">
+      <div><div class="hero-stat-val">50+</div><div class="hero-stat-label">🌭 Intervenants</div></div>
+      <div><div class="hero-stat-val">30+</div><div class="hero-stat-label">🌭 Degustations</div></div>
+      <div><div class="hero-stat-val">600+</div><div class="hero-stat-label">Conferences</div></div>
+      <div><div class="hero-stat-val">150</div><div class="hero-stat-label">Artisans presents</div></div>
+      <div><div class="hero-stat-val">5 000</div><div class="hero-stat-label">Festivaliers</div></div>
+    </div>
+    <div class="hero-ctas">
+      <a href="#inscription" class="btn btn-gold" id="hero-inscrire">🌭 S'inscrire</a>
+      <a href="#programme" class="btn btn-outline-light">Voir le programme</a>
+      <a href="#congres" class="btn btn-outline-light">Decouvrir le Congres</a>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<!-- NUMBERS BAR (like rdv-histoire "1000 intervenants / ...")     -->
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<div class="numbers-bar">
+  <div class="numbers-inner">
+    <div><div class="number-item-val">50+</div><div class="number-item-label">intervenants</div></div>
+    <div><div class="number-item-val">30+</div><div class="number-item-label">degustations et conferences</div></div>
+    <div><div class="number-item-val">150</div><div class="number-item-label">artisans presents</div></div>
+    <div><div class="number-item-val">300</div><div class="number-item-label">specialites en vitrine</div></div>
+    <div><div class="number-item-val">5 000</div><div class="number-item-label">festivaliers attendus</div></div>
+  </div>
+</div>
+
+<!-- sausage divider -->
+<div class="section-divider">🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭</div>
+
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<!-- A LA UNE (6 article cards like rdv-histoire)                  -->
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<section id="actualites" class="site-section">
+  <span class="section-eyebrow eyebrow-red">A la une</span>
+  <h2 class="section-heading">🌭 Actualites du Congres</h2>
+  <p class="section-subheading">Les dernieres nouvelles du Congres de la Saucisse — Strasbourg 2026.</p>
+
+  <div class="cards-grid-3">
+    <div class="card-article" onclick="document.getElementById('congres').scrollIntoView({behavior:'smooth'})">
+      <div class="card-article-img"><img src="img/img-actualites.png" alt="Actualites du Congres"></div>
+      <div class="card-article-body">
+        <span class="card-article-cat cat-appel">Appel a communications</span>
+        <h3 class="card-article-title">Appel a communications ouvert jusqu'au 30 avril</h3>
+        <p class="card-article-excerpt">Chercheurs, artisans et professionnels : soumettez vos propositions pour le premier Congres de la Saucisse. 6 thematiques, formats conference ou atelier.</p>
+        <p class="card-article-date">14 mars 2026</p>
+      </div>
+    </div>
+
+    <div class="card-article" onclick="document.getElementById('congres-prix').scrollIntoView({behavior:'smooth'})">
+      <div class="card-article-img"><img src="img/img-prix.png" alt="Grand Prix de la Saucisse"></div>
+      <div class="card-article-body">
+        <span class="card-article-cat cat-concours">Concours</span>
+        <h3 class="card-article-title">Le Grand Prix de la Saucisse : les nomines 2026</h3>
+        <p class="card-article-excerpt">12 charcutiers artisanaux de 8 pays en lice pour le tout premier Grand Prix de la Saucisse. Jury preside par Jean-Marc Schaller, MOF 2018.</p>
+        <p class="card-article-date">10 mars 2026</p>
+      </div>
+    </div>
+
+    <div class="card-article" onclick="document.getElementById('intervenants').scrollIntoView({behavior:'smooth'})">
+      <div class="card-article-img"><img src="img/img-speakers.png" alt="Intervenants"></div>
+      <div class="card-article-body">
+        <span class="card-article-cat cat-masterclass">Masterclass</span>
+        <h3 class="card-article-title">Masterclass avec Hans Gruber, maitre fumeur de Foret-Noire</h3>
+        <p class="card-article-excerpt">5e generation de maitres fumeurs. Hans Gruber revelera les secrets du fumage traditionnel au bois de hetre. Places limitees.</p>
+        <p class="card-article-date">8 mars 2026</p>
+      </div>
+    </div>
+
+    <div class="card-article" onclick="document.getElementById('infos').scrollIntoView({behavior:'smooth'})">
+      <div class="card-article-img"><img src="img/img-winstub.png" alt="Parcours gastronomique dans les winstubs"></div>
+      <div class="card-article-body">
+        <span class="card-article-cat cat-parcours">Parcours gastronomique</span>
+        <h3 class="card-article-title">La Route de la Saucisse : parcours dans Strasbourg</h3>
+        <p class="card-article-excerpt">12 etapes dans les rues de Strasbourg : winstubs, charcutiers, ateliers de degustation. Carte interactive incluse dans le pass.</p>
+        <p class="card-article-date">5 mars 2026</p>
+      </div>
+    </div>
+
+    <div class="card-article" onclick="document.getElementById('programme').scrollIntoView({behavior:'smooth'})">
+      <div class="card-article-img"><img src="img/img-professionnel.png" alt="Table ronde professionnelle"></div>
+      <div class="card-article-body">
+        <span class="card-article-cat cat-debat">Table ronde</span>
+        <h3 class="card-article-title">L'avenir de la charcuterie artisanale face a l'industrie</h3>
+        <p class="card-article-excerpt">Jean-Marc Schaller, Francois Heim et Marc Bertrand debattront des defis et opportunites pour la saucisse artisanale en 2026.</p>
+        <p class="card-article-date">1 mars 2026</p>
+      </div>
+    </div>
+
+    <div class="card-article" onclick="document.getElementById('congres').scrollIntoView({behavior:'smooth'})">
+      <div class="card-article-img"><img src="img/img-knack.png" alt="Concours du meilleur knack"></div>
+      <div class="card-article-body">
+        <span class="card-article-cat cat-knack">Concours</span>
+        <h3 class="card-article-title">Concours du meilleur knack d'Alsace — inscriptions ouvertes</h3>
+        <p class="card-article-excerpt">Artisans charcutiers alsaciens, inscrivez votre knack avant le 15 mai. Jury professionnel, prix de 5 000 euros et vitrine internationale.</p>
+        <p class="card-article-date">25 fevrier 2026</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider">🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭</div>
+
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<!-- THEMATIQUES (6 themes like rdv-histoire)                      -->
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<section class="site-section">
+  <span class="section-eyebrow eyebrow-gold">Thematiques</span>
+  <h2 class="section-heading">🌭 Les thematiques 2026</h2>
+  <p class="section-subheading">6 axes pour explorer la saucisse artisanale sous tous ses angles.</p>
+
+  <div class="themes-grid">
+    <div class="theme-card">
+      <img src="img/img-cervelas.png" alt="Science et Nutrition" class="theme-card-img">
+      <span class="theme-card-icon">🔬</span>
+      <h3>Science &amp; Nutrition</h3>
+      <p>Recherche, ferments lactiques, impact nutritionnel, etudes comparatives artisanal vs industriel. Conferences avec l'INRAE.</p>
+    </div>
+    <div class="theme-card">
+      <img src="img/img-knack.png" alt="Artisanat et Savoir-faire" class="theme-card-img">
+      <span class="theme-card-icon">🏭</span>
+      <h3>Artisanat &amp; Savoir-faire</h3>
+      <p>Fabrication, fumage, maturation, terroir, Label Rouge, traditions ancestrales. Demos live par des MOF.</p>
+    </div>
+    <div class="theme-card">
+      <img src="img/img-expo.png" alt="International" class="theme-card-img">
+      <span class="theme-card-icon">🌍</span>
+      <h3>International</h3>
+      <p>Bratwurst, mortadella, chorizo, bangers, arabiki — les saucisses du monde entier. Experts de 8 pays.</p>
+    </div>
+    <div class="theme-card">
+      <img src="img/img-marche-noel.png" alt="Histoire et Patrimoine" class="theme-card-img">
+      <span class="theme-card-icon">📜</span>
+      <h3>Histoire &amp; Patrimoine</h3>
+      <p>De Rome a Strasbourg, 3000 ans de charcuterie. Christkindelsmaerik et musee de la charcuterie.</p>
+    </div>
+    <div class="theme-card">
+      <img src="img/img-riesling.png" alt="Gastronomie et Degustation" class="theme-card-img">
+      <span class="theme-card-icon">🍽️</span>
+      <h3>Gastronomie &amp; Degustation</h3>
+      <p>Accords biere-saucisse, haute gastronomie charcutiere, recettes de chefs etoiles. 30+ degustations.</p>
+    </div>
+    <div class="theme-card">
+      <img src="img/img-professionnel.png" alt="Business et Innovation" class="theme-card-img">
+      <span class="theme-card-icon">💼</span>
+      <h3>Business &amp; Innovation</h3>
+      <p>FoodTech, IA, saucisse vegetale hybride, food design, tendances marche. Espace B2B dedicate.</p>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider">🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭</div>
+
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<!-- PROGRAMME                                                      -->
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<section id="programme" class="site-section">
+  <span class="section-eyebrow eyebrow-green">Programme</span>
+  <h2 class="section-heading">🌭 Programme complet</h2>
+  <p class="section-subheading">32 sessions sur 3 jours — conferences, ateliers, degustations et tables rondes.</p>
+  <div class="tabs-bar" id="prog-tabs">
+    <button class="tab-btn active" onclick="showProgramDay(1, this)">Jour 1 — Jeu. 12 juin</button>
+    <button class="tab-btn" onclick="showProgramDay(2, this)">Jour 2 — Ven. 13 juin</button>
+    <button class="tab-btn" onclick="showProgramDay(3, this)">Jour 3 — Sam. 14 juin</button>
+  </div>
+  <div class="filters-bar" id="prog-filters"></div>
+  <div id="prog-sessions-list"></div>
+</section>
+
+<div class="section-divider">🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭</div>
+
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<!-- INTERVENANTS                                                   -->
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<section id="intervenants" class="site-section">
+  <span class="section-eyebrow eyebrow-gold">Intervenants</span>
+  <h2 class="section-heading">🌭 Nos intervenants</h2>
+  <p class="section-subheading">22 experts internationaux de la saucisse artisanale.</p>
+  <div class="filters-bar" id="interv-filters"></div>
+  <div class="speakers-grid" id="interv-grid"></div>
+</section>
+
+<div class="section-divider">🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭</div>
+
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<!-- MEDIATHEQUE                                                    -->
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<section id="mediatheque" class="site-section">
+  <span class="section-eyebrow eyebrow-green">Mediatheque</span>
+  <h2 class="section-heading">🌭 Mediatheque</h2>
+  <p class="section-subheading">Photos, videos et documents du Congres de la Saucisse.</p>
+
+  <img src="img/img-mediatheque.png" alt="Centre media du Congres" class="section-banner-img">
+
+  <div class="themes-grid">
+    <div class="theme-card" style="text-align:center;">
+      <span class="theme-card-icon">📸</span>
+      <h3>Photos HD</h3>
+      <p>Galerie photo du Congres. Banque d'images haute resolution pour la presse et les partenaires.</p>
+    </div>
+    <div class="theme-card" style="text-align:center;">
+      <span class="theme-card-icon">🎬</span>
+      <h3>Videos</h3>
+      <p>Teaser officiel, replays des conferences, interviews des intervenants, aftermovie.</p>
+    </div>
+    <div class="theme-card" style="text-align:center;">
+      <span class="theme-card-icon">📄</span>
+      <h3>Documents</h3>
+      <p>Programme PDF, brochure officielle, fiches thematiques, guide pratique.</p>
+    </div>
+  </div>
+
+  <div style="text-align:center;margin-top:32px;">
+    <p style="color:var(--text-muted);font-size:.85rem;">La mediatheque sera alimentee a l'approche et pendant le Congres.</p>
+  </div>
+</section>
+
+<div class="section-divider">🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭</div>
+
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<!-- LE CONGRES                                                     -->
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<section id="congres" class="site-section">
+  <span class="section-eyebrow eyebrow-gold">Le Congres</span>
+  <h2 class="section-heading">🌭 Le Congres de la Saucisse</h2>
+  <p class="section-subheading">Tout savoir sur le plus grand evenement europeen dedie a la saucisse artisanale.</p>
+
+  <!-- A propos -->
+  <div id="congres-about" class="congres-layout">
+    <div class="congres-text">
+      <h2 class="sub-heading">A propos</h2>
+      <p>Le Congres de la Saucisse est ne d'une idee simple : reunir pour la premiere fois en un seul lieu tous les acteurs de la saucisse artisanale — charcutiers, chercheurs, chefs, eleveurs, innovateurs et passionnes.</p>
+      <p>Organise au coeur de Strasbourg, capitale europeenne et berceau de la knack, cet evenement inedit rassemble 22 experts de 8 pays pour 3 jours de conferences, ateliers pratiques, degustations et debats autour de l'avenir de la charcuterie.</p>
+      <p>Le Congres est porte par l'Institut Francais de la Charcuterie-Cuisine (IFCC), en partenariat avec la Ville de Strasbourg, la Region Grand Est et l'INRAE.</p>
+      <p>Un lieu de rencontre privilegie entre chercheurs, artisans, passionnes et gourmands pour comprendre et savourer la saucisse artisanale dans toutes ses dimensions.</p>
+    </div>
+    <div class="congres-sidebar">
+      <h3>🌭 Informations cles</h3>
+      <div class="info-row"><span class="label">Edition</span><span class="value">1ere edition</span></div>
+      <div class="info-row"><span class="label">Theme</span><span class="value">La Saucisse Artisanale</span></div>
+      <div class="info-row"><span class="label">Dates</span><span class="value">12 — 14 juin 2026</span></div>
+      <div class="info-row"><span class="label">Lieu</span><span class="value">Palais des Congres</span></div>
+      <div class="info-row"><span class="label">Ville</span><span class="value">Strasbourg</span></div>
+      <div class="info-row"><span class="label">Intervenants</span><span class="value">50+ experts</span></div>
+      <div class="info-row"><span class="label">Sessions</span><span class="value">30+ sessions</span></div>
+      <div class="info-row"><span class="label">Capacite</span><span class="value">5 000 places</span></div>
+      <div class="info-row"><span class="label">Pays</span><span class="value">8 pays representes</span></div>
+    </div>
+  </div>
+
+  <!-- Thematiques (rdv-histoire sub-grid) -->
+  <div id="congres-thematiques" class="info-subsection">
+    <span class="section-eyebrow eyebrow-gold">Thematiques</span>
+    <h2>Les thematiques 2026</h2>
+    <p style="color:var(--text-dim);font-size:.88rem;margin-bottom:20px;">6 axes de reflexion couvrant tous les aspects de la saucisse artisanale.</p>
+    <div class="themes-grid">
+      <div class="theme-card"><span class="theme-card-icon">🔬</span><h3>Science &amp; Nutrition</h3><p>Ferments, nutrition, etudes comparatives artisanal vs industriel.</p></div>
+      <div class="theme-card"><span class="theme-card-icon">🏭</span><h3>Artisanat &amp; Savoir-faire</h3><p>Fabrication, fumage, maturation, terroir, Label Rouge.</p></div>
+      <div class="theme-card"><span class="theme-card-icon">🌍</span><h3>International</h3><p>Bratwurst, mortadella, chorizo, bangers — les saucisses du monde.</p></div>
+      <div class="theme-card"><span class="theme-card-icon">📜</span><h3>Histoire &amp; Patrimoine</h3><p>3000 ans de charcuterie, de Rome a Strasbourg.</p></div>
+      <div class="theme-card"><span class="theme-card-icon">🍽️</span><h3>Gastronomie &amp; Degustation</h3><p>Accords, haute gastronomie, recettes de chefs.</p></div>
+      <div class="theme-card"><span class="theme-card-icon">💼</span><h3>Business &amp; Innovation</h3><p>FoodTech, IA, saucisse vegetale, tendances marche.</p></div>
+    </div>
+  </div>
+
+  <!-- Expositions -->
+  <div id="congres-expositions" class="info-subsection">
+    <span class="section-eyebrow eyebrow-red">Expositions</span>
+    <h2>Les expositions</h2>
+    <p style="color:var(--text-dim);font-size:.88rem;margin-bottom:20px;">Explorez nos expositions permanentes pendant les 3 jours du Congres.</p>
+    <img src="img/img-expo.png" alt="Hall d'exposition" class="section-banner-img">
+    <div class="themes-grid">
+      <div class="theme-card"><span class="theme-card-icon">🎨</span><h3>Saucisse : 3000 ans d'histoire</h3><p>En partenariat avec le Musee de la Charcuterie de Strasbourg. Objets, documents et reconstitutions de la Rome antique a nos jours.</p></div>
+      <div class="theme-card"><span class="theme-card-icon">🌍</span><h3>Saucisses du Monde</h3><p>247 varietes de saucisses des 5 continents. Collection rassemblee par Roberto Gonzalez de la Real Academia de Gastronomia.</p></div>
+      <div class="theme-card"><span class="theme-card-icon">📸</span><h3>La Saucisse par DALL-E</h3><p>Exposition d'art numerique : 40 portraits de saucisses generes par intelligence artificielle. Tradition et technologie.</p></div>
+    </div>
+  </div>
+
+  <!-- Prix -->
+  <div id="congres-prix" class="info-subsection">
+    <span class="section-eyebrow eyebrow-gold">Prix</span>
+    <h2>🌭 Les prix 2026</h2>
+    <p style="color:var(--text-dim);font-size:.88rem;margin-bottom:20px;">3 prix decernes lors de la ceremonie de cloture du samedi 14 juin.</p>
+    <img src="img/img-prix.png" alt="Ceremonie de remise des prix" class="section-banner-img">
+    <div class="prix-grid">
+      <div class="prix-card"><div class="prix-icon">🏆</div><h3>Grand Prix de la Saucisse</h3><p>Recompense la meilleure saucisse artisanale parmi 12 candidats de 8 pays. Jury international de 5 experts preside par Jean-Marc Schaller, MOF 2018.</p></div>
+      <div class="prix-card"><div class="prix-icon">🌟</div><h3>Prix du Meilleur Knack</h3><p>Concours reserve aux artisans charcutiers alsaciens. Evaluation sur le gout, la texture, la tenue et le respect de la tradition. 5 000 euros.</p></div>
+      <div class="prix-card"><div class="prix-icon">💡</div><h3>Prix Innovation</h3><p>Recompense l'innovation la plus prometteuse dans le domaine de la saucisse : nutrition, production, packaging, distribution ou experience.</p></div>
+    </div>
+  </div>
+
+  <!-- Lieux -->
+  <div id="congres-lieux" class="info-subsection">
+    <span class="section-eyebrow eyebrow-green">Lieux</span>
+    <h2>Les lieux</h2>
+    <p style="color:var(--text-dim);font-size:.88rem;margin-bottom:20px;">Le Palais des Congres de Strasbourg — 10 salles sur 2 etages.</p>
+
+    <!-- Photo exterieure du Palais -->
+    <img src="img/plans/palais-exterieur.jpg" alt="Palais des Congres de Strasbourg — Vue exterieure" class="section-banner-img" style="margin-bottom:32px;">
+
+    <!-- Les Salles — Photos + Capacites -->
+    <h2 class="sub-heading" style="margin-bottom:20px;">🌭 Les salles</h2>
+    <div class="salles-grid-3">
+      <div class="salle-showcase">
+        <img src="img/img-salle-erasme.png" alt="Salle Erasme — Auditorium principal" class="salle-showcase-img">
+        <div class="salle-showcase-body">
+          <h3>Salle Erasme <span class="room-type-badge type-auditorium">Auditorium</span></h3>
+          <div class="salle-meta">Rez-de-chaussee — Ceremonies d'ouverture et de cloture, pleniere, Grand Prix</div>
+          <table class="capacity-table">
+            <tr><th>Configuration</th><th>Capacite</th></tr>
+            <tr><td>Theatre</td><td>1 800 places</td></tr>
+            <tr><td>Conference</td><td>1 500 places</td></tr>
+            <tr><td>Banquet</td><td>1 000 places</td></tr>
+          </table>
+        </div>
+      </div>
+      <div class="salle-showcase">
+        <img src="img/img-salle-workshop.png" alt="Salles de conference — Format atelier" class="salle-showcase-img">
+        <div class="salle-showcase-body">
+          <h3>Salles Gutenberg / Schweitzer <span class="room-type-badge type-conference">Conference</span></h3>
+          <div class="salle-meta">1er etage — Conferences thematiques, masterclasses, ateliers</div>
+          <table class="capacity-table">
+            <tr><th>Configuration</th><th>Capacite</th></tr>
+            <tr><td>Theatre</td><td>100 — 300 places</td></tr>
+            <tr><td>Classe</td><td>80 — 200 places</td></tr>
+            <tr><td>U-shape</td><td>40 — 80 places</td></tr>
+          </table>
+        </div>
+      </div>
+      <div class="salle-showcase">
+        <img src="img/img-salle-reunion.png" alt="Salle de reunion — Format U" class="salle-showcase-img">
+        <div class="salle-showcase-body">
+          <h3>Salles de commission <span class="room-type-badge type-reunion">Reunion</span></h3>
+          <div class="salle-meta">1er etage — Reunions B2B, jurys, comites scientifiques</div>
+          <table class="capacity-table">
+            <tr><th>Configuration</th><th>Capacite</th></tr>
+            <tr><td>U-shape</td><td>20 — 30 places</td></tr>
+            <tr><td>Boardroom</td><td>15 — 25 places</td></tr>
+            <tr><td>Cocktail</td><td>40 — 50 places</td></tr>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Liste complete des salles (generee par JS) -->
+    <h2 class="sub-heading" style="margin-top:32px;margin-bottom:16px;">Toutes les salles</h2>
+    <div class="lieux-grid" id="lieux-grid"></div>
+
+    <!-- Plans des etages -->
+    <h2 class="sub-heading" style="margin-top:36px;margin-bottom:16px;">🌭 Plans du Palais des Congres</h2>
+    <p style="color:var(--text-dim);font-size:.88rem;margin-bottom:16px;">Cliquez sur un plan pour l'agrandir.</p>
+    <div class="plans-grid">
+      <div class="plan-card">
+        <h4>Rez-de-chaussee — Plan general</h4>
+        <a href="img/plans/plan-rdc.jpg" target="_blank"><img src="img/plans/plan-rdc.jpg" alt="Plan RDC" class="plan-img"></a>
+      </div>
+      <div class="plan-card">
+        <h4>Rez-de-chaussee — Salles</h4>
+        <a href="img/plans/plan-rdc-salles.jpg" target="_blank"><img src="img/plans/plan-rdc-salles.jpg" alt="Plan RDC Salles" class="plan-img"></a>
+      </div>
+      <div class="plan-card">
+        <h4>1er etage — Plan general</h4>
+        <a href="img/plans/plan-etage1.jpg" target="_blank"><img src="img/plans/plan-etage1.jpg" alt="Plan Etage 1" class="plan-img"></a>
+      </div>
+      <div class="plan-card">
+        <h4>1er etage — Salles</h4>
+        <a href="img/plans/plan-etage1-salles.jpg" target="_blank"><img src="img/plans/plan-etage1-salles.jpg" alt="Plan Etage 1 Salles" class="plan-img"></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider">🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭</div>
+
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<!-- CAFES GOURMANDS (instead of "Cafes historiques")              -->
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<section id="cafes" class="site-section">
+  <span class="section-eyebrow eyebrow-gold">Cafes Gourmands</span>
+  <h2 class="section-heading">🌭 Cafes Gourmands</h2>
+  <p class="section-subheading">Rencontres conviviales autour d'une biere et d'une saucisse. Animees par nos experts.</p>
+
+  <img src="img/img-cafe-gourmand.png" alt="Cafes Gourmands du Congres" class="section-banner-img">
+
+  <div class="cafes-grid">
+    <div class="cafe-card">
+      <h3>🌭 Cafe-Degustation : Knack vs Bratwurst</h3>
+      <div class="type">Jeu. 12 juin &middot; 18h30 &middot; Brasserie Meteor</div>
+      <p>Degustation comparee a l'aveugle entre la knack alsacienne et la bratwurst allemande. Animee par Hans Gruber et Jean-Marc Schaller. Bieres assorties.</p>
+    </div>
+    <div class="cafe-card">
+      <h3>🌭 Cafe Terroir : Les saucisses des montagnes</h3>
+      <div class="type">Ven. 13 juin &middot; 17h &middot; Maison Kammerzell</div>
+      <p>Des Alpes aux Pyrenees en passant par les Vosges : les saucisses sechees d'altitude. Avec Pierre Oteiza (Pays Basque) et Marco Rossi (Val d'Aoste).</p>
+    </div>
+    <div class="cafe-card">
+      <h3>🌭 Cafe Innovation : La saucisse du futur</h3>
+      <div class="type">Ven. 13 juin &middot; 19h &middot; Le Rafiot</div>
+      <p>FoodTech, saucisse cultivee, vegetale hybride : quel avenir pour la charcuterie ? Debat ouvert avec Lena Bjorkman (Stockholm Food Lab).</p>
+    </div>
+    <div class="cafe-card">
+      <h3>🌭 Cafe Histoire : Le banquet de Rabelais</h3>
+      <div class="type">Sam. 14 juin &middot; 11h &middot; Chez Yvonne</div>
+      <p>De l'andouille de Rabelais aux saucisses de Strasbourg : voyage gastronomique a travers les siecles. Avec le Pr. Michel Onfray.</p>
+    </div>
+  </div>
+
+  <div id="cafes-degustation" style="margin-top:32px;">
+    <h2 class="sub-heading">🌭 Cafes Degustation</h2>
+    <p style="color:var(--text-dim);font-size:.88rem;margin-bottom:16px;">Sessions de degustation commentee, limitees a 30 places chacune. Reservation obligatoire.</p>
+    <div class="cafes-grid">
+      <div class="cafe-card">
+        <h3>Les 10 meilleures saucisses du monde</h3>
+        <div class="type">Jeu. 12 juin &middot; 15h &middot; Salle Gutenberg</div>
+        <p>Tour du monde en 10 saucisses : chorizo, merguez, kielbasa, andouillette, frankfurter... Commentaires par Roberto Gonzalez.</p>
+      </div>
+      <div class="cafe-card">
+        <h3>Accords bieres &amp; saucisses</h3>
+        <div class="type">Sam. 14 juin &middot; 14h &middot; Brasserie Meteor</div>
+        <p>6 bieres alsaciennes x 6 saucisses : trouver les accords parfaits. Anime par le maitre brasseur de Meteor.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider">🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭</div>
+
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<!-- ESPACE PROFESSIONNEL                                           -->
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<section id="pro" class="site-section" style="max-width:900px;margin:0 auto;">
+  <span class="section-eyebrow eyebrow-green">Professionnel</span>
+  <h2 class="section-heading">🌭 Espace Professionnel</h2>
+  <p class="section-subheading">Exposez vos produits, rencontrez des acheteurs, developpez votre reseau.</p>
+
+  <img src="img/img-professionnel.png" alt="Networking professionnel" class="section-banner-img">
+
+  <div class="themes-grid" style="grid-template-columns: repeat(2, 1fr);">
+    <div class="theme-card" style="text-align:center;">
+      <span class="theme-card-icon">🏪</span>
+      <h3>Exposer au Congres</h3>
+      <p>150 stands disponibles. Artisans charcutiers, equipementiers, distributeurs, editeurs. Stands de 9m2 a 36m2.</p>
+    </div>
+    <div class="theme-card" style="text-align:center;">
+      <span class="theme-card-icon">🤝</span>
+      <h3>B2B Meetings</h3>
+      <p>Plateforme de rendez-vous professionnels. Connectez-vous avec des acheteurs, importateurs et distributeurs de 12 pays.</p>
+    </div>
+    <div class="theme-card" style="text-align:center;">
+      <span class="theme-card-icon">🎯</span>
+      <h3>Offres Partenaires</h3>
+      <p>Devenez partenaire du Congres : visibilite, networking exclusif, acces VIP. 4 niveaux de partenariat disponibles.</p>
+    </div>
+    <div class="theme-card" style="text-align:center;">
+      <span class="theme-card-icon">📊</span>
+      <h3>Etude de marche</h3>
+      <p>Rapport exclusif sur le marche de la saucisse artisanale en Europe 2026. Offert aux exposants et partenaires.</p>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider">🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭</div>
+
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<!-- INFOS PRATIQUES                                                -->
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<section id="infos" class="site-section">
+  <span class="section-eyebrow eyebrow-green">Pratique</span>
+  <h2 class="section-heading">🌭 Infos pratiques</h2>
+  <p class="section-subheading">Tout pour preparer votre venue au Congres de la Saucisse 2026.</p>
+  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:32px;">
+    <img src="img/img-knack.png" alt="Knack artisanale" style="width:100%;height:160px;object-fit:cover;border-radius:var(--radius);">
+    <img src="img/img-cervelas.png" alt="Salade de cervelas" style="width:100%;height:160px;object-fit:cover;border-radius:var(--radius);">
+    <img src="img/img-riesling.png" alt="Riesling d'Alsace" style="width:100%;height:160px;object-fit:cover;border-radius:var(--radius);">
+  </div>
+
+  <!-- Carte -->
+  <div class="info-subsection">
+    <h2>Plan du quartier</h2>
+    <div id="site-map" class="map-container"></div>
+  </div>
+
+  <!-- Venir -->
+  <div id="infos-venir" class="info-subsection">
+    <h2>🌭 Venir a Strasbourg</h2>
+    <div class="transport-grid">
+      <div class="transport-card"><h3>🚅 TGV</h3><p><strong>Paris &rarr; Strasbourg : 1h46</strong><br>Gare de l'Est. Tram B arret Wacken (20 min). Trains directs depuis Lyon, Marseille, Lille.</p></div>
+      <div class="transport-card"><h3>✈️ Avion</h3><p><strong>Aeroport Entzheim (SXB)</strong><br>Navette train 9 min vers centre. Vols directs depuis 40+ villes europeennes.</p></div>
+      <div class="transport-card"><h3>🚗 Voiture</h3><p><strong>A4 depuis Paris (4h30)</strong><br>Parking Wacken 800 places, 12 euros/jour. A35 depuis Colmar/Bale.</p></div>
+      <div class="transport-card"><h3>🚋 Tram</h3><p>Lignes <strong>B</strong> et <strong>E</strong>, arret <strong>Wacken</strong> — directement devant le Palais des Congres.</p></div>
+    </div>
+  </div>
+
+  <!-- Se Loger -->
+  <div id="infos-loger" class="info-subsection">
+    <h2>🌭 Se loger</h2>
+    <p style="color:var(--text-dim);font-size:.88rem;margin-bottom:16px;">8 hotels a proximite du Palais des Congres, de 85 euros a 220 euros/nuit. Tarifs negocies pour les congressistes.</p>
+    <div class="hotel-grid" id="hotel-grid"></div>
+  </div>
+
+  <!-- Se Restaurer -->
+  <div id="infos-restaurer" class="info-subsection">
+    <h2>🌭 Se restaurer — Winstubs recommandees</h2>
+    <img src="img/img-winstub.png" alt="Winstub alsacienne typique" class="section-banner-img">
+    <div class="cafes-grid">
+      <div class="cafe-card"><h3>Maison Kammerzell</h3><div class="type">Winstub historique (1427)</div><p>Place de la Cathedrale. La plus ancienne maison de Strasbourg. Choucroute royale, saucisses, foie gras.</p></div>
+      <div class="cafe-card"><h3>Chez Yvonne</h3><div class="type">Winstub traditionnelle</div><p>Rue du Sanglier. Saucisses grillees, choucroute, presskopf. Institution strasbourgeoise depuis 1873.</p></div>
+      <div class="cafe-card"><h3>La Corde a Linge</h3><div class="type">Flammekueche creative</div><p>Petite France. Tartes flambees traditionnelles et creatives. Terrasse au bord de l'Ill.</p></div>
+      <div class="cafe-card"><h3>Au Pont Corbeau</h3><div class="type">Winstub authentique</div><p>Quai Saint-Nicolas. Cuisine alsacienne authentique, knacks, baeckeoffe, Riesling au verre.</p></div>
+      <div class="cafe-card"><h3>Le Clou</h3><div class="type">Winstub conviviale</div><p>Rue du Chaudron. Portions genereuses, excellente selection de bieres locales.</p></div>
+      <div class="cafe-card"><h3>Brasserie Meteor</h3><div class="type">Brasserie alsacienne — Partenaire</div><p>Bieres artisanales brassees a Hochfelden depuis 1640. Accords biere-saucisse du Congres.</p></div>
+    </div>
+  </div>
+
+  <!-- Decouvrir -->
+  <div id="infos-decouvrir" class="info-subsection">
+    <h2>🌭 Decouvrir Strasbourg</h2>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:24px;">
+      <img src="img/img-marche-noel.png" alt="Marche de Noel de Strasbourg" style="width:100%;height:200px;object-fit:cover;border-radius:var(--radius);">
+      <img src="img/img-vignoble.png" alt="Vignoble alsacien" style="width:100%;height:200px;object-fit:cover;border-radius:var(--radius);">
+    </div>
+    <div class="discover-grid">
+      <div class="discover-card"><div class="icon">⛪</div><h4>Cathedrale Notre-Dame</h4><p>Chef-d'oeuvre gothique, plateforme panoramique a 66m. Horloge astronomique.</p></div>
+      <div class="discover-card"><div class="icon">🏘️</div><h4>Petite France</h4><p>Quartier pittoresque au bord de l'Ill. Maisons a colombages, ponts couverts.</p></div>
+      <div class="discover-card"><div class="icon">🏛️</div><h4>Parlement europeen</h4><p>Visites guidees gratuites, hemicycle et exposition permanente.</p></div>
+      <div class="discover-card"><div class="icon">🖼️</div><h4>Musees</h4><p>11 musees : Beaux-Arts, Art Moderne, Alsacien, Tomi Ungerer...</p></div>
+    </div>
+  </div>
+
+  <!-- Numeros utiles -->
+  <div class="info-subsection">
+    <h2>Numeros utiles</h2>
+    <div class="emergency-grid">
+      <div class="emergency-card"><div class="number">15</div><div class="elabel">SAMU</div></div>
+      <div class="emergency-card"><div class="number">17</div><div class="elabel">Police</div></div>
+      <div class="emergency-card"><div class="number">18</div><div class="elabel">Pompiers</div></div>
+      <div class="emergency-card"><div class="number">112</div><div class="elabel">Urgences EU</div></div>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider">🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭</div>
+
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<!-- ESPACE PRESSE                                                  -->
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<section id="presse" class="site-section" style="max-width:900px;margin:0 auto;">
+  <span class="section-eyebrow eyebrow-red">Presse</span>
+  <h2 class="section-heading">🌭 Espace Presse</h2>
+  <p class="section-subheading">Accreditation et kit medias pour les journalistes.</p>
+
+  <div class="info-subsection">
+    <h2>Communiques de presse</h2>
+    <div class="press-doc"><div class="doc-icon">📄</div><div class="doc-info"><h4>Communique de lancement</h4><p>PDF &middot; 2.4 Mo &middot; 15 mars 2026</p></div><button class="btn-dl" onclick="alert('Telechargement demo')">Telecharger</button></div>
+    <div class="press-doc"><div class="doc-icon">📄</div><div class="doc-info"><h4>Programme detaille</h4><p>PDF &middot; 4.1 Mo &middot; 20 mars 2026</p></div><button class="btn-dl" onclick="alert('Telechargement demo')">Telecharger</button></div>
+    <div class="press-doc"><div class="doc-icon">📄</div><div class="doc-info"><h4>Biographies des intervenants</h4><p>PDF &middot; 3.2 Mo &middot; 22 mars 2026</p></div><button class="btn-dl" onclick="alert('Telechargement demo')">Telecharger</button></div>
+  </div>
+
+  <div class="info-subsection">
+    <h2>Kit medias</h2>
+    <div class="media-kit">
+      <div class="media-item"><div class="icon">📷</div><h4>Photos HD</h4><p>25 photos, ZIP 45 Mo</p></div>
+      <div class="media-item"><div class="icon">🎨</div><h4>Logos</h4><p>PNG, SVG, AI</p></div>
+      <div class="media-item"><div class="icon">🎥</div><h4>Teaser video</h4><p>MP4, 30 sec</p></div>
+      <div class="media-item"><div class="icon">📊</div><h4>Infographie</h4><p>Chiffres cles 2026</p></div>
+    </div>
+  </div>
+
+  <div class="info-subsection">
+    <h2>Accreditation presse</h2>
+    <div class="card-inset">
+      <form id="press-form" onsubmit="submitPress(event)">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+          <div class="form-group"><label>Prenom *</label><input type="text" id="p-prenom" required placeholder="Votre prenom"></div>
+          <div class="form-group"><label>Nom *</label><input type="text" id="p-nom" required placeholder="Votre nom"></div>
+        </div>
+        <div class="form-group"><label>Email *</label><input type="email" id="p-email" required placeholder="votre@email.com"></div>
+        <div class="form-group"><label>Media *</label><input type="text" id="p-media" required placeholder="Nom du media"></div>
+        <button type="submit" class="btn-sm btn-sm-gold" style="width:100%;justify-content:center;">🌭 Demander l'accreditation</button>
+      </form>
+      <div id="press-success" class="hidden" style="text-align:center;padding:24px;">
+        <h3 style="color:var(--accent);">🌭 Demande envoyee ! (demo)</h3>
+        <p style="color:var(--text-dim);font-size:.88rem;margin-top:8px;">Vous recevrez une confirmation sous 48h.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="info-subsection">
+    <h2>Contact presse</h2>
+    <div class="contact-press">
+      <p style="font-size:.9rem;line-height:1.8;color:var(--text-body);"><strong style="color:#FFF;">Monique Pfleger</strong><br>Responsable communication<br><br><span style="color:var(--accent);">presse@congres-saucisse.fr</span><br>03 88 37 67 67 (poste 3)</p>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider">🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭</div>
+
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<!-- INSCRIPTION                                                    -->
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<section id="inscription" class="site-section" style="max-width:800px;margin:0 auto;">
+  <span class="section-eyebrow eyebrow-gold">Inscription</span>
+  <h2 class="section-heading">🌭 Inscription</h2>
+  <p class="section-subheading">Reservez votre place au Congres de la Saucisse 2026.</p>
+  <div id="inscription-container"></div>
+</section>
+
+<div class="section-divider">🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭🌭</div>
+
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<!-- PARTENAIRES (rdv-histoire 6 categories)                       -->
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<section id="partenaires" class="site-section">
+  <span class="section-eyebrow eyebrow-gold">Partenaires</span>
+  <h2 class="section-heading">🌭 Nos partenaires</h2>
+  <p class="section-subheading">Ils rendent cet evenement possible.</p>
+
+  <div class="partners-section">
+    <h3>Partenaires institutionnels</h3>
+    <div class="partners-logos">
+      <div class="partner-logo-item"><span class="p-icon">🏛️</span><div><div class="p-name">Ville de Strasbourg</div><div class="p-type">Collectivite</div></div></div>
+      <div class="partner-logo-item"><span class="p-icon">🇫🇷</span><div><div class="p-name">Region Grand Est</div><div class="p-type">Collectivite</div></div></div>
+      <div class="partner-logo-item"><span class="p-icon">🇪🇺</span><div><div class="p-name">Union Europeenne</div><div class="p-type">Institution</div></div></div>
+      <div class="partner-logo-item"><span class="p-icon">🏢</span><div><div class="p-name">CCI Alsace Eurometropole</div><div class="p-type">Institution</div></div></div>
+    </div>
+  </div>
+
+  <div class="partners-section">
+    <h3>Grands mecenes</h3>
+    <div class="partners-logos">
+      <div class="partner-logo-item"><span class="p-icon">🏆</span><div><div class="p-name">Fleischwerke AG</div><div class="p-type">Sponsor Or</div></div></div>
+      <div class="partner-logo-item"><span class="p-icon">🍺</span><div><div class="p-name">Brasserie Meteor</div><div class="p-type">Sponsor Or</div></div></div>
+    </div>
+  </div>
+
+  <div class="partners-section">
+    <h3>Mecenes</h3>
+    <div class="partners-logos">
+      <div class="partner-logo-item"><span class="p-icon">🏅</span><div><div class="p-name">Alsace Qualite</div><div class="p-type">Label qualite</div></div></div>
+      <div class="partner-logo-item"><span class="p-icon">💻</span><div><div class="p-name">SausageTech</div><div class="p-type">Innovation</div></div></div>
+    </div>
+  </div>
+
+  <div class="partners-section">
+    <h3>Partenaires scientifiques</h3>
+    <div class="partners-logos">
+      <div class="partner-logo-item"><span class="p-icon">🔬</span><div><div class="p-name">INRAE</div><div class="p-type">Recherche</div></div></div>
+      <div class="partner-logo-item"><span class="p-icon">📚</span><div><div class="p-name">IFCC</div><div class="p-type">Institut</div></div></div>
+      <div class="partner-logo-item"><span class="p-icon">🎓</span><div><div class="p-name">Universite de Strasbourg</div><div class="p-type">Enseignement</div></div></div>
+    </div>
+  </div>
+
+  <div class="partners-section">
+    <h3>Medias</h3>
+    <div class="partners-logos">
+      <div class="partner-logo-item"><span class="p-icon">📰</span><div><div class="p-name">DNA — Dernieres Nouvelles d'Alsace</div><div class="p-type">Presse regionale</div></div></div>
+      <div class="partner-logo-item"><span class="p-icon">📻</span><div><div class="p-name">France Bleu Alsace</div><div class="p-type">Radio</div></div></div>
+      <div class="partner-logo-item"><span class="p-icon">📺</span><div><div class="p-name">France 3 Grand Est</div><div class="p-type">Television</div></div></div>
+    </div>
+  </div>
+
+  <div class="partners-section">
+    <h3>Ils nous soutiennent</h3>
+    <div class="partners-logos">
+      <div class="partner-logo-item"><span class="p-icon">🚆</span><div><div class="p-name">SNCF — TGV Est</div><div class="p-type">Transport</div></div></div>
+      <div class="partner-logo-item"><span class="p-icon">🏨</span><div><div class="p-name">Hilton Strasbourg</div><div class="p-type">Hebergement</div></div></div>
+      <div class="partner-logo-item"><span class="p-icon">🚋</span><div><div class="p-name">CTS — Tramway</div><div class="p-type">Transport urbain</div></div></div>
+      <div class="partner-logo-item"><span class="p-icon">🍷</span><div><div class="p-name">Vins d'Alsace</div><div class="p-type">Oenologie</div></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<!-- FOOTER (rdv-histoire style)                                    -->
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<footer class="site-footer">
+  <div class="footer-grid">
+    <div class="footer-col">
+      <h4>🌭 Le Congres de la Saucisse</h4>
+      <p>Palais des Congres<br>Place de Bordeaux<br>67082 Strasbourg Cedex</p>
+      <p style="margin-top:12px;">
+        Tel : +33 (0)3 88 37 67 67<br>
+        Email : <a href="mailto:contact@congres-saucisse.fr">contact@congres-saucisse.fr</a>
+      </p>
+      <div class="footer-social-row">
+        <a href="#" title="Facebook">f</a>
+        <a href="#" title="YouTube">yt</a>
+        <a href="#" title="Instagram">ig</a>
+        <a href="#" title="LinkedIn">in</a>
+        <a href="#" title="Mastodon">M</a>
+        <a href="#" title="Bluesky">BS</a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4>Le Congres</h4>
+      <a href="#congres-about">A propos</a>
+      <a href="#congres-thematiques">Thematiques</a>
+      <a href="#congres-prix">Les Prix</a>
+      <a href="#congres-expositions">Expositions</a>
+      <a href="#congres-lieux">Les Lieux</a>
+      <a href="#programme">Programme</a>
+      <a href="#cafes">Cafes Gourmands</a>
+    </div>
+    <div class="footer-col">
+      <h4>Infos Pratiques</h4>
+      <a href="#infos-venir">Venir</a>
+      <a href="#infos-loger">Se Loger</a>
+      <a href="#infos-restaurer">Se Restaurer</a>
+      <a href="#infos-decouvrir">Decouvrir</a>
+      <a href="#presse">Espace Presse</a>
+      <a href="#pro">Espace Professionnel</a>
+      <a href="#inscription">Inscription</a>
+    </div>
+    <div class="footer-col">
+      <h4>Newsletter</h4>
+      <p style="margin-bottom:12px;">Recevez les actualites du Congres.</p>
+      <div class="newsletter-form">
+        <input type="email" placeholder="Votre email..." id="nl-email">
+        <button onclick="alert('Inscription newsletter demo ! 🌭')">OK</button>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>Made with 🌭 a Strasbourg — Evenement fictif a but de demonstration.</p>
+    <div class="footer-bottom-links">
+      <a href="#">Mentions legales</a>
+      <a href="#">Politique de confidentialite</a>
+      <a href="#">Plan du site</a>
+      <a href="#">Gestion des cookies</a>
+      <a href="admin.html" title="Acces administration">Administration</a>
+    </div>
+  </div>
+</footer>
+
+<!-- SPEAKER MODAL -->
+<div class="modal-overlay" id="speaker-modal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeSpeakerModal()">&times;</button>
+    <div id="modal-content"></div>
+  </div>
+</div>
+
+<!-- SCRIPTS -->
+<script src="js/data.js"></script>
+<script src="js/qrcode.js"></script>
+<script src="js/content-filter.js"></script>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<script>
+/* ═══════════════════════════════════════════════════════════════
+   CONGRES DE LA SAUCISSE — PUBLIC SITE LOGIC
+   Clone rdv-histoire.com structure
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ── Mobile nav toggle ── */
+function toggleMobileNav() {
+  document.getElementById('main-nav').classList.toggle('open');
+  document.getElementById('header-ctas').classList.toggle('open');
+}
+// Close mobile nav on link click
+document.querySelectorAll('.main-nav a').forEach(function(a) {
+  a.addEventListener('click', function() {
+    document.getElementById('main-nav').classList.remove('open');
+    document.getElementById('header-ctas').classList.remove('open');
+  });
+});
+
+/* ── Active nav highlight on scroll ── */
+var navLinks = document.querySelectorAll('.main-nav > a, .main-nav > .nav-drop > a');
+var sections = document.querySelectorAll('section[id]');
+window.addEventListener('scroll', function() {
+  var scrollPos = window.scrollY + 100;
+  sections.forEach(function(sec) {
+    if (sec.offsetTop <= scrollPos && sec.offsetTop + sec.offsetHeight > scrollPos) {
+      navLinks.forEach(function(a) { a.classList.remove('active'); });
+      var id = sec.id;
+      navLinks.forEach(function(a) {
+        if (a.getAttribute('href') === '#' + id) a.classList.add('active');
+      });
+    }
+  });
+});
+
+/* ── Programme ── */
+var progState = { day: 1, theme: null, salle: null, favorites: CONGRES.loadFavorites() };
+
+function showProgramDay(day, btn) {
+  progState.day = day;
+  document.querySelectorAll('#prog-tabs .tab-btn').forEach(function(b, i) { b.classList.toggle('active', i === day - 1); });
+  renderProg();
+}
+
+function filterProgTheme(theme) {
+  progState.theme = theme; progState.salle = null;
+  updateProgFilters(); renderProg();
+}
+
+function filterProgSalle(salle) {
+  progState.salle = progState.salle === salle ? null : salle; progState.theme = null;
+  updateProgFilters(); renderProg();
+}
+
+function updateProgFilters() {
+  document.querySelectorAll('#prog-filters .filter-chip').forEach(function(btn) {
+    var isActive = false;
+    if (!progState.theme && !progState.salle && !btn.dataset.theme && !btn.dataset.salle) isActive = true;
+    if (progState.theme && btn.dataset.theme === progState.theme) isActive = true;
+    if (progState.salle && btn.dataset.salle === progState.salle) isActive = true;
+    btn.classList.toggle('active', isActive);
+  });
+}
+
+function toggleFav(id) {
+  var idx = progState.favorites.indexOf(id);
+  if (idx === -1) progState.favorites.push(id); else progState.favorites.splice(idx, 1);
+  CONGRES.saveFavorites(progState.favorites); renderProg();
+}
+
+function renderProg() {
+  var sessions = CONGRES.getSessionsByDay(progState.day);
+  if (progState.theme) sessions = sessions.filter(function(s) { return s.theme === progState.theme; });
+  if (progState.salle) sessions = sessions.filter(function(s) { return s.salle === progState.salle; });
+  var html = '';
+  if (sessions.length === 0) html = '<div style="text-align:center;padding:40px;color:var(--text-muted);">Aucune session trouvee.</div>';
+  sessions.forEach(function(s) {
+    var salle = CONGRES.getSalle(s.salle);
+    var places = CONGRES.getPlacesRestantes(s);
+    var capClass = CONGRES.getCapacityClass(s.salle, s.inscrits);
+    var isFav = progState.favorites.indexOf(s.id) !== -1;
+    var names = s.speakers.map(function(id) { var sp = CONGRES.getSpeaker(id); return sp ? sp.prenom + ' ' + sp.nom : ''; }).join(', ');
+    html += '<div class="session-card"><div class="session-time">' + s.debut + '<br><span style="font-size:.68rem;color:var(--text-muted);">' + s.fin + '</span></div><div class="session-info"><h3>' + s.titre + '</h3><div class="speaker-name">' + names + '</div><div class="meta">' + (salle ? salle.nom + ' &middot; ' + salle.etage : '') + ' &middot; <span class="capacity-badge capacity-' + capClass + '">' + places + ' places</span></div><div class="meta" style="margin-top:2px;"><span class="filter-chip" style="padding:2px 8px;font-size:.68rem;cursor:default;">' + s.theme + '</span></div></div><div class="session-actions"><button class="heart-btn' + (isFav ? ' active' : '') + '" onclick="toggleFav(' + s.id + ')" title="Favori">' + (isFav ? '&#9829;' : '&#9825;') + '</button></div></div>';
+  });
+  document.getElementById('prog-sessions-list').innerHTML = html;
+}
+
+// Init programme filters
+(function() {
+  var fhtml = '<button class="filter-chip active" onclick="filterProgTheme(null)">Toutes</button>';
+  CONGRES.SALLES.forEach(function(s) { fhtml += '<button class="filter-chip" data-salle="' + s.id + '" onclick="filterProgSalle(\'' + s.id + '\')">' + s.nom + '</button>'; });
+  CONGRES.THEMES.forEach(function(t) { fhtml += '<button class="filter-chip" data-theme="' + t + '" onclick="filterProgTheme(\'' + t + '\')">' + t + '</button>'; });
+  document.getElementById('prog-filters').innerHTML = fhtml;
+  renderProg();
+})();
+
+/* ── Intervenants ── */
+var intervFilter = null;
+function filterInterv(theme) {
+  intervFilter = theme;
+  document.querySelectorAll('#interv-filters .filter-chip').forEach(function(btn) {
+    btn.classList.toggle('active', (!theme && !btn.dataset.t) || (theme && btn.dataset.t === theme));
+  });
+  renderInterv();
+}
+function renderInterv() {
+  var speakers = CONGRES.SPEAKERS;
+  if (intervFilter) speakers = speakers.filter(function(s) { return s.theme === intervFilter; });
+  var html = '';
+  speakers.forEach(function(s) {
+    html += '<div class="speaker-card" onclick="openSpeaker(' + s.id + ')"><div class="speaker-avatar">' + s.initiales + '</div><h3>' + s.prenom + ' ' + s.nom + '</h3><div class="title">' + s.titre + '</div><div class="org">' + s.org + '</div></div>';
+  });
+  document.getElementById('interv-grid').innerHTML = html;
+}
+function openSpeaker(id) {
+  var s = CONGRES.getSpeaker(id); if (!s) return;
+  var sessions = CONGRES.getSessionsBySpeaker(id);
+  var dayNames = ['', 'Jeu. 12 juin', 'Ven. 13 juin', 'Sam. 14 juin'];
+  var html = '<div style="text-align:center;margin-bottom:20px;"><div class="speaker-avatar" style="width:100px;height:100px;font-size:2.2rem;margin:0 auto 12px;">' + s.initiales + '</div><h2 style="font-size:1.3rem;color:#FFF;">' + s.prenom + ' ' + s.nom + '</h2><div style="color:var(--accent);font-weight:600;font-size:.9rem;">' + s.titre + '</div><div style="color:var(--text-muted);font-size:.82rem;">' + s.org + '</div></div><div style="background:rgba(255,255,255,.03);border-radius:12px;padding:16px;margin-bottom:20px;"><p style="font-size:.88rem;color:var(--text-body);line-height:1.7;">' + s.bio + '</p></div>';
+  if (sessions.length > 0) {
+    html += '<h3 style="font-size:.95rem;color:var(--accent);margin-bottom:12px;">Sessions (' + sessions.length + ')</h3>';
+    sessions.forEach(function(sess) {
+      var salle = CONGRES.getSalle(sess.salle);
+      html += '<div style="display:flex;gap:12px;padding:10px;background:rgba(255,255,255,.02);border-radius:10px;margin-bottom:8px;"><div style="min-width:60px;text-align:center;font-weight:700;color:var(--accent);font-size:.85rem;">' + sess.debut + '</div><div><div style="font-weight:600;font-size:.88rem;color:#FFF;">' + sess.titre + '</div><div style="font-size:.78rem;color:var(--text-muted);">' + dayNames[sess.jour] + ' &middot; ' + (salle ? salle.nom : '') + '</div></div></div>';
+    });
+  }
+  document.getElementById('modal-content').innerHTML = html;
+  document.getElementById('speaker-modal').classList.add('active');
+}
+function closeSpeakerModal() { document.getElementById('speaker-modal').classList.remove('active'); }
+document.getElementById('speaker-modal').addEventListener('click', function(e) { if (e.target === this) closeSpeakerModal(); });
+document.addEventListener('keydown', function(e) { if (e.key === 'Escape') closeSpeakerModal(); });
+
+// Init intervenants
+(function() {
+  var themes = [];
+  CONGRES.SPEAKERS.forEach(function(s) { if (themes.indexOf(s.theme) === -1) themes.push(s.theme); });
+  var html = '<button class="filter-chip active" onclick="filterInterv(null)">Tous</button>';
+  themes.forEach(function(t) { html += '<button class="filter-chip" data-t="' + t + '" onclick="filterInterv(\'' + t + '\')">' + t + '</button>'; });
+  document.getElementById('interv-filters').innerHTML = html;
+  renderInterv();
+})();
+
+/* ── Lieux ── */
+(function() {
+  var tc = {auditorium:'type-auditorium',conference:'type-conference',atelier:'type-atelier',reunion:'type-reunion',expo:'type-expo',restauration:'type-restauration'};
+  var html = '';
+  CONGRES.SALLES.forEach(function(s) {
+    html += '<div class="lieu-card"><h4>' + s.nom + ' <span class="room-type-badge ' + (tc[s.type]||'') + '">' + s.type + '</span></h4><div class="lieu-meta">' + s.etage + ' &middot; ' + s.equipement + '</div><div class="lieu-cap">' + s.capacite + ' places</div></div>';
+  });
+  document.getElementById('lieux-grid').innerHTML = html;
+})();
+
+/* ── Hotels ── */
+(function() {
+  var html = '';
+  CONGRES.HOTELS.forEach(function(h) {
+    var stars = '';
+    for (var i = 0; i < h.etoiles; i++) stars += '&#9733;';
+    html += '<div class="hotel-card"><h4>' + h.nom + ' <span style="color:#FFD300;font-size:.8rem;">' + stars + '</span></h4><div class="hotel-meta">' + h.adresse + ' &middot; ' + h.distance + ' du Palais</div><div class="hotel-price">' + h.prix + ' &euro; / nuit</div></div>';
+  });
+  document.getElementById('hotel-grid').innerHTML = html;
+})();
+
+/* ── Leaflet Map ── */
+setTimeout(function() {
+  var m = document.getElementById('site-map');
+  if (!m || m._leaflet_id) return;
+  var map = L.map('site-map').setView([48.5953, 7.77], 15);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: 'OpenStreetMap' }).addTo(map);
+  L.marker([48.5953, 7.77]).addTo(map).bindPopup('<strong>Palais des Congres</strong><br>🌭 Congres de la Saucisse 2026').openPopup();
+  setTimeout(function() { map.invalidateSize(); }, 300);
+}, 500);
+
+/* ── Presse form ── */
+function submitPress(e) {
+  e.preventDefault();
+  document.getElementById('press-form').classList.add('hidden');
+  document.getElementById('press-success').classList.remove('hidden');
+}
+
+/* ── Inscription (7-step form) ── */
+(function() {
+  var container = document.getElementById('inscription-container');
+  container.innerHTML =
+    '<div class="stepper"><div class="step-indicator active" data-step="1">1. Infos</div><div class="step-indicator" data-step="2">2. Pass</div><div class="step-indicator" data-step="3">3. Sessions</div><div class="step-indicator" data-step="4">4. Repas</div><div class="step-indicator" data-step="5">5. Hotel</div><div class="step-indicator" data-step="6">6. Recap</div><div class="step-indicator" data-step="7">7. OK</div></div>' +
+    '<div class="step-content active" data-step="1"><h2 style="font-size:1.1rem;margin-bottom:20px;color:#FFF;">Informations personnelles</h2><div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;"><div class="form-group"><label>Prenom *</label><input type="text" id="f-prenom" placeholder="Votre prenom"></div><div class="form-group"><label>Nom *</label><input type="text" id="f-nom" placeholder="Votre nom"></div></div><div class="form-group"><label>Email *</label><input type="email" id="f-email" placeholder="votre@email.com"></div><div class="form-group"><label>Telephone</label><input type="tel" id="f-tel" placeholder="06 12 34 56 78"></div><div class="form-group"><label>Entreprise</label><input type="text" id="f-entreprise" placeholder="Nom entreprise"></div><div class="form-group"><label>Regime alimentaire</label><select id="f-regime"><option value="standard">Standard</option><option value="vegetarien">Vegetarien</option><option value="vegan">Vegan</option><option value="sans-gluten">Sans gluten</option><option value="halal">Halal</option></select></div><label style="display:flex;align-items:flex-start;gap:8px;font-size:.82rem;color:var(--text-body);margin-top:16px;"><input type="checkbox" id="f-rgpd" style="width:18px;height:18px;accent-color:var(--accent);flex-shrink:0;margin-top:2px;"> J\'accepte le traitement de mes donnees (RGPD) *</label><div style="text-align:right;margin-top:20px;"><button class="btn-sm btn-sm-gold" onclick="regNextStep(2)">Suivant 🌭</button></div></div>' +
+    '<div class="step-content" data-step="2"><h2 style="font-size:1.1rem;margin-bottom:20px;color:#FFF;">Choisissez votre pass</h2><div class="pass-grid" id="ins-pass-grid"></div><div style="display:flex;justify-content:space-between;margin-top:20px;"><button class="btn-sm btn-sm-outline" onclick="regNextStep(1)">Retour</button><button class="btn-sm btn-sm-gold" onclick="regNextStep(3)">Suivant 🌭</button></div></div>' +
+    '<div class="step-content" data-step="3"><h2 style="font-size:1.1rem;margin-bottom:20px;color:#FFF;">Vos sessions</h2><div class="tabs-bar" style="margin-bottom:16px;"><button class="tab-btn active" onclick="regShowDay(1,this)">Jour 1</button><button class="tab-btn" onclick="regShowDay(2,this)">Jour 2</button><button class="tab-btn" onclick="regShowDay(3,this)">Jour 3</button></div><div id="ins-session-choices"></div><div style="display:flex;justify-content:space-between;margin-top:20px;"><button class="btn-sm btn-sm-outline" onclick="regNextStep(2)">Retour</button><button class="btn-sm btn-sm-gold" onclick="regNextStep(4)">Suivant 🌭</button></div></div>' +
+    '<div class="step-content" data-step="4"><h2 style="font-size:1.1rem;margin-bottom:20px;color:#FFF;">Option repas</h2><div id="ins-repas-choices"></div><div style="display:flex;justify-content:space-between;margin-top:20px;"><button class="btn-sm btn-sm-outline" onclick="regNextStep(3)">Retour</button><button class="btn-sm btn-sm-gold" onclick="regNextStep(5)">Suivant 🌭</button></div></div>' +
+    '<div class="step-content" data-step="5"><h2 style="font-size:1.1rem;margin-bottom:20px;color:#FFF;">Hotel (optionnel)</h2><div id="ins-hotel-choices"></div><div class="hotel-option selected" onclick="regSelectHotel(null)" id="hotel-none"><div><strong style="color:#FFF;">Pas besoin</strong></div></div><div style="display:flex;justify-content:space-between;margin-top:20px;"><button class="btn-sm btn-sm-outline" onclick="regNextStep(4)">Retour</button><button class="btn-sm btn-sm-gold" onclick="regNextStep(6)">Recapitulatif 🌭</button></div></div>' +
+    '<div class="step-content" data-step="6"><h2 style="font-size:1.1rem;margin-bottom:20px;color:#FFF;">Recapitulatif</h2><div id="ins-recap-content"></div><div style="display:flex;justify-content:space-between;margin-top:20px;"><button class="btn-sm btn-sm-outline" onclick="regNextStep(5)">Retour</button><button class="btn-sm btn-sm-gold" onclick="regConfirm()">🌭 Confirmer</button></div></div>' +
+    '<div class="step-content" data-step="7"><div class="confirmation-box"><div class="check-icon">&#10003;</div><h2 style="font-size:1.4rem;margin-bottom:8px;color:#FFF;">🌭 Inscription confirmee !</h2><p style="color:var(--text-dim);">Badge genere (mode demo).</p><div id="ins-badge-container" style="margin-top:20px;"></div><div style="margin-top:20px;"><a href="#accueil" class="btn-sm btn-sm-gold">🌭 Retour accueil</a></div></div></div>';
+
+  window.REG = { prenom:'', nom:'', email:'', tel:'', entreprise:'', pass:'standard', sessions:[], repas:'standard', hotel:null, regime:'standard', rgpd:false };
+})();
+
+function regNextStep(step) {
+  if (step === 2) {
+    REG.prenom = document.getElementById('f-prenom').value.trim();
+    REG.nom = document.getElementById('f-nom').value.trim();
+    REG.email = document.getElementById('f-email').value.trim();
+    REG.tel = document.getElementById('f-tel').value.trim();
+    REG.entreprise = document.getElementById('f-entreprise').value.trim();
+    REG.regime = document.getElementById('f-regime').value;
+    REG.rgpd = document.getElementById('f-rgpd').checked;
+    if (!REG.prenom || !REG.nom || !REG.email) { alert('Remplissez prenom, nom et email.'); return; }
+    if (!REG.rgpd) { alert('Acceptez le RGPD.'); return; }
+    if (typeof ContentFilter !== 'undefined') { var f = [REG.prenom, REG.nom, REG.entreprise]; for (var i = 0; i < f.length; i++) { var c = ContentFilter.check(f[i]); if (!c.ok) { alert(c.reason); return; } } }
+  }
+  document.querySelectorAll('#inscription-container .step-content').forEach(function(e) { e.classList.remove('active'); });
+  document.querySelector('#inscription-container .step-content[data-step="' + step + '"]').classList.add('active');
+  document.querySelectorAll('#inscription-container .step-indicator').forEach(function(e) { var s = parseInt(e.dataset.step); e.classList.toggle('active', s === step); e.classList.toggle('done', s < step); });
+  if (step === 2) regInitPasses();
+  if (step === 3) regShowDay(1);
+  if (step === 4) regInitRepas();
+  if (step === 5) regInitHotels();
+  if (step === 6) regBuildRecap();
+  document.getElementById('inscription').scrollIntoView({ behavior: 'smooth' });
+}
+
+function regInitPasses() {
+  var html = '';
+  CONGRES.PASSES.forEach(function(p) {
+    var sel = REG.pass === p.id ? ' selected' : '';
+    html += '<div class="pass-card' + sel + '" onclick="regSelectPass(\'' + p.id + '\',this)"><div class="pass-name">' + p.nom + '</div><div class="pass-price">' + (p.prix === 0 ? 'Gratuit' : p.prix + ' &euro;') + '</div><ul class="pass-features">';
+    p.features.forEach(function(f) { html += '<li>' + f + '</li>'; });
+    html += '</ul></div>';
+  });
+  document.getElementById('ins-pass-grid').innerHTML = html;
+}
+function regSelectPass(id, el) {
+  REG.pass = id;
+  document.querySelectorAll('#ins-pass-grid .pass-card').forEach(function(c) { c.classList.remove('selected'); });
+  el.classList.add('selected');
+}
+function regShowDay(day, btn) {
+  if (btn) { btn.parentElement.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.remove('active'); }); btn.classList.add('active'); }
+  var sessions = CONGRES.getSessionsByDay(day), html = '';
+  sessions.forEach(function(s) {
+    var sp = s.speakers.map(function(id) { var x = CONGRES.getSpeaker(id); return x ? x.prenom + ' ' + x.nom : ''; }).join(', ');
+    var salle = CONGRES.getSalle(s.salle);
+    var ck = REG.sessions.indexOf(s.id) !== -1;
+    html += '<label class="session-check' + (ck ? ' checked' : '') + '"><input type="checkbox" ' + (ck ? 'checked' : '') + ' onchange="regToggleSession(' + s.id + ',this)"><div><strong style="color:#FFF;">' + s.debut + '</strong> <span style="color:#FFF;">' + s.titre + '</span><br><span style="font-size:.78rem;color:var(--text-muted);">' + sp + ' &middot; ' + (salle ? salle.nom : '') + '</span></div></label>';
+  });
+  document.getElementById('ins-session-choices').innerHTML = html;
+}
+function regToggleSession(id, el) {
+  var idx = REG.sessions.indexOf(id);
+  if (idx === -1) REG.sessions.push(id); else REG.sessions.splice(idx, 1);
+  el.closest('.session-check').classList.toggle('checked', el.checked);
+}
+function regInitRepas() {
+  var html = '';
+  CONGRES.REPAS_OPTIONS.forEach(function(r) {
+    var sel = REG.repas === r.id;
+    html += '<label class="repas-option' + (sel ? ' selected' : '') + '" onclick="regSelectRepas(\'' + r.id + '\')"><input type="radio" name="repas" ' + (sel ? 'checked' : '') + ' style="accent-color:var(--accent);"><div><strong style="color:#FFF;">' + r.nom + '</strong> — ' + r.prix + ' &euro;/jour</div></label>';
+  });
+  document.getElementById('ins-repas-choices').innerHTML = html;
+}
+function regSelectRepas(id) { REG.repas = id; }
+function regInitHotels() {
+  var html = '';
+  CONGRES.HOTELS.forEach(function(h) {
+    var sel = REG.hotel === h.id;
+    html += '<div class="hotel-option' + (sel ? ' selected' : '') + '" onclick="regSelectHotel(' + h.id + ')" data-hotel="' + h.id + '"><div style="flex:1;"><strong style="color:#FFF;">' + h.nom + '</strong><br><span style="font-size:.82rem;color:var(--text-muted);">' + h.distance + '</span></div><div style="text-align:right;"><div style="font-size:1.1rem;font-weight:800;color:var(--accent);">' + h.prix + ' &euro;</div><div style="font-size:.75rem;color:var(--text-muted);">/nuit</div></div></div>';
+  });
+  document.getElementById('ins-hotel-choices').innerHTML = html;
+}
+function regSelectHotel(id) {
+  REG.hotel = id;
+  document.querySelectorAll('.hotel-option').forEach(function(e) { e.classList.remove('selected'); });
+  if (id === null) { document.getElementById('hotel-none').classList.add('selected'); } else { var e = document.querySelector('[data-hotel="' + id + '"]'); if (e) e.classList.add('selected'); document.getElementById('hotel-none').classList.remove('selected'); }
+}
+function regBuildRecap() {
+  var pass = CONGRES.getPass(REG.pass), repas = CONGRES.REPAS_OPTIONS.find(function(r) { return r.id === REG.repas; }), hotel = REG.hotel ? CONGRES.getHotel(REG.hotel) : null;
+  var pp = pass ? pass.prix : 0, rp = repas ? repas.prix * 3 : 0, hp = hotel ? hotel.prix * 3 : 0;
+  if (REG.pass === 'platinum') hp = 0;
+  var total = pp + rp + hp;
+  var html = '<div class="recap-section"><h4>Informations</h4><div class="recap-row"><span>Nom</span><span style="color:#FFF;">' + REG.prenom + ' ' + REG.nom + '</span></div><div class="recap-row"><span>Email</span><span style="color:#FFF;">' + REG.email + '</span></div></div><div class="recap-section"><h4>Pass</h4><div class="recap-row"><span>' + (pass ? pass.nom : '') + '</span><span style="color:#FFF;">' + pp + ' &euro;</span></div></div><div class="recap-section"><h4>Sessions (' + REG.sessions.length + ')</h4>';
+  REG.sessions.forEach(function(sid) { var s = CONGRES.getSession(sid); if (s) html += '<div class="recap-row"><span style="color:var(--text-body);">J' + s.jour + ' ' + s.debut + ' — ' + s.titre + '</span><span></span></div>'; });
+  html += '</div><div class="recap-total">Total : ' + total + ' &euro;</div><p style="font-size:.78rem;color:var(--text-muted);text-align:center;">Mode demo.</p>';
+  document.getElementById('ins-recap-content').innerHTML = html;
+}
+function regConfirm() {
+  var id = 'INS-' + String(Date.now()).slice(-6);
+  var ins = { id: id, nom: REG.nom, prenom: REG.prenom, email: REG.email, tel: REG.tel, entreprise: REG.entreprise, pass: REG.pass, sessions: REG.sessions, repas: REG.repas, hotel: REG.hotel, jours: [1, 2, 3], regime: REG.regime, rgpd: REG.rgpd, statut: 'confirmed', date: new Date().toISOString().split('T')[0] };
+  var list = CONGRES.loadInscriptions(); list.push(ins); CONGRES.saveInscriptions(list);
+  if (typeof generateBadge === 'function') document.getElementById('ins-badge-container').innerHTML = generateBadge(ins);
+  regNextStep(7);
+  sausageRain();
+}
+
+/* ═══ SAUSAGE RAIN / PARADE EFFECTS ═══ */
+function sausageRain() {
+  for (var i = 0; i < 30; i++) {
+    var s = document.createElement('div');
+    s.className = 'sausage-rain';
+    s.textContent = '\uD83C\uDF2D';
+    s.style.left = (Math.random() * 100) + 'vw';
+    s.style.animationDelay = (Math.random() * 2) + 's';
+    s.style.animationDuration = (1.5 + Math.random() * 2) + 's';
+    s.style.fontSize = (20 + Math.random() * 24) + 'px';
+    document.body.appendChild(s);
+    (function(el) { setTimeout(function() { el.remove(); }, 5000); })(s);
+  }
+}
+
+document.getElementById('cta-inscrire').addEventListener('click', function() { sausageRain(); });
+document.getElementById('hero-inscrire').addEventListener('click', function() { sausageRain(); });
+
+var paradeTriggered = false;
+window.addEventListener('scroll', function() {
+  if (paradeTriggered) return;
+  if ((window.innerHeight + window.scrollY) >= (document.body.offsetHeight - 200)) {
+    paradeTriggered = true;
+    for (var i = 0; i < 8; i++) {
+      var p = document.createElement('div');
+      p.className = 'sausage-parade';
+      p.textContent = '\uD83C\uDF2D';
+      p.style.animationDelay = (i * 0.4) + 's';
+      p.style.bottom = (20 + Math.random() * 60) + 'px';
+      p.style.fontSize = (28 + Math.random() * 20) + 'px';
+      document.body.appendChild(p);
+      (function(el) { setTimeout(function() { el.remove(); paradeTriggered = false; }, 8000); })(p);
+    }
+  }
+});
+
+/* ═══ QR BADGE GENERATOR (stub) ═══ */
+if (typeof generateBadge === 'undefined') {
+  window.generateBadge = function(ins) {
+    var pass = CONGRES.getPass(ins.pass);
+    return '<div class="badge-preview"><div class="badge-header">CONGRES DE LA SAUCISSE 2026</div><div class="badge-name">' + ins.prenom + ' ' + ins.nom + '</div><div class="badge-company">' + (ins.entreprise || '') + '</div><div class="badge-pass badge-pass-' + ins.pass + '">' + (pass ? pass.nom : ins.pass) + '</div><div style="font-size:.78rem;color:#999;margin-top:12px;">' + ins.id + '</div></div>';
+  };
+}
+
+/* ═══ CUSTOM SECTIONS — from admin "Mes Rubriques" ═══ */
+(function() {
+  var sections = [];
+  try { sections = JSON.parse(localStorage.getItem('congres_custom_sections') || '[]'); } catch(e) {}
+  if (!sections.length) return;
+
+  var nav = document.getElementById('main-nav');
+  var partenaires = document.getElementById('partenaires');
+
+  sections.forEach(function(sec) {
+    if (!sec.titre || !sec.contenu) return;
+
+    var sectionEl = document.createElement('section');
+    sectionEl.id = sec.id || 'custom-section';
+    sectionEl.className = 'site-section';
+    sectionEl.style.cssText = 'max-width:900px;margin:0 auto;';
+
+    var imgHtml = sec.image ? '<img src="' + sec.image + '" style="max-width:100%;border-radius:12px;margin-bottom:24px;" onerror="this.style.display=\'none\'">' : '';
+    var textHtml = sec.contenu.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g, '<br>');
+
+    sectionEl.innerHTML =
+      '<span class="section-eyebrow eyebrow-gold">Rubrique</span>' +
+      '<h2 class="section-heading">' + (sec.icon || '📄') + ' ' + sec.titre + '</h2>' +
+      imgHtml +
+      '<div style="font-size:.95rem;color:var(--text-body);line-height:1.8;">' + textHtml + '</div>';
+
+    var divider = document.createElement('div');
+    divider.className = 'section-divider';
+    divider.textContent = '\uD83C\uDF2D\uD83C\uDF2D\uD83C\uDF2D\uD83C\uDF2D\uD83C\uDF2D\uD83C\uDF2D\uD83C\uDF2D\uD83C\uDF2D\uD83C\uDF2D\uD83C\uDF2D\uD83C\uDF2D\uD83C\uDF2D\uD83C\uDF2D\uD83C\uDF2D\uD83C\uDF2D\uD83C\uDF2D\uD83C\uDF2D\uD83C\uDF2D\uD83C\uDF2D\uD83C\uDF2D\uD83C\uDF2D\uD83C\uDF2D\uD83C\uDF2D\uD83C\uDF2D\uD83C\uDF2D\uD83C\uDF2D\uD83C\uDF2D\uD83C\uDF2D\uD83C\uDF2D\uD83C\uDF2D';
+
+    var footer = document.querySelector('.site-footer');
+    if (footer) {
+      footer.parentNode.insertBefore(divider, footer);
+      footer.parentNode.insertBefore(sectionEl, footer);
+    }
+
+    if (sec.visible && nav) {
+      var link = document.createElement('a');
+      link.href = '#' + (sec.id || 'custom-section');
+      link.textContent = sec.titre;
+      nav.appendChild(link);
+    }
+  });
+})();
+</script>
+
+</body>
+</html>
