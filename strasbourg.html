@@ -1,0 +1,2745 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Les Rencontres de Strasbourg — Forum Politique, Société, Environnement. 1ère Édition, 15-18 octobre 2026.">
+<meta name="theme-color" content="#0e0e20">
+<title>Les Rencontres de Strasbourg — Politique · Société · Environnement</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;800;900&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<style>
+/* ============================================
+   THEME SYSTEM — 3 switchable themes
+   ============================================ */
+
+/* Theme 1: Classique (default) — Dark navy + gold */
+:root {
+  --bg-primary: #0e0e20;
+  --bg-secondary: #141432;
+  --bg-card: #1a1a3e;
+  --bg-card-hover: #222250;
+  --bg-input: #1a1a3e;
+  --accent: #c8a44e;
+  --accent-hover: #d4b55f;
+  --accent-rgb: 200,164,78;
+  --text-primary: #f0ede6;
+  --text-secondary: #a8a4b8;
+  --text-muted: #6e6a80;
+  --border: rgba(200,164,78,0.15);
+  --border-light: rgba(255,255,255,0.06);
+  --nav-bg: rgba(14,14,32,0.95);
+  --hero-overlay: linear-gradient(135deg, rgba(14,14,32,0.92), rgba(20,20,50,0.85));
+  --badge-bg: rgba(200,164,78,0.15);
+  --badge-text: #c8a44e;
+  --shadow: 0 4px 24px rgba(0,0,0,0.3);
+  --shadow-hover: 0 8px 40px rgba(0,0,0,0.4);
+  --footer-bg: #0a0a18;
+  --theme-name: 'classique';
+}
+
+/* Theme 2: Strasbourg — Burgundy + cream */
+[data-theme="strasbourg"] {
+  --bg-primary: #2a0a12;
+  --bg-secondary: #3a1420;
+  --bg-card: #4a1e2e;
+  --bg-card-hover: #5a2838;
+  --bg-input: #4a1e2e;
+  --accent: #F5E6D0;
+  --accent-hover: #fff0e0;
+  --accent-rgb: 245,230,208;
+  --text-primary: #F5E6D0;
+  --text-secondary: #c8a898;
+  --text-muted: #8a6a5a;
+  --border: rgba(245,230,208,0.15);
+  --border-light: rgba(245,230,208,0.06);
+  --nav-bg: rgba(42,10,18,0.95);
+  --hero-overlay: linear-gradient(135deg, rgba(42,10,18,0.92), rgba(74,14,26,0.85));
+  --badge-bg: rgba(245,230,208,0.15);
+  --badge-text: #F5E6D0;
+  --shadow: 0 4px 24px rgba(0,0,0,0.4);
+  --shadow-hover: 0 8px 40px rgba(0,0,0,0.5);
+  --footer-bg: #1a0508;
+  --theme-name: 'strasbourg';
+}
+
+/* Theme 3: Moderne — White + electric blue + coral */
+[data-theme="moderne"] {
+  --bg-primary: #FFFFFF;
+  --bg-secondary: #F5F7FA;
+  --bg-card: #FFFFFF;
+  --bg-card-hover: #F0F4FF;
+  --bg-input: #F5F7FA;
+  --accent: #0066FF;
+  --accent-hover: #0052CC;
+  --accent-rgb: 0,102,255;
+  --text-primary: #1a1a2e;
+  --text-secondary: #555566;
+  --text-muted: #999;
+  --border: rgba(0,102,255,0.15);
+  --border-light: rgba(0,0,0,0.06);
+  --nav-bg: rgba(255,255,255,0.95);
+  --hero-overlay: linear-gradient(135deg, rgba(0,102,255,0.85), rgba(255,107,107,0.7));
+  --badge-bg: rgba(0,102,255,0.1);
+  --badge-text: #0066FF;
+  --shadow: 0 4px 24px rgba(0,0,0,0.08);
+  --shadow-hover: 0 8px 40px rgba(0,0,0,0.12);
+  --footer-bg: #1a1a2e;
+  --theme-name: 'moderne';
+}
+[data-theme="moderne"] .nav-inner { border-bottom-color: #e0e0e0; }
+[data-theme="moderne"] nav { border-bottom: 1px solid #e0e0e0; }
+[data-theme="moderne"] .card { border: 1px solid #e8e8e8; }
+[data-theme="moderne"] .footer-section { color: #ccc; }
+[data-theme="moderne"] footer a { color: #aaa; }
+[data-theme="moderne"] footer a:hover { color: #fff; }
+[data-theme="moderne"] .hero-subtitle { color: rgba(255,255,255,0.9) !important; }
+[data-theme="moderne"] .hero h1 { color: #fff !important; }
+[data-theme="moderne"] .hero-meta { color: rgba(255,255,255,0.8) !important; }
+[data-theme="moderne"] .hero .btn-primary { background: #FF6B6B; }
+[data-theme="moderne"] .hero .btn-primary:hover { background: #e55a5a; }
+[data-theme="moderne"] .hero .btn-outline { border-color: rgba(255,255,255,0.4); color: #fff; }
+[data-theme="moderne"] .countdown-item .count-num { color: #FF6B6B; }
+[data-theme="moderne"] .section-label { color: #FF6B6B; }
+[data-theme="moderne"] .theme-badge { background: rgba(255,107,107,0.1); color: #FF6B6B; }
+[data-theme="moderne"] .day-tab.active { border-color: #FF6B6B; color: #FF6B6B; }
+
+/* ============================================
+   RESET & BASE
+   ============================================ */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'Inter', -apple-system, 'Segoe UI', sans-serif;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+a { color: var(--accent); text-decoration: none; transition: color 0.2s; }
+a:hover { color: var(--accent-hover); }
+img { max-width: 100%; display: block; }
+h1, h2, h3, h4 { font-family: 'Playfair Display', Georgia, serif; line-height: 1.2; }
+.container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+
+/* ============================================
+   NAVIGATION
+   ============================================ */
+nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  background: var(--nav-bg);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border-light);
+  transition: all 0.3s;
+}
+nav.scrolled { box-shadow: 0 2px 20px rgba(0,0,0,0.3); }
+.nav-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  height: 64px;
+  padding: 0 24px;
+  gap: 8px;
+}
+.nav-logo {
+  font-family: 'Playfair Display', serif;
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--accent);
+  margin-right: auto;
+  white-space: nowrap;
+  letter-spacing: -0.02em;
+}
+.nav-links { display: flex; gap: 2px; align-items: center; }
+.nav-links a {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  padding: 8px 14px;
+  border-radius: 8px;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+.nav-links a:hover { background: var(--bg-card); color: var(--accent); }
+.nav-links a.active { color: var(--accent); }
+.nav-btn {
+  background: var(--accent);
+  color: var(--bg-primary) !important;
+  padding: 8px 16px !important;
+  border-radius: 8px;
+  font-weight: 700 !important;
+  font-size: 13px !important;
+  cursor: pointer;
+  border: none;
+  font-family: 'Inter', sans-serif;
+  transition: all 0.2s;
+}
+.nav-btn:hover { background: var(--accent-hover); transform: translateY(-1px); }
+.theme-toggle {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text-secondary);
+  padding: 7px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.2s;
+  position: relative;
+}
+.theme-toggle:hover { background: var(--bg-card); color: var(--accent); border-color: var(--accent); }
+.search-toggle {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text-secondary);
+  padding: 7px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.2s;
+}
+.search-toggle:hover { background: var(--bg-card); color: var(--accent); border-color: var(--accent); }
+
+/* Mobile hamburger */
+.hamburger { display: none; background: transparent; border: none; color: var(--text-primary); font-size: 24px; cursor: pointer; padding: 8px; }
+.mobile-menu {
+  display: none;
+  position: fixed;
+  top: 64px;
+  left: 0;
+  right: 0;
+  background: var(--bg-primary);
+  border-bottom: 1px solid var(--border-light);
+  padding: 16px 24px;
+  z-index: 999;
+}
+.mobile-menu.open { display: block; }
+.mobile-menu a {
+  display: block;
+  padding: 12px 0;
+  color: var(--text-secondary);
+  font-weight: 600;
+  border-bottom: 1px solid var(--border-light);
+}
+.mobile-menu a:last-child { border-bottom: none; }
+
+@media(max-width: 1024px) {
+  .nav-links { display: none; }
+  .theme-toggle, .search-toggle { display: none; }
+  .hamburger { display: block; }
+  .mobile-theme-search { display: flex; gap: 8px; padding: 12px 0; }
+  .mobile-theme-search button {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid var(--border);
+    background: var(--bg-card);
+    color: var(--text-secondary);
+    border-radius: 8px;
+    font-size: 14px;
+    cursor: pointer;
+  }
+}
+@media(min-width: 1025px) {
+  .mobile-theme-search { display: none !important; }
+}
+
+/* Theme panel */
+.theme-panel {
+  display: none;
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 16px;
+  min-width: 240px;
+  box-shadow: var(--shadow);
+  z-index: 1001;
+}
+.theme-panel.open { display: block; }
+.theme-panel h4 { font-family: 'Inter', sans-serif; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; color: var(--text-muted); margin-bottom: 12px; }
+.theme-option {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.2s;
+  margin-bottom: 4px;
+}
+.theme-option:hover { background: var(--bg-card-hover); }
+.theme-option.active { background: rgba(var(--accent-rgb), 0.15); }
+.theme-swatch {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  border: 2px solid transparent;
+  flex-shrink: 0;
+}
+.theme-option.active .theme-swatch { border-color: var(--accent); }
+.theme-option span { font-size: 14px; font-weight: 600; color: var(--text-primary); }
+.theme-option small { display: block; font-size: 11px; color: var(--text-muted); font-weight: 400; }
+
+/* Search overlay */
+.search-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0,0,0,0.7);
+  z-index: 2000;
+  align-items: flex-start;
+  justify-content: center;
+  padding-top: 120px;
+}
+.search-overlay.open { display: flex; }
+.search-box {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 24px;
+  width: 90%;
+  max-width: 600px;
+  box-shadow: var(--shadow);
+}
+.search-box input {
+  width: 100%;
+  padding: 16px 20px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  background: var(--bg-input);
+  color: var(--text-primary);
+  font-size: 18px;
+  font-family: 'Inter', sans-serif;
+  outline: none;
+}
+.search-box input::placeholder { color: var(--text-muted); }
+.search-box input:focus { border-color: var(--accent); }
+.search-results { margin-top: 16px; max-height: 400px; overflow-y: auto; }
+.search-result-item {
+  padding: 12px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.search-result-item:hover { background: var(--bg-card-hover); }
+.search-result-item .sr-type { font-size: 11px; text-transform: uppercase; color: var(--accent); font-weight: 700; letter-spacing: 1px; }
+.search-result-item .sr-title { font-size: 15px; font-weight: 600; color: var(--text-primary); margin-top: 2px; }
+.search-result-item .sr-meta { font-size: 13px; color: var(--text-muted); }
+
+/* ============================================
+   HERO
+   ============================================ */
+.hero {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  overflow: hidden;
+}
+.hero-bg {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: linear-gradient(135deg, #0e0e20 0%, #1a1a3e 30%, #2a1a4a 60%, #0e0e20 100%);
+  z-index: 0;
+}
+.hero-bg::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: var(--hero-overlay);
+  z-index: 1;
+}
+/* Decorative elements */
+.hero-bg::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle at 30% 50%, rgba(var(--accent-rgb), 0.08) 0%, transparent 50%),
+              radial-gradient(circle at 70% 30%, rgba(var(--accent-rgb), 0.05) 0%, transparent 40%);
+  z-index: 2;
+  animation: heroGlow 15s ease-in-out infinite alternate;
+}
+@keyframes heroGlow {
+  0% { transform: translate(0, 0) rotate(0deg); }
+  100% { transform: translate(-2%, 2%) rotate(3deg); }
+}
+.hero-content {
+  position: relative;
+  z-index: 10;
+  padding: 100px 24px 60px;
+  max-width: 800px;
+}
+.hero-edition {
+  display: inline-block;
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  color: var(--accent);
+  background: rgba(var(--accent-rgb), 0.1);
+  border: 1px solid rgba(var(--accent-rgb), 0.2);
+  padding: 8px 24px;
+  border-radius: 30px;
+  margin-bottom: 32px;
+}
+.hero h1 {
+  font-size: clamp(36px, 7vw, 72px);
+  font-weight: 900;
+  color: var(--text-primary);
+  margin-bottom: 16px;
+  letter-spacing: -0.02em;
+  line-height: 1.05;
+}
+.hero-subtitle {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(18px, 3vw, 28px);
+  font-weight: 400;
+  font-style: italic;
+  color: var(--text-secondary);
+  margin-bottom: 24px;
+  letter-spacing: 0.05em;
+}
+.hero-meta {
+  font-size: 16px;
+  color: var(--text-secondary);
+  margin-bottom: 40px;
+  line-height: 1.8;
+}
+.hero-meta strong { color: var(--accent); font-weight: 600; }
+.hero-btns { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; margin-bottom: 48px; }
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 16px 36px;
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: 700;
+  font-family: 'Inter', sans-serif;
+  border: none;
+  cursor: pointer;
+  transition: all 0.25s;
+  text-decoration: none;
+}
+.btn-primary {
+  background: var(--accent);
+  color: var(--bg-primary);
+}
+.btn-primary:hover { background: var(--accent-hover); transform: translateY(-2px); box-shadow: 0 6px 24px rgba(var(--accent-rgb), 0.3); color: var(--bg-primary); }
+.btn-outline {
+  background: transparent;
+  color: var(--text-primary);
+  border: 2px solid var(--border);
+}
+.btn-outline:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-2px); }
+
+/* Countdown */
+.countdown {
+  display: flex;
+  gap: 24px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.countdown-item {
+  text-align: center;
+  min-width: 80px;
+}
+.count-num {
+  font-family: 'Playfair Display', serif;
+  font-size: 48px;
+  font-weight: 900;
+  color: var(--accent);
+  line-height: 1;
+}
+.count-label {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: var(--text-muted);
+  margin-top: 8px;
+}
+
+/* Scroll indicator */
+.scroll-indicator {
+  position: absolute;
+  bottom: 32px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+  animation: scrollBounce 2s ease-in-out infinite;
+}
+.scroll-indicator svg { width: 24px; height: 24px; stroke: var(--text-muted); }
+@keyframes scrollBounce {
+  0%, 100% { transform: translateX(-50%) translateY(0); }
+  50% { transform: translateX(-50%) translateY(8px); }
+}
+
+/* ============================================
+   SECTIONS COMMON
+   ============================================ */
+.section {
+  padding: 100px 0;
+  position: relative;
+}
+.section-alt { background: var(--bg-secondary); }
+.section-header {
+  text-align: center;
+  max-width: 700px;
+  margin: 0 auto 60px;
+}
+.section-label {
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  color: var(--accent);
+  margin-bottom: 16px;
+  display: block;
+}
+.section-header h2 {
+  font-size: clamp(28px, 4vw, 44px);
+  font-weight: 800;
+  color: var(--text-primary);
+  margin-bottom: 16px;
+}
+.section-header p {
+  font-size: 17px;
+  color: var(--text-secondary);
+  line-height: 1.7;
+}
+
+/* ============================================
+   NUMBERS BAR
+   ============================================ */
+.numbers-bar {
+  background: var(--bg-card);
+  border-top: 1px solid var(--border-light);
+  border-bottom: 1px solid var(--border-light);
+  padding: 40px 0;
+}
+.numbers-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+  text-align: center;
+}
+.num-item .num-val {
+  font-family: 'Playfair Display', serif;
+  font-size: 42px;
+  font-weight: 900;
+  color: var(--accent);
+  line-height: 1;
+}
+.num-item .num-label {
+  font-size: 14px;
+  color: var(--text-muted);
+  margin-top: 8px;
+  font-weight: 500;
+}
+@media(max-width: 600px) {
+  .numbers-grid { grid-template-columns: repeat(2, 1fr); gap: 32px; }
+}
+
+/* ============================================
+   THEMATIQUES CARDS
+   ============================================ */
+.themes-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+@media(max-width: 900px) { .themes-grid { grid-template-columns: repeat(2, 1fr); } }
+@media(max-width: 600px) { .themes-grid { grid-template-columns: 1fr; } }
+.card {
+  background: var(--bg-card);
+  border-radius: 16px;
+  padding: 32px 28px;
+  transition: all 0.3s;
+  cursor: default;
+  border: 1px solid var(--border-light);
+  position: relative;
+  overflow: hidden;
+}
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-hover);
+  border-color: rgba(var(--accent-rgb), 0.3);
+}
+.card-icon {
+  font-size: 36px;
+  margin-bottom: 16px;
+  display: block;
+}
+.card h3 {
+  font-family: 'Playfair Display', serif;
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 10px;
+  color: var(--text-primary);
+}
+.card p {
+  font-size: 14px;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  margin-bottom: 16px;
+}
+.theme-badge {
+  display: inline-block;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--accent);
+  background: var(--badge-bg);
+  padding: 4px 12px;
+  border-radius: 20px;
+}
+
+/* ============================================
+   PROGRAMME
+   ============================================ */
+.day-tabs {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  margin-bottom: 48px;
+  flex-wrap: wrap;
+}
+.day-tab {
+  padding: 12px 28px;
+  border: 2px solid var(--border);
+  border-radius: 10px;
+  background: transparent;
+  color: var(--text-secondary);
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.day-tab:hover { border-color: var(--accent); color: var(--accent); }
+.day-tab.active {
+  border-color: var(--accent);
+  color: var(--accent);
+  background: rgba(var(--accent-rgb), 0.08);
+}
+.day-tab .day-date { display: block; font-size: 11px; font-weight: 500; color: var(--text-muted); margin-top: 2px; }
+
+.day-content { display: none; }
+.day-content.active { display: block; }
+
+.programme-list { display: flex; flex-direction: column; gap: 12px; max-width: 900px; margin: 0 auto; }
+.session-card {
+  display: flex;
+  gap: 20px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-light);
+  border-radius: 14px;
+  padding: 20px 24px;
+  transition: all 0.2s;
+  align-items: flex-start;
+}
+.session-card:hover { border-color: rgba(var(--accent-rgb), 0.3); box-shadow: var(--shadow); }
+.session-time {
+  min-width: 60px;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--accent);
+  padding-top: 2px;
+  white-space: nowrap;
+}
+.session-info { flex: 1; }
+.session-info h4 {
+  font-family: 'Playfair Display', serif;
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 6px;
+  line-height: 1.3;
+}
+.session-speaker {
+  font-size: 13px;
+  color: var(--text-secondary);
+  margin-bottom: 8px;
+}
+.session-meta {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+.session-room {
+  font-size: 12px;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.session-theme-badge {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 3px 10px;
+  border-radius: 20px;
+  background: var(--badge-bg);
+  color: var(--badge-text);
+}
+.session-status {
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 20px;
+}
+.status-available { background: rgba(46,204,113,0.15); color: #2ecc71; }
+.status-full { background: rgba(231,76,60,0.15); color: #e74c3c; }
+.status-few { background: rgba(241,196,15,0.15); color: #f1c40f; }
+
+@media(max-width: 600px) {
+  .session-card { flex-direction: column; gap: 8px; }
+  .session-time { min-width: auto; }
+}
+
+/* ============================================
+   INTERVENANTS
+   ============================================ */
+.speakers-filters {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  margin-bottom: 40px;
+  flex-wrap: wrap;
+}
+.filter-btn {
+  padding: 8px 18px;
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  background: transparent;
+  color: var(--text-secondary);
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.filter-btn:hover { border-color: var(--accent); color: var(--accent); }
+.filter-btn.active { background: var(--accent); color: var(--bg-primary); border-color: var(--accent); }
+
+.speakers-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 20px;
+}
+.speaker-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-light);
+  border-radius: 14px;
+  padding: 28px 20px;
+  text-align: center;
+  transition: all 0.3s;
+}
+.speaker-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-hover); border-color: rgba(var(--accent-rgb), 0.3); }
+.speaker-avatar {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, rgba(var(--accent-rgb), 0.2), rgba(var(--accent-rgb), 0.05));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 14px;
+  font-family: 'Playfair Display', serif;
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--accent);
+  border: 2px solid rgba(var(--accent-rgb), 0.2);
+}
+.speaker-card h4 {
+  font-family: 'Playfair Display', serif;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 4px;
+}
+.speaker-card .speaker-title {
+  font-size: 12px;
+  color: var(--accent);
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+.speaker-card .speaker-inst {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+.speakers-more {
+  text-align: center;
+  margin-top: 40px;
+}
+
+/* ============================================
+   ACTUALITES
+   ============================================ */
+.news-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 24px;
+}
+@media(max-width: 700px) { .news-grid { grid-template-columns: 1fr; } }
+.news-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-light);
+  border-radius: 14px;
+  padding: 28px;
+  transition: all 0.3s;
+}
+.news-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-hover); border-color: rgba(var(--accent-rgb), 0.3); }
+.news-date {
+  font-size: 12px;
+  color: var(--text-muted);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 8px;
+}
+.news-card h3 {
+  font-family: 'Playfair Display', serif;
+  font-size: 19px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 10px;
+  line-height: 1.3;
+}
+.news-card p {
+  font-size: 14px;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  margin-bottom: 14px;
+}
+.news-card .read-more {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--accent);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  transition: gap 0.2s;
+}
+.news-card .read-more:hover { gap: 8px; }
+.news-full { display: none; margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border-light); }
+.news-full.open { display: block; }
+.news-full p { font-size: 14px; color: var(--text-secondary); line-height: 1.7; }
+
+/* ============================================
+   PARTENAIRES
+   ============================================ */
+.partners-category {
+  margin-bottom: 48px;
+}
+.partners-category h3 {
+  font-family: 'Playfair Display', serif;
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 20px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border-light);
+}
+.partners-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  align-items: center;
+}
+.partner-item {
+  background: var(--bg-card);
+  border: 1px solid var(--border-light);
+  border-radius: 12px;
+  padding: 16px 24px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+.partner-item:hover { border-color: rgba(var(--accent-rgb), 0.3); color: var(--accent); }
+
+/* ============================================
+   INFOS PRATIQUES
+   ============================================ */
+.infos-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 32px;
+}
+@media(max-width: 800px) { .infos-grid { grid-template-columns: 1fr; } }
+.info-block {
+  background: var(--bg-card);
+  border: 1px solid var(--border-light);
+  border-radius: 14px;
+  padding: 28px;
+}
+.info-block h3 {
+  font-family: 'Playfair Display', serif;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.info-block p, .info-block li {
+  font-size: 14px;
+  color: var(--text-secondary);
+  line-height: 1.7;
+}
+.info-block ul { list-style: none; }
+.info-block ul li { padding: 6px 0; border-bottom: 1px solid var(--border-light); }
+.info-block ul li:last-child { border-bottom: none; }
+.info-block ul li::before { content: ''; }
+.info-icon { font-size: 20px; }
+#map-container {
+  width: 100%;
+  height: 300px;
+  border-radius: 14px;
+  overflow: hidden;
+  margin-top: 24px;
+  border: 1px solid var(--border-light);
+}
+.tarif-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border-light);
+}
+.tarif-item:last-child { border-bottom: none; }
+.tarif-price {
+  font-weight: 700;
+  color: var(--accent);
+  font-size: 16px;
+}
+
+/* ============================================
+   MEDIATHEQUE
+   ============================================ */
+.media-placeholder {
+  background: var(--bg-card);
+  border: 1px solid var(--border-light);
+  border-radius: 14px;
+  padding: 60px 40px;
+  text-align: center;
+  max-width: 700px;
+  margin: 0 auto 40px;
+}
+.media-placeholder .media-icon { font-size: 48px; margin-bottom: 16px; }
+.media-placeholder h3 {
+  font-family: 'Playfair Display', serif;
+  font-size: 22px;
+  color: var(--text-primary);
+  margin-bottom: 10px;
+}
+.media-placeholder p { color: var(--text-secondary); font-size: 15px; }
+.videos-preview {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 24px;
+  max-width: 900px;
+  margin: 0 auto;
+}
+.video-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-light);
+  border-radius: 14px;
+  overflow: hidden;
+}
+.video-card iframe {
+  width: 100%;
+  aspect-ratio: 16/9;
+  border: none;
+}
+.video-card .video-info { padding: 16px; }
+.video-card .video-info h4 {
+  font-family: 'Playfair Display', serif;
+  font-size: 15px;
+  color: var(--text-primary);
+  margin-bottom: 4px;
+}
+.video-card .video-info p { font-size: 13px; color: var(--text-muted); }
+
+/* ============================================
+   APPEL A COMMUNICATIONS
+   ============================================ */
+.form-container {
+  max-width: 700px;
+  margin: 0 auto;
+  background: var(--bg-card);
+  border: 1px solid var(--border-light);
+  border-radius: 16px;
+  padding: 40px;
+}
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+@media(max-width: 600px) { .form-row { grid-template-columns: 1fr; } }
+.form-group { margin-bottom: 16px; }
+.form-group label {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  margin-bottom: 6px;
+}
+.form-group input, .form-group select, .form-group textarea {
+  width: 100%;
+  padding: 12px 16px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--bg-input);
+  color: var(--text-primary);
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+.form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+  border-color: var(--accent);
+}
+.form-group textarea { resize: vertical; min-height: 120px; }
+.form-group select { appearance: none; cursor: pointer; }
+.form-deadline {
+  text-align: center;
+  margin-top: 16px;
+  font-size: 14px;
+  color: var(--text-muted);
+}
+.form-deadline strong { color: var(--accent); }
+.form-success {
+  display: none;
+  text-align: center;
+  padding: 40px;
+}
+.form-success .check-icon { font-size: 48px; margin-bottom: 16px; }
+.form-success h3 { color: var(--text-primary); margin-bottom: 8px; }
+.form-success p { color: var(--text-secondary); }
+
+/* ============================================
+   NEWSLETTER
+   ============================================ */
+.newsletter-section {
+  background: linear-gradient(135deg, rgba(var(--accent-rgb), 0.08), rgba(var(--accent-rgb), 0.02));
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+.newsletter-inner {
+  text-align: center;
+  max-width: 600px;
+  margin: 0 auto;
+}
+.newsletter-inner h2 {
+  font-size: 28px;
+  color: var(--text-primary);
+  margin-bottom: 10px;
+}
+.newsletter-inner p {
+  color: var(--text-secondary);
+  margin-bottom: 24px;
+}
+.newsletter-form {
+  display: flex;
+  gap: 12px;
+  max-width: 480px;
+  margin: 0 auto;
+}
+.newsletter-form input {
+  flex: 1;
+  padding: 14px 20px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--bg-input);
+  color: var(--text-primary);
+  font-family: 'Inter', sans-serif;
+  font-size: 15px;
+  outline: none;
+}
+.newsletter-form input:focus { border-color: var(--accent); }
+.newsletter-form button {
+  padding: 14px 28px;
+  background: var(--accent);
+  color: var(--bg-primary);
+  border: none;
+  border-radius: 10px;
+  font-family: 'Inter', sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+.newsletter-form button:hover { background: var(--accent-hover); }
+@media(max-width: 500px) {
+  .newsletter-form { flex-direction: column; }
+}
+
+/* ============================================
+   FOOTER
+   ============================================ */
+footer {
+  background: var(--footer-bg);
+  padding: 60px 0 0;
+  border-top: 1px solid var(--border-light);
+}
+.footer-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 40px;
+  margin-bottom: 40px;
+}
+@media(max-width: 800px) { .footer-grid { grid-template-columns: 1fr 1fr; } }
+@media(max-width: 500px) { .footer-grid { grid-template-columns: 1fr; } }
+.footer-brand .footer-logo {
+  font-family: 'Playfair Display', serif;
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--accent);
+  margin-bottom: 12px;
+}
+.footer-brand p {
+  font-size: 14px;
+  color: var(--text-muted);
+  line-height: 1.6;
+  margin-bottom: 16px;
+}
+.social-links { display: flex; gap: 12px; }
+.social-link {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-card);
+  border: 1px solid var(--border-light);
+  border-radius: 8px;
+  color: var(--text-muted);
+  font-size: 14px;
+  transition: all 0.2s;
+}
+.social-link:hover { border-color: var(--accent); color: var(--accent); }
+.footer-section h4 {
+  font-family: 'Inter', sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: var(--text-muted);
+  margin-bottom: 16px;
+}
+.footer-section a {
+  display: block;
+  font-size: 14px;
+  color: var(--text-secondary);
+  padding: 4px 0;
+  transition: color 0.2s;
+}
+.footer-section a:hover { color: var(--accent); }
+.footer-bottom {
+  border-top: 1px solid var(--border-light);
+  padding: 20px 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.footer-bottom p {
+  font-size: 13px;
+  color: var(--text-muted);
+}
+.footer-legal { display: flex; gap: 20px; }
+.footer-legal a {
+  font-size: 13px;
+  color: var(--text-muted);
+}
+.footer-legal a:hover { color: var(--accent); }
+
+/* ============================================
+   COOKIE BANNER (RGPD)
+   ============================================ */
+.cookie-banner {
+  display: none;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: var(--bg-card);
+  border-top: 1px solid var(--border);
+  padding: 20px 24px;
+  z-index: 3000;
+  box-shadow: 0 -4px 20px rgba(0,0,0,0.2);
+}
+.cookie-banner.show { display: block; }
+.cookie-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+.cookie-inner p {
+  flex: 1;
+  font-size: 14px;
+  color: var(--text-secondary);
+  min-width: 280px;
+}
+.cookie-btns { display: flex; gap: 12px; }
+.cookie-accept {
+  padding: 10px 24px;
+  background: var(--accent);
+  color: var(--bg-primary);
+  border: none;
+  border-radius: 8px;
+  font-family: 'Inter', sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+  cursor: pointer;
+}
+.cookie-decline {
+  padding: 10px 24px;
+  background: transparent;
+  color: var(--text-secondary);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+/* ============================================
+   SCROLL ANIMATIONS
+   ============================================ */
+.reveal {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ============================================
+   PRINT
+   ============================================ */
+@media print {
+  nav, .cookie-banner, .search-overlay, .theme-panel, .hero-bg, .scroll-indicator, footer, .newsletter-section { display: none !important; }
+  body { background: #fff; color: #000; }
+  .hero { min-height: auto; padding: 40px 0; }
+  .hero-content { padding: 0; }
+  .hero h1 { color: #000 !important; font-size: 28px; }
+  .section { padding: 30px 0; }
+  .card, .session-card, .news-card, .speaker-card, .info-block, .form-container {
+    background: #fff;
+    border: 1px solid #ddd;
+    box-shadow: none;
+    break-inside: avoid;
+  }
+  .section-label { color: #333; }
+  .section-header h2 { color: #000; }
+  .card h3, .session-info h4, .news-card h3 { color: #000; }
+  .card p, .session-speaker, .news-card p { color: #333; }
+  .theme-badge, .session-theme-badge { border: 1px solid #999; background: #f0f0f0; color: #333; }
+}
+
+/* Utility */
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
+</style>
+</head>
+<body>
+
+<!-- ============================================
+     NAVIGATION
+     ============================================ -->
+<nav id="navbar">
+  <div class="nav-inner">
+    <a href="#accueil" class="nav-logo">Les Rencontres de Strasbourg</a>
+    <div class="nav-links">
+      <a href="#accueil" class="active">Accueil</a>
+      <a href="#programme">Programme</a>
+      <a href="#intervenants">Intervenants</a>
+      <a href="#actualites">Actualites</a>
+      <a href="#partenaires">Partenaires</a>
+      <a href="#infos">Infos pratiques</a>
+      <a href="#mediatheque">Mediatheque</a>
+      <div style="position:relative;">
+        <button class="theme-toggle" onclick="toggleThemePanel()" aria-label="Changer de theme">&#127912;</button>
+        <div class="theme-panel" id="themePanel">
+          <h4>Theme graphique</h4>
+          <div class="theme-option active" onclick="setTheme('classique')" data-theme-opt="classique">
+            <div class="theme-swatch" style="background:linear-gradient(135deg,#0e0e20,#c8a44e);"></div>
+            <div><span>Classique</span><small>Marine & or — institutionnel</small></div>
+          </div>
+          <div class="theme-option" onclick="setTheme('strasbourg')" data-theme-opt="strasbourg">
+            <div class="theme-swatch" style="background:linear-gradient(135deg,#4A0E1A,#F5E6D0);"></div>
+            <div><span>Strasbourg</span><small>Bourgogne & creme — Alsace</small></div>
+          </div>
+          <div class="theme-option" onclick="setTheme('moderne')" data-theme-opt="moderne">
+            <div class="theme-swatch" style="background:linear-gradient(135deg,#0066FF,#FF6B6B);"></div>
+            <div><span>Moderne</span><small>Blanc, bleu & corail — contemporain</small></div>
+          </div>
+        </div>
+      </div>
+      <button class="search-toggle" onclick="openSearch()" aria-label="Rechercher">&#128269;</button>
+    </div>
+    <button class="hamburger" onclick="toggleMobileMenu()" aria-label="Menu">&#9776;</button>
+  </div>
+</nav>
+
+<!-- Mobile menu -->
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#accueil" onclick="closeMobileMenu()">Accueil</a>
+  <a href="#programme" onclick="closeMobileMenu()">Programme</a>
+  <a href="#intervenants" onclick="closeMobileMenu()">Intervenants</a>
+  <a href="#actualites" onclick="closeMobileMenu()">Actualites</a>
+  <a href="#partenaires" onclick="closeMobileMenu()">Partenaires</a>
+  <a href="#infos" onclick="closeMobileMenu()">Infos pratiques</a>
+  <a href="#mediatheque" onclick="closeMobileMenu()">Mediatheque</a>
+  <a href="#appel" onclick="closeMobileMenu()">Appel a communications</a>
+  <div class="mobile-theme-search">
+    <button onclick="setTheme('classique');closeMobileMenu();">&#127912; Classique</button>
+    <button onclick="setTheme('strasbourg');closeMobileMenu();">&#127863; Strasbourg</button>
+    <button onclick="setTheme('moderne');closeMobileMenu();">&#9889; Moderne</button>
+  </div>
+</div>
+
+<!-- Search overlay -->
+<div class="search-overlay" id="searchOverlay" onclick="if(event.target===this)closeSearch()">
+  <div class="search-box">
+    <input type="text" id="searchInput" placeholder="Rechercher un intervenant, une conference..." oninput="performSearch(this.value)" autocomplete="off">
+    <div class="search-results" id="searchResults"></div>
+  </div>
+</div>
+
+<!-- ============================================
+     HERO
+     ============================================ -->
+<section class="hero" id="accueil">
+  <div class="hero-bg"></div>
+  <div class="hero-content">
+    <div class="hero-edition">1ere Edition — 2026</div>
+    <h1>Les Rencontres<br>de Strasbourg</h1>
+    <div class="hero-subtitle">Politique &middot; Societe &middot; Environnement</div>
+    <div class="hero-meta">
+      <strong>15 — 18 octobre 2026</strong><br>
+      Palais de la Musique et des Congres, Strasbourg
+    </div>
+    <div class="hero-btns">
+      <a href="#appel" class="btn btn-primary">Reserver ma place</a>
+      <a href="#programme" class="btn btn-outline">Voir le programme</a>
+    </div>
+    <div class="countdown" id="countdown">
+      <div class="countdown-item"><span class="count-num" id="cd-days">--</span><span class="count-label">Jours</span></div>
+      <div class="countdown-item"><span class="count-num" id="cd-hours">--</span><span class="count-label">Heures</span></div>
+      <div class="countdown-item"><span class="count-num" id="cd-mins">--</span><span class="count-label">Minutes</span></div>
+      <div class="countdown-item"><span class="count-num" id="cd-secs">--</span><span class="count-label">Secondes</span></div>
+    </div>
+  </div>
+  <div class="scroll-indicator">
+    <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><polyline points="7 13 12 18 17 13"/><line x1="12" y1="6" x2="12" y2="18"/></svg>
+  </div>
+</section>
+
+<!-- ============================================
+     NUMBERS BAR
+     ============================================ -->
+<div class="numbers-bar">
+  <div class="container">
+    <div class="numbers-grid">
+      <div class="num-item reveal"><div class="num-val" data-count="200">0</div><div class="num-label">Intervenants</div></div>
+      <div class="num-item reveal"><div class="num-val" data-count="80">0</div><div class="num-label">Conferences</div></div>
+      <div class="num-item reveal"><div class="num-val" data-count="40">0</div><div class="num-label">Debats</div></div>
+      <div class="num-item reveal"><div class="num-val" data-count="20">0</div><div class="num-label">Ateliers</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================
+     THEMATIQUES
+     ============================================ -->
+<section class="section" id="thematiques">
+  <div class="container">
+    <div class="section-header reveal">
+      <span class="section-label">Thematiques</span>
+      <h2>Six axes de reflexion</h2>
+      <p>Quatre jours pour interroger les grands enjeux de notre epoque, a travers six thematiques transversales.</p>
+    </div>
+    <div class="themes-grid">
+      <div class="card reveal">
+        <span class="card-icon">&#127963;</span>
+        <h3>Politique & Democratie</h3>
+        <p>Institutions, elections, citoyennete, construction europeenne, crise de la representation.</p>
+        <span class="theme-badge">14 conferences</span>
+      </div>
+      <div class="card reveal">
+        <span class="card-icon">&#127757;</span>
+        <h3>Environnement & Climat</h3>
+        <p>Transition ecologique, biodiversite, energie, adaptation climatique, justice environnementale.</p>
+        <span class="theme-badge">16 conferences</span>
+      </div>
+      <div class="card reveal">
+        <span class="card-icon">&#128101;</span>
+        <h3>Societe & Vivre-ensemble</h3>
+        <p>Inegalites, education, sante publique, migrations, cohesion sociale, laicite.</p>
+        <span class="theme-badge">15 conferences</span>
+      </div>
+      <div class="card reveal">
+        <span class="card-icon">&#128188;</span>
+        <h3>Economie & Travail</h3>
+        <p>Emploi, innovation, economie sociale et solidaire, reindustrialisation, precarite.</p>
+        <span class="theme-badge">12 conferences</span>
+      </div>
+      <div class="card reveal">
+        <span class="card-icon">&#128300;</span>
+        <h3>Sciences & Technologies</h3>
+        <p>Intelligence artificielle, numerique, ethique des donnees, sante de demain, transhumanisme.</p>
+        <span class="theme-badge">13 conferences</span>
+      </div>
+      <div class="card reveal">
+        <span class="card-icon">&#127912;</span>
+        <h3>Culture & Patrimoine</h3>
+        <p>Memoire collective, identite, creation artistique, medias, pluralisme culturel.</p>
+        <span class="theme-badge">10 conferences</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================
+     PROGRAMME
+     ============================================ -->
+<section class="section section-alt" id="programme">
+  <div class="container">
+    <div class="section-header reveal">
+      <span class="section-label">Programme</span>
+      <h2>Quatre jours de debats et de rencontres</h2>
+      <p>Conferences plenieres, tables rondes, ateliers participatifs et projections — le programme complet de la 1ere edition.</p>
+    </div>
+
+    <div class="day-tabs">
+      <button class="day-tab active" onclick="showDay(1)">Jour 1<span class="day-date">Jeu. 15 oct.</span></button>
+      <button class="day-tab" onclick="showDay(2)">Jour 2<span class="day-date">Ven. 16 oct.</span></button>
+      <button class="day-tab" onclick="showDay(3)">Jour 3<span class="day-date">Sam. 17 oct.</span></button>
+      <button class="day-tab" onclick="showDay(4)">Jour 4<span class="day-date">Dim. 18 oct.</span></button>
+    </div>
+
+    <!-- DAY 1 -->
+    <div class="day-content active" id="day1">
+      <div class="programme-list">
+        <div class="session-card reveal" data-search="ouverture europe democratie">
+          <div class="session-time">9h00</div>
+          <div class="session-info">
+            <h4>Ceremonie d'ouverture — L'Europe a la croisee des chemins</h4>
+            <div class="session-speaker">Sylvie Kauffmann &middot; Catherine Trautmann</div>
+            <div class="session-meta">
+              <span class="session-room">&#128205; Grand Auditorium</span>
+              <span class="session-theme-badge">Politique</span>
+              <span class="session-status status-few">Dernieres places</span>
+            </div>
+          </div>
+        </div>
+        <div class="session-card reveal" data-search="populisme democratie europe">
+          <div class="session-time">10h30</div>
+          <div class="session-info">
+            <h4>L'Europe face aux populismes : comprendre, resister, reformer</h4>
+            <div class="session-speaker">Pascal Music &middot; Dominique Moisi &middot; Nathalie Tocci</div>
+            <div class="session-meta">
+              <span class="session-room">&#128205; Salle Erasme</span>
+              <span class="session-theme-badge">Politique</span>
+              <span class="session-status status-available">Places disponibles</span>
+            </div>
+          </div>
+        </div>
+        <div class="session-card reveal" data-search="climat urgence transition ecologique">
+          <div class="session-time">11h30</div>
+          <div class="session-info">
+            <h4>Urgence climatique : de la prise de conscience a l'action collective</h4>
+            <div class="session-speaker">Valerie Masson-Delmotte &middot; Jean Jouzel</div>
+            <div class="session-meta">
+              <span class="session-room">&#128205; Grand Auditorium</span>
+              <span class="session-theme-badge">Environnement</span>
+              <span class="session-status status-full">Complet</span>
+            </div>
+          </div>
+        </div>
+        <div class="session-card reveal" data-search="IA democratie intelligence artificielle numerique">
+          <div class="session-time">14h00</div>
+          <div class="session-info">
+            <h4>IA et democratie : menace ou opportunite ?</h4>
+            <div class="session-speaker">Cedric Villani &middot; Laurence Devillers &middot; Asma Mhalla</div>
+            <div class="session-meta">
+              <span class="session-room">&#128205; Salle Gutenberg</span>
+              <span class="session-theme-badge">Sciences</span>
+              <span class="session-status status-available">Places disponibles</span>
+            </div>
+          </div>
+        </div>
+        <div class="session-card reveal" data-search="education inegalites jeunesse societe">
+          <div class="session-time">14h00</div>
+          <div class="session-info">
+            <h4>L'ecole de demain : repenser l'education face aux inegalites</h4>
+            <div class="session-speaker">Philippe Meirieu &middot; Najat Vallaud-Belkacem</div>
+            <div class="session-meta">
+              <span class="session-room">&#128205; Salle Schweitzer</span>
+              <span class="session-theme-badge">Societe</span>
+              <span class="session-status status-available">Places disponibles</span>
+            </div>
+          </div>
+        </div>
+        <div class="session-card reveal" data-search="travail emploi precarite economie">
+          <div class="session-time">15h30</div>
+          <div class="session-info">
+            <h4>Le travail en mutation : entre ubérisation et quête de sens</h4>
+            <div class="session-speaker">Dominique Meda &middot; Denis Maillard</div>
+            <div class="session-meta">
+              <span class="session-room">&#128205; Salle Erasme</span>
+              <span class="session-theme-badge">Economie</span>
+              <span class="session-status status-available">Places disponibles</span>
+            </div>
+          </div>
+        </div>
+        <div class="session-card reveal" data-search="medias desinformation information culture">
+          <div class="session-time">16h30</div>
+          <div class="session-info">
+            <h4>Medias et desinformation : le defi de la confiance</h4>
+            <div class="session-speaker">Christophe Deloire &middot; Julia Cage</div>
+            <div class="session-meta">
+              <span class="session-room">&#128205; Salle Gutenberg</span>
+              <span class="session-theme-badge">Culture</span>
+              <span class="session-status status-available">Places disponibles</span>
+            </div>
+          </div>
+        </div>
+        <div class="session-card reveal" data-search="keynote conference magistrale soir">
+          <div class="session-time">18h30</div>
+          <div class="session-info">
+            <h4>Conference magistrale — Ou va le monde ? Lecture geopolitique de 2026</h4>
+            <div class="session-speaker">Thomas Piketty</div>
+            <div class="session-meta">
+              <span class="session-room">&#128205; Grand Auditorium</span>
+              <span class="session-theme-badge">Politique</span>
+              <span class="session-status status-full">Complet</span>
+            </div>
+          </div>
+        </div>
+        <div class="session-card reveal" data-search="cocktail reception inauguration">
+          <div class="session-time">20h00</div>
+          <div class="session-info">
+            <h4>Cocktail inaugural — Terrasse du Palais des Congres</h4>
+            <div class="session-speaker">Sur invitation</div>
+            <div class="session-meta">
+              <span class="session-room">&#128205; Terrasse panoramique</span>
+              <span class="session-theme-badge">Evenement</span>
+              <span class="session-status status-few">Dernieres places</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DAY 2 -->
+    <div class="day-content" id="day2">
+      <div class="programme-list">
+        <div class="session-card reveal" data-search="biodiversite vivant nature">
+          <div class="session-time">9h00</div>
+          <div class="session-info">
+            <h4>Biodiversite : la sixieme extinction est-elle evitable ?</h4>
+            <div class="session-speaker">Gilles Boeuf &middot; Isabelle Autissier</div>
+            <div class="session-meta">
+              <span class="session-room">&#128205; Grand Auditorium</span>
+              <span class="session-theme-badge">Environnement</span>
+              <span class="session-status status-available">Places disponibles</span>
+            </div>
+          </div>
+        </div>
+        <div class="session-card reveal" data-search="sante hopital systeme soins">
+          <div class="session-time">9h00</div>
+          <div class="session-info">
+            <h4>Systeme de sante : soigner les soignants, reformer l'hopital</h4>
+            <div class="session-speaker">Martin Hirsch &middot; Agnes Buzyn</div>
+            <div class="session-meta">
+              <span class="session-room">&#128205; Salle Schweitzer</span>
+              <span class="session-theme-badge">Societe</span>
+              <span class="session-status status-available">Places disponibles</span>
+            </div>
+          </div>
+        </div>
+        <div class="session-card reveal" data-search="migration refugies accueil asile">
+          <div class="session-time">10h30</div>
+          <div class="session-info">
+            <h4>Migrations : entre devoir d'humanite et souverainete des Etats</h4>
+            <div class="session-speaker">Francois Gemenne &middot; Catherine Wihtol de Wenden</div>
+            <div class="session-meta">
+              <span class="session-room">&#128205; Grand Auditorium</span>
+              <span class="session-theme-badge">Societe</span>
+              <span class="session-status status-full">Complet</span>
+            </div>
+          </div>
+        </div>
+        <div class="session-card reveal" data-search="energie nucleaire renouvelable">
+          <div class="session-time">10h30</div>
+          <div class="session-info">
+            <h4>Nucleaire, solaire, eolien : quel mix energetique pour 2050 ?</h4>
+            <div class="session-speaker">Jean-Marc Jancovici &middot; Corinne Lepage</div>
+            <div class="session-meta">
+              <span class="session-room">&#128205; Salle Erasme</span>
+              <span class="session-theme-badge">Environnement</span>
+              <span class="session-status status-full">Complet</span>
+            </div>
+          </div>
+        </div>
+        <div class="session-card reveal" data-search="laicite religion republique vivre ensemble">
+          <div class="session-time">14h00</div>
+          <div class="session-info">
+            <h4>Laicite en France : un principe a reinventer ?</h4>
+            <div class="session-speaker">Jean Bauberot &middot; Dounia Bouzar &middot; Patrick Weil</div>
+            <div class="session-meta">
+              <span class="session-room">&#128205; Grand Auditorium</span>
+              <span class="session-theme-badge">Societe</span>
+              <span class="session-status status-available">Places disponibles</span>
+            </div>
+          </div>
+        </div>
+        <div class="session-card reveal" data-search="reindustrialisation souverainete economique">
+          <div class="session-time">14h00</div>
+          <div class="session-info">
+            <h4>Reindustrialiser la France : mythe ou strategie ?</h4>
+            <div class="session-speaker">Elie Cohen &middot; Anais Voy-Gillis</div>
+            <div class="session-meta">
+              <span class="session-room">&#128205; Salle Gutenberg</span>
+              <span class="session-theme-badge">Economie</span>
+              <span class="session-status status-available">Places disponibles</span>
+            </div>
+          </div>
+        </div>
+        <div class="session-card reveal" data-search="numerique ethique donnees RGPD">
+          <div class="session-time">15h30</div>
+          <div class="session-info">
+            <h4>Ethique du numerique : qui gouverne nos donnees ?</h4>
+            <div class="session-speaker">Cynthia Fleury &middot; Tariq Krim</div>
+            <div class="session-meta">
+              <span class="session-room">&#128205; Salle Erasme</span>
+              <span class="session-theme-badge">Sciences</span>
+              <span class="session-status status-available">Places disponibles</span>
+            </div>
+          </div>
+        </div>
+        <div class="session-card reveal" data-search="patrimoine memoire identite alsace">
+          <div class="session-time">16h30</div>
+          <div class="session-info">
+            <h4>Patrimoine vivant : Strasbourg, memoire d'Europe</h4>
+            <div class="session-speaker">Georges Bischoff &middot; Marie-Christine Pouchelle</div>
+            <div class="session-meta">
+              <span class="session-room">&#128205; Salle Schweitzer</span>
+              <span class="session-theme-badge">Culture</span>
+              <span class="session-status status-available">Places disponibles</span>
+            </div>
+          </div>
+        </div>
+        <div class="session-card reveal" data-search="projection documentaire film">
+          <div class="session-time">20h30</div>
+          <div class="session-info">
+            <h4>Projection-debat : "Demain" de Cyril Dion (seance speciale)</h4>
+            <div class="session-speaker">Cyril Dion (sous reserve)</div>
+            <div class="session-meta">
+              <span class="session-room">&#128205; Grand Auditorium</span>
+              <span class="session-theme-badge">Environnement</span>
+              <span class="session-status status-few">Dernieres places</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DAY 3 -->
+    <div class="day-content" id="day3">
+      <div class="programme-list">
+        <div class="session-card reveal" data-search="atelier citoyen democratie participative">
+          <div class="session-time">9h00</div>
+          <div class="session-info">
+            <h4>Atelier — Democratie participative : et si les citoyens decidaient ?</h4>
+            <div class="session-speaker">Loic Blondiaux &middot; animateurs locaux</div>
+            <div class="session-meta">
+              <span class="session-room">&#128205; Espace Ateliers A</span>
+              <span class="session-theme-badge">Politique</span>
+              <span class="session-status status-available">Places disponibles</span>
+            </div>
+          </div>
+        </div>
+        <div class="session-card reveal" data-search="atelier climat fresque">
+          <div class="session-time">9h00</div>
+          <div class="session-info">
+            <h4>Atelier — Fresque du Climat : comprendre pour agir</h4>
+            <div class="session-speaker">Animateurs certifies Fresque du Climat</div>
+            <div class="session-meta">
+              <span class="session-room">&#128205; Espace Ateliers B</span>
+              <span class="session-theme-badge">Environnement</span>
+              <span class="session-status status-full">Complet</span>
+            </div>
+          </div>
+        </div>
+        <div class="session-card reveal" data-search="feminisme egalite genre parite">
+          <div class="session-time">10h30</div>
+          <div class="session-info">
+            <h4>Debat — Egalite femmes-hommes : ou en est-on vraiment ?</h4>
+            <div class="session-speaker">Caroline De Haas &middot; Marlene Schiappa &middot; Sandrine Rousseau</div>
+            <div class="session-meta">
+              <span class="session-room">&#128205; Grand Auditorium</span>
+              <span class="session-theme-badge">Societe</span>
+              <span class="session-status status-full">Complet</span>
+            </div>
+          </div>
+        </div>
+        <div class="session-card reveal" data-search="economie circulaire decroissance sobriete">
+          <div class="session-time">10h30</div>
+          <div class="session-info">
+            <h4>Debat — Croissance, decroissance, post-croissance : quel modele ?</h4>
+            <div class="session-speaker">Timothee Parrique &middot; Eloi Laurent</div>
+            <div class="session-meta">
+              <span class="session-room">&#128205; Salle Erasme</span>
+              <span class="session-theme-badge">Economie</span>
+              <span class="session-status status-available">Places disponibles</span>
+            </div>
+          </div>
+        </div>
+        <div class="session-card reveal" data-search="sante mentale jeunes bien-etre">
+          <div class="session-time">14h00</div>
+          <div class="session-info">
+            <h4>Atelier — Sante mentale des jeunes : l'urgence invisible</h4>
+            <div class="session-speaker">Boris Cyrulnik &middot; psychiatres hospitaliers</div>
+            <div class="session-meta">
+              <span class="session-room">&#128205; Espace Ateliers A</span>
+              <span class="session-theme-badge">Societe</span>
+              <span class="session-status status-available">Places disponibles</span>
+            </div>
+          </div>
+        </div>
+        <div class="session-card reveal" data-search="medecine genomique biotechnologie">
+          <div class="session-time">14h00</div>
+          <div class="session-info">
+            <h4>Debat — Genomique et biotechnologies : jusqu'ou aller ?</h4>
+            <div class="session-speaker">Emmanuelle Charpentier &middot; Jean-Francois Delfraissy</div>
+            <div class="session-meta">
+              <span class="session-room">&#128205; Salle Gutenberg</span>
+              <span class="session-theme-badge">Sciences</span>
+              <span class="session-status status-few">Dernieres places</span>
+            </div>
+          </div>
+        </div>
+        <div class="session-card reveal" data-search="atelier journalisme medias fake news">
+          <div class="session-time">15h30</div>
+          <div class="session-info">
+            <h4>Atelier — Decrypter les fake news : outils et methodes</h4>
+            <div class="session-speaker">Samuel Laurent (Les Decodeurs) &middot; journalistes AFP</div>
+            <div class="session-meta">
+              <span class="session-room">&#128205; Espace Ateliers B</span>
+              <span class="session-theme-badge">Culture</span>
+              <span class="session-status status-available">Places disponibles</span>
+            </div>
+          </div>
+        </div>
+        <div class="session-card reveal" data-search="urbanisme ville durable mobilite">
+          <div class="session-time">16h00</div>
+          <div class="session-info">
+            <h4>Debat — La ville en 2050 : densifier, verdir, ralentir</h4>
+            <div class="session-speaker">Carlos Moreno &middot; Jeanne Barseghian</div>
+            <div class="session-meta">
+              <span class="session-room">&#128205; Salle Erasme</span>
+              <span class="session-theme-badge">Environnement</span>
+              <span class="session-status status-available">Places disponibles</span>
+            </div>
+          </div>
+        </div>
+        <div class="session-card reveal" data-search="concert spectacle culture soiree">
+          <div class="session-time">20h30</div>
+          <div class="session-info">
+            <h4>Soiree speciale — Lectures engagees & musique</h4>
+            <div class="session-speaker">Auteurs invites &middot; Ensemble Accroche Note</div>
+            <div class="session-meta">
+              <span class="session-room">&#128205; Grand Auditorium</span>
+              <span class="session-theme-badge">Culture</span>
+              <span class="session-status status-available">Places disponibles</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DAY 4 -->
+    <div class="day-content" id="day4">
+      <div class="programme-list">
+        <div class="session-card reveal" data-search="europe defense geopolitique">
+          <div class="session-time">9h00</div>
+          <div class="session-info">
+            <h4>Table ronde — Defense europeenne : vers une autonomie strategique ?</h4>
+            <div class="session-speaker">Nicole Gnesotto &middot; Bruno Tertrais &middot; Florence Parly</div>
+            <div class="session-meta">
+              <span class="session-room">&#128205; Grand Auditorium</span>
+              <span class="session-theme-badge">Politique</span>
+              <span class="session-status status-available">Places disponibles</span>
+            </div>
+          </div>
+        </div>
+        <div class="session-card reveal" data-search="agriculture alimentation souverainete alimentaire">
+          <div class="session-time">9h00</div>
+          <div class="session-info">
+            <h4>Table ronde — Souverainete alimentaire : nourrir sans detruire</h4>
+            <div class="session-speaker">Marc Dufumier &middot; Maxime de Rostolan</div>
+            <div class="session-meta">
+              <span class="session-room">&#128205; Salle Erasme</span>
+              <span class="session-theme-badge">Environnement</span>
+              <span class="session-status status-available">Places disponibles</span>
+            </div>
+          </div>
+        </div>
+        <div class="session-card reveal" data-search="justice sociale redistribution fiscalite">
+          <div class="session-time">10h30</div>
+          <div class="session-info">
+            <h4>Table ronde — Fiscalite et justice sociale : qui paie, qui gagne ?</h4>
+            <div class="session-speaker">Gabriel Zucman &middot; Esther Duflo</div>
+            <div class="session-meta">
+              <span class="session-room">&#128205; Grand Auditorium</span>
+              <span class="session-theme-badge">Economie</span>
+              <span class="session-status status-full">Complet</span>
+            </div>
+          </div>
+        </div>
+        <div class="session-card reveal" data-search="espace exploration science futur">
+          <div class="session-time">10h30</div>
+          <div class="session-info">
+            <h4>Conference — L'exploration spatiale, nouvelle frontiere de l'humanite</h4>
+            <div class="session-speaker">Thomas Pesquet (en visio)</div>
+            <div class="session-meta">
+              <span class="session-room">&#128205; Salle Gutenberg</span>
+              <span class="session-theme-badge">Sciences</span>
+              <span class="session-status status-full">Complet</span>
+            </div>
+          </div>
+        </div>
+        <div class="session-card reveal" data-search="jeunesse engagement generation">
+          <div class="session-time">14h00</div>
+          <div class="session-info">
+            <h4>Table ronde — La jeunesse s'engage : nouvelles formes de mobilisation</h4>
+            <div class="session-speaker">Camille Etienne &middot; Priscillia Ludosky &middot; etudiants engages</div>
+            <div class="session-meta">
+              <span class="session-room">&#128205; Grand Auditorium</span>
+              <span class="session-theme-badge">Societe</span>
+              <span class="session-status status-available">Places disponibles</span>
+            </div>
+          </div>
+        </div>
+        <div class="session-card reveal" data-search="livre edition creation litterature">
+          <div class="session-time">14h00</div>
+          <div class="session-info">
+            <h4>Table ronde — Le livre face au numerique : creation en danger ?</h4>
+            <div class="session-speaker">Leila Slimani &middot; Sylvain Tesson</div>
+            <div class="session-meta">
+              <span class="session-room">&#128205; Salle Schweitzer</span>
+              <span class="session-theme-badge">Culture</span>
+              <span class="session-status status-available">Places disponibles</span>
+            </div>
+          </div>
+        </div>
+        <div class="session-card reveal" data-search="eau ressources stress hydrique">
+          <div class="session-time">15h30</div>
+          <div class="session-info">
+            <h4>Conference — L'eau, le petrole du XXIe siecle</h4>
+            <div class="session-speaker">Erik Orsenna &middot; Emma Haziza</div>
+            <div class="session-meta">
+              <span class="session-room">&#128205; Salle Erasme</span>
+              <span class="session-theme-badge">Environnement</span>
+              <span class="session-status status-available">Places disponibles</span>
+            </div>
+          </div>
+        </div>
+        <div class="session-card reveal" data-search="synthese bilan perspectives conclusion cloture">
+          <div class="session-time">17h00</div>
+          <div class="session-info">
+            <h4>Seance de cloture — Synthese et perspectives pour 2027</h4>
+            <div class="session-speaker">Comite scientifique &middot; Tous les intervenants invites</div>
+            <div class="session-meta">
+              <span class="session-room">&#128205; Grand Auditorium</span>
+              <span class="session-theme-badge">Evenement</span>
+              <span class="session-status status-available">Places disponibles</span>
+            </div>
+          </div>
+        </div>
+        <div class="session-card reveal" data-search="apero cloture fin evenement">
+          <div class="session-time">18h30</div>
+          <div class="session-info">
+            <h4>Aperitif de cloture — Vins d'Alsace & gastronomie locale</h4>
+            <div class="session-speaker">Ouvert a tous les participants</div>
+            <div class="session-meta">
+              <span class="session-room">&#128205; Hall d'honneur</span>
+              <span class="session-theme-badge">Evenement</span>
+              <span class="session-status status-available">Places disponibles</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ============================================
+     INTERVENANTS
+     ============================================ -->
+<section class="section" id="intervenants">
+  <div class="container">
+    <div class="section-header reveal">
+      <span class="section-label">Intervenants</span>
+      <h2>200+ voix pour eclairer le debat</h2>
+      <p>Chercheurs, elus, journalistes, militants, artistes — des personnalites de premier plan pour nourrir la reflexion collective.</p>
+    </div>
+
+    <div class="speakers-filters">
+      <button class="filter-btn active" onclick="filterSpeakers('all')">Tous</button>
+      <button class="filter-btn" onclick="filterSpeakers('politique')">Politique</button>
+      <button class="filter-btn" onclick="filterSpeakers('environnement')">Environnement</button>
+      <button class="filter-btn" onclick="filterSpeakers('societe')">Societe</button>
+      <button class="filter-btn" onclick="filterSpeakers('economie')">Economie</button>
+      <button class="filter-btn" onclick="filterSpeakers('sciences')">Sciences</button>
+      <button class="filter-btn" onclick="filterSpeakers('culture')">Culture</button>
+    </div>
+
+    <div class="speakers-grid" id="speakersGrid"></div>
+
+    <div class="speakers-more reveal">
+      <button class="btn btn-outline" onclick="showAllSpeakers()">Voir tous les intervenants</button>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================
+     ACTUALITES
+     ============================================ -->
+<section class="section section-alt" id="actualites">
+  <div class="container">
+    <div class="section-header reveal">
+      <span class="section-label">Actualites</span>
+      <h2>Les dernieres nouvelles du Forum</h2>
+      <p>Annonces, coulisses, partenariats — suivez la preparation de la 1ere edition des Rencontres de Strasbourg.</p>
+    </div>
+    <div class="news-grid" id="newsGrid"></div>
+  </div>
+</section>
+
+<!-- ============================================
+     PARTENAIRES
+     ============================================ -->
+<section class="section" id="partenaires">
+  <div class="container">
+    <div class="section-header reveal">
+      <span class="section-label">Partenaires</span>
+      <h2>Ils nous soutiennent</h2>
+      <p>Institutions, medias, universites et entreprises — un ecosysteme de partenaires pour un evenement d'envergure.</p>
+    </div>
+
+    <div class="partners-category reveal">
+      <h3>&#127963; Institutionnels</h3>
+      <div class="partners-row">
+        <div class="partner-item">Ville de Strasbourg</div>
+        <div class="partner-item">Region Grand Est</div>
+        <div class="partner-item">Conseil de l'Europe</div>
+        <div class="partner-item">Parlement Europeen</div>
+        <div class="partner-item">Ministere de la Culture</div>
+        <div class="partner-item">Prefecture du Bas-Rhin</div>
+        <div class="partner-item">Eurometropole de Strasbourg</div>
+        <div class="partner-item">Collectivite europeenne d'Alsace</div>
+      </div>
+    </div>
+
+    <div class="partners-category reveal">
+      <h3>&#128240; Medias</h3>
+      <div class="partners-row">
+        <div class="partner-item">France Culture</div>
+        <div class="partner-item">Le Monde</div>
+        <div class="partner-item">Arte</div>
+        <div class="partner-item">DNA — Dernieres Nouvelles d'Alsace</div>
+        <div class="partner-item">France 3 Grand Est</div>
+        <div class="partner-item">Mediapart</div>
+        <div class="partner-item">La Croix</div>
+        <div class="partner-item">France Inter</div>
+      </div>
+    </div>
+
+    <div class="partners-category reveal">
+      <h3>&#127891; Academiques</h3>
+      <div class="partners-row">
+        <div class="partner-item">Universite de Strasbourg</div>
+        <div class="partner-item">Sciences Po Strasbourg</div>
+        <div class="partner-item">CNRS</div>
+        <div class="partner-item">INSP (ex-ENA)</div>
+        <div class="partner-item">EHESS</div>
+        <div class="partner-item">College de France</div>
+        <div class="partner-item">Institut Universitaire de France</div>
+      </div>
+    </div>
+
+    <div class="partners-category reveal">
+      <h3>&#128188; Entreprises & Mecenat</h3>
+      <div class="partners-row">
+        <div class="partner-item">Caisse des Depots</div>
+        <div class="partner-item">Banque de France</div>
+        <div class="partner-item">Groupe La Poste</div>
+        <div class="partner-item">EDF</div>
+        <div class="partner-item">Habitat de l'Ill</div>
+        <div class="partner-item">CCI Alsace Eurometropole</div>
+        <div class="partner-item">Fondation de France</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================
+     INFOS PRATIQUES
+     ============================================ -->
+<section class="section section-alt" id="infos">
+  <div class="container">
+    <div class="section-header reveal">
+      <span class="section-label">Infos pratiques</span>
+      <h2>Venir aux Rencontres</h2>
+      <p>Tout ce qu'il faut savoir pour preparer votre venue a Strasbourg du 15 au 18 octobre 2026.</p>
+    </div>
+
+    <div class="infos-grid">
+      <div class="info-block reveal">
+        <h3><span class="info-icon">&#128205;</span> Lieu</h3>
+        <p><strong>Palais de la Musique et des Congres</strong><br>Place de Bordeaux<br>67000 Strasbourg</p>
+        <div id="map-container"></div>
+      </div>
+
+      <div class="info-block reveal">
+        <h3><span class="info-icon">&#128652;</span> Acces</h3>
+        <ul>
+          <li><strong>Tram :</strong> Lignes B, E, F — arret "Wacken"</li>
+          <li><strong>Train :</strong> Gare de Strasbourg (TGV Paris 1h46) puis tram</li>
+          <li><strong>Voiture :</strong> Parking Wacken (1200 places), A35 sortie Wacken</li>
+          <li><strong>Avion :</strong> Aeroport Strasbourg-Entzheim (15 min navette)</li>
+          <li><strong>Velo :</strong> Station Velop — Place de Bordeaux</li>
+        </ul>
+      </div>
+
+      <div class="info-block reveal">
+        <h3><span class="info-icon">&#127915;</span> Tarifs</h3>
+        <div class="tarif-item">
+          <span>Conferences & debats</span>
+          <span class="tarif-price">Gratuit</span>
+        </div>
+        <div class="tarif-item">
+          <span>Ateliers (unite)</span>
+          <span class="tarif-price">15 &euro;</span>
+        </div>
+        <div class="tarif-item">
+          <span>Pass 3 jours (tout inclus)</span>
+          <span class="tarif-price">35 &euro;</span>
+        </div>
+        <div class="tarif-item">
+          <span>Tarif etudiant / demandeur d'emploi</span>
+          <span class="tarif-price">Gratuit</span>
+        </div>
+        <div class="tarif-item">
+          <span>Pass scolaire (groupe)</span>
+          <span class="tarif-price">Gratuit</span>
+        </div>
+      </div>
+
+      <div class="info-block reveal">
+        <h3><span class="info-icon">&#127976;</span> Hebergement partenaire</h3>
+        <ul>
+          <li><strong>Hotel Regent Petite France</strong> — 5 rue des Moulins (code RENCONTRES2026 : -15%)</li>
+          <li><strong>Holiday Inn Strasbourg Nord</strong> — 20 place de Bordeaux (tarif groupe 89&euro;/nuit)</li>
+          <li><strong>CIARUS Auberge de Jeunesse</strong> — 7 rue Finkmatt (25&euro;/nuit en dortoir)</li>
+        </ul>
+      </div>
+
+      <div class="info-block reveal">
+        <h3><span class="info-icon">&#128222;</span> Contact</h3>
+        <ul>
+          <li><strong>Email :</strong> contact@rencontres-strasbourg.fr</li>
+          <li><strong>Telephone :</strong> 03 88 37 67 67</li>
+          <li><strong>Horaires :</strong> 9h — 21h (chaque jour)</li>
+          <li><strong>Accueil presse :</strong> presse@rencontres-strasbourg.fr</li>
+          <li><strong>Accessibilite :</strong> Site entierement accessible PMR</li>
+        </ul>
+      </div>
+
+      <div class="info-block reveal">
+        <h3><span class="info-icon">&#128197;</span> Horaires</h3>
+        <ul>
+          <li><strong>Accueil :</strong> 8h00 — Ouverture des portes</li>
+          <li><strong>Conferences :</strong> 9h00 — 18h30</li>
+          <li><strong>Ateliers :</strong> 9h00 — 17h00 (sur inscription)</li>
+          <li><strong>Librairie :</strong> 9h00 — 20h00</li>
+          <li><strong>Espace restauration :</strong> 11h30 — 14h30</li>
+          <li><strong>Soirees speciales :</strong> 20h00 — 22h30</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================
+     MEDIATHEQUE
+     ============================================ -->
+<section class="section" id="mediatheque">
+  <div class="container">
+    <div class="section-header reveal">
+      <span class="section-label">Mediatheque</span>
+      <h2>Revivre les Rencontres en video</h2>
+      <p>L'integralite des conferences sera filmee et mise en ligne gratuitement apres l'evenement.</p>
+    </div>
+
+    <div class="media-placeholder reveal">
+      <div class="media-icon">&#127909;</div>
+      <h3>200+ heures de conferences</h3>
+      <p>Les videos seront disponibles apres l'evenement, a partir de novembre 2026. En attendant, decouvrez quelques conferences qui ont inspire notre programmation.</p>
+    </div>
+
+    <div class="videos-preview">
+      <div class="video-card reveal">
+        <iframe src="https://www.youtube.com/embed/9bS2g4L2vxc" title="Conference politique" loading="lazy" allowfullscreen></iframe>
+        <div class="video-info">
+          <h4>Thomas Piketty — Capital et ideologie</h4>
+          <p>Conference inaugurale, Sciences Po Paris</p>
+        </div>
+      </div>
+      <div class="video-card reveal">
+        <iframe src="https://www.youtube.com/embed/diKGSsbbfHQ" title="Conference climat" loading="lazy" allowfullscreen></iframe>
+        <div class="video-info">
+          <h4>Jean-Marc Jancovici — Energie et climat</h4>
+          <p>Cours des Mines, Paris</p>
+        </div>
+      </div>
+      <div class="video-card reveal">
+        <iframe src="https://www.youtube.com/embed/NKGnXgH_CzI" title="Conference societe" loading="lazy" allowfullscreen></iframe>
+        <div class="video-info">
+          <h4>Edgar Morin — Penser la complexite</h4>
+          <p>Conference au College de France</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================
+     APPEL A COMMUNICATIONS
+     ============================================ -->
+<section class="section section-alt" id="appel">
+  <div class="container">
+    <div class="section-header reveal">
+      <span class="section-label">Appel a communications</span>
+      <h2>Proposez votre intervention</h2>
+      <p>Chercheurs, experts, acteurs de terrain — soumettez votre proposition de conference, atelier ou table ronde pour la 1ere edition.</p>
+    </div>
+
+    <div class="form-container reveal" id="formContainer">
+      <form id="submissionForm" onsubmit="handleSubmit(event)">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="f-nom">Nom *</label>
+            <input type="text" id="f-nom" required placeholder="Votre nom">
+          </div>
+          <div class="form-group">
+            <label for="f-prenom">Prenom *</label>
+            <input type="text" id="f-prenom" required placeholder="Votre prenom">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="f-email">Email *</label>
+            <input type="email" id="f-email" required placeholder="votre@email.fr">
+          </div>
+          <div class="form-group">
+            <label for="f-institution">Institution / Organisme</label>
+            <input type="text" id="f-institution" placeholder="Universite, entreprise, association...">
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="f-theme">Thematique *</label>
+          <select id="f-theme" required>
+            <option value="">-- Choisissez une thematique --</option>
+            <option value="politique">Politique & Democratie</option>
+            <option value="environnement">Environnement & Climat</option>
+            <option value="societe">Societe & Vivre-ensemble</option>
+            <option value="economie">Economie & Travail</option>
+            <option value="sciences">Sciences & Technologies</option>
+            <option value="culture">Culture & Patrimoine</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="f-titre">Titre de la communication *</label>
+          <input type="text" id="f-titre" required placeholder="Titre de votre proposition">
+        </div>
+        <div class="form-group">
+          <label for="f-resume">Resume (300 mots max.) *</label>
+          <textarea id="f-resume" required placeholder="Decrivez votre proposition : objectifs, problematique, apport original..." maxlength="2000"></textarea>
+        </div>
+        <div style="text-align:center; margin-top:24px;">
+          <button type="submit" class="btn btn-primary">Soumettre ma proposition</button>
+        </div>
+        <div class="form-deadline">
+          <strong>Date limite : 30 juin 2026</strong>
+        </div>
+      </form>
+
+      <div class="form-success" id="formSuccess">
+        <div class="check-icon">&#9989;</div>
+        <h3>Proposition envoyee !</h3>
+        <p>Merci pour votre soumission. Le comite scientifique vous repondra avant le 31 juillet 2026.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================
+     NEWSLETTER
+     ============================================ -->
+<section class="section newsletter-section" id="newsletter">
+  <div class="container">
+    <div class="newsletter-inner reveal">
+      <h2>Restez informe</h2>
+      <p>Recevez les dernieres actualites, le programme detaille et les invitations speciales.</p>
+      <form class="newsletter-form" onsubmit="handleNewsletter(event)">
+        <input type="email" placeholder="Votre adresse email" required id="nlEmail">
+        <button type="submit">S'inscrire</button>
+      </form>
+      <p id="nlConfirm" style="display:none; margin-top:16px; color:var(--accent); font-weight:600;">Inscription confirmee ! Merci.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================
+     FOOTER
+     ============================================ -->
+<footer>
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="footer-logo">Les Rencontres de Strasbourg</div>
+        <p>Forum europeen sur les grands enjeux politiques, societaux et environnementaux. 1ere edition du 15 au 18 octobre 2026 au Palais de la Musique et des Congres.</p>
+        <div class="social-links">
+          <a href="#" class="social-link" title="Facebook" aria-label="Facebook">f</a>
+          <a href="#" class="social-link" title="X / Twitter" aria-label="Twitter">X</a>
+          <a href="#" class="social-link" title="Instagram" aria-label="Instagram">ig</a>
+          <a href="#" class="social-link" title="LinkedIn" aria-label="LinkedIn">in</a>
+          <a href="#" class="social-link" title="YouTube" aria-label="YouTube">&#9654;</a>
+        </div>
+      </div>
+      <div class="footer-section">
+        <h4>Navigation</h4>
+        <a href="#accueil">Accueil</a>
+        <a href="#programme">Programme</a>
+        <a href="#intervenants">Intervenants</a>
+        <a href="#actualites">Actualites</a>
+        <a href="#partenaires">Partenaires</a>
+      </div>
+      <div class="footer-section">
+        <h4>Participer</h4>
+        <a href="#appel">Appel a communications</a>
+        <a href="#infos">Infos pratiques</a>
+        <a href="#mediatheque">Mediatheque</a>
+        <a href="#newsletter">Newsletter</a>
+      </div>
+      <div class="footer-section">
+        <h4>Contact</h4>
+        <a href="mailto:contact@rencontres-strasbourg.fr">contact@rencontres-strasbourg.fr</a>
+        <a href="tel:+33388376767">03 88 37 67 67</a>
+        <a href="#">Espace presse</a>
+        <a href="#">Devenir partenaire</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2026 Les Rencontres de Strasbourg — Tous droits reserves</p>
+      <div class="footer-legal">
+        <a href="#">Mentions legales</a>
+        <a href="#">CGU</a>
+        <a href="#">Confidentialite</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- ============================================
+     COOKIE BANNER
+     ============================================ -->
+<div class="cookie-banner" id="cookieBanner">
+  <div class="cookie-inner">
+    <p>Ce site utilise des cookies pour ameliorer votre experience. En poursuivant votre navigation, vous acceptez l'utilisation de cookies conformement a notre politique de confidentialite (RGPD).</p>
+    <div class="cookie-btns">
+      <button class="cookie-accept" onclick="acceptCookies()">Accepter</button>
+      <button class="cookie-decline" onclick="declineCookies()">Refuser</button>
+    </div>
+  </div>
+</div>
+
+<!-- Leaflet JS -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<script>
+/* ============================================
+   DATA
+   ============================================ */
+
+const speakers = [
+  { name: "Sylvie Kauffmann", title: "Editorialiste", inst: "Le Monde", theme: "politique", initials: "SK" },
+  { name: "Catherine Trautmann", title: "Ancienne ministre", inst: "Parlement Europeen", theme: "politique", initials: "CT" },
+  { name: "Dominique Moisi", title: "Geopolitologue", inst: "Institut Montaigne", theme: "politique", initials: "DM" },
+  { name: "Thomas Piketty", title: "Economiste", inst: "EHESS / PSE", theme: "economie", initials: "TP" },
+  { name: "Valerie Masson-Delmotte", title: "Paleoclimatologue", inst: "GIEC / CEA", theme: "environnement", initials: "VM" },
+  { name: "Jean Jouzel", title: "Climatologue", inst: "GIEC / CEA", theme: "environnement", initials: "JJ" },
+  { name: "Cedric Villani", title: "Mathematicien", inst: "Assemblee Nationale", theme: "sciences", initials: "CV" },
+  { name: "Laurence Devillers", title: "Chercheuse IA", inst: "CNRS / Sorbonne", theme: "sciences", initials: "LD" },
+  { name: "Asma Mhalla", title: "Politologue du numerique", inst: "Sciences Po", theme: "sciences", initials: "AM" },
+  { name: "Philippe Meirieu", title: "Pedagogue", inst: "Universite Lumiere Lyon 2", theme: "societe", initials: "PM" },
+  { name: "Najat Vallaud-Belkacem", title: "Ancienne ministre", inst: "ONE France", theme: "societe", initials: "NV" },
+  { name: "Dominique Meda", title: "Sociologue", inst: "Universite Paris-Dauphine", theme: "economie", initials: "DMe" },
+  { name: "Julia Cage", title: "Economiste des medias", inst: "Sciences Po Paris", theme: "culture", initials: "JC" },
+  { name: "Gilles Boeuf", title: "Biologiste marin", inst: "Sorbonne Universite", theme: "environnement", initials: "GB" },
+  { name: "Isabelle Autissier", title: "Navigatrice, ecrivaine", inst: "WWF France", theme: "environnement", initials: "IA" },
+  { name: "Martin Hirsch", title: "Medecin, haut fonctionnaire", inst: "AP-HP", theme: "societe", initials: "MH" },
+  { name: "Francois Gemenne", title: "Politologue", inst: "GIEC / Universite de Liege", theme: "societe", initials: "FG" },
+  { name: "Jean-Marc Jancovici", title: "Ingenieur, essayiste", inst: "The Shift Project", theme: "environnement", initials: "JMJ" },
+  { name: "Corinne Lepage", title: "Avocate, ancienne ministre", inst: "Cap21", theme: "environnement", initials: "CL" },
+  { name: "Jean Bauberot", title: "Historien de la laicite", inst: "EPHE", theme: "societe", initials: "JB" },
+  { name: "Elie Cohen", title: "Economiste", inst: "CNRS", theme: "economie", initials: "EC" },
+  { name: "Anais Voy-Gillis", title: "Chercheuse industrie", inst: "Institut Choiseul", theme: "economie", initials: "AV" },
+  { name: "Cynthia Fleury", title: "Philosophe", inst: "CNAM / Conservatoire", theme: "sciences", initials: "CF" },
+  { name: "Tariq Krim", title: "Entrepreneur tech", inst: "Netvibes / Jolicloud", theme: "sciences", initials: "TK" },
+  { name: "Georges Bischoff", title: "Historien", inst: "Universite de Strasbourg", theme: "culture", initials: "GBi" },
+  { name: "Loic Blondiaux", title: "Politiste", inst: "Universite Paris 1", theme: "politique", initials: "LB" },
+  { name: "Sandrine Rousseau", title: "Economiste, elue", inst: "Assemblee Nationale", theme: "societe", initials: "SR" },
+  { name: "Timothee Parrique", title: "Economiste ecologique", inst: "Universite de Lund", theme: "economie", initials: "TPa" },
+  { name: "Eloi Laurent", title: "Economiste", inst: "Sciences Po / OFCE", theme: "economie", initials: "EL" },
+  { name: "Boris Cyrulnik", title: "Neuropsychiatre", inst: "Universite de Toulon", theme: "societe", initials: "BC" },
+  { name: "Emmanuelle Charpentier", title: "Nobel Chimie 2020", inst: "Max Planck Berlin", theme: "sciences", initials: "ECh" },
+  { name: "Carlos Moreno", title: "Urbaniste", inst: "Universite Paris 1", theme: "environnement", initials: "CM" },
+  { name: "Jeanne Barseghian", title: "Maire de Strasbourg", inst: "Ville de Strasbourg", theme: "politique", initials: "JBa" },
+  { name: "Nicole Gnesotto", title: "Geopoliticienne", inst: "CNAM", theme: "politique", initials: "NG" },
+  { name: "Bruno Tertrais", title: "Geopolitologue", inst: "Fondation pour la Recherche Strategique", theme: "politique", initials: "BT" },
+  { name: "Gabriel Zucman", title: "Economiste, fiscaliste", inst: "UC Berkeley / PSE", theme: "economie", initials: "GZ" },
+  { name: "Esther Duflo", title: "Nobel Economie 2019", inst: "MIT / J-PAL", theme: "economie", initials: "ED" },
+  { name: "Thomas Pesquet", title: "Astronaute", inst: "ESA / CNES", theme: "sciences", initials: "TPe" },
+  { name: "Camille Etienne", title: "Activiste climat", inst: "Independante", theme: "environnement", initials: "CE" },
+  { name: "Leila Slimani", title: "Ecrivaine, Prix Goncourt", inst: "Gallimard", theme: "culture", initials: "LS" },
+  { name: "Sylvain Tesson", title: "Ecrivain voyageur", inst: "Gallimard", theme: "culture", initials: "ST" },
+  { name: "Erik Orsenna", title: "Academicien, ecrivain", inst: "Academie francaise", theme: "environnement", initials: "EO" },
+  { name: "Emma Haziza", title: "Hydrologue", inst: "Mayane", theme: "environnement", initials: "EH" },
+  { name: "Marc Dufumier", title: "Agronome", inst: "AgroParisTech", theme: "environnement", initials: "MD" },
+  { name: "Nathalie Tocci", title: "Politologue", inst: "Istituto Affari Internazionali", theme: "politique", initials: "NT" },
+  { name: "Patrick Weil", title: "Historien du droit", inst: "CNRS / Yale", theme: "societe", initials: "PW" },
+  { name: "Samuel Laurent", title: "Journaliste fact-checking", inst: "Le Monde - Les Decodeurs", theme: "culture", initials: "SL" },
+  { name: "Cyril Dion", title: "Realisateur, ecrivain", inst: "Mouvement Colibris", theme: "environnement", initials: "CD" },
+  { name: "Jean-Francois Delfraissy", title: "Immunologue", inst: "Comite national d'ethique", theme: "sciences", initials: "JFD" },
+  { name: "Denis Maillard", title: "Essayiste travail", inst: "Temps Commun", theme: "economie", initials: "DMa" },
+];
+
+const news = [
+  {
+    date: "24 mars 2026",
+    title: "Le theme de la 1ere edition devoile",
+    summary: "Le comite scientifique a choisi « Ou va le monde ? » comme fil rouge de cette premiere edition des Rencontres de Strasbourg.",
+    full: "Ce theme transversal irriguera les six axes de reflexion du Forum. De la crise democratique a l'urgence climatique, en passant par les mutations technologiques, les 200 intervenants tenteront de dessiner les contours du monde de demain.",
+    badge: "Annonce"
+  },
+  {
+    date: "18 mars 2026",
+    title: "Thomas Piketty, conference inaugurale",
+    summary: "L'economiste Thomas Piketty prononcera la conference magistrale d'ouverture le 15 octobre au Grand Auditorium.",
+    full: "Auteur de « Capital et Ideologie », Thomas Piketty proposera une lecture geopolitique de l'annee 2026, entre montee des inegalites, crise de la democratie et espoirs de transformation sociale.",
+    badge: "Intervenants"
+  },
+  {
+    date: "12 mars 2026",
+    title: "Partenariat avec le Conseil de l'Europe",
+    summary: "Le Conseil de l'Europe devient partenaire institutionnel majeur des Rencontres, renforçant la dimension europeenne du Forum.",
+    full: "Siegeant a Strasbourg, le Conseil de l'Europe apporte son expertise sur les droits de l'homme, la democratie et l'Etat de droit. Plusieurs sessions seront co-organisees avec ses experts.",
+    badge: "Partenariat"
+  },
+  {
+    date: "5 mars 2026",
+    title: "Masterclass France Culture : 4 emissions en direct",
+    summary: "France Culture installera ses studios au coeur du Palais des Congres pour 4 emissions speciales en direct.",
+    full: "Les emissions « Les Matins », « La Grande Table », « La Suite dans les idees » et « Soft Power » seront enregistrees en public pendant les 4 jours du Forum.",
+    badge: "Medias"
+  },
+  {
+    date: "28 fevrier 2026",
+    title: "Appel a communications : prolongation jusqu'au 30 juin",
+    summary: "Face au nombre de propositions recues, le comite scientifique prolonge l'appel a communications jusqu'au 30 juin 2026.",
+    full: "Plus de 350 propositions ont deja ete recues. Le comite encourage particulierement les soumissions sur les thematiques « Sciences & Technologies » et « Culture & Patrimoine », encore sous-representees.",
+    badge: "Organisation"
+  },
+  {
+    date: "20 fevrier 2026",
+    title: "Esther Duflo et Gabriel Zucman reunis pour la premiere fois",
+    summary: "Les deux laureats du Nobel dialogueront sur la fiscalite et la justice sociale lors d'une table ronde exceptionnelle.",
+    full: "Esther Duflo (Prix Nobel 2019) et Gabriel Zucman se retrouveront le dimanche 18 octobre pour un echange inedit sur la redistribution des richesses a l'echelle mondiale.",
+    badge: "Intervenants"
+  },
+  {
+    date: "14 fevrier 2026",
+    title: "200+ heures de video en acces libre apres l'evenement",
+    summary: "Toutes les conferences seront filmees et mises en ligne gratuitement dans les semaines suivant le Forum.",
+    full: "En partenariat avec Arte et France Culture, une equipe de 20 cameras couvrira l'integralite des sessions. La mediatheque en ligne sera accessible des novembre 2026.",
+    badge: "Mediatheque"
+  },
+  {
+    date: "7 fevrier 2026",
+    title: "Arte co-produit une serie documentaire sur les Rencontres",
+    summary: "La chaine franco-allemande suivra les coulisses de la preparation du Forum pour un documentaire en 3 episodes.",
+    full: "Diffusion prevue en decembre 2026 sur Arte et arte.tv. Le tournage a debute en janvier et suivra le parcours de plusieurs intervenants et organisateurs.",
+    badge: "Medias"
+  },
+  {
+    date: "30 janvier 2026",
+    title: "Ateliers Fresque du Climat : inscriptions ouvertes",
+    summary: "20 sessions de la Fresque du Climat seront proposees pendant les 4 jours. Inscrivez-vous des maintenant.",
+    full: "Encadres par des animateurs certifies, ces ateliers de 3 heures permettent de comprendre les mecanismes du changement climatique de maniere ludique et collaborative. Places limitees a 15 personnes par session.",
+    badge: "Programme"
+  },
+  {
+    date: "15 janvier 2026",
+    title: "Le site officiel des Rencontres est en ligne !",
+    summary: "Decouvrez le programme provisoire, les premiers intervenants confirmes et toutes les informations pratiques.",
+    full: "Apres 6 mois de preparation, le comite d'organisation est fier de presenter le site officiel de la 1ere edition des Rencontres de Strasbourg. Programme, intervenants, infos pratiques : tout y est.",
+    badge: "Annonce"
+  }
+];
+
+/* ============================================
+   THEME SYSTEM
+   ============================================ */
+function setTheme(theme) {
+  if (theme === 'classique') {
+    document.documentElement.removeAttribute('data-theme');
+  } else {
+    document.documentElement.setAttribute('data-theme', theme);
+  }
+  localStorage.setItem('rs-theme', theme);
+  // Update active state
+  document.querySelectorAll('.theme-option').forEach(opt => {
+    opt.classList.toggle('active', opt.dataset.themeOpt === theme);
+  });
+}
+
+function toggleThemePanel() {
+  document.getElementById('themePanel').classList.toggle('open');
+}
+
+// Close theme panel on outside click
+document.addEventListener('click', function(e) {
+  const panel = document.getElementById('themePanel');
+  const toggle = document.querySelector('.theme-toggle');
+  if (panel && !panel.contains(e.target) && !toggle.contains(e.target)) {
+    panel.classList.remove('open');
+  }
+});
+
+// Load saved theme
+const savedTheme = localStorage.getItem('rs-theme');
+if (savedTheme) setTheme(savedTheme);
+
+/* ============================================
+   MOBILE MENU
+   ============================================ */
+function toggleMobileMenu() {
+  document.getElementById('mobileMenu').classList.toggle('open');
+}
+function closeMobileMenu() {
+  document.getElementById('mobileMenu').classList.remove('open');
+}
+
+/* ============================================
+   SEARCH
+   ============================================ */
+function openSearch() {
+  document.getElementById('searchOverlay').classList.add('open');
+  setTimeout(() => document.getElementById('searchInput').focus(), 100);
+}
+function closeSearch() {
+  document.getElementById('searchOverlay').classList.remove('open');
+  document.getElementById('searchInput').value = '';
+  document.getElementById('searchResults').innerHTML = '';
+}
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') closeSearch();
+  if ((e.metaKey || e.ctrlKey) && e.key === 'k') { e.preventDefault(); openSearch(); }
+});
+
+function performSearch(query) {
+  const results = document.getElementById('searchResults');
+  if (!query || query.length < 2) { results.innerHTML = ''; return; }
+  const q = query.toLowerCase();
+  let html = '';
+
+  // Search speakers
+  speakers.filter(s => (s.name + ' ' + s.title + ' ' + s.inst + ' ' + s.theme).toLowerCase().includes(q)).slice(0, 5).forEach(s => {
+    html += `<div class="search-result-item" onclick="closeSearch();location.hash='intervenants';">
+      <div class="sr-type">Intervenant</div>
+      <div class="sr-title">${s.name}</div>
+      <div class="sr-meta">${s.title} — ${s.inst}</div>
+    </div>`;
+  });
+
+  // Search sessions
+  document.querySelectorAll('.session-card').forEach(card => {
+    const text = (card.dataset.search || '') + ' ' + card.textContent;
+    if (text.toLowerCase().includes(q)) {
+      const title = card.querySelector('h4').textContent;
+      const speaker = card.querySelector('.session-speaker').textContent;
+      html += `<div class="search-result-item" onclick="closeSearch();location.hash='programme';">
+        <div class="sr-type">Conference</div>
+        <div class="sr-title">${title}</div>
+        <div class="sr-meta">${speaker}</div>
+      </div>`;
+    }
+  });
+
+  // Search news
+  news.filter(n => (n.title + ' ' + n.summary).toLowerCase().includes(q)).slice(0, 3).forEach(n => {
+    html += `<div class="search-result-item" onclick="closeSearch();location.hash='actualites';">
+      <div class="sr-type">Actualite</div>
+      <div class="sr-title">${n.title}</div>
+      <div class="sr-meta">${n.date}</div>
+    </div>`;
+  });
+
+  if (!html) html = '<div style="padding:20px;text-align:center;color:var(--text-muted);">Aucun resultat pour &laquo; ' + query + ' &raquo;</div>';
+  results.innerHTML = html;
+}
+
+/* ============================================
+   COUNTDOWN
+   ============================================ */
+function updateCountdown() {
+  const target = new Date('2026-10-15T09:00:00+02:00');
+  const now = new Date();
+  const diff = target - now;
+  if (diff <= 0) {
+    document.getElementById('cd-days').textContent = '0';
+    document.getElementById('cd-hours').textContent = '0';
+    document.getElementById('cd-mins').textContent = '0';
+    document.getElementById('cd-secs').textContent = '0';
+    return;
+  }
+  const d = Math.floor(diff / (1000*60*60*24));
+  const h = Math.floor((diff % (1000*60*60*24)) / (1000*60*60));
+  const m = Math.floor((diff % (1000*60*60)) / (1000*60));
+  const s = Math.floor((diff % (1000*60)) / 1000);
+  document.getElementById('cd-days').textContent = d;
+  document.getElementById('cd-hours').textContent = h;
+  document.getElementById('cd-mins').textContent = String(m).padStart(2,'0');
+  document.getElementById('cd-secs').textContent = String(s).padStart(2,'0');
+}
+updateCountdown();
+setInterval(updateCountdown, 1000);
+
+/* ============================================
+   PROGRAMME DAY TABS
+   ============================================ */
+function showDay(n) {
+  document.querySelectorAll('.day-tab').forEach((tab, i) => tab.classList.toggle('active', i === n-1));
+  document.querySelectorAll('.day-content').forEach((day, i) => day.classList.toggle('active', i === n-1));
+}
+
+/* ============================================
+   SPEAKERS GRID RENDER
+   ============================================ */
+let showAll = false;
+let currentFilter = 'all';
+
+function renderSpeakers() {
+  const grid = document.getElementById('speakersGrid');
+  let filtered = currentFilter === 'all' ? speakers : speakers.filter(s => s.theme === currentFilter);
+  if (!showAll) filtered = filtered.slice(0, 20);
+  grid.innerHTML = filtered.map(s => `
+    <div class="speaker-card reveal visible" data-theme-filter="${s.theme}">
+      <div class="speaker-avatar">${s.initials}</div>
+      <h4>${s.name}</h4>
+      <div class="speaker-title">${s.title}</div>
+      <div class="speaker-inst">${s.inst}</div>
+    </div>
+  `).join('');
+}
+
+function filterSpeakers(theme) {
+  currentFilter = theme;
+  showAll = false;
+  document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.toggle('active', btn.textContent.toLowerCase().replace('e','e').includes(theme) || (theme === 'all' && btn.textContent === 'Tous')));
+  // Fix filter active state properly
+  document.querySelectorAll('.filter-btn').forEach(btn => {
+    const map = { 'Tous': 'all', 'Politique': 'politique', 'Environnement': 'environnement', 'Societe': 'societe', 'Economie': 'economie', 'Sciences': 'sciences', 'Culture': 'culture' };
+    btn.classList.toggle('active', map[btn.textContent] === theme);
+  });
+  renderSpeakers();
+}
+
+function showAllSpeakers() {
+  showAll = true;
+  renderSpeakers();
+}
+
+renderSpeakers();
+
+/* ============================================
+   NEWS RENDER
+   ============================================ */
+function renderNews() {
+  const grid = document.getElementById('newsGrid');
+  grid.innerHTML = news.map((n, i) => `
+    <div class="news-card reveal">
+      <div class="news-date">${n.date} &middot; <span class="theme-badge">${n.badge}</span></div>
+      <h3>${n.title}</h3>
+      <p>${n.summary}</p>
+      <span class="read-more" onclick="toggleNews(${i})">Lire la suite &#8594;</span>
+      <div class="news-full" id="news-${i}">
+        <p>${n.full}</p>
+      </div>
+    </div>
+  `).join('');
+}
+
+function toggleNews(i) {
+  const el = document.getElementById('news-' + i);
+  el.classList.toggle('open');
+}
+
+renderNews();
+
+/* ============================================
+   FORM
+   ============================================ */
+function handleSubmit(e) {
+  e.preventDefault();
+  document.getElementById('submissionForm').style.display = 'none';
+  document.getElementById('formSuccess').style.display = 'block';
+}
+
+function handleNewsletter(e) {
+  e.preventDefault();
+  document.getElementById('nlEmail').value = '';
+  document.getElementById('nlConfirm').style.display = 'block';
+}
+
+/* ============================================
+   NAV SCROLL
+   ============================================ */
+window.addEventListener('scroll', function() {
+  const nav = document.getElementById('navbar');
+  nav.classList.toggle('scrolled', window.scrollY > 50);
+
+  // Active nav link
+  const sections = ['accueil','thematiques','programme','intervenants','actualites','partenaires','infos','mediatheque','appel'];
+  let current = 'accueil';
+  sections.forEach(id => {
+    const el = document.getElementById(id);
+    if (el && window.scrollY >= el.offsetTop - 200) current = id;
+  });
+  document.querySelectorAll('.nav-links a[href^="#"]').forEach(a => {
+    a.classList.toggle('active', a.getAttribute('href') === '#' + current);
+  });
+});
+
+/* ============================================
+   SCROLL REVEAL
+   ============================================ */
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+    }
+  });
+}, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+// Re-observe dynamically added elements
+const reObserve = () => {
+  document.querySelectorAll('.reveal:not(.visible)').forEach(el => observer.observe(el));
+};
+setTimeout(reObserve, 500);
+
+/* ============================================
+   ANIMATED COUNTERS
+   ============================================ */
+const counterObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      const el = entry.target;
+      const target = parseInt(el.dataset.count);
+      let current = 0;
+      const step = Math.ceil(target / 40);
+      const interval = setInterval(() => {
+        current += step;
+        if (current >= target) { current = target; clearInterval(interval); }
+        el.textContent = current + '+';
+      }, 30);
+      counterObserver.unobserve(el);
+    }
+  });
+}, { threshold: 0.5 });
+
+document.querySelectorAll('[data-count]').forEach(el => counterObserver.observe(el));
+
+/* ============================================
+   MAP (Leaflet)
+   ============================================ */
+try {
+  const map = L.map('map-container').setView([48.5950, 7.7693], 15);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; OpenStreetMap'
+  }).addTo(map);
+  L.marker([48.5950, 7.7693]).addTo(map)
+    .bindPopup('<strong>Palais de la Musique et des Congres</strong><br>Place de Bordeaux, Strasbourg')
+    .openPopup();
+} catch(e) { console.warn('Map init error', e); }
+
+/* ============================================
+   COOKIE BANNER
+   ============================================ */
+if (!localStorage.getItem('rs-cookies')) {
+  setTimeout(() => document.getElementById('cookieBanner').classList.add('show'), 2000);
+}
+function acceptCookies() {
+  localStorage.setItem('rs-cookies', 'accepted');
+  document.getElementById('cookieBanner').classList.remove('show');
+}
+function declineCookies() {
+  localStorage.setItem('rs-cookies', 'declined');
+  document.getElementById('cookieBanner').classList.remove('show');
+}
+
+</script>
+</body>
+</html>
