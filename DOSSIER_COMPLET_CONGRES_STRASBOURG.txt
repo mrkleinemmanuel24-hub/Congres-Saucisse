@@ -1,0 +1,593 @@
+================================================================================
+                 DOSSIER COMPLET — LES RENCONTRES DE STRASBOURG
+         Forum Politique, Societe, Environnement — 1ere Edition 2026
+================================================================================
+
+Fondateur : Emmanuel Klein
+Date de creation du document : 28 mars 2026
+Statut : Site + Back-office complets, prets a deployer
+URL principale : https://congres-saucisse.pages.dev
+URL Stephanie : https://congres-saucisse.pages.dev/stephanie.html
+
+================================================================================
+                            TABLE DES MATIERES
+================================================================================
+
+1.  LE PROJET EN BREF
+2.  DEUX VERSIONS DU CONGRES
+3.  LE SITE PUBLIC — LES RENCONTRES DE STRASBOURG
+4.  LE SITE PUBLIC — LE CONGRES DE LA SAUCISSE
+5.  LE BACK-OFFICE ADMIN
+6.  LE DASHBOARD DE STEPHANIE
+7.  MODULES DU BACK-OFFICE
+8.  LE SIMULATEUR FINANCIER
+9.  LE MODULE SECURITE
+10. ARCHITECTURE DE L'APPLICATION
+11. DESIGN ET EXPERIENCE UTILISATEUR
+12. LES 3 THEMES GRAPHIQUES
+13. LES ICONES DALL-E
+14. COMPOSANTS TECHNIQUES
+15. INVENTAIRE DES FICHIERS
+16. REGLES DU PROJET
+17. PROCHAINES ETAPES
+
+================================================================================
+1. LE PROJET EN BREF
+================================================================================
+
+Ce projet est un site de congres complet avec back-office, cree pour
+Stephanie. Il a ete construit en clonant la structure de rdv-histoire.com
+(les Rendez-Vous de l'Histoire de Blois) et en l'adaptant pour Strasbourg.
+
+Le projet existe en DEUX versions :
+1. Les Rencontres de Strasbourg — version politique/societe/environnement
+   (version serieuse, ton institutionnel)
+2. Le Congres de la Saucisse — version gastronomique/festive
+   (version fun, ton convivial, saucisses qui rebondissent)
+
+Les deux versions partagent le meme back-office admin.
+
+Le site inclut un back-office complet avec :
+- Dashboard avec graphiques et statistiques
+- Simulateur financier (frais, revenus, rentabilite)
+- Checklist de 66 items (J-6 mois a post-event)
+- Module securite (14 scenarios de crise, autorisations, VIP)
+- Gestion des participants, badges QR, check-in
+- Templates d'invitation et emails automatiques
+- Gestion traiteur (regimes alimentaires, marge, repas staff)
+- Espace "Recommandations de Stephanie"
+
+
+================================================================================
+2. DEUX VERSIONS DU CONGRES
+================================================================================
+
+VERSION 1 : LES RENCONTRES DE STRASBOURG (index.html)
+- Forum Politique, Societe, Environnement
+- 1ere edition, 15-18 octobre 2026
+- Ton institutionnel, design premium
+- Clone de rdv-histoire.com adapte Strasbourg
+- Intervenants, programme, partenaires, infos pratiques
+
+VERSION 2 : LE CONGRES DE LA SAUCISSE (saucisse.html)
+- Le plus grand rassemblement europeen dedie a la saucisse artisanale
+- 12-14 juin 2026, Palais des Congres de Strasbourg
+- 50 intervenants, 30 sessions, degustations
+- Design identique mais thematique gastronomique
+- Clone du meme template rdv-histoire.com
+
+VERSION 3 : STRASBOURG (strasbourg.html)
+- Version additionnelle, variante Strasbourg
+
+Les deux versions sont independantes mais utilisent le meme back-office
+admin et les memes composants JavaScript.
+
+
+================================================================================
+3. LE SITE PUBLIC — LES RENCONTRES DE STRASBOURG
+================================================================================
+
+STRUCTURE DE LA PAGE :
+- Barre utilitaire (date, lieu, inscription)
+- Navigation fixe avec menu complet
+- Hero immersif (image DALL-E grand format)
+- Programme (sections par jour)
+- Intervenants (grille avec photos)
+- Partenaires (logos)
+- Infos pratiques (carte Leaflet, hotels, restaurants, transport)
+- Inscription (formulaire)
+- Footer avec liens legaux
+
+DATES : 15-18 octobre 2026
+LIEU : Palais des Congres de Strasbourg, place de Bordeaux
+
+THEMES COUVERTS :
+- Politique europeenne
+- Transition ecologique
+- Societe et democratie
+- Innovation et technologie
+- Culture et patrimoine
+
+CARTE INTERACTIVE :
+Carte Leaflet.js montrant :
+- Le Palais des Congres
+- Hotels recommandes
+- Restaurants partenaires
+- Monuments a visiter (Cathedrale, Petite France, Parlement)
+- Points de transport
+
+
+================================================================================
+4. LE SITE PUBLIC — LE CONGRES DE LA SAUCISSE
+================================================================================
+
+Meme structure que Les Rencontres, mais en version gastronomique :
+
+DATES : 12-14 juin 2026
+LIEU : Palais des Congres de Strasbourg
+
+PROGRAMME :
+- Conferences sur la saucisse artisanale
+- Degustations (choucroute, flammekueche, cervelas, knack)
+- Ateliers de fabrication
+- Exposition de charcutiers
+- Cafe gourmand et marche de Noel
+
+50 intervenants, 30 sessions
+Theme visuel : dark navy + gold (#0e0e20 + #c8a44e)
+
+
+================================================================================
+5. LE BACK-OFFICE ADMIN
+================================================================================
+
+ACCES : https://congres-saucisse.pages.dev/admin.html
+MOT DE PASSE : SAUCISSE2026 (puis change en "admin")
+
+ARCHITECTURE : Application SPA (Single Page Application) avec sidebar
+de navigation a gauche et contenu principal a droite.
+
+SIDEBAR (260px fixe) :
+- Logo et titre
+- Sections separees (Gestion, Communication, Logistique, Securite)
+- Liens de navigation vers chaque module
+- Footer avec credits
+
+MODULES DISPONIBLES :
+1. Dashboard — Vue d'ensemble avec graphiques
+2. Salles — Gestion des salles avec jauges de capacite
+3. Participants — Base de donnees, recherche, filtres
+4. Badges QR — Generation et impression de badges
+5. Check-in — Accueil participants (scan QR)
+6. Emails — Templates d'invitation + envoi automatique
+7. Staff — Equipe organisatrice (WhatsApp)
+8. Securite — 14 scenarios de crise + autorisations
+9. Budget — Suivi budgetaire detaille
+10. Simulateur financier — Projection recettes/depenses
+11. Traiteur — Regimes alimentaires, commandes, marge
+12. Recommandations de Stephanie — Espace commentaires
+
+
+================================================================================
+6. LE DASHBOARD DE STEPHANIE
+================================================================================
+
+Un fichier JavaScript dedie (dashboard-stephanie.js, ~15k) genere un
+dashboard personnalise pour Stephanie avec :
+
+- Compteurs animes (participants inscrits, intervenants confirmes,
+  partenaires signes, budget consomme)
+- Graphiques Chart.js (inscriptions par semaine, repartition regimes,
+  budget par poste)
+- Timeline du congres (J-6 mois a J+7)
+- Alertes et actions a prendre
+- Score de preparation global (pourcentage)
+
+
+================================================================================
+7. MODULES DU BACK-OFFICE
+================================================================================
+
+MODULE SALLES :
+- Liste des salles avec nom, capacite, equipements
+- Jauge visuelle de remplissage
+- Affectation des sessions aux salles
+- Alerte si depassement de capacite
+
+MODULE PARTICIPANTS :
+- Import CSV / ajout manuel
+- Champs : nom, prenom, email, organisation, statut, badge VIP
+- Recherche et filtres avances
+- Export vers CSV/Excel
+
+MODULE BADGES QR :
+- Generation automatique de QR codes par participant
+- Template de badge avec nom, photo, organisation, QR
+- Impression par lot
+- Niveaux : Standard, VIP Bronze, VIP Gold, VIP Platinum, Staff
+
+MODULE CHECK-IN :
+- Scan du QR code a l'entree
+- Compteur temps reel des arrives
+- Alerte si badge inconnu ou deja scanne
+
+MODULE EMAILS :
+- Templates pre-rediges (invitation, confirmation, rappel, remerciement)
+- Variables dynamiques ({prenom}, {session}, {salle})
+- Envoi simule (pas de serveur email integre — a connecter)
+
+MODULE TRAITEUR :
+- Saisie des regimes alimentaires (vegetarien, vegan, halal, sans gluten,
+  allergies)
+- Calcul des quantites par repas
+- Marge traiteur et cout par tete
+- Gestion des repas staff
+
+
+================================================================================
+8. LE SIMULATEUR FINANCIER
+================================================================================
+
+Le simulateur financier (simulateur-financier.js, ~35k) permet de
+projeter les recettes et depenses du congres :
+
+POSTES DE DEPENSES :
+- Location du Palais des Congres
+- Traiteur (dejeuners, pauses, gala)
+- Hebergement intervenants
+- Transport (navettes, taxis)
+- Communication (flyers, affiches, web)
+- Technique (son, lumiere, video)
+- Securite (agents, vigiles)
+- Assurance
+- Divers et imprevus
+
+SOURCES DE REVENUS :
+- Inscriptions participants (differents tarifs)
+- Partenariats / sponsors
+- Stands exposants
+- Subventions publiques
+
+FONCTIONNALITES :
+- Calcul automatique de la marge nette
+- Seuil de rentabilite (break-even)
+- Scenarios (optimiste, realiste, pessimiste)
+- Export des projections
+
+
+================================================================================
+9. LE MODULE SECURITE
+================================================================================
+
+Le module securite (securite.js, ~47k) est le plus complet :
+
+14 SCENARIOS DE CRISE COUVERTS :
+1. Evacuation incendie
+2. Attentat / intrusion
+3. Alerte a la bombe
+4. Panne electrique
+5. Urgence medicale (participant ou intervenant)
+6. Manifestation exterieure
+7. Incident VIP
+8. Cyber-attaque (site / donnees)
+9. Intemperies (inondation, tempete)
+10. Incident alimentaire (intoxication)
+11. Defaillance technique (son, video)
+12. Mouvement de foule
+13. Agression / violence
+14. Cas COVID ou maladie contagieuse
+
+POUR CHAQUE SCENARIO :
+- Niveau d'alerte (vert, orange, rouge)
+- Protocole etape par etape
+- Responsable designe
+- Numeros d'urgence
+- Checklist de gestion de crise
+
+AUTORISATIONS ET CONFORMITE :
+- Declaration en prefecture (formulaire pre-rempli)
+- Commission de securite
+- Autorisations ERP (Etablissement Recevant du Public)
+- RGPD (traitement des donnees participants)
+
+GESTION VIP :
+- Acces differencies (zones VIP, loges, coulisses)
+- Protocole d'accueil VIP
+- Vehicules et navettes prioritaires
+- Contacts securite dediee
+
+
+================================================================================
+10. ARCHITECTURE DE L'APPLICATION
+================================================================================
+
+PAGE                       DESCRIPTION
+---------------------------------------------------------------------------
+index.html                 Site public — Les Rencontres de Strasbourg
+saucisse.html              Site public — Congres de la Saucisse
+strasbourg.html            Site public — Variante Strasbourg
+admin.html                 Back-office SPA complet
+stephanie.html             Page d'accueil personnalisee Stephanie
+mentions-legales.html      Mentions legales et RGPD
+
+js/data.js                 Donnees du congres (sessions, intervenants)
+js/spa-sections.js         Sections SPA (114k — le plus gros fichier)
+js/securite.js             Module securite (47k)
+js/simulateur-financier.js Simulateur financier (35k)
+js/dashboard-stephanie.js  Dashboard personnalise (15k)
+js/content-filter.js       Filtre anti-insultes
+js/copyright-footer.js     Footer juridique
+js/guided-tour.js          Visite guidee premier lancement
+js/qrcode.js               Generateur de QR codes
+js/ip-protection.js        Protection IP / steganographie
+
+css/front.css              Styles du site public (37k)
+css/admin.css              Styles du back-office (9.5k)
+
+img/                       Images DALL-E
+img/icons/                 30 icones DALL-E (48-64px)
+
+STACK TECHNIQUE :
+- Front-end : HTML, CSS, JavaScript (vanilla)
+- Hebergement : Cloudflare Pages
+- Cartes : Leaflet.js
+- Polices : Playfair Display + Inter (Google Fonts)
+- QR codes : qrcode.js
+- Donnees : localStorage (aucun serveur)
+
+
+================================================================================
+11. DESIGN ET EXPERIENCE UTILISATEUR
+================================================================================
+
+SITE PUBLIC :
+- Design "congres premium" clone de rdv-histoire.com
+- Fond dark navy (#0e0e20)
+- Accent dore (#c8a44e)
+- Texte clair sur fond sombre
+- Images hero DALL-E plein ecran
+- Polices : Playfair Display (titres) + Inter (corps)
+- Responsive (mobile, tablette, desktop)
+
+BACK-OFFICE :
+- Sidebar fixe 260px (disparait sur mobile avec hamburger)
+- Fond #1a1a2e
+- Accent vert #2AD783
+- Design type Notion/Linear (minimaliste, pro)
+- Mode SPA (pas de rechargement de page)
+- Responsive avec menu hamburger sur mobile
+
+
+================================================================================
+12. LES 3 THEMES GRAPHIQUES
+================================================================================
+
+Le site public supporte 3 themes commutables :
+
+THEME 1 : CLASSIQUE (par defaut)
+- Dark navy + gold
+- --bg-primary: #0e0e20
+- --accent: #c8a44e
+- Inspiration : conferences internationales, TED
+
+THEME 2 : STRASBOURG
+- Burgundy + cream
+- --bg-primary: #2a0a12
+- --accent: #F5E6D0
+- Inspiration : couleurs alsaciennes, vin chaud, bois
+
+THEME 3 : MODERNE
+- White + electric blue + coral
+- --bg-primary: #FFFFFF
+- --accent: #0066FF
+- Inspiration : design tech, Apple WWDC, Google I/O
+
+Le switch de theme est en haut de page et change instantanement
+toutes les couleurs via CSS custom properties.
+
+
+================================================================================
+13. LES ICONES DALL-E
+================================================================================
+
+30 icones DALL-E dans img/icons/, chacune en haute resolution :
+
+NAVIGATION SITE :
+- icon-home.png             Page d'accueil
+- icon-programme.png        Programme du congres
+- icon-intervenants.png     Liste des intervenants
+- icon-inscription.png      Formulaire d'inscription
+- icon-infos.png            Informations pratiques
+- icon-plan.png             Plan du site
+- icon-presse.png           Espace presse
+
+LIEUX STRASBOURG :
+- icon-cathedrale.png       Cathedrale de Strasbourg
+- icon-petite-france.png    Quartier Petite France
+- icon-parlement.png        Parlement europeen
+- icon-hotel.png            Hotels recommandes
+- icon-restaurant.png       Restaurants partenaires
+
+BACK-OFFICE :
+- icon-dashboard.png        Dashboard
+- icon-salles.png           Gestion des salles
+- icon-participants.png     Gestion des participants
+- icon-emails.png           Templates d'emails
+- icon-invitations.png      Invitations
+- icon-checkin.png          Check-in
+- icon-export.png           Export donnees
+- icon-qrcode.png           QR codes
+- icon-meteo.png            Meteo evenement
+- icon-saucisse.png         Logo saucisse
+
+BADGES :
+- icon-badge-standard.png
+- icon-badge-staff.png
+- icon-badge-vip-bronze.png
+- icon-badge-vip-gold.png
+- icon-badge-vip-platinum.png
+
+IMAGES HERO (plein format) :
+- hero-congress.png
+- hero-saucisse.png
+- hero-strasbourg.png
+
+IMAGES SECTIONS :
+- img-actualites.png
+- img-badge.png
+- img-cafe-gourmand.png
+- img-cervelas.png
+- img-choucroute.png
+- img-expo.png
+- img-flammekueche.png
+- img-gala.png
+- img-inscription.png
+- img-knack.png
+- img-marche-noel.png
+- img-mediatheque.png
+
+
+================================================================================
+14. COMPOSANTS TECHNIQUES
+================================================================================
+
+COMPOSANTS REUTILISABLES :
+
+1. content-filter.js
+   Filtre anti-insultes en francais.
+
+2. copyright-footer.js
+   Footer juridique standardise.
+
+3. guided-tour.js
+   Visite guidee premier lancement.
+
+4. qrcode.js
+   Generation de QR codes (badges, check-in).
+
+5. ip-protection.js
+   Protection de la propriete intellectuelle (watermark steganographique,
+   anti-capture d'ecran). Reutilisable pour d'autres projets.
+
+6. Module SPA (admin.html + spa-sections.js)
+   Architecture Single Page Application avec sidebar, navigation par
+   hash, chargement dynamique des sections. Reutilisable pour tout
+   back-office.
+
+7. Simulateur financier
+   Module complet de simulation budgetaire. Adaptable a n'importe quel
+   evenement (conference, salon, festival).
+
+8. Module securite (14 scenarios)
+   Protocoles de crise complets. Adaptable a tout ERP.
+
+
+================================================================================
+15. INVENTAIRE DES FICHIERS
+================================================================================
+
+Congres-Saucisse/
+|
+|-- index.html              Site public — Les Rencontres de Strasbourg (127k)
+|-- saucisse.html           Site public — Congres de la Saucisse (122k)
+|-- strasbourg.html         Site public — Variante Strasbourg (106k)
+|-- admin.html              Back-office SPA complet (28k)
+|-- stephanie.html          Page d'accueil Stephanie (4k)
+|-- mentions-legales.html   Mentions legales (9k)
+|-- old-index.html          Version precedente (backup) (72k)
+|-- README.md               Description du projet
+|-- MESSAGE_STEPHANIE.txt   Message d'envoi a Stephanie
+|
+|-- css/
+|   |-- front.css           Styles site public (37k)
+|   |-- admin.css           Styles back-office (9.5k)
+|
+|-- js/
+|   |-- data.js             Donnees congres (24k)
+|   |-- spa-sections.js     Sections SPA (114k)
+|   |-- securite.js         Module securite (47k)
+|   |-- simulateur-financier.js  Simulateur (35k)
+|   |-- dashboard-stephanie.js   Dashboard (15k)
+|   |-- content-filter.js   Filtre anti-insultes (7k)
+|   |-- copyright-footer.js Footer juridique (1k)
+|   |-- guided-tour.js      Visite guidee (8k)
+|   |-- qrcode.js           QR codes (5k)
+|   |-- ip-protection.js    Protection IP (7k)
+|
+|-- img/
+|   |-- icons/              30 icones DALL-E
+|   |-- hero-*.png          3 images hero
+|   |-- img-*.png           12+ images sections
+|   |-- fun/                Images fun (bonus)
+
+
+================================================================================
+16. REGLES DU PROJET
+================================================================================
+
+1. DEUX VERSIONS — NE JAMAIS LES MELANGER
+   index.html = Les Rencontres de Strasbourg (serieux)
+   saucisse.html = Congres de la Saucisse (fun)
+   Les deux partagent le meme back-office.
+
+2. STEPHANIE EST LA DESTINATAIRE
+   Tout le projet est fait pour Stephanie. La page stephanie.html est
+   son point d'entree personnel avec acces direct au site et a l'admin.
+
+3. MOT DE PASSE ADMIN
+   Initialement SAUCISSE2026, change en "admin" pour simplifier.
+
+4. CONTENT-FILTER.JS SUR TOUS LES CHAMPS DE SAISIE
+   Tous les formulaires (feedback, inscriptions, commentaires) sont
+   proteges par le filtre anti-insultes.
+
+5. ICONES DALL-E PARTOUT
+   Chaque bouton de la sidebar admin et chaque section du site public
+   utilise une icone DALL-E en haute resolution.
+
+6. RESPONSIVE OBLIGATOIRE
+   Le back-office passe en mode hamburger sous 900px.
+   Le site public est entierement responsive.
+
+7. MENTIONS LEGALES COMPLETES
+   Page dediee avec toutes les mentions obligatoires (editeur,
+   hebergeur, RGPD, cookies, propriete intellectuelle).
+
+8. IP PROTECTION
+   Le module ip-protection.js protege contre la copie du contenu
+   et les captures d'ecran non autorisees.
+
+
+================================================================================
+17. PROCHAINES ETAPES
+================================================================================
+
+IMMEDIAT :
+[  ] Envoyer le lien a Stephanie et recueillir son feedback
+[  ] Ajuster le contenu du programme (sessions, intervenants) selon
+     ses indications
+[  ] Choisir entre version politique ou gastronomique (ou les deux)
+[  ] Completer les donnees des partenaires
+
+MOIS 2 :
+[  ] Connecter les emails a un vrai service (Brevo ou Mailjet)
+[  ] Importer les vrais participants (si le congres est confirme)
+[  ] Tester le check-in QR en conditions reelles
+[  ] Ajouter les vrais intervenants avec photos
+
+MOIS 3-6 :
+[  ] Ouvrir les inscriptions en ligne
+[  ] Activer les paiements (Stripe)
+[  ] Lancer la communication (LinkedIn, presse)
+[  ] Imprimer les badges et tester le workflow complet
+
+================================================================================
+                            FIN DU DOCUMENT
+================================================================================
+
+Document cree le 28 mars 2026
+Derniere mise a jour : 28 mars 2026
+Contact : Emmanuel Klein
+Site : https://congres-saucisse.pages.dev
+
+================================================================================
