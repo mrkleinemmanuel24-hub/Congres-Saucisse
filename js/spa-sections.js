@@ -316,17 +316,572 @@ SPA_INIT.invitations = function() { document.getElementById('section-invitations
 
 SPA_INIT.traiteur = function() { var ins=CONGRES.loadInscriptions(),r={standard:0,veggie:0,halal:0,gluten:0};ins.forEach(function(i){var x=i.repas||'standard';(i.jours||[1,2,3]).forEach(function(){r[x]=(r[x]||0)+1;});});var t=Object.values(r).reduce(function(a,b){return a+b;},0);var n={standard:'Standard',veggie:'Vegetarien',halal:'Halal',gluten:'Sans gluten'};var h='';Object.keys(n).forEach(function(k){h+='<div class="stat-card"><div class="stat-value">'+r[k]+'</div><div class="stat-label">'+n[k]+'</div></div>';});h+='<div class="stat-card"><div class="stat-value">'+t+'</div><div class="stat-label">Total</div></div>';document.getElementById('section-traiteur').innerHTML=adminWrap('Traiteur','icon-traiteur.png','<div class="stats-grid">'+h+'</div>'); };
 
-SPA_INIT.salles = function() { var h='';CONGRES.SALLES.forEach(function(s){var ss=CONGRES.getSessionsBySalle(s.id),mx=0;ss.forEach(function(x){mx=Math.max(mx,Math.round(x.inscrits/s.capacite*100));});var c=mx>=100?'#333':mx>=80?'#DC2626':mx>=50?'#F59E0B':'#22C55E';h+='<div class="gauge-card"><h4>'+s.nom+'</h4><div class="gauge-info">'+s.etage+' · '+s.capacite+' pl. · '+ss.length+' sessions</div><div class="gauge-track"><div class="gauge-fill" style="width:'+Math.min(mx,100)+'%;background:'+c+';"></div></div><div style="text-align:right;font-size:.75rem;color:#5F5C55;margin-top:4px;">'+mx+'%</div></div>';});document.getElementById('section-salles').innerHTML=adminWrap('Jauge des salles','icon-salles.png','<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px;">'+h+'</div>'); };
+SPA_INIT.salles = function() {
+  // ─── ROOM DATA with booked counts ───
+  var ROOMS = [
+    {id:'erasme', name:'Amphitheatre Schweitzer (Erasme)', capacity:450, booked:423},
+    {id:'schweitzer', name:'Salle Schweitzer', capacity:320, booked:287},
+    {id:'cassin', name:'Salle Cassin', capacity:200, booked:145},
+    {id:'schuman', name:'Salle Schuman', capacity:150, booked:110},
+    {id:'curie', name:'Salle Curie', capacity:100, booked:98},
+    {id:'gutenberg', name:'Salle Gutenberg', capacity:80, booked:72},
+    {id:'kleber', name:'Salle Kleber', capacity:120, booked:120},
+    {id:'tomi', name:'Salle Tomi Ungerer', capacity:60, booked:35},
+    {id:'brandt', name:'Salle Willy Brandt (Expo)', capacity:500, booked:412},
+    {id:'europe', name:'Hall Europe (Restauration)', capacity:300, booked:222}
+  ];
 
-SPA_INIT.checkin = function() { document.getElementById('section-checkin').innerHTML=adminWrap('Check-in','icon-checkin.png','<div style="text-align:center;max-width:500px;margin:0 auto;"><div style="background:#161822;border:2px dashed rgba(201,168,76,.1);border-radius:20px;padding:40px;"><img src="img/icons/icon-qrcode.png" alt="" style="width:64px;height:64px;border-radius:12px;object-fit:contain;margin:0 auto;display:block;"><p style="color:#9B978F;margin-top:12px;">Scannez ou saisissez le code badge</p></div><input type="text" id="adm-code" placeholder="INS-001" style="width:100%;padding:14px;border-radius:12px;border:1px solid rgba(201,168,76,.1);background:rgba(255,255,255,.04);color:#E8E4DC;font-size:1rem;text-align:center;font-weight:700;margin-top:16px;" onkeydown="if(event.key===\'Enter\')SPA_CI.go()"><button onclick="SPA_CI.go()" style="margin-top:10px;padding:10px 24px;border-radius:10px;background:#C9A84C;color:#111;font-weight:700;border:none;cursor:pointer;width:100%;">Valider</button><div id="adm-ci-res" style="margin-top:20px;"></div></div>');window.SPA_CI={ck:JSON.parse(localStorage.getItem('congres_checkins')||'[]'),go:function(){var c=document.getElementById('adm-code').value.trim().toUpperCase();if(!c)return;var ins=CONGRES.loadInscriptions(),f=ins.find(function(i){return i.id.toUpperCase()===c;}),el=document.getElementById('adm-ci-res');if(!f){el.innerHTML='<div style="padding:20px;background:rgba(220,38,38,.08);border:2px solid #DC2626;border-radius:16px;"><h3 style="color:#DC2626;text-align:center;">Badge inconnu</h3></div>';return;}if(this.ck.indexOf(f.id)!==-1){el.innerHTML='<div style="padding:20px;background:rgba(220,38,38,.08);border:2px solid #DC2626;border-radius:16px;"><h3 style="color:#DC2626;text-align:center;">Deja scanne</h3></div>';return;}this.ck.push(f.id);localStorage.setItem('congres_checkins',JSON.stringify(this.ck));el.innerHTML='<div style="padding:20px;background:rgba(34,197,94,.08);border:2px solid #22C55E;border-radius:16px;"><h3 style="color:#22C55E;text-align:center;">&#10003; '+f.prenom+' '+f.nom+'</h3></div>';document.getElementById('adm-code').value='';}}; };
+  // Cross-reference with actual data.js salles
+  ROOMS.forEach(function(r) {
+    var dataSalle = CONGRES.getSalle(r.id);
+    if (dataSalle) {
+      r.capacity = dataSalle.capacite;
+      r.displayName = dataSalle.nom;
+      r.etage = dataSalle.etage;
+      r.type = dataSalle.type;
+    }
+  });
 
-SPA_INIT.emails = function() { document.getElementById('section-emails').innerHTML=adminWrap('Emails automatiques','icon-emails.png','<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px;"><div class="chart-card"><h3>Confirmation inscription</h3><p style="font-size:.82rem;color:#9B978F;">Envoi immediat.</p></div><div class="chart-card"><h3>Rappel J-7</h3><p style="font-size:.82rem;color:#9B978F;">5 juin 2026.</p></div><div class="chart-card"><h3>Rappel J-1</h3><p style="font-size:.82rem;color:#9B978F;">11 juin 2026.</p></div><div class="chart-card"><h3>Programme du jour</h3><p style="font-size:.82rem;color:#9B978F;">Chaque matin a 7h.</p></div></div>'); };
+  // ─── Summary totals ───
+  var totalCap = 0, totalBooked = 0;
+  ROOMS.forEach(function(r) { totalCap += r.capacity; totalBooked += r.booked; });
+  var totalDispo = totalCap - totalBooked;
+
+  // ─── Room capacity cards ───
+  var dashHtml = '<div style="background:linear-gradient(135deg,#161822,#1C1F2E);border:1px solid rgba(201,168,76,.2);border-radius:16px;padding:24px;margin-bottom:24px;">' +
+    '<div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;margin-bottom:20px;">' +
+      '<h2 style="color:#C9A84C;font-size:1.1rem;margin:0;">Tableau de bord capacite en temps reel</h2>' +
+      '<div style="display:flex;gap:16px;flex-wrap:wrap;">' +
+        '<div style="text-align:center;"><div style="font-size:1.4rem;font-weight:800;color:#FFF;">' + totalCap + '</div><div style="font-size:.72rem;color:#9B978F;">places totales</div></div>' +
+        '<div style="text-align:center;"><div style="font-size:1.4rem;font-weight:800;color:#F59E0B;">' + totalBooked + '</div><div style="font-size:.72rem;color:#9B978F;">reservees</div></div>' +
+        '<div style="text-align:center;"><div style="font-size:1.4rem;font-weight:800;color:#22C55E;">' + totalDispo + '</div><div style="font-size:.72rem;color:#9B978F;">disponibles</div></div>' +
+      '</div>' +
+    '</div>' +
+    '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px;">';
+
+  ROOMS.forEach(function(r) {
+    var pct = Math.round(r.booked / r.capacity * 100);
+    var restantes = Math.max(0, r.capacity - r.booked);
+    var gaugeColor = pct >= 100 ? '#DC2626' : pct >= 80 ? '#DC2626' : pct >= 50 ? '#F59E0B' : '#22C55E';
+    var statusText, statusColor, statusBg;
+    if (pct >= 100) { statusText = 'COMPLET'; statusColor = '#FFF'; statusBg = '#DC2626'; }
+    else if (pct >= 80) { statusText = 'Presque complet'; statusColor = '#DC2626'; statusBg = 'rgba(220,38,38,.12)'; }
+    else { statusText = 'Disponible'; statusColor = '#22C55E'; statusBg = 'rgba(34,197,94,.12)'; }
+
+    dashHtml += '<div style="background:#0F1118;border:1px solid rgba(201,168,76,.08);border-radius:12px;padding:16px;">' +
+      '<div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px;">' +
+        '<div style="font-weight:700;font-size:.88rem;color:#E8E4DC;">' + (r.displayName || r.name) + '</div>' +
+        '<span style="display:inline-block;padding:3px 10px;border-radius:6px;font-size:.7rem;font-weight:700;background:' + statusBg + ';color:' + statusColor + ';">' + statusText + '</span>' +
+      '</div>' +
+      '<div style="font-size:.75rem;color:#9B978F;margin-bottom:10px;">' + (r.etage || '') + ' · Capacite : ' + r.capacity + ' places</div>' +
+      '<div style="height:10px;background:rgba(255,255,255,.06);border-radius:6px;overflow:hidden;margin-bottom:8px;">' +
+        '<div style="height:100%;width:' + Math.min(pct, 100) + '%;background:' + gaugeColor + ';border-radius:6px;transition:width .5s ease;"></div>' +
+      '</div>' +
+      '<div style="display:flex;justify-content:space-between;align-items:baseline;">' +
+        '<span style="font-size:.75rem;color:#9B978F;">' + r.booked + ' / ' + r.capacity + ' (' + pct + '%)</span>' +
+        '<span style="font-size:1.3rem;font-weight:800;color:' + (restantes === 0 ? '#DC2626' : restantes < 20 ? '#F59E0B' : '#22C55E') + ';">' + restantes + '</span>' +
+      '</div>' +
+      '<div style="text-align:right;font-size:.72rem;color:#9B978F;">places restantes</div>' +
+    '</div>';
+  });
+
+  dashHtml += '</div></div>';
+
+  // ─── Original gauge section (kept intact) ───
+  var h='';CONGRES.SALLES.forEach(function(s){var ss=CONGRES.getSessionsBySalle(s.id),mx=0;ss.forEach(function(x){mx=Math.max(mx,Math.round(x.inscrits/s.capacite*100));});var c=mx>=100?'#333':mx>=80?'#DC2626':mx>=50?'#F59E0B':'#22C55E';h+='<div class="gauge-card"><h4>'+s.nom+'</h4><div class="gauge-info">'+s.etage+' · '+s.capacite+' pl. · '+ss.length+' sessions</div><div class="gauge-track"><div class="gauge-fill" style="width:'+Math.min(mx,100)+'%;background:'+c+';"></div></div><div style="text-align:right;font-size:.75rem;color:#5F5C55;margin-top:4px;">'+mx+'%</div></div>';});
+
+  document.getElementById('section-salles').innerHTML=adminWrap('Jauge des salles','icon-salles.png', dashHtml + '<h2 style="color:#C9A84C;font-size:1rem;margin:24px 0 16px;">Occupation par session</h2><div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px;">'+h+'</div>');
+};
+
+SPA_INIT.checkin = function() {
+  document.getElementById('section-checkin').innerHTML=adminWrap('Check-in','icon-checkin.png',
+    '<div style="text-align:center;max-width:600px;margin:0 auto;">' +
+      '<div style="background:#161822;border:2px dashed rgba(201,168,76,.1);border-radius:20px;padding:40px;">' +
+        '<img src="img/icons/icon-qrcode.png" alt="" style="width:64px;height:64px;border-radius:12px;object-fit:contain;margin:0 auto;display:block;">' +
+        '<p style="color:#9B978F;margin-top:12px;">Scannez ou saisissez le code badge</p>' +
+      '</div>' +
+      '<input type="text" id="adm-code" placeholder="INS-001" style="width:100%;padding:14px;border-radius:12px;border:1px solid rgba(201,168,76,.1);background:rgba(255,255,255,.04);color:#E8E4DC;font-size:1rem;text-align:center;font-weight:700;margin-top:16px;" onkeydown="if(event.key===\'Enter\')SPA_CI.go()" oninput="SPA_CI.search()">' +
+      '<button onclick="SPA_CI.go()" style="margin-top:10px;padding:10px 24px;border-radius:10px;background:#C9A84C;color:#111;font-weight:700;border:none;cursor:pointer;width:100%;">Valider le check-in</button>' +
+      '<div id="adm-ci-search" style="margin-top:16px;"></div>' +
+      '<div id="adm-ci-res" style="margin-top:16px;"></div>' +
+      '<div id="adm-ci-badge" style="margin-top:20px;"></div>' +
+    '</div>'
+  );
+
+  window.SPA_CI={
+    ck:JSON.parse(localStorage.getItem('congres_checkins')||'[]'),
+    search: function() {
+      var q = document.getElementById('adm-code').value.trim().toLowerCase();
+      var searchEl = document.getElementById('adm-ci-search');
+      if (q.length < 2) { searchEl.innerHTML = ''; return; }
+      var ins = CONGRES.loadInscriptions();
+      var matches = ins.filter(function(i) {
+        return i.id.toLowerCase().indexOf(q) !== -1 ||
+               i.nom.toLowerCase().indexOf(q) !== -1 ||
+               i.prenom.toLowerCase().indexOf(q) !== -1 ||
+               i.email.toLowerCase().indexOf(q) !== -1;
+      }).slice(0, 5);
+      if (matches.length === 0) { searchEl.innerHTML = '<div style="font-size:.82rem;color:#9B978F;padding:8px;">Aucun resultat</div>'; return; }
+      var html = '<div style="text-align:left;">';
+      matches.forEach(function(m) {
+        var pass = CONGRES.getPass(m.pass);
+        var checked = SPA_CI.ck.indexOf(m.id) !== -1;
+        html += '<div onclick="SPA_CI.selectParticipant(\'' + m.id + '\')" style="display:flex;align-items:center;gap:12px;padding:10px 14px;background:#161822;border:1px solid rgba(201,168,76,.08);border-radius:10px;margin-bottom:6px;cursor:pointer;transition:background .15s;" onmouseover="this.style.background=\'#1C1F2E\'" onmouseout="this.style.background=\'#161822\'">' +
+          '<div style="width:36px;height:36px;border-radius:50%;background:rgba(201,168,76,.15);display:flex;align-items:center;justify-content:center;font-weight:800;color:#C9A84C;font-size:.78rem;">' + m.prenom[0] + m.nom[0] + '</div>' +
+          '<div style="flex:1;min-width:0;">' +
+            '<div style="font-weight:700;font-size:.85rem;color:#E8E4DC;">' + m.prenom + ' ' + m.nom + '</div>' +
+            '<div style="font-size:.72rem;color:#9B978F;">' + m.id + ' — ' + (pass ? pass.nom : m.pass) + (checked ? ' — <span style="color:#22C55E;">deja scanne</span>' : '') + '</div>' +
+          '</div>' +
+        '</div>';
+      });
+      html += '</div>';
+      searchEl.innerHTML = html;
+    },
+    selectParticipant: function(id) {
+      document.getElementById('adm-code').value = id;
+      document.getElementById('adm-ci-search').innerHTML = '';
+      this.showBadge(id);
+    },
+    showBadge: function(code) {
+      var ins = CONGRES.loadInscriptions();
+      var f = ins.find(function(i) { return i.id.toUpperCase() === code.toUpperCase(); });
+      var badgeEl = document.getElementById('adm-ci-badge');
+      if (!f) { badgeEl.innerHTML = ''; return; }
+
+      var pass = CONGRES.getPass(f.pass);
+      var passName = pass ? pass.nom : 'Standard';
+      var passColor = pass ? pass.couleur : '#E5E7EB';
+      var passTextColor = pass ? pass.textColor : '#374151';
+      var joursText = (f.jours || [1,2,3]).map(function(j) { return 'J' + j; }).join(' · ');
+      var dayNames = ['', 'Jeu. 12 juin', 'Ven. 13 juin', 'Sam. 14 juin'];
+
+      // Sessions list
+      var sessHtml = '';
+      if (f.sessions && f.sessions.length > 0) {
+        f.sessions.forEach(function(sid) {
+          var sess = CONGRES.getSession(sid);
+          if (sess) {
+            var salle = CONGRES.getSalle(sess.salle);
+            sessHtml += '<div style="font-size:.75rem;padding:4px 8px;background:rgba(201,168,76,.05);border-radius:6px;margin-bottom:3px;color:#9B978F;">' +
+              dayNames[sess.jour] + ' ' + sess.debut + ' — ' + sess.titre + (salle ? ' (' + salle.nom + ')' : '') + '</div>';
+          }
+        });
+      }
+
+      // QR Code
+      var qr = '';
+      if (typeof generateQRSVG === 'function') {
+        qr = generateQRSVG(f.id + '-' + f.nom + '-' + f.pass, 160);
+      }
+
+      var html = '<div style="background:#FFF;border-radius:20px;padding:32px 24px;max-width:400px;margin:0 auto;text-align:center;position:relative;" id="badge-print-area">' +
+        '<div style="background:#171C22;padding:14px;border-radius:12px;margin-bottom:16px;">' +
+          '<div style="color:#FFD300;font-size:1rem;font-weight:800;">Le Congres de la Saucisse</div>' +
+          '<div style="color:#B1B9C3;font-size:.72rem;">Strasbourg 2026 — Palais des Congres</div>' +
+        '</div>' +
+        '<div style="width:72px;height:72px;border-radius:50%;background:linear-gradient(135deg,#2AD783,#FFD300);margin:0 auto 10px;display:flex;align-items:center;justify-content:center;font-size:1.6rem;font-weight:800;color:#111;">' +
+          f.prenom[0] + f.nom[0] +
+        '</div>' +
+        '<div style="font-size:1.2rem;font-weight:800;color:#111;">' + f.prenom + ' ' + f.nom + '</div>' +
+        '<div style="font-size:.82rem;color:#666;">' + (f.entreprise || '') + '</div>' +
+        '<div style="display:inline-block;padding:4px 16px;border-radius:8px;font-size:.82rem;font-weight:700;margin:10px 0;background:' + passColor + ';color:' + passTextColor + ';">' + passName + '</div>' +
+        '<div style="margin:12px auto;max-width:160px;">' + qr + '</div>' +
+        '<div style="font-size:.78rem;color:#666;">Jours : ' + joursText + '</div>' +
+        '<div style="font-size:.72rem;color:#999;margin-top:6px;">ID : ' + f.id + '</div>';
+
+      if (sessHtml) {
+        html += '<div style="text-align:left;margin-top:16px;border-top:1px solid #EEE;padding-top:12px;">' +
+          '<div style="font-size:.78rem;font-weight:700;color:#333;margin-bottom:6px;">Sessions (' + f.sessions.length + ')</div>' +
+          sessHtml + '</div>';
+      }
+
+      html += '<div style="border-top:1px solid #EEE;margin-top:12px;padding-top:8px;font-size:.68rem;color:#BBB;">Palais des Congres de Strasbourg — 12-14 juin 2026</div>' +
+      '</div>';
+
+      // Print button
+      html += '<div style="margin-top:16px;display:flex;gap:10px;justify-content:center;">' +
+        '<button onclick="SPA_CI.printBadge()" style="padding:10px 24px;border-radius:10px;background:#C9A84C;color:#111;font-weight:700;border:none;cursor:pointer;font-size:.88rem;">&#128424; Imprimer le badge</button>' +
+      '</div>';
+
+      badgeEl.innerHTML = html;
+    },
+    go:function(){
+      var c=document.getElementById('adm-code').value.trim().toUpperCase();
+      if(!c)return;
+      var ins=CONGRES.loadInscriptions(),f=ins.find(function(i){return i.id.toUpperCase()===c;}),el=document.getElementById('adm-ci-res');
+      document.getElementById('adm-ci-search').innerHTML = '';
+      if(!f){el.innerHTML='<div style="padding:20px;background:rgba(220,38,38,.08);border:2px solid #DC2626;border-radius:16px;"><h3 style="color:#DC2626;text-align:center;">Badge inconnu</h3></div>';document.getElementById('adm-ci-badge').innerHTML='';return;}
+      if(this.ck.indexOf(f.id)!==-1){el.innerHTML='<div style="padding:20px;background:rgba(220,38,38,.08);border:2px solid #DC2626;border-radius:16px;"><h3 style="color:#DC2626;text-align:center;">Deja scanne</h3></div>';this.showBadge(f.id);return;}
+      this.ck.push(f.id);localStorage.setItem('congres_checkins',JSON.stringify(this.ck));
+      el.innerHTML='<div style="padding:20px;background:rgba(34,197,94,.08);border:2px solid #22C55E;border-radius:16px;"><h3 style="color:#22C55E;text-align:center;">&#10003; ' +f.prenom+' '+f.nom+'</h3><p style="text-align:center;font-size:.82rem;color:#22C55E;margin-top:6px;">Check-in valide !</p></div>';
+      this.showBadge(f.id);
+      document.getElementById('adm-code').value='';
+    },
+    printBadge: function() {
+      var area = document.getElementById('badge-print-area');
+      if (!area) return;
+      var w = window.open('', '_blank', 'width=500,height=700');
+      w.document.write('<!DOCTYPE html><html><head><title>Badge Congres</title><style>body{margin:0;padding:20px;font-family:-apple-system,BlinkMacSystemFont,Inter,sans-serif;background:#FFF;}@media print{body{padding:0;}button{display:none!important;}}</style></head><body>');
+      w.document.write(area.outerHTML);
+      w.document.write('<div style="text-align:center;margin-top:20px;"><button onclick="window.print()" style="padding:12px 28px;border-radius:10px;background:#C9A84C;color:#111;font-weight:700;border:none;cursor:pointer;font-size:1rem;">Imprimer</button></div>');
+      w.document.write('</body></html>');
+      w.document.close();
+    }
+  };
+};
+
+SPA_INIT.emails = function() {
+  // ─── Original email cards ───
+  var originalCards = '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px;margin-bottom:32px;"><div class="chart-card"><h3>Confirmation inscription</h3><p style="font-size:.82rem;color:#9B978F;">Envoi immediat.</p></div><div class="chart-card"><h3>Rappel J-7</h3><p style="font-size:.82rem;color:#9B978F;">5 juin 2026.</p></div><div class="chart-card"><h3>Rappel J-1</h3><p style="font-size:.82rem;color:#9B978F;">11 juin 2026.</p></div><div class="chart-card"><h3>Programme du jour</h3><p style="font-size:.82rem;color:#9B978F;">Chaque matin a 7h.</p></div></div>';
+
+  // ─── Speaker-level email templates ───
+  var SPEAKER_TEMPLATES = [
+    {
+      level: 'Keynote',
+      icon: '&#127775;',
+      color: '#FFD300',
+      desc: 'Traitement VIP — voiture avec chauffeur, green room privee',
+      subject: 'Congres de la Saucisse 2026 — Confirmation Keynote VIP',
+      body: 'Cher/Chere [PRENOM] [NOM],\n\n' +
+        'C\'est un immense honneur de vous confirmer votre participation en tant que Keynote Speaker au Congres de la Saucisse 2026.\n\n' +
+        'DETAILS DE VOTRE SESSION :\n' +
+        '  Session : [TITRE_SESSION]\n' +
+        '  Date : [DATE_SESSION]\n' +
+        '  Heure : [HEURE]\n' +
+        '  Salle : [SALLE]\n\n' +
+        'VOTRE ACCUEIL VIP :\n' +
+        '  - Voiture avec chauffeur depuis la gare/aeroport\n' +
+        '  - Green room privee avec rafraichissements\n' +
+        '  - Assistant personnel dedie pendant toute la duree du Congres\n' +
+        '  - Diner prive avec le comite d\'organisation (11 juin, veille)\n' +
+        '  - Suite au Hilton Strasbourg (3 nuits, prise en charge integrale)\n\n' +
+        'INFORMATIONS PRATIQUES :\n' +
+        '  Lieu : Palais des Congres de Strasbourg\n' +
+        '  Adresse : Place Adrien Zeller, 67000 Strasbourg\n' +
+        '  Parking VIP : acces direct niveau -1, badge fourni\n' +
+        '  Contact sur place : Stephanie Martin — 06 12 34 56 78\n\n' +
+        'Votre badge QR sera joint a cet email.\n\n' +
+        'Avec nos plus sinceres remerciements,\n' +
+        'Le Comite d\'Organisation du Congres de la Saucisse\n' +
+        'congres-saucisse.pages.dev'
+    },
+    {
+      level: 'Conferencier',
+      icon: '&#127908;',
+      color: '#2AD783',
+      desc: 'Speaker standard — places reservees, badge intervenant',
+      subject: 'Congres de la Saucisse 2026 — Confirmation Conferencier',
+      body: 'Cher/Chere [PRENOM] [NOM],\n\n' +
+        'Nous avons le plaisir de vous confirmer votre intervention en tant que conferencier(e) au Congres de la Saucisse 2026.\n\n' +
+        'VOTRE SESSION :\n' +
+        '  Session : [TITRE_SESSION]\n' +
+        '  Date : [DATE_SESSION]\n' +
+        '  Heure : [HEURE]\n' +
+        '  Salle : [SALLE]\n' +
+        '  Duree : 45 minutes (35 min presentation + 10 min Q&A)\n\n' +
+        'LOGISTIQUE :\n' +
+        '  - Places reservees rang 1-3 pour votre entourage\n' +
+        '  - Salle de preparation speakers (1er etage, salle Tomi Ungerer)\n' +
+        '  - Test technique la veille (11 juin) de 14h a 18h\n' +
+        '  - Formats acceptes : 16:9 PowerPoint/PDF, cle USB ou email\n\n' +
+        'INFORMATIONS PRATIQUES :\n' +
+        '  Lieu : Palais des Congres de Strasbourg\n' +
+        '  Adresse : Place Adrien Zeller, 67000 Strasbourg\n' +
+        '  Parking : gratuit sur presentation du badge (niveau -1)\n' +
+        '  Contact regie : Thomas Becker — 06 23 45 67 89\n\n' +
+        'Votre badge QR est joint a cet email.\n\n' +
+        'Cordialement,\n' +
+        'Le Comite d\'Organisation du Congres de la Saucisse'
+    },
+    {
+      level: 'Paneliste',
+      icon: '&#128101;',
+      color: '#3B82F6',
+      desc: 'Participant de table ronde — briefing groupe',
+      subject: 'Congres de la Saucisse 2026 — Confirmation Paneliste',
+      body: 'Cher/Chere [PRENOM] [NOM],\n\n' +
+        'Nous sommes ravis de vous confirmer votre participation en tant que paneliste au Congres de la Saucisse 2026.\n\n' +
+        'VOTRE TABLE RONDE :\n' +
+        '  Session : [TITRE_SESSION]\n' +
+        '  Date : [DATE_SESSION]\n' +
+        '  Heure : [HEURE]\n' +
+        '  Salle : [SALLE]\n\n' +
+        'BRIEFING COLLECTIF :\n' +
+        '  Un briefing avec les autres panelistes et le moderateur est prevu :\n' +
+        '  Date : [DATE_SESSION], 1h avant la session\n' +
+        '  Lieu : Salle Tomi Ungerer (1er etage)\n' +
+        '  Le moderateur vous enverra les axes de discussion en amont.\n\n' +
+        'FORMAT :\n' +
+        '  - 5 min d\'introduction par paneliste\n' +
+        '  - 30 min de debat modere\n' +
+        '  - 15 min de questions du public\n\n' +
+        'INFORMATIONS PRATIQUES :\n' +
+        '  Lieu : Palais des Congres de Strasbourg\n' +
+        '  Adresse : Place Adrien Zeller, 67000 Strasbourg\n' +
+        '  Contact : Pierre Keller — 06 34 56 78 90\n\n' +
+        'Cordialement,\n' +
+        'Le Comite d\'Organisation du Congres de la Saucisse'
+    },
+    {
+      level: 'Moderateur',
+      icon: '&#127897;',
+      color: '#A855F7',
+      desc: 'Moderateur de session — briefing technique',
+      subject: 'Congres de la Saucisse 2026 — Confirmation Moderateur',
+      body: 'Cher/Chere [PRENOM] [NOM],\n\n' +
+        'Merci d\'avoir accepte de moderer une session au Congres de la Saucisse 2026.\n\n' +
+        'VOTRE SESSION :\n' +
+        '  Session : [TITRE_SESSION]\n' +
+        '  Date : [DATE_SESSION]\n' +
+        '  Heure : [HEURE]\n' +
+        '  Salle : [SALLE]\n\n' +
+        'BRIEFING TECHNIQUE :\n' +
+        '  Date : 11 juin 2026 (veille), 15h00\n' +
+        '  Lieu : Regie technique, salle Erasme\n' +
+        '  Points abordes :\n' +
+        '  - Fonctionnement micro/retour ecran\n' +
+        '  - Gestion du chronometre (ecran dedie visible depuis la scene)\n' +
+        '  - Protocole Q&A (micros salle, moderation chat en ligne)\n' +
+        '  - Contact regie en direct via oreillette\n\n' +
+        'VOS RESPONSABILITES :\n' +
+        '  - Introduire les speakers (biographies fournies)\n' +
+        '  - Gerer le timing de chaque intervention\n' +
+        '  - Animer les Q&A et filtrer les questions\n' +
+        '  - Conclure la session avec un resume\n\n' +
+        'INFORMATIONS PRATIQUES :\n' +
+        '  Lieu : Palais des Congres de Strasbourg\n' +
+        '  Adresse : Place Adrien Zeller, 67000 Strasbourg\n' +
+        '  Contact regie : Thomas Becker — 06 23 45 67 89\n\n' +
+        'Cordialement,\n' +
+        'Le Comite d\'Organisation du Congres de la Saucisse'
+    }
+  ];
+
+  // Build template selector
+  var tplHtml = '<div style="margin-top:8px;margin-bottom:24px;">' +
+    '<h2 style="color:#C9A84C;font-size:1rem;margin-bottom:16px;">Templates par niveau d\'intervenant</h2>' +
+    '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px;margin-bottom:20px;">';
+
+  SPEAKER_TEMPLATES.forEach(function(t, idx) {
+    tplHtml += '<div class="chart-card" style="cursor:pointer;border:2px solid transparent;transition:all .25s;" id="email-tpl-card-' + idx + '" onclick="SPA_EMAIL.selectTemplate(' + idx + ')">' +
+      '<div style="font-size:1.5rem;margin-bottom:6px;">' + t.icon + '</div>' +
+      '<h3 style="color:' + t.color + ';">' + t.level + '</h3>' +
+      '<p style="font-size:.78rem;color:#9B978F;">' + t.desc + '</p>' +
+    '</div>';
+  });
+
+  tplHtml += '</div>';
+
+  // Template preview area
+  tplHtml += '<div id="email-tpl-preview" style="display:none;background:#161822;border:1px solid rgba(201,168,76,.15);border-radius:16px;padding:24px;">' +
+    '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">' +
+      '<h3 id="email-tpl-title" style="color:#C9A84C;font-size:1rem;">Template</h3>' +
+      '<button onclick="SPA_EMAIL.copyTemplate()" style="padding:8px 20px;border-radius:10px;background:#C9A84C;color:#111;font-weight:700;border:none;cursor:pointer;font-size:.85rem;">Copier le texte</button>' +
+    '</div>' +
+    '<div style="margin-bottom:16px;display:grid;grid-template-columns:1fr 1fr;gap:10px;">' +
+      '<div><label style="display:block;font-size:.72rem;color:#9B978F;margin-bottom:4px;">Prenom</label><input type="text" id="email-f-prenom" value="Jean-Marc" style="width:100%;padding:8px;border-radius:8px;border:1px solid rgba(201,168,76,.1);background:rgba(255,255,255,.04);color:#E8E4DC;font-size:.85rem;" oninput="SPA_EMAIL.updatePreview()"></div>' +
+      '<div><label style="display:block;font-size:.72rem;color:#9B978F;margin-bottom:4px;">Nom</label><input type="text" id="email-f-nom" value="Schaller" style="width:100%;padding:8px;border-radius:8px;border:1px solid rgba(201,168,76,.1);background:rgba(255,255,255,.04);color:#E8E4DC;font-size:.85rem;" oninput="SPA_EMAIL.updatePreview()"></div>' +
+      '<div><label style="display:block;font-size:.72rem;color:#9B978F;margin-bottom:4px;">Date session</label><input type="text" id="email-f-date" value="12 juin 2026" style="width:100%;padding:8px;border-radius:8px;border:1px solid rgba(201,168,76,.1);background:rgba(255,255,255,.04);color:#E8E4DC;font-size:.85rem;" oninput="SPA_EMAIL.updatePreview()"></div>' +
+      '<div><label style="display:block;font-size:.72rem;color:#9B978F;margin-bottom:4px;">Heure</label><input type="text" id="email-f-heure" value="09:00" style="width:100%;padding:8px;border-radius:8px;border:1px solid rgba(201,168,76,.1);background:rgba(255,255,255,.04);color:#E8E4DC;font-size:.85rem;" oninput="SPA_EMAIL.updatePreview()"></div>' +
+      '<div><label style="display:block;font-size:.72rem;color:#9B978F;margin-bottom:4px;">Salle</label><input type="text" id="email-f-salle" value="Salle Erasme" style="width:100%;padding:8px;border-radius:8px;border:1px solid rgba(201,168,76,.1);background:rgba(255,255,255,.04);color:#E8E4DC;font-size:.85rem;" oninput="SPA_EMAIL.updatePreview()"></div>' +
+      '<div><label style="display:block;font-size:.72rem;color:#9B978F;margin-bottom:4px;">Titre session</label><input type="text" id="email-f-titre" value="Ceremonie d\'ouverture" style="width:100%;padding:8px;border-radius:8px;border:1px solid rgba(201,168,76,.1);background:rgba(255,255,255,.04);color:#E8E4DC;font-size:.85rem;" oninput="SPA_EMAIL.updatePreview()"></div>' +
+    '</div>' +
+    '<div style="font-size:.75rem;color:#9B978F;margin-bottom:8px;font-weight:600;">Objet : <span id="email-tpl-subject" style="color:#E8E4DC;"></span></div>' +
+    '<div id="email-tpl-body" style="background:#0F1118;border-radius:12px;padding:20px;font-size:.85rem;color:#B8B8D0;line-height:1.8;white-space:pre-wrap;font-family:monospace;max-height:500px;overflow-y:auto;"></div>' +
+    '<div id="email-copy-msg" style="display:none;margin-top:10px;padding:8px 16px;background:rgba(34,197,94,.1);color:#22C55E;border-radius:8px;font-size:.82rem;font-weight:600;text-align:center;">Texte copie dans le presse-papiers !</div>' +
+  '</div></div>';
+
+  document.getElementById('section-emails').innerHTML=adminWrap('Emails automatiques','icon-emails.png', originalCards + tplHtml);
+
+  window.SPA_EMAIL = {
+    templates: SPEAKER_TEMPLATES,
+    currentIdx: -1,
+    selectTemplate: function(idx) {
+      this.currentIdx = idx;
+      // Highlight selected card
+      for (var i = 0; i < this.templates.length; i++) {
+        var card = document.getElementById('email-tpl-card-' + i);
+        if (card) card.style.borderColor = (i === idx) ? this.templates[i].color : 'transparent';
+      }
+      document.getElementById('email-tpl-preview').style.display = 'block';
+      document.getElementById('email-tpl-title').textContent = 'Template : ' + this.templates[idx].level;
+      document.getElementById('email-tpl-title').style.color = this.templates[idx].color;
+      this.updatePreview();
+      document.getElementById('email-tpl-preview').scrollIntoView({ behavior: 'smooth' });
+    },
+    updatePreview: function() {
+      if (this.currentIdx < 0) return;
+      var t = this.templates[this.currentIdx];
+      var prenom = document.getElementById('email-f-prenom').value || '[PRENOM]';
+      var nom = document.getElementById('email-f-nom').value || '[NOM]';
+      var date = document.getElementById('email-f-date').value || '[DATE_SESSION]';
+      var heure = document.getElementById('email-f-heure').value || '[HEURE]';
+      var salle = document.getElementById('email-f-salle').value || '[SALLE]';
+      var titre = document.getElementById('email-f-titre').value || '[TITRE_SESSION]';
+      var body = t.body
+        .replace(/\[PRENOM\]/g, prenom)
+        .replace(/\[NOM\]/g, nom)
+        .replace(/\[DATE_SESSION\]/g, date)
+        .replace(/\[HEURE\]/g, heure)
+        .replace(/\[SALLE\]/g, salle)
+        .replace(/\[TITRE_SESSION\]/g, titre);
+      var subject = t.subject;
+      document.getElementById('email-tpl-subject').textContent = subject;
+      document.getElementById('email-tpl-body').textContent = body;
+      document.getElementById('email-copy-msg').style.display = 'none';
+    },
+    copyTemplate: function() {
+      var body = document.getElementById('email-tpl-body').textContent;
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(body).then(function() {
+          document.getElementById('email-copy-msg').style.display = 'block';
+          setTimeout(function() { document.getElementById('email-copy-msg').style.display = 'none'; }, 2500);
+        });
+      } else {
+        var ta = document.createElement('textarea');
+        ta.value = body;
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+        document.getElementById('email-copy-msg').style.display = 'block';
+        setTimeout(function() { document.getElementById('email-copy-msg').style.display = 'none'; }, 2500);
+      }
+    }
+  };
+};
 
 SPA_INIT.checklist = function() { var SECS=[{t:'J-6 mois',items:['Lieu confirme','Budget valide','Assurance RC','Contrat signe','Comite constitue','Site web']},{t:'J-3 mois',items:['Speakers confirmes','Traiteur reserve','Hotels reserves','Programme finalise','Sponsors']},{t:'J-1 mois',items:['Invitations envoyees','Badges commandes','Signaletique','Plan evacuation','Staff recrute']},{t:'J-1 semaine',items:['Speakers reconfirmes','Traiteur final','Test AV','Briefing staff','WiFi teste']},{t:'Jour J',items:['Accueil 07:00','Check-in teste','Traiteur en place','Photographe','DAE verifie']},{t:'Post-event',items:['Sondage satisfaction','Remerciements','Factures payees','RGPD suppression']}];var st={};try{st=JSON.parse(localStorage.getItem('congres_cl_spa')||'{}');}catch(e){}var tot=0,done=0;SECS.forEach(function(s){s.items.forEach(function(item,i){tot++;if(st[s.t+'_'+i])done++;});});var pct=tot>0?Math.round(done/tot*100):0;var h='<div style="background:#161822;border:1px solid #C9A84C;border-radius:14px;padding:24px;margin-bottom:24px;"><h2 style="color:#C9A84C;">Progression : '+pct+'% ('+done+'/'+tot+')</h2><div style="height:20px;background:rgba(255,255,255,.06);border-radius:10px;overflow:hidden;"><div style="height:100%;width:'+pct+'%;background:#C9A84C;border-radius:10px;"></div></div></div>';SECS.forEach(function(sec){h+='<div class="chart-card"><h3>'+sec.t+'</h3>';sec.items.forEach(function(item,i){var k=sec.t+'_'+i,ck=st[k]||false;h+='<div style="display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid rgba(201,168,76,.05);font-size:.82rem;"><input type="checkbox" '+(ck?'checked':'')+' style="width:18px;height:18px;accent-color:#22C55E;" onchange="SPA_CL.t(\''+k.replace(/'/g,"\\'")+'\',this.checked)"><span style="'+(ck?'text-decoration:line-through;color:#5F5C55;':'')+'">'+item+'</span></div>';});h+='</div>';});document.getElementById('section-checklist').innerHTML=adminWrap('Checklist','icon-checkin.png',h);window.SPA_CL={t:function(k,v){var s={};try{s=JSON.parse(localStorage.getItem('congres_cl_spa')||'{}');}catch(e){}s[k]=v;localStorage.setItem('congres_cl_spa',JSON.stringify(s));initializedSections['checklist']=false;SPA_INIT.checklist();}}; };
 
 SPA_INIT.speakers = function() { var spk=CONGRES.SPEAKERS,df={1:'confirmed',2:'confirmed',3:'confirmed',4:'confirmed',5:'confirmed',6:'cancelled',7:'confirmed',8:'confirmed',9:'confirmed',10:'confirmed',11:'confirmed',12:'confirmed',13:'confirmed',14:'confirmed',15:'confirmed',16:'confirmed',17:'confirmed',18:'pending',19:'confirmed',20:'confirmed',21:'confirmed',22:'confirmed'};var h='<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(380px,1fr));gap:16px;">';spk.forEach(function(s){var st=df[s.id]||'pending',sc=st==='confirmed'?'#22C55E':st==='cancelled'?'#DC2626':'#F59E0B';var ss=CONGRES.getSessionsBySpeaker(s.id);h+='<div style="background:#161822;border:1px solid rgba(201,168,76,.1);border-radius:14px;padding:20px;"><div style="display:flex;align-items:center;gap:12px;margin-bottom:12px;"><div style="width:48px;height:48px;border-radius:50%;background:rgba(201,168,76,.15);display:flex;align-items:center;justify-content:center;font-weight:800;color:#C9A84C;">'+s.initiales+'</div><div><div style="font-weight:700;font-size:.9rem;">'+s.prenom+' '+s.nom+'</div><div style="font-size:.75rem;color:#9B978F;">'+s.titre+'</div></div></div><div style="font-size:.78rem;color:#9B978F;">'+s.org+' | <span style="color:'+sc+';font-weight:700;">'+st+'</span></div>';if(ss.length>0){h+='<div style="margin-top:8px;">';ss.forEach(function(x){h+='<div style="font-size:.75rem;padding:4px 8px;background:rgba(201,168,76,.05);border-radius:6px;margin-bottom:4px;color:#9B978F;">J'+x.jour+' '+x.debut+' : '+x.titre+'</div>';});h+='</div>';}h+='</div>';});h+='</div>';document.getElementById('section-speakers').innerHTML=adminWrap('Speakers','icon-participants.png',h); };
 
-SPA_INIT.staff = function() { var s=CONGRES.getStats(),n=Math.ceil(s.total/50);document.getElementById('section-staff').innerHTML=adminWrap('Staff','icon-participants.png','<div class="stats-grid"><div class="stat-card"><div class="stat-value">'+s.total+'</div><div class="stat-label">Participants</div></div><div class="stat-card"><div class="stat-value">'+n+'</div><div class="stat-label">Staff necessaire</div></div></div><p style="font-size:.82rem;color:#9B978F;">Module de gestion staff avec postes et planning.</p>'); };
+SPA_INIT.staff = function() {
+  var s=CONGRES.getStats(),n=Math.ceil(s.total/50);
+
+  // ─── Staff directory ───
+  var STAFF = [
+    { cat: 'Direction', icon: '&#127919;', members: [
+      { nom: 'Stephanie Martin', role: 'Directrice du Congres', tel: '0612345678', status: 'dispo' },
+      { nom: 'Pierre Keller', role: 'Directeur adjoint', tel: '0623456789', status: 'dispo' },
+      { nom: 'Anne Muller', role: 'Responsable programme', tel: '0634567890', status: 'occupe' },
+      { nom: 'Marc Hoffmann', role: 'Responsable partenariats', tel: '0645678901', status: 'dispo' },
+      { nom: 'Claire Bauer', role: 'Responsable communication', tel: '0656789012', status: 'dispo' }
+    ]},
+    { cat: 'Regie technique', icon: '&#127908;', members: [
+      { nom: 'Thomas Becker', role: 'Chef regie son/video', tel: '0667890123', status: 'dispo' },
+      { nom: 'Lucas Roth', role: 'Technicien lumiere', tel: '0678901234', status: 'dispo' },
+      { nom: 'Julien Weiss', role: 'Technicien son', tel: '0689012345', status: 'occupe' }
+    ]},
+    { cat: 'Hotesses d\'accueil', icon: '&#128075;', members: [
+      { nom: 'Marie Fischer', role: 'Chef hotesses', tel: '0690123456', status: 'dispo' },
+      { nom: 'Lea Schmitt', role: 'Accueil Hall Erasme', tel: '0601234567', status: 'dispo' },
+      { nom: 'Emma Braun', role: 'Accueil 1er etage', tel: '0612345670', status: 'absent' },
+      { nom: 'Sarah Meyer', role: 'Accueil VIP', tel: '0623456701', status: 'dispo' },
+      { nom: 'Laura Klein', role: 'Accueil presse', tel: '0634567012', status: 'dispo' }
+    ]},
+    { cat: 'Securite', icon: '&#128274;', members: [
+      { nom: 'Jean-Luc Vogel', role: 'Chef securite', tel: '0645670123', status: 'dispo' },
+      { nom: 'Fabrice Herrmann', role: 'Agent securite entree', tel: '0656701234', status: 'dispo' },
+      { nom: 'Karim Benali', role: 'Agent securite salles', tel: '0667012345', status: 'dispo' },
+      { nom: 'Nicolas Reiter', role: 'Agent securite parking', tel: '0678012345', status: 'occupe' }
+    ]},
+    { cat: 'Traiteur', icon: '&#127869;', members: [
+      { nom: 'Christophe Oster', role: 'Chef traiteur', tel: '0689123456', status: 'dispo' },
+      { nom: 'Sophie Wenger', role: 'Coordinatrice buffets', tel: '0690234567', status: 'dispo' }
+    ]},
+    { cat: 'Photo / Video', icon: '&#128248;', members: [
+      { nom: 'Romain Klinger', role: 'Photographe officiel', tel: '0601345678', status: 'dispo' },
+      { nom: 'Amelie Fuchs', role: 'Videastes / livestream', tel: '0612456789', status: 'dispo' }
+    ]},
+    { cat: 'Logistique & Transport', icon: '&#128663;', members: [
+      { nom: 'Patrick Oberle', role: 'Chef logistique', tel: '0623567890', status: 'dispo' },
+      { nom: 'David Kern', role: 'Navettes & transport', tel: '0634678901', status: 'absent' }
+    ]}
+  ];
+
+  // Store staff statuses in localStorage
+  var staffStatuses = {};
+  try { staffStatuses = JSON.parse(localStorage.getItem('congres_staff_status') || '{}'); } catch(e) {}
+
+  // ─── ALERTE GENERALE button ───
+  var allPhones = [];
+  STAFF.forEach(function(cat) { cat.members.forEach(function(m) { allPhones.push(m.tel); }); });
+
+  var alertBtn = '<div style="text-align:center;margin-bottom:24px;">' +
+    '<button onclick="SPA_STAFF.alerteGenerale()" style="padding:14px 32px;border-radius:14px;background:linear-gradient(135deg,#DC2626,#B91C1C);color:#FFF;font-weight:800;font-size:1rem;border:none;cursor:pointer;box-shadow:0 4px 20px rgba(220,38,38,.3);transition:transform .15s;"' +
+    ' onmouseover="this.style.transform=\'scale(1.03)\'" onmouseout="this.style.transform=\'scale(1)\'">' +
+    '&#128680; ALERTE GENERALE — Contacter tout le staff</button>' +
+    '<p style="font-size:.75rem;color:#9B978F;margin-top:8px;">Ouvre WhatsApp pour chaque membre du staff (urgences uniquement)</p>' +
+  '</div>';
+
+  // ─── Build staff directory ───
+  var staffHtml = '';
+  STAFF.forEach(function(cat, catIdx) {
+    staffHtml += '<div style="margin-bottom:28px;">' +
+      '<h3 style="color:#C9A84C;font-size:.95rem;margin-bottom:12px;">' + cat.icon + ' ' + cat.cat + ' (' + cat.members.length + ')</h3>' +
+      '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:12px;">';
+
+    cat.members.forEach(function(m, mIdx) {
+      var key = catIdx + '-' + mIdx;
+      var st = staffStatuses[key] || m.status;
+      var statusEmoji = st === 'dispo' ? '&#128994;' : st === 'occupe' ? '&#128993;' : '&#128308;';
+      var statusLabel = st === 'dispo' ? 'Disponible' : st === 'occupe' ? 'Occupe' : 'Absent';
+      var initials = m.nom.split(' ').map(function(w) { return w[0]; }).join('').substring(0, 2);
+      var telClean = m.tel.replace(/\s/g, '');
+      var telIntl = '33' + telClean.substring(1);
+      var telDisplay = telClean.replace(/(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})/, '$1 $2 $3 $4 $5');
+
+      staffHtml += '<div style="background:#161822;border:1px solid rgba(201,168,76,.08);border-radius:12px;padding:14px;display:flex;gap:12px;align-items:flex-start;">' +
+        '<div style="width:44px;height:44px;border-radius:50%;background:rgba(201,168,76,.15);display:flex;align-items:center;justify-content:center;font-weight:800;color:#C9A84C;font-size:.85rem;flex-shrink:0;">' + initials + '</div>' +
+        '<div style="flex:1;min-width:0;">' +
+          '<div style="font-weight:700;font-size:.88rem;color:#E8E4DC;">' + m.nom + '</div>' +
+          '<div style="font-size:.75rem;color:#9B978F;">' + m.role + '</div>' +
+          '<div style="font-size:.78rem;color:#9B978F;margin-top:2px;">' + telDisplay + '</div>' +
+          '<div style="display:flex;align-items:center;gap:6px;margin-top:6px;">' +
+            '<span onclick="SPA_STAFF.toggleStatus(\'' + key + '\')" style="cursor:pointer;font-size:.78rem;padding:2px 8px;border-radius:6px;background:rgba(255,255,255,.04);" title="Cliquer pour changer le statut">' + statusEmoji + ' ' + statusLabel + '</span>' +
+          '</div>' +
+          '<div style="display:flex;gap:6px;margin-top:8px;flex-wrap:wrap;">' +
+            '<a href="tel:' + telClean + '" style="padding:6px 12px;border-radius:8px;background:rgba(34,197,94,.1);color:#22C55E;font-size:.75rem;font-weight:700;text-decoration:none;display:inline-flex;align-items:center;gap:4px;">&#128222; Appeler</a>' +
+            '<a href="https://wa.me/' + telIntl + '?text=Urgent%20Congr%C3%A8s%20Strasbourg%20%E2%80%94%20" target="_blank" style="padding:6px 12px;border-radius:8px;background:rgba(37,211,102,.1);color:#25D366;font-size:.75rem;font-weight:700;text-decoration:none;display:inline-flex;align-items:center;gap:4px;">&#128172; WhatsApp</a>' +
+            '<a href="sms:' + telClean + '?body=Urgent%20Congr%C3%A8s%20%E2%80%94%20" style="padding:6px 12px;border-radius:8px;background:rgba(59,130,246,.1);color:#3B82F6;font-size:.75rem;font-weight:700;text-decoration:none;display:inline-flex;align-items:center;gap:4px;">&#128241; SMS</a>' +
+          '</div>' +
+        '</div>' +
+      '</div>';
+    });
+
+    staffHtml += '</div></div>';
+  });
+
+  // ─── Original stats (kept intact) ───
+  var origStats = '<div class="stats-grid" style="margin-bottom:24px;"><div class="stat-card"><div class="stat-value">'+s.total+'</div><div class="stat-label">Participants</div></div><div class="stat-card"><div class="stat-value">'+n+'</div><div class="stat-label">Staff necessaire</div></div><div class="stat-card"><div class="stat-value">' + allPhones.length + '</div><div class="stat-label">Staff actuel</div></div></div>';
+
+  document.getElementById('section-staff').innerHTML=adminWrap('Staff','icon-participants.png', origStats + alertBtn + staffHtml);
+
+  window.SPA_STAFF = {
+    alerteGenerale: function() {
+      if (!confirm('Envoyer une alerte a TOUT le staff (' + allPhones.length + ' personnes) via WhatsApp ?')) return;
+      var delay = 0;
+      allPhones.forEach(function(tel) {
+        var intl = '33' + tel.replace(/\s/g, '').substring(1);
+        setTimeout(function() {
+          window.open('https://wa.me/' + intl + '?text=ALERTE%20GENERALE%20Congr%C3%A8s%20Saucisse%20%E2%80%94%20Merci%20de%20vous%20presenter%20imm%C3%A9diatement%20au%20PC%20securite.', '_blank');
+        }, delay);
+        delay += 500;
+      });
+    },
+    toggleStatus: function(key) {
+      var statuses = {};
+      try { statuses = JSON.parse(localStorage.getItem('congres_staff_status') || '{}'); } catch(e) {}
+      var current = statuses[key] || 'dispo';
+      var next = current === 'dispo' ? 'occupe' : current === 'occupe' ? 'absent' : 'dispo';
+      statuses[key] = next;
+      localStorage.setItem('congres_staff_status', JSON.stringify(statuses));
+      // Re-render
+      initializedSections['staff'] = false;
+      SPA_INIT.staff();
+    }
+  };
+};
 
 /* SPA_INIT.securite is now in js/securite.js (comprehensive 5-tab module) */
 
