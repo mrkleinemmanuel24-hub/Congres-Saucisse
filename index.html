@@ -12,10 +12,10 @@
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 <style>
 /* ============================================
-   THEME SYSTEM — 3 switchable themes
+   THEME SYSTEM — 5 ultra premium themes
    ============================================ */
 
-/* Theme 1: RVGS (default) — Bleu roi + or */
+/* Theme 1: Nuit diplomatique (default) — Bleu roi + or */
 :root {
   --bg-primary: #0D1B4A;
   --bg-secondary: #142866;
@@ -25,6 +25,7 @@
   --accent: #D4A843;
   --accent-hover: #E0B854;
   --accent-rgb: 212,168,67;
+  --accent-secondary: #D4A843;
   --text-primary: #F0EDE6;
   --text-secondary: #B0B8CC;
   --text-muted: #7080A0;
@@ -37,88 +38,201 @@
   --shadow: 0 4px 24px rgba(0,0,0,0.3);
   --shadow-hover: 0 8px 40px rgba(0,0,0,0.4);
   --footer-bg: #091236;
-  --theme-name: 'rvgs';
+  --heading-font: 'Playfair Display', Georgia, serif;
+  --theme-name: 'nuit';
 }
 
-/* Theme 2: RVGS Clair — Light mode */
-[data-theme="strasbourg"] {
-  --bg-primary: #F5F5F0;
-  --bg-secondary: #EEEEE8;
+/* Theme 2: Republique — Tricolore presidentiel */
+[data-theme="republique"] {
+  --bg-primary: #002654;
+  --bg-secondary: #001B3D;
+  --bg-card: #0A2E5C;
+  --bg-card-hover: #0E3A70;
+  --bg-input: #001B3D;
+  --accent: #C8102E;
+  --accent-hover: #E01535;
+  --accent-rgb: 200,16,46;
+  --accent-secondary: #FFFFFF;
+  --text-primary: #FFFFFF;
+  --text-secondary: #C0C8D8;
+  --text-muted: #7088A8;
+  --border: rgba(200,16,46,0.2);
+  --border-light: rgba(255,255,255,0.08);
+  --nav-bg: rgba(0,38,84,0.96);
+  --hero-overlay: linear-gradient(135deg, rgba(0,38,84,0.92), rgba(0,27,61,0.88));
+  --badge-bg: rgba(200,16,46,0.15);
+  --badge-text: #C8102E;
+  --shadow: 0 4px 24px rgba(0,0,0,0.35);
+  --shadow-hover: 0 8px 40px rgba(0,0,0,0.45);
+  --footer-bg: #001229;
+  --heading-font: 'Playfair Display', Georgia, serif;
+  --gold: #C9A84C;
+  --theme-name: 'republique';
+}
+[data-theme="republique"] .landing-btn.site-btn { background: #C8102E; color: #fff; box-shadow: 0 4px 24px rgba(200,16,46,0.3); }
+[data-theme="republique"] .landing-btn.site-btn:hover { background: #E01535; box-shadow: 0 8px 32px rgba(200,16,46,0.4); color: #fff; }
+[data-theme="republique"] .gold-circle { border-color: #C9A84C; }
+[data-theme="republique"] .landing-logo p { color: #C9A84C; }
+[data-theme="republique"] .landing-theme { background: #C8102E !important; }
+
+/* Theme 3: Jour d'Europe — Clair + bleu UE + etoiles or */
+[data-theme="europe"] {
+  --bg-primary: #F5F3EE;
+  --bg-secondary: #ECEAE4;
   --bg-card: #FFFFFF;
   --bg-card-hover: #F0F4FF;
-  --bg-input: #EEEEE8;
+  --bg-input: #ECEAE4;
+  --accent: #003399;
+  --accent-hover: #0044CC;
+  --accent-rgb: 0,51,153;
+  --accent-secondary: #FFCC00;
+  --text-primary: #1A1A2E;
+  --text-secondary: #3A4A6A;
+  --text-muted: #7080A0;
+  --border: rgba(0,51,153,0.15);
+  --border-light: rgba(0,0,0,0.06);
+  --nav-bg: rgba(245,243,238,0.96);
+  --hero-overlay: linear-gradient(135deg, rgba(0,51,153,0.88), rgba(0,34,102,0.82));
+  --badge-bg: rgba(0,51,153,0.1);
+  --badge-text: #003399;
+  --shadow: 0 4px 24px rgba(0,0,0,0.08);
+  --shadow-hover: 0 8px 40px rgba(0,0,0,0.12);
+  --footer-bg: #0D1B4A;
+  --heading-font: 'Playfair Display', Georgia, serif;
+  --theme-name: 'europe';
+}
+[data-theme="europe"] .nav-inner { border-bottom-color: #ddd; }
+[data-theme="europe"] nav { border-bottom: 1px solid #ddd; }
+[data-theme="europe"] .card { border: 1px solid #e0e0e0; }
+[data-theme="europe"] .hero-subtitle { color: rgba(255,255,255,0.9) !important; }
+[data-theme="europe"] .hero h1 { color: #fff !important; }
+[data-theme="europe"] .hero-meta { color: rgba(255,255,255,0.8) !important; }
+[data-theme="europe"] .hero .btn-outline { border-color: rgba(255,255,255,0.4); color: #fff; }
+[data-theme="europe"] .footer-section { color: #ccc; }
+[data-theme="europe"] footer a { color: #aaa; }
+[data-theme="europe"] footer a:hover { color: #FFCC00; }
+[data-theme="europe"] .landing-btn.site-btn { background: #003399; color: #fff; box-shadow: 0 4px 24px rgba(0,51,153,0.3); }
+[data-theme="europe"] .landing-btn.site-btn:hover { background: #0044CC; box-shadow: 0 8px 32px rgba(0,51,153,0.4); color: #fff; }
+[data-theme="europe"] .landing-btn.admin-btn { border-color: rgba(0,51,153,0.3); color: #3A4A6A; }
+[data-theme="europe"] .landing-btn.admin-btn:hover { border-color: #003399; color: #003399; }
+[data-theme="europe"] .gold-circle { border-color: #FFCC00; }
+[data-theme="europe"] .landing-logo p { color: #003399; }
+[data-theme="europe"] .landing-theme { background: #003399 !important; color: #FFCC00 !important; }
+[data-theme="europe"] .landing-org { color: #7080A0; }
+
+/* Theme 4: Institutionnel — Sobre, gris + navy, serif */
+[data-theme="institutionnel"] {
+  --bg-primary: #F8F8F6;
+  --bg-secondary: #F0F0EC;
+  --bg-card: #FFFFFF;
+  --bg-card-hover: #F5F5F2;
+  --bg-input: #F0F0EC;
   --accent: #1B3A8C;
   --accent-hover: #142866;
   --accent-rgb: 27,58,140;
-  --text-primary: #1B3A8C;
-  --text-secondary: #3A4A6A;
-  --text-muted: #7080A0;
-  --border: rgba(27,58,140,0.15);
-  --border-light: rgba(0,0,0,0.06);
-  --nav-bg: rgba(245,245,240,0.95);
-  --hero-overlay: linear-gradient(135deg, rgba(13,27,74,0.88), rgba(27,58,140,0.80));
-  --badge-bg: rgba(27,58,140,0.1);
+  --accent-secondary: #1B3A8C;
+  --text-primary: #333333;
+  --text-secondary: #555555;
+  --text-muted: #888888;
+  --border: #E0E0E0;
+  --border-light: rgba(0,0,0,0.04);
+  --nav-bg: rgba(248,248,246,0.96);
+  --hero-overlay: linear-gradient(135deg, rgba(27,58,140,0.90), rgba(13,27,74,0.85));
+  --badge-bg: rgba(27,58,140,0.08);
   --badge-text: #1B3A8C;
-  --shadow: 0 4px 24px rgba(0,0,0,0.08);
-  --shadow-hover: 0 8px 40px rgba(0,0,0,0.12);
-  --footer-bg: #0D1B4A;
-  --theme-name: 'rvgs-clair';
+  --shadow: 0 2px 12px rgba(0,0,0,0.06);
+  --shadow-hover: 0 4px 24px rgba(0,0,0,0.1);
+  --footer-bg: #1A1A2E;
+  --heading-font: 'Playfair Display', Georgia, serif;
+  --theme-name: 'institutionnel';
 }
+[data-theme="institutionnel"] .nav-inner { border-bottom-color: #e0e0e0; }
+[data-theme="institutionnel"] nav { border-bottom: 1px solid #e0e0e0; }
+[data-theme="institutionnel"] .card { border: 1px solid #e8e8e8; }
+[data-theme="institutionnel"] .hero-subtitle { color: rgba(255,255,255,0.9) !important; }
+[data-theme="institutionnel"] .hero h1 { color: #fff !important; }
+[data-theme="institutionnel"] .hero-meta { color: rgba(255,255,255,0.8) !important; }
+[data-theme="institutionnel"] .hero .btn-outline { border-color: rgba(255,255,255,0.4); color: #fff; }
+[data-theme="institutionnel"] .footer-section { color: #ccc; }
+[data-theme="institutionnel"] footer a { color: #aaa; }
+[data-theme="institutionnel"] footer a:hover { color: #fff; }
+[data-theme="institutionnel"] .section-label { color: #1B3A8C; }
+[data-theme="institutionnel"] .landing-btn.site-btn { background: #1B3A8C; color: #fff; box-shadow: 0 4px 24px rgba(27,58,140,0.2); }
+[data-theme="institutionnel"] .landing-btn.site-btn:hover { background: #142866; box-shadow: 0 8px 32px rgba(27,58,140,0.3); color: #fff; }
+[data-theme="institutionnel"] .landing-btn.admin-btn { border-color: #E0E0E0; color: #555; }
+[data-theme="institutionnel"] .landing-btn.admin-btn:hover { border-color: #1B3A8C; color: #1B3A8C; }
+[data-theme="institutionnel"] .gold-circle { border-color: #1B3A8C; opacity: 0.15; }
+[data-theme="institutionnel"] .landing-logo p { color: #1B3A8C; }
+[data-theme="institutionnel"] .landing-theme { background: #1B3A8C !important; }
+[data-theme="institutionnel"] .landing-org { color: #888; }
+[data-theme="institutionnel"] h1, [data-theme="institutionnel"] h2, [data-theme="institutionnel"] h3 { font-family: 'Playfair Display', Georgia, serif; }
 
-/* Theme 3: Moderne — White + bleu roi + or */
-[data-theme="moderne"] {
-  --bg-primary: #FFFFFF;
-  --bg-secondary: #F5F5F0;
-  --bg-card: #FFFFFF;
-  --bg-card-hover: #F0F4FF;
-  --bg-input: #F5F5F0;
-  --accent: #D4A843;
-  --accent-hover: #E0B854;
-  --accent-rgb: 212,168,67;
-  --text-primary: #0D1B4A;
-  --text-secondary: #3A4A6A;
-  --text-muted: #7080A0;
-  --border: rgba(212,168,67,0.15);
-  --border-light: rgba(0,0,0,0.06);
-  --nav-bg: rgba(255,255,255,0.95);
-  --hero-overlay: linear-gradient(135deg, rgba(13,27,74,0.90), rgba(27,58,140,0.82));
-  --badge-bg: rgba(212,168,67,0.1);
-  --badge-text: #D4A843;
-  --shadow: 0 4px 24px rgba(0,0,0,0.08);
-  --shadow-hover: 0 8px 40px rgba(0,0,0,0.12);
-  --footer-bg: #0D1B4A;
-  --theme-name: 'moderne';
+/* Theme 5: Batailles de l'eau — Ocean profond + turquoise */
+[data-theme="eau"] {
+  --bg-primary: #0A1628;
+  --bg-secondary: #0F2035;
+  --bg-card: #142A45;
+  --bg-card-hover: #1A3555;
+  --bg-input: #0F2035;
+  --accent: #4ECDC4;
+  --accent-hover: #6DD8D1;
+  --accent-rgb: 78,205,196;
+  --accent-secondary: #2E86AB;
+  --text-primary: #E8F4F8;
+  --text-secondary: #A0C4D0;
+  --text-muted: #5A8A9A;
+  --border: rgba(78,205,196,0.15);
+  --border-light: rgba(255,255,255,0.05);
+  --nav-bg: rgba(10,22,40,0.96);
+  --hero-overlay: linear-gradient(135deg, rgba(10,22,40,0.92), rgba(15,32,53,0.85));
+  --badge-bg: rgba(78,205,196,0.12);
+  --badge-text: #4ECDC4;
+  --shadow: 0 4px 24px rgba(0,0,0,0.35);
+  --shadow-hover: 0 8px 40px rgba(0,0,0,0.45);
+  --footer-bg: #060E1A;
+  --heading-font: 'Playfair Display', Georgia, serif;
+  --theme-name: 'eau';
 }
-[data-theme="moderne"] .nav-inner { border-bottom-color: #e0e0e0; }
-[data-theme="moderne"] nav { border-bottom: 1px solid #e0e0e0; }
-[data-theme="moderne"] .card { border: 1px solid #e8e8e8; }
-[data-theme="moderne"] .footer-section { color: #ccc; }
-[data-theme="moderne"] footer a { color: #aaa; }
-[data-theme="moderne"] footer a:hover { color: #fff; }
-[data-theme="moderne"] .hero-subtitle { color: rgba(255,255,255,0.9) !important; }
-[data-theme="moderne"] .hero h1 { color: #fff !important; }
-[data-theme="moderne"] .hero-meta { color: rgba(255,255,255,0.8) !important; }
-[data-theme="moderne"] .hero .btn-primary { background: #D4A843; }
-[data-theme="moderne"] .hero .btn-primary:hover { background: #E0B854; }
-[data-theme="moderne"] .hero .btn-outline { border-color: rgba(255,255,255,0.4); color: #fff; }
-[data-theme="moderne"] .countdown-item .count-num { color: #D4A843; }
-[data-theme="moderne"] .section-label { color: #1B3A8C; }
-[data-theme="moderne"] .theme-badge { background: rgba(27,58,140,0.1); color: #1B3A8C; }
-[data-theme="moderne"] .day-tab.active { border-color: #1B3A8C; color: #1B3A8C; }
-[data-theme="strasbourg"] .nav-inner { border-bottom-color: #ddd; }
-[data-theme="strasbourg"] nav { border-bottom: 1px solid #ddd; }
-[data-theme="strasbourg"] .card { border: 1px solid #e0e0e0; }
-[data-theme="strasbourg"] .hero-subtitle { color: rgba(255,255,255,0.9) !important; }
-[data-theme="strasbourg"] .hero h1 { color: #fff !important; }
-[data-theme="strasbourg"] .hero-meta { color: rgba(255,255,255,0.8) !important; }
-[data-theme="strasbourg"] .hero .btn-outline { border-color: rgba(255,255,255,0.4); color: #fff; }
-[data-theme="strasbourg"] .footer-section { color: #ccc; }
-[data-theme="strasbourg"] footer a { color: #aaa; }
-[data-theme="strasbourg"] footer a:hover { color: #D4A843; }
+[data-theme="eau"] .landing-btn.site-btn { background: #4ECDC4; color: #0A1628; box-shadow: 0 4px 24px rgba(78,205,196,0.3); }
+[data-theme="eau"] .landing-btn.site-btn:hover { background: #6DD8D1; box-shadow: 0 8px 32px rgba(78,205,196,0.4); color: #0A1628; }
+[data-theme="eau"] .gold-circle { border-color: #4ECDC4; }
+[data-theme="eau"] .landing-logo p { color: #4ECDC4; }
+[data-theme="eau"] .landing-theme { background: #2E86AB !important; }
+
+/* Tricolor bar — only visible on Republique theme */
+.tricolor-bar { display: none; height: 4px; background: linear-gradient(90deg, #002654 33%, #FFFFFF 33% 66%, #C8102E 66%); position: fixed; top: 0; left: 0; right: 0; z-index: 10000; }
+[data-theme="republique"] .tricolor-bar,
+body.theme-republique .tricolor-bar { display: block; }
+
+/* Wave animation — only visible on Eau theme */
+@keyframes waveFlow {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+[data-theme="eau"] .landing-choice::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 120px;
+  background: linear-gradient(90deg, rgba(78,205,196,0.03), rgba(46,134,171,0.06), rgba(78,205,196,0.03), rgba(46,134,171,0.06));
+  background-size: 300% 100%;
+  animation: waveFlow 8s ease-in-out infinite;
+  pointer-events: none;
+  mask-image: linear-gradient(to top, rgba(0,0,0,0.6), transparent);
+  -webkit-mask-image: linear-gradient(to top, rgba(0,0,0,0.6), transparent);
+}
 
 /* ============================================
-   LANDING CHOICE (2 boutons)
+   LANDING CHOICE — Ultra premium Elysee style
    ============================================ */
+@keyframes goldRotate { from { transform: translate(-50%, -50%) rotate(0deg); } to { transform: translate(-50%, -50%) rotate(360deg); } }
+@keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes pulseGlow { 0%, 100% { opacity: 0.25; } 50% { opacity: 0.45; } }
+
 .landing-choice {
   min-height: 100vh;
   display: flex;
@@ -129,95 +243,148 @@
   position: relative;
   overflow: hidden;
   text-align: center;
-  padding: 40px 24px;
+  padding: 60px 24px 40px;
 }
 .landing-choice::before {
   content: '';
   position: absolute;
   inset: 0;
-  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 800 600'%3E%3Cellipse cx='400' cy='300' rx='280' ry='260' fill='none' stroke='rgba(212,168,67,0.06)' stroke-width='1'/%3E%3Cellipse cx='400' cy='300' rx='200' ry='180' fill='none' stroke='rgba(212,168,67,0.04)' stroke-width='0.5'/%3E%3Cpath d='M180 280 Q220 240 280 250 Q320 200 380 220 Q420 180 460 200 Q500 170 540 190 Q580 180 620 210 Q640 230 620 260 Q640 280 620 300 Q640 330 610 350 Q580 380 540 370 Q500 400 460 380 Q420 410 380 390 Q340 420 300 390 Q260 400 220 370 Q190 350 180 320 Q170 300 180 280Z' fill='none' stroke='rgba(212,168,67,0.05)' stroke-width='0.8'/%3E%3C/svg%3E") center/cover no-repeat;
-  opacity: 0.6;
+  background:
+    radial-gradient(ellipse 600px 500px at 50% 40%, rgba(var(--accent-rgb),0.04) 0%, transparent 70%),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 800 600'%3E%3Cellipse cx='400' cy='300' rx='280' ry='260' fill='none' stroke='rgba(212,168,67,0.05)' stroke-width='0.8'/%3E%3Cellipse cx='400' cy='300' rx='200' ry='180' fill='none' stroke='rgba(212,168,67,0.03)' stroke-width='0.5'/%3E%3Cpath d='M180 280 Q220 240 280 250 Q320 200 380 220 Q420 180 460 200 Q500 170 540 190 Q580 180 620 210 Q640 230 620 260 Q640 280 620 300 Q640 330 610 350 Q580 380 540 370 Q500 400 460 380 Q420 410 380 390 Q340 420 300 390 Q260 400 220 370 Q190 350 180 320 Q170 300 180 280Z' fill='none' stroke='rgba(212,168,67,0.04)' stroke-width='0.6'/%3E%3C/svg%3E") center/cover no-repeat;
+  opacity: 0.8;
   pointer-events: none;
 }
 .landing-logo {
   position: relative;
-  margin-bottom: 48px;
+  margin-bottom: 56px;
+  animation: fadeInUp 1s ease-out;
 }
 .gold-circle {
-  width: 220px;
-  height: 220px;
-  border: 3px solid #D4A843;
+  width: 260px;
+  height: 260px;
+  border: 2px solid var(--accent);
   border-radius: 50%;
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  opacity: 0.3;
-  box-shadow: 0 0 60px rgba(212,168,67,0.1);
+  opacity: 0.25;
+  box-shadow: 0 0 80px rgba(var(--accent-rgb),0.08), inset 0 0 60px rgba(var(--accent-rgb),0.03);
+  animation: goldRotate 120s linear infinite, pulseGlow 6s ease-in-out infinite;
+}
+.gold-circle-inner {
+  width: 200px;
+  height: 200px;
+  border: 1px solid var(--accent);
+  border-radius: 50%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  opacity: 0.12;
+  animation: goldRotate 90s linear infinite reverse;
 }
 .landing-logo h1 {
   font-family: 'Playfair Display', Georgia, serif;
-  font-size: clamp(28px, 5vw, 52px);
+  font-size: clamp(32px, 5vw, 48px);
   font-weight: 900;
   color: var(--text-primary);
-  line-height: 1.15;
+  line-height: 1.2;
   position: relative;
   z-index: 1;
-  letter-spacing: -0.01em;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
 }
-.landing-logo p {
-  font-size: clamp(14px, 2vw, 18px);
+.landing-logo .landing-subtitle {
+  font-family: 'Inter', sans-serif;
+  font-size: clamp(13px, 1.8vw, 16px);
   color: var(--accent);
   font-weight: 600;
-  margin-top: 12px;
-  letter-spacing: 1px;
+  margin-top: 20px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
   position: relative;
   z-index: 1;
 }
 .landing-logo .landing-theme {
   display: inline-block;
-  font-size: 14px;
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
   font-weight: 700;
   color: #F0EDE6;
-  background: #1B3A8C;
-  padding: 6px 18px;
-  border-radius: 20px;
+  background: var(--bg-card);
+  padding: 8px 24px;
+  border-radius: 2px;
+  margin-top: 20px;
+  position: relative;
+  z-index: 1;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  border: 1px solid var(--border);
+}
+.landing-org-top {
+  font-family: 'Inter', sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-muted);
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
   margin-top: 16px;
   position: relative;
   z-index: 1;
-  letter-spacing: 0.5px;
+}
+.landing-separator {
+  width: 80px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--accent), transparent);
+  margin: 40px auto;
+  position: relative;
+  z-index: 1;
+  animation: fadeIn 1.5s ease-out 0.3s both;
 }
 .landing-buttons {
   display: flex;
-  gap: 20px;
+  gap: 24px;
   flex-wrap: wrap;
   justify-content: center;
   position: relative;
   z-index: 1;
+  animation: fadeInUp 1s ease-out 0.4s both;
 }
 .landing-btn {
   display: inline-flex;
   align-items: center;
-  gap: 10px;
-  padding: 20px 40px;
-  border-radius: 14px;
+  gap: 12px;
+  padding: 24px 48px;
+  border-radius: 4px;
   font-family: 'Inter', sans-serif;
-  font-size: 18px;
+  font-size: 14px;
   font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
   text-decoration: none;
-  transition: all 0.3s;
-  min-width: 240px;
+  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  min-width: 260px;
   justify-content: center;
+  border: 2px solid transparent;
+  position: relative;
+}
+.landing-btn .btn-icon {
+  font-size: 18px;
+  opacity: 0.9;
 }
 .landing-btn.site-btn {
   background: var(--accent);
   color: var(--bg-primary);
-  box-shadow: 0 4px 24px rgba(212,168,67,0.3);
+  border-color: var(--accent);
+  box-shadow: 0 4px 24px rgba(var(--accent-rgb),0.25);
 }
 .landing-btn.site-btn:hover {
   background: var(--accent-hover);
-  transform: translateY(-3px);
-  box-shadow: 0 8px 32px rgba(212,168,67,0.4);
+  border-color: var(--accent-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 32px rgba(var(--accent-rgb),0.35);
   color: var(--bg-primary);
 }
 .landing-btn.admin-btn {
@@ -228,20 +395,122 @@
 .landing-btn.admin-btn:hover {
   border-color: var(--accent);
   color: var(--accent);
-  transform: translateY(-3px);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.2);
 }
 .landing-org {
-  margin-top: 32px;
-  font-size: 13px;
+  margin-top: 48px;
+  font-family: 'Inter', sans-serif;
+  font-size: 12px;
   color: var(--text-muted);
   position: relative;
   z-index: 1;
-  letter-spacing: 1px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  animation: fadeIn 1s ease-out 0.8s both;
 }
+
+/* Theme selector pills on landing */
+.landing-theme-selector {
+  margin-top: 48px;
+  position: relative;
+  z-index: 1;
+  animation: fadeIn 1s ease-out 1s both;
+}
+.landing-theme-selector .selector-label {
+  font-family: 'Inter', sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-muted);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  margin-bottom: 16px;
+}
+.theme-pills {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.theme-pill {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 2px solid rgba(255,255,255,0.15);
+  cursor: pointer;
+  transition: all 0.3s;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.theme-pill:hover {
+  transform: scale(1.15);
+  border-color: rgba(255,255,255,0.4);
+}
+.theme-pill.active {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(var(--accent-rgb),0.3), 0 0 16px rgba(var(--accent-rgb),0.2);
+}
+.theme-pill .pill-inner {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+}
+.theme-pill[data-pill="nuit"] .pill-inner { background: linear-gradient(135deg, #0D1B4A, #D4A843); }
+.theme-pill[data-pill="republique"] .pill-inner { background: linear-gradient(90deg, #002654 33%, #FFFFFF 33% 66%, #C8102E 66%); }
+.theme-pill[data-pill="europe"] .pill-inner { background: linear-gradient(135deg, #F5F3EE, #003399); }
+.theme-pill[data-pill="institutionnel"] .pill-inner { background: linear-gradient(135deg, #F8F8F6, #1B3A8C); }
+.theme-pill[data-pill="eau"] .pill-inner { background: linear-gradient(135deg, #0A1628, #4ECDC4); }
+
+/* Tooltip on hover */
+.theme-pill .pill-tooltip {
+  position: absolute;
+  bottom: calc(100% + 10px);
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--bg-card);
+  color: var(--text-primary);
+  font-family: 'Inter', sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+  padding: 6px 12px;
+  border-radius: 4px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s, transform 0.2s;
+  transform: translateX(-50%) translateY(4px);
+}
+.theme-pill:hover .pill-tooltip {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
 @media(max-width: 600px) {
-  .landing-btn { min-width: 200px; padding: 16px 28px; font-size: 16px; }
-  .gold-circle { width: 160px; height: 160px; }
+  .landing-btn { min-width: 220px; padding: 18px 32px; font-size: 13px; }
+  .gold-circle { width: 200px; height: 200px; }
+  .gold-circle-inner { width: 150px; height: 150px; }
+  .landing-logo h1 { letter-spacing: 0.08em; }
+  .theme-pill { width: 32px; height: 32px; }
+  .theme-pill .pill-inner { width: 20px; height: 20px; }
 }
+
+/* Light theme overrides for landing pills */
+[data-theme="europe"] .theme-pill,
+[data-theme="institutionnel"] .theme-pill { border-color: rgba(0,0,0,0.15); }
+[data-theme="europe"] .theme-pill:hover,
+[data-theme="institutionnel"] .theme-pill:hover { border-color: rgba(0,0,0,0.35); }
+[data-theme="europe"] .theme-pill.active { border-color: #003399; box-shadow: 0 0 0 3px rgba(0,51,153,0.2), 0 0 16px rgba(0,51,153,0.1); }
+[data-theme="institutionnel"] .theme-pill.active { border-color: #1B3A8C; box-shadow: 0 0 0 3px rgba(27,58,140,0.2), 0 0 16px rgba(27,58,140,0.1); }
+[data-theme="europe"] .landing-choice::before,
+[data-theme="institutionnel"] .landing-choice::before { opacity: 0.3; }
+[data-theme="europe"] .landing-separator { background: linear-gradient(90deg, transparent, #003399, transparent); }
+[data-theme="institutionnel"] .landing-separator { background: linear-gradient(90deg, transparent, #1B3A8C, transparent); }
+
 .main-site { display: none; }
 .main-site.visible { display: block; }
 
@@ -375,16 +644,17 @@ nav.scrolled { box-shadow: 0 2px 20px rgba(0,0,0,0.3); }
   .nav-links { display: none; }
   .theme-toggle, .search-toggle { display: none; }
   .hamburger { display: block; }
-  .mobile-theme-search { display: flex; gap: 8px; padding: 12px 0; }
+  .mobile-theme-search { display: flex; gap: 6px; padding: 12px 0; flex-wrap: wrap; }
   .mobile-theme-search button {
-    flex: 1;
-    padding: 10px;
+    flex: 1 1 auto;
+    padding: 8px 6px;
     border: 1px solid var(--border);
     background: var(--bg-card);
     color: var(--text-secondary);
     border-radius: 8px;
-    font-size: 14px;
+    font-size: 12px;
     cursor: pointer;
+    min-width: 60px;
   }
 }
 @media(min-width: 1025px) {
@@ -1416,25 +1686,58 @@ footer {
 </head>
 <body>
 
+<!-- Tricolor bar (visible only on Republique theme) -->
+<div class="tricolor-bar" id="tricolorBar"></div>
+
 <!-- ============================================
-     LANDING CHOICE
+     LANDING CHOICE — Ultra premium
      ============================================ -->
 <div class="landing-choice" id="landingChoice">
   <div class="landing-logo">
     <div class="gold-circle"></div>
-    <h1>Les Rendez-vous<br>Geopolitiques<br>de Strasbourg</h1>
-    <p>Festival international — 19-21 mars 2027</p>
-    <div class="landing-theme">Theme 2027 : Les batailles de l'eau</div>
+    <div class="gold-circle-inner"></div>
+    <h1>Les Rendez-vous<br>G&eacute;opolitiques<br>de Strasbourg</h1>
+    <div class="landing-subtitle">Festival international &mdash; 19-21 mars 2027</div>
+    <div class="landing-theme">Th&egrave;me 2027 : Les batailles de l'eau</div>
+    <div class="landing-org-top">ARDG &mdash; Association Rh&eacute;nane pour la D&eacute;mocratisation de la G&eacute;opolitique</div>
   </div>
+
+  <div class="landing-separator"></div>
+
   <div class="landing-buttons">
     <a href="#site" onclick="showSite()" class="landing-btn site-btn">
-      &#127760; Decouvrir le festival
+      <span class="btn-icon">&#127760;</span> D&eacute;couvrir le festival
     </a>
     <a href="admin.html" class="landing-btn admin-btn">
-      &#9881; Espace organisateur
+      <span class="btn-icon">&#9881;</span> Espace organisateur
     </a>
   </div>
-  <div class="landing-org">ARDG — Association des Rendez-vous Geopolitiques</div>
+
+  <div class="landing-theme-selector">
+    <div class="selector-label">Th&egrave;me visuel</div>
+    <div class="theme-pills">
+      <div class="theme-pill active" data-pill="nuit" onclick="setTheme('nuit')" title="Nuit diplomatique">
+        <div class="pill-inner"></div>
+        <div class="pill-tooltip">Nuit diplomatique</div>
+      </div>
+      <div class="theme-pill" data-pill="republique" onclick="setTheme('republique')" title="R&eacute;publique">
+        <div class="pill-inner"></div>
+        <div class="pill-tooltip">R&eacute;publique</div>
+      </div>
+      <div class="theme-pill" data-pill="europe" onclick="setTheme('europe')" title="Jour d'Europe">
+        <div class="pill-inner"></div>
+        <div class="pill-tooltip">Jour d'Europe</div>
+      </div>
+      <div class="theme-pill" data-pill="institutionnel" onclick="setTheme('institutionnel')" title="Institutionnel">
+        <div class="pill-inner"></div>
+        <div class="pill-tooltip">Institutionnel</div>
+      </div>
+      <div class="theme-pill" data-pill="eau" onclick="setTheme('eau')" title="Batailles de l'eau">
+        <div class="pill-inner"></div>
+        <div class="pill-tooltip">Batailles de l'eau</div>
+      </div>
+    </div>
+  </div>
 </div>
 
 <!-- ============================================
@@ -1460,20 +1763,28 @@ footer {
       <a href="erp.html" title="ERP — Back-office financier et administratif" style="color:var(--accent,#D4A843);font-weight:700">ERP</a>
       <button onclick="openSearch()" style="background:none;border:1px solid var(--border,rgba(255,255,255,.15));color:var(--text-dim,#7080A0);padding:6px 14px;border-radius:8px;cursor:pointer;font-family:var(--font);font-size:13px;display:flex;align-items:center;gap:6px;transition:all .2s" onmouseover="this.style.borderColor='var(--accent,#D4A843)';this.style.color='var(--accent,#D4A843)'" onmouseout="this.style.borderColor='var(--border,rgba(255,255,255,.15))';this.style.color='var(--text-dim,#7080A0)'">&loupe; Rechercher <kbd style="font-size:10px;padding:1px 5px;border-radius:4px;background:rgba(255,255,255,.1);margin-left:4px">⌘K</kbd></button>
       <div style="position:relative;">
-        <button class="theme-toggle" onclick="toggleThemePanel()" aria-label="Changer de theme" title="Changer le thème graphique du site — 3 versions disponibles">&#127912;</button>
+        <button class="theme-toggle" onclick="toggleThemePanel()" aria-label="Changer de theme" title="Changer le th&egrave;me graphique du site &mdash; 5 versions disponibles">&#127912;</button>
         <div class="theme-panel" id="themePanel">
-          <h4>Theme graphique</h4>
-          <div class="theme-option active" onclick="setTheme('classique')" data-theme-opt="classique">
+          <h4>Th&egrave;me graphique</h4>
+          <div class="theme-option active" onclick="setTheme('nuit')" data-theme-opt="nuit">
             <div class="theme-swatch" style="background:linear-gradient(135deg,#0D1B4A,#D4A843);"></div>
-            <div><span>RVGS Sombre</span><small>Bleu roi & or — institutionnel</small></div>
+            <div><span>Nuit diplomatique</span><small>Bleu roi &amp; or &mdash; ambassade</small></div>
           </div>
-          <div class="theme-option" onclick="setTheme('strasbourg')" data-theme-opt="strasbourg">
-            <div class="theme-swatch" style="background:linear-gradient(135deg,#F5F5F0,#1B3A8C);"></div>
-            <div><span>RVGS Clair</span><small>Blanc chaud & bleu — accessible</small></div>
+          <div class="theme-option" onclick="setTheme('republique')" data-theme-opt="republique">
+            <div class="theme-swatch" style="background:linear-gradient(90deg,#002654 33%,#FFFFFF 33% 66%,#C8102E 66%);"></div>
+            <div><span>R&eacute;publique</span><small>Tricolore &mdash; pr&eacute;sidentiel</small></div>
           </div>
-          <div class="theme-option" onclick="setTheme('moderne')" data-theme-opt="moderne">
-            <div class="theme-swatch" style="background:linear-gradient(135deg,#FFFFFF,#D4A843);"></div>
-            <div><span>Moderne</span><small>Blanc, or & bleu — contemporain</small></div>
+          <div class="theme-option" onclick="setTheme('europe')" data-theme-opt="europe">
+            <div class="theme-swatch" style="background:linear-gradient(135deg,#F5F3EE,#003399);"></div>
+            <div><span>Jour d'Europe</span><small>Bleu UE &amp; &eacute;toiles d'or</small></div>
+          </div>
+          <div class="theme-option" onclick="setTheme('institutionnel')" data-theme-opt="institutionnel">
+            <div class="theme-swatch" style="background:linear-gradient(135deg,#F8F8F6,#1B3A8C);"></div>
+            <div><span>Institutionnel</span><small>Sobre &mdash; acad&eacute;mique</small></div>
+          </div>
+          <div class="theme-option" onclick="setTheme('eau')" data-theme-opt="eau">
+            <div class="theme-swatch" style="background:linear-gradient(135deg,#0A1628,#4ECDC4);"></div>
+            <div><span>Batailles de l'eau</span><small>Oc&eacute;an &amp; turquoise</small></div>
           </div>
         </div>
       </div>
@@ -1494,9 +1805,11 @@ footer {
   <a href="#mediatheque" onclick="closeMobileMenu()">Mediatheque</a>
   <a href="#appel" onclick="closeMobileMenu()">Appel a communications</a>
   <div class="mobile-theme-search">
-    <button onclick="setTheme('classique');closeMobileMenu();">&#127760; Sombre</button>
-    <button onclick="setTheme('strasbourg');closeMobileMenu();">&#9728; Clair</button>
-    <button onclick="setTheme('moderne');closeMobileMenu();">&#9889; Moderne</button>
+    <button onclick="setTheme('nuit');closeMobileMenu();">&#127769; Nuit</button>
+    <button onclick="setTheme('republique');closeMobileMenu();">&#127467;&#127479; R&eacute;p.</button>
+    <button onclick="setTheme('europe');closeMobileMenu();">&#9728; Europe</button>
+    <button onclick="setTheme('institutionnel');closeMobileMenu();">&#127963; Instit.</button>
+    <button onclick="setTheme('eau');closeMobileMenu();">&#127754; Eau</button>
   </div>
 </div>
 
@@ -2650,16 +2963,37 @@ const news = [
    THEME SYSTEM
    ============================================ */
 function setTheme(theme) {
-  if (theme === 'classique') {
+  // Map old theme names to new ones for backward compat
+  var themeMap = { 'classique': 'nuit', 'strasbourg': 'europe', 'moderne': 'institutionnel' };
+  if (themeMap[theme]) theme = themeMap[theme];
+
+  if (theme === 'nuit') {
     document.documentElement.removeAttribute('data-theme');
   } else {
     document.documentElement.setAttribute('data-theme', theme);
   }
   localStorage.setItem('rs-theme', theme);
-  // Update active state
-  document.querySelectorAll('.theme-option').forEach(opt => {
+
+  // Tricolor bar visibility
+  var tribar = document.getElementById('tricolorBar');
+  if (tribar) tribar.style.display = (theme === 'republique') ? 'block' : 'none';
+
+  // Body class for republique tricolor bar
+  document.body.classList.toggle('theme-republique', theme === 'republique');
+
+  // Update active state in nav theme panel
+  document.querySelectorAll('.theme-option').forEach(function(opt) {
     opt.classList.toggle('active', opt.dataset.themeOpt === theme);
   });
+
+  // Update active state on landing pills
+  document.querySelectorAll('.theme-pill').forEach(function(pill) {
+    pill.classList.toggle('active', pill.dataset.pill === theme);
+  });
+
+  // Adjust nav top offset for tricolor bar
+  var nav = document.getElementById('navbar');
+  if (nav) nav.style.top = (theme === 'republique') ? '4px' : '0';
 }
 
 function toggleThemePanel() {
@@ -2668,16 +3002,16 @@ function toggleThemePanel() {
 
 // Close theme panel on outside click
 document.addEventListener('click', function(e) {
-  const panel = document.getElementById('themePanel');
-  const toggle = document.querySelector('.theme-toggle');
+  var panel = document.getElementById('themePanel');
+  var toggle = document.querySelector('.theme-toggle');
   if (panel && !panel.contains(e.target) && !toggle.contains(e.target)) {
     panel.classList.remove('open');
   }
 });
 
-// Load saved theme
-const savedTheme = localStorage.getItem('rs-theme');
-if (savedTheme) setTheme(savedTheme);
+// Load saved theme (default: nuit)
+var savedTheme = localStorage.getItem('rs-theme') || 'nuit';
+setTheme(savedTheme);
 
 /* ============================================
    MOBILE MENU
