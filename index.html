@@ -2959,12 +2959,23 @@ function openFeedback(section) {
       });
     }
 
+    // Normaliser les accents pour la recherche
+    function normalizeAccents(str) {
+      if (typeof str !== 'string') return '';
+      return str.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+    }
+
     window._congressFuse = new Fuse(searchData, {
       keys: [{name:'name',weight:2},{name:'desc',weight:1},{name:'type',weight:0.5}],
       threshold: 0.35,
       includeMatches: true,
       includeScore: true,
-      minMatchCharLength: 2
+      minMatchCharLength: 2,
+      getFn: function(obj, path) {
+        var val = Fuse.config.getFn(obj, path);
+        if (Array.isArray(val)) return val.map(function(v){ return normalizeAccents(v); });
+        return normalizeAccents(val);
+      }
     });
     window._congressSearchData = searchData;
   };
@@ -3008,7 +3019,9 @@ function openFeedback(section) {
       results.innerHTML = q && q.length < 2 ? '<p style="text-align:center;color:rgba(255,255,255,0.5);padding:20px">Tapez au moins 2 caractères</p>' : '';
       return;
     }
-    var found = window._congressFuse.search(q);
+    // Normaliser la requête aussi (accents)
+    var qNorm = q.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+    var found = window._congressFuse.search(qNorm);
     if (found.length === 0) {
       results.innerHTML = '<p style="text-align:center;color:rgba(255,255,255,0.5);padding:20px">Aucun résultat pour "' + q + '"</p>';
       return;
