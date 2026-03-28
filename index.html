@@ -1682,6 +1682,387 @@ footer {
 
 /* Utility */
 .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
+
+/* ============================================
+   NAV DROPDOWN — Programme
+   ============================================ */
+.nav-dropdown {
+  position: relative;
+  display: inline-block;
+}
+.nav-dropdown > a::after {
+  content: ' \25BE';
+  font-size: 10px;
+}
+.nav-dropdown-menu {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 8px 0;
+  min-width: 280px;
+  box-shadow: var(--shadow);
+  z-index: 1002;
+}
+.nav-dropdown:hover .nav-dropdown-menu { display: block; }
+.nav-dropdown-menu a {
+  display: block;
+  padding: 10px 20px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  white-space: nowrap;
+  transition: all 0.15s;
+}
+.nav-dropdown-menu a:hover {
+  background: var(--bg-card-hover);
+  color: var(--accent);
+}
+
+/* ============================================
+   HERO SLIDER
+   ============================================ */
+.hero-slider {
+  position: relative;
+  width: 100%;
+  height: 60vh;
+  min-height: 400px;
+  overflow: hidden;
+  background: var(--bg-primary);
+}
+.slider-track {
+  display: flex;
+  height: 100%;
+  transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  width: 100%;
+}
+.slider-slide {
+  min-width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  padding: 40px 24px;
+}
+.slider-slide::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  opacity: 0.85;
+}
+.slide-content {
+  position: relative;
+  z-index: 1;
+  max-width: 700px;
+}
+.slide-tag {
+  display: inline-block;
+  font-family: 'Inter', sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  color: var(--accent);
+  background: rgba(var(--accent-rgb), 0.15);
+  border: 1px solid rgba(var(--accent-rgb), 0.25);
+  padding: 6px 20px;
+  border-radius: 30px;
+  margin-bottom: 20px;
+}
+.slide-title {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: clamp(28px, 5vw, 52px);
+  font-weight: 900;
+  color: #fff;
+  margin-bottom: 16px;
+  line-height: 1.1;
+  text-shadow: 0 2px 30px rgba(0,0,0,0.3);
+}
+.slide-subtitle {
+  font-family: 'Inter', sans-serif;
+  font-size: clamp(14px, 2vw, 18px);
+  color: rgba(255,255,255,0.85);
+  line-height: 1.6;
+  margin-bottom: 20px;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+.slide-author {
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--accent);
+  font-style: italic;
+}
+.slide-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 32px;
+  background: var(--accent);
+  color: var(--bg-primary);
+  border-radius: 8px;
+  font-family: 'Inter', sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  text-decoration: none;
+  transition: all 0.25s;
+  margin-top: 12px;
+}
+.slide-cta:hover {
+  background: var(--accent-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 24px rgba(var(--accent-rgb), 0.3);
+  color: var(--bg-primary);
+}
+
+/* Slider arrows */
+.slider-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 10;
+  background: rgba(0,0,0,0.4);
+  border: 1px solid rgba(255,255,255,0.15);
+  color: #fff;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+  backdrop-filter: blur(8px);
+}
+.slider-arrow:hover {
+  background: rgba(var(--accent-rgb), 0.6);
+  border-color: var(--accent);
+}
+.slider-arrow.prev { left: 20px; }
+.slider-arrow.next { right: 20px; }
+
+/* Slider dots */
+.slider-dots {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 8px;
+  z-index: 10;
+}
+.slider-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.3);
+  cursor: pointer;
+  transition: all 0.25s;
+  border: none;
+}
+.slider-dot.active {
+  background: var(--accent);
+  transform: scale(1.3);
+  box-shadow: 0 0 10px rgba(var(--accent-rgb), 0.4);
+}
+.slider-dot:hover { background: rgba(255,255,255,0.6); }
+
+/* Slide backgrounds */
+.slide-bg-1 { background: linear-gradient(135deg, #0D1B4A 0%, #1B3A8C 50%, #0D1B4A 100%); }
+.slide-bg-2 { background: linear-gradient(135deg, #0A1628 0%, #142A45 40%, #1A3555 100%); }
+.slide-bg-3 { background: linear-gradient(135deg, #0D1B4A 0%, #142866 60%, #1B3A8C 100%); }
+.slide-bg-4 { background: linear-gradient(135deg, #1A2744 0%, #0D1B4A 50%, #243B6A 100%); }
+.slide-bg-5 { background: linear-gradient(135deg, #142866 0%, #1B3A8C 40%, #0D1B4A 100%); }
+.slide-bg-6 { background: linear-gradient(135deg, #0D1B4A 0%, #1A2744 50%, #142866 100%); }
+.slide-bg-7 { background: linear-gradient(135deg, #1B3A8C 0%, #0D1B4A 40%, #142866 100%); }
+.slide-bg-8 { background: linear-gradient(135deg, #142866 0%, #0D1B4A 50%, #1A2744 100%); }
+.slide-bg-9 { background: linear-gradient(135deg, #0D1B4A 0%, #243B6A 50%, #142866 100%); }
+.slide-bg-10 { background: linear-gradient(135deg, #1A2744 0%, #1B3A8C 50%, #0D1B4A 100%); }
+
+@media(max-width: 768px) {
+  .hero-slider { height: 50vh; min-height: 350px; }
+  .slider-arrow { width: 36px; height: 36px; font-size: 16px; }
+  .slider-arrow.prev { left: 8px; }
+  .slider-arrow.next { right: 8px; }
+}
+
+/* ============================================
+   THEME SECTION
+   ============================================ */
+.theme-detail-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 24px;
+  margin-top: 40px;
+}
+.theme-detail-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-light);
+  border-radius: 16px;
+  padding: 28px 24px;
+  transition: all 0.3s;
+}
+.theme-detail-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-hover);
+  border-color: rgba(var(--accent-rgb), 0.3);
+}
+.theme-detail-card h4 {
+  font-family: 'Playfair Display', serif;
+  font-size: 18px;
+  color: var(--text-primary);
+  margin-bottom: 10px;
+}
+.theme-detail-card p {
+  font-size: 14px;
+  color: var(--text-secondary);
+  line-height: 1.7;
+}
+
+/* ============================================
+   CONTACT & SUGGESTION FORM
+   ============================================ */
+.contact-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+  margin-top: 40px;
+}
+@media(max-width: 768px) {
+  .contact-grid { grid-template-columns: 1fr; }
+}
+.contact-form-box {
+  background: var(--bg-card);
+  border: 1px solid var(--border-light);
+  border-radius: 16px;
+  padding: 32px;
+}
+.contact-form-box h3 {
+  font-family: 'Playfair Display', serif;
+  font-size: 22px;
+  color: var(--text-primary);
+  margin-bottom: 20px;
+}
+.contact-form-box label {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  margin-bottom: 6px;
+}
+.contact-form-box input,
+.contact-form-box textarea {
+  width: 100%;
+  padding: 12px 16px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: var(--bg-input);
+  color: var(--text-primary);
+  font-size: 15px;
+  font-family: 'Inter', sans-serif;
+  margin-bottom: 14px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+.contact-form-box input:focus,
+.contact-form-box textarea:focus {
+  border-color: var(--accent);
+}
+.contact-form-box textarea {
+  min-height: 100px;
+  resize: vertical;
+}
+.contact-submit-btn {
+  width: 100%;
+  padding: 14px;
+  background: var(--accent);
+  color: var(--bg-primary);
+  border: none;
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: 700;
+  font-family: 'Inter', sans-serif;
+  cursor: pointer;
+  transition: all 0.25s;
+}
+.contact-submit-btn:hover {
+  background: var(--accent-hover);
+  transform: translateY(-1px);
+}
+
+/* ============================================
+   RESERVATION CTA SECTION
+   ============================================ */
+.reservation-cta {
+  text-align: center;
+  padding: 80px 24px;
+  background: linear-gradient(135deg, rgba(var(--accent-rgb), 0.06), transparent);
+}
+.reservation-cta h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(28px, 4vw, 44px);
+  color: var(--text-primary);
+  margin-bottom: 16px;
+}
+.reservation-cta p {
+  font-size: 17px;
+  color: var(--text-secondary);
+  max-width: 600px;
+  margin: 0 auto 32px;
+  line-height: 1.7;
+}
+.reservation-cta .btn-primary {
+  font-size: 18px;
+  padding: 18px 48px;
+}
+
+/* Nav theme dots — compact on right */
+.nav-theme-dots {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+  margin-left: 8px;
+}
+.nav-theme-dot {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 2px solid rgba(255,255,255,0.15);
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+.nav-theme-dot:hover { border-color: var(--accent); transform: scale(1.15); }
+.nav-theme-dot .dot-inner {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+}
+.nav-theme-dot[data-dot="nuit"] .dot-inner { background: linear-gradient(135deg, #0D1B4A, #D4A843); }
+.nav-theme-dot[data-dot="republique"] .dot-inner { background: linear-gradient(90deg, #002654 33%, #fff 33% 66%, #C8102E 66%); }
+.nav-theme-dot[data-dot="europe"] .dot-inner { background: linear-gradient(135deg, #F5F3EE, #003399); }
+.nav-theme-dot[data-dot="institutionnel"] .dot-inner { background: linear-gradient(135deg, #F8F8F6, #1B3A8C); }
+.nav-theme-dot[data-dot="eau"] .dot-inner { background: linear-gradient(135deg, #0A1628, #4ECDC4); }
+
+/* Light themes — dots border */
+[data-theme="europe"] .nav-theme-dot,
+[data-theme="institutionnel"] .nav-theme-dot { border-color: rgba(0,0,0,0.15); }
+[data-theme="europe"] .nav-theme-dot:hover,
+[data-theme="institutionnel"] .nav-theme-dot:hover { border-color: var(--accent); }
+
 </style>
 </head>
 <body>
@@ -1752,43 +2133,32 @@ footer {
   <div class="nav-inner">
     <a href="#accueil" class="nav-logo">RVGS 2027</a>
     <div class="nav-links">
-      <a href="#accueil" class="active" title="Page d'accueil du congrès">Accueil</a>
-      <a href="#programme" title="Programme complet des 3 jours — conférences, ateliers, débats">Programme</a>
-      <a href="#intervenants" title="200+ intervenants — politologues, climatologues, économistes">Intervenants</a>
-      <a href="#actualites" title="Dernières nouvelles et annonces du congrès">Actualites</a>
-      <a href="#partenaires" title="Nos partenaires institutionnels, médias et académiques">Partenaires</a>
-      <a href="#infos" title="Lieu, accès, tarifs, hébergement, contact">Infos pratiques</a>
-      <a href="#mediatheque" title="Vidéos et replays des conférences">Mediatheque</a>
-      <a href="admin.html" title="BackOffice administration — gestion salles, participants, badges, emails" style="color:var(--accent,#D4A843);font-weight:700">Admin</a>
-      <a href="erp.html" title="ERP — Back-office financier et administratif" style="color:var(--accent,#D4A843);font-weight:700">ERP</a>
-      <button onclick="openSearch()" style="background:none;border:1px solid var(--border,rgba(255,255,255,.15));color:var(--text-dim,#7080A0);padding:6px 14px;border-radius:8px;cursor:pointer;font-family:var(--font);font-size:13px;display:flex;align-items:center;gap:6px;transition:all .2s" onmouseover="this.style.borderColor='var(--accent,#D4A843)';this.style.color='var(--accent,#D4A843)'" onmouseout="this.style.borderColor='var(--border,rgba(255,255,255,.15))';this.style.color='var(--text-dim,#7080A0)'">&loupe; Rechercher <kbd style="font-size:10px;padding:1px 5px;border-radius:4px;background:rgba(255,255,255,.1);margin-left:4px">⌘K</kbd></button>
-      <div style="position:relative;">
-        <button class="theme-toggle" onclick="toggleThemePanel()" aria-label="Changer de theme" title="Changer le th&egrave;me graphique du site &mdash; 5 versions disponibles">&#127912;</button>
-        <div class="theme-panel" id="themePanel">
-          <h4>Th&egrave;me graphique</h4>
-          <div class="theme-option active" onclick="setTheme('nuit')" data-theme-opt="nuit">
-            <div class="theme-swatch" style="background:linear-gradient(135deg,#0D1B4A,#D4A843);"></div>
-            <div><span>Nuit diplomatique</span><small>Bleu roi &amp; or &mdash; ambassade</small></div>
-          </div>
-          <div class="theme-option" onclick="setTheme('republique')" data-theme-opt="republique">
-            <div class="theme-swatch" style="background:linear-gradient(90deg,#002654 33%,#FFFFFF 33% 66%,#C8102E 66%);"></div>
-            <div><span>R&eacute;publique</span><small>Tricolore &mdash; pr&eacute;sidentiel</small></div>
-          </div>
-          <div class="theme-option" onclick="setTheme('europe')" data-theme-opt="europe">
-            <div class="theme-swatch" style="background:linear-gradient(135deg,#F5F3EE,#003399);"></div>
-            <div><span>Jour d'Europe</span><small>Bleu UE &amp; &eacute;toiles d'or</small></div>
-          </div>
-          <div class="theme-option" onclick="setTheme('institutionnel')" data-theme-opt="institutionnel">
-            <div class="theme-swatch" style="background:linear-gradient(135deg,#F8F8F6,#1B3A8C);"></div>
-            <div><span>Institutionnel</span><small>Sobre &mdash; acad&eacute;mique</small></div>
-          </div>
-          <div class="theme-option" onclick="setTheme('eau')" data-theme-opt="eau">
-            <div class="theme-swatch" style="background:linear-gradient(135deg,#0A1628,#4ECDC4);"></div>
-            <div><span>Batailles de l'eau</span><small>Oc&eacute;an &amp; turquoise</small></div>
-          </div>
+      <a href="#accueil" class="active">Accueil</a>
+      <div class="nav-dropdown">
+        <a href="#programme">Programme</a>
+        <div class="nav-dropdown-menu">
+          <a href="#programme" onclick="showDay(1)">Jour 1 &mdash; Mercredi 19 mars</a>
+          <a href="#programme" onclick="showDay(2)">Jour 2 &mdash; Jeudi 20 mars</a>
+          <a href="#programme" onclick="showDay(3)">Jour 3 &mdash; Vendredi 21 mars</a>
+          <a href="#theme">Th&egrave;me : Les batailles de l'eau</a>
+          <a href="#theme">Pays invit&eacute; : Danemark / Estonie</a>
         </div>
       </div>
-      <button class="search-toggle" onclick="openSearch()" aria-label="Rechercher">&#128269;</button>
+      <a href="#intervenants">Intervenants</a>
+      <a href="#lieux">Lieux</a>
+      <a href="#actualites">Actualit&eacute;s</a>
+      <a href="#partenaires">Partenaires</a>
+      <a href="#pratique">Infos pratiques</a>
+      <a href="#contact">Contact</a>
+      <a href="#reserver" class="nav-btn">R&eacute;server</a>
+      <div class="nav-theme-dots">
+        <div class="nav-theme-dot" data-dot="nuit" onclick="setTheme('nuit')" title="Nuit diplomatique"><div class="dot-inner"></div></div>
+        <div class="nav-theme-dot" data-dot="republique" onclick="setTheme('republique')" title="R&eacute;publique"><div class="dot-inner"></div></div>
+        <div class="nav-theme-dot" data-dot="europe" onclick="setTheme('europe')" title="Jour d'Europe"><div class="dot-inner"></div></div>
+        <div class="nav-theme-dot" data-dot="institutionnel" onclick="setTheme('institutionnel')" title="Institutionnel"><div class="dot-inner"></div></div>
+        <div class="nav-theme-dot" data-dot="eau" onclick="setTheme('eau')" title="Batailles de l'eau"><div class="dot-inner"></div></div>
+      </div>
+      <a href="admin.html" style="color:var(--accent);font-weight:700;font-size:12px;margin-left:8px" title="Espace organisateur">&#9881; Admin</a>
     </div>
     <button class="hamburger" onclick="toggleMobileMenu()" aria-label="Menu">&#9776;</button>
   </div>
@@ -1799,11 +2169,12 @@ footer {
   <a href="#accueil" onclick="closeMobileMenu()">Accueil</a>
   <a href="#programme" onclick="closeMobileMenu()">Programme</a>
   <a href="#intervenants" onclick="closeMobileMenu()">Intervenants</a>
-  <a href="#actualites" onclick="closeMobileMenu()">Actualites</a>
+  <a href="#lieux" onclick="closeMobileMenu()">Lieux</a>
+  <a href="#actualites" onclick="closeMobileMenu()">Actualit&eacute;s</a>
   <a href="#partenaires" onclick="closeMobileMenu()">Partenaires</a>
-  <a href="#infos" onclick="closeMobileMenu()">Infos pratiques</a>
-  <a href="#mediatheque" onclick="closeMobileMenu()">Mediatheque</a>
-  <a href="#appel" onclick="closeMobileMenu()">Appel a communications</a>
+  <a href="#pratique" onclick="closeMobileMenu()">Infos pratiques</a>
+  <a href="#contact" onclick="closeMobileMenu()">Contact</a>
+  <a href="#reserver" onclick="closeMobileMenu()">R&eacute;server</a>
   <div class="mobile-theme-search">
     <button onclick="setTheme('nuit');closeMobileMenu();">&#127769; Nuit</button>
     <button onclick="setTheme('republique');closeMobileMenu();">&#127467;&#127479; R&eacute;p.</button>
@@ -1822,33 +2193,115 @@ footer {
 </div>
 
 <!-- ============================================
-     HERO
+     HERO SLIDER
      ============================================ -->
-<section class="hero" id="accueil">
-  <div class="hero-bg"></div>
-  <div class="hero-content">
-    <div class="hero-edition">Festival international — 2027</div>
-    <h1>Les Rendez-vous<br>Geopolitiques<br>de Strasbourg</h1>
-    <div class="hero-subtitle">La geopolitique dans tous ses etats</div>
-    <div class="hero-meta">
-      <strong>19 — 21 mars 2027</strong><br>
-      Palais de la Musique et des Congres, Strasbourg<br>
-      <span style="display:inline-block;margin-top:8px;font-size:14px;background:rgba(212,168,67,0.15);padding:4px 14px;border-radius:20px;color:var(--accent);font-weight:600;">Theme 2027 : Les batailles de l'eau</span>
+<section id="accueil">
+<div class="hero-slider" id="heroSlider">
+  <div class="slider-track" id="sliderTrack">
+    <!-- Slide 1: Le festival -->
+    <div class="slider-slide slide-bg-1">
+      <div class="slide-content">
+        <span class="slide-tag">Le festival</span>
+        <h2 class="slide-title">Les Rendez-vous<br>G&eacute;opolitiques de Strasbourg</h2>
+        <p class="slide-subtitle">Festival international &mdash; 19-21 mars 2027</p>
+      </div>
     </div>
-    <div class="hero-btns">
-      <a href="#appel" class="btn btn-primary">Reserver ma place</a>
-      <a href="#programme" class="btn btn-outline">Voir le programme</a>
+    <!-- Slide 2: Le theme 2027 -->
+    <div class="slider-slide slide-bg-2">
+      <div class="slide-content">
+        <span class="slide-tag">Le th&egrave;me 2027</span>
+        <h2 class="slide-title">Les batailles de l'eau</h2>
+        <p class="slide-subtitle">Des nappes phr&eacute;atiques aux oc&eacute;ans, l'eau trace de nouvelles lignes de fracture g&eacute;opolitiques</p>
+      </div>
     </div>
-    <div class="countdown" id="countdown">
-      <div class="countdown-item"><span class="count-num" id="cd-days">--</span><span class="count-label">Jours</span></div>
-      <div class="countdown-item"><span class="count-num" id="cd-hours">--</span><span class="count-label">Heures</span></div>
-      <div class="countdown-item"><span class="count-num" id="cd-mins">--</span><span class="count-label">Minutes</span></div>
-      <div class="countdown-item"><span class="count-num" id="cd-secs">--</span><span class="count-label">Secondes</span></div>
+    <!-- Slide 3: Pierre Haski -->
+    <div class="slider-slide slide-bg-3">
+      <div class="slide-content">
+        <span class="slide-tag">Le mot du cofondateur</span>
+        <h2 class="slide-title">&laquo; Il est urgent de s'informer, de comprendre, de d&eacute;battre &raquo;</h2>
+        <p class="slide-author">Pierre Haski &mdash; Pr&eacute;sident de Reporters Sans Fronti&egrave;res</p>
+      </div>
+    </div>
+    <!-- Slide 4: Pays invité -->
+    <div class="slider-slide slide-bg-4">
+      <div class="slide-content">
+        <span class="slide-tag">Le pays invit&eacute;</span>
+        <h2 class="slide-title">Danemark / Estonie</h2>
+        <p class="slide-subtitle">Nations strat&eacute;giques en mati&egrave;re de s&eacute;curit&eacute;, environnement et ressources naturelles</p>
+      </div>
+    </div>
+    <!-- Slide 5: 100 evenements -->
+    <div class="slider-slide slide-bg-5">
+      <div class="slide-content">
+        <span class="slide-tag">100 &eacute;v&eacute;nements</span>
+        <h2 class="slide-title">Conf&eacute;rences, tables rondes, expositions, projections, ateliers...</h2>
+        <p class="slide-subtitle">Gratuit et ouvert &agrave; tous</p>
+      </div>
+    </div>
+    <!-- Slide 6: Les intervenants -->
+    <div class="slider-slide slide-bg-6">
+      <div class="slide-content">
+        <span class="slide-tag">Les intervenants</span>
+        <h2 class="slide-title">G&eacute;opolitologues, historiens, diplomates, journalistes, militaires, artistes...</h2>
+        <p class="slide-subtitle">Une pluralit&eacute; de regards sur le monde</p>
+      </div>
+    </div>
+    <!-- Slide 7: Salon du livre -->
+    <div class="slider-slide slide-bg-7">
+      <div class="slide-content">
+        <span class="slide-tag">Salon du livre</span>
+        <h2 class="slide-title">Un salon du livre g&eacute;opolitique</h2>
+        <p class="slide-subtitle">Point focal du festival</p>
+      </div>
+    </div>
+    <!-- Slide 8: Partenaires -->
+    <div class="slider-slide slide-bg-8">
+      <div class="slide-content">
+        <span class="slide-tag">Partenaires</span>
+        <h2 class="slide-title">Parlement europ&eacute;en, Conseil de l'Europe, Arte, France Inter, Le Monde...</h2>
+        <p class="slide-subtitle">Des partenaires de premier plan</p>
+      </div>
+    </div>
+    <!-- Slide 9: Strasbourg -->
+    <div class="slider-slide slide-bg-9">
+      <div class="slide-content">
+        <span class="slide-tag">Strasbourg</span>
+        <h2 class="slide-title">Un festival au c&oelig;ur de la ville</h2>
+        <p class="slide-subtitle">Ville europ&eacute;enne et internationale par excellence</p>
+      </div>
+    </div>
+    <!-- Slide 10: Appel a contribution -->
+    <div class="slider-slide slide-bg-10">
+      <div class="slide-content">
+        <span class="slide-tag">Appel &agrave; contribution</span>
+        <h2 class="slide-title">Rejoignez l'aventure</h2>
+        <p class="slide-subtitle">Investisseurs, partenaires, b&eacute;n&eacute;voles &mdash; contactez-nous</p>
+        <a href="#contact" class="slide-cta">Nous contacter &rarr;</a>
+      </div>
     </div>
   </div>
-  <div class="scroll-indicator">
-    <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><polyline points="7 13 12 18 17 13"/><line x1="12" y1="6" x2="12" y2="18"/></svg>
+  <button class="slider-arrow prev" onclick="prevSlide()" aria-label="Diapo precedente">&#10094;</button>
+  <button class="slider-arrow next" onclick="nextSlide()" aria-label="Diapo suivante">&#10095;</button>
+  <div class="slider-dots" id="sliderDots"></div>
+</div>
+
+<!-- Countdown bar -->
+<div class="numbers-bar" style="padding:24px 0;">
+  <div class="container">
+    <div style="display:flex;align-items:center;justify-content:center;gap:32px;flex-wrap:wrap;">
+      <div class="countdown" id="countdown" style="margin:0;">
+        <div class="countdown-item"><span class="count-num" id="cd-days">--</span><span class="count-label">Jours</span></div>
+        <div class="countdown-item"><span class="count-num" id="cd-hours">--</span><span class="count-label">Heures</span></div>
+        <div class="countdown-item"><span class="count-num" id="cd-mins">--</span><span class="count-label">Minutes</span></div>
+        <div class="countdown-item"><span class="count-num" id="cd-secs">--</span><span class="count-label">Secondes</span></div>
+      </div>
+      <div style="display:flex;gap:12px;">
+        <a href="#reserver" class="btn btn-primary" style="padding:12px 28px;font-size:14px;">R&eacute;server ma place</a>
+        <a href="#programme" class="btn btn-outline" style="padding:12px 28px;font-size:14px;">Voir le programme</a>
+      </div>
+    </div>
   </div>
+</div>
 </section>
 
 <!-- ============================================
@@ -1917,6 +2370,48 @@ footer {
 
   <div style="text-align:center;padding:16px 0 8px;opacity:0.6;transition:opacity .2s" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=0.6">
     <a onclick="openFeedback('thematiques')" style="cursor:pointer;font-size:13px;color:var(--accent,#D4A843);text-decoration:none;font-family:var(--font)">✏️ Une thématique à ajouter ?</a>
+  </div>
+</section>
+
+<!-- ============================================
+     THEME 2027 : LES BATAILLES DE L'EAU
+     ============================================ -->
+<section class="section section-alt" id="theme">
+  <div class="container">
+    <div class="section-header reveal">
+      <span class="section-label">Th&egrave;me 2027</span>
+      <h2>Les batailles de l'eau</h2>
+      <p>Des nappes phr&eacute;atiques aux oc&eacute;ans, l'eau trace de nouvelles lignes de fracture g&eacute;opolitiques. Un th&egrave;me transversal qui irrigue les six axes de r&eacute;flexion du festival.</p>
+    </div>
+    <div class="theme-detail-grid">
+      <div class="theme-detail-card reveal">
+        <h4>&#128167; Stress hydrique</h4>
+        <p>2,2 milliards de personnes n'ont pas acc&egrave;s &agrave; l'eau potable. Les tensions autour des ressources en eau douce s'intensifient sur tous les continents.</p>
+      </div>
+      <div class="theme-detail-card reveal">
+        <h4>&#127758; Oc&eacute;ans et souverainet&eacute;</h4>
+        <p>De l'Arctique &agrave; la mer de Chine, les oc&eacute;ans sont devenus des espaces de confrontation g&eacute;opolitique majeurs. Routes maritimes, ZEE, fonds sous-marins.</p>
+      </div>
+      <div class="theme-detail-card reveal">
+        <h4>&#127754; Climat et mont&eacute;e des eaux</h4>
+        <p>Le r&eacute;chauffement climatique acc&eacute;l&egrave;re la fonte des glaces et la mont&eacute;e du niveau des mers. Des millions de r&eacute;fugi&eacute;s climatiques &agrave; l'horizon 2050.</p>
+      </div>
+      <div class="theme-detail-card reveal">
+        <h4>&#9878; Droit international de l'eau</h4>
+        <p>Fleuves transfrontaliers, trait&eacute;s de partage, conflits juridiques : l'eau est au c&oelig;ur du droit international contemporain. Nil, Jourdain, M&eacute;kong, Rhin.</p>
+      </div>
+      <div class="theme-detail-card reveal">
+        <h4>&#128176; Privatisation et acc&egrave;s</h4>
+        <p>L'eau est-elle un bien commun ou une marchandise ? Multinationales, services publics, municipalisation : les mod&egrave;les s'affrontent.</p>
+      </div>
+      <div class="theme-detail-card reveal">
+        <h4>&#127981; Innovation et solutions</h4>
+        <p>Dessalement, r&eacute;utilisation des eaux us&eacute;es, agriculture de pr&eacute;cision, protection des zones humides : les solutions existent et se d&eacute;ploient.</p>
+      </div>
+    </div>
+    <div style="text-align:center;margin-top:48px;" class="reveal">
+      <p style="font-size:15px;color:var(--text-secondary);max-width:600px;margin:0 auto 24px;line-height:1.7;"><strong>Pays invit&eacute; : Danemark / Estonie</strong><br>Nations strat&eacute;giques en mati&egrave;re de s&eacute;curit&eacute;, environnement et ressources naturelles. Conf&eacute;rences et tables rondes d&eacute;di&eacute;es.</p>
+    </div>
   </div>
 </section>
 
@@ -2523,6 +3018,8 @@ footer {
   </div>
 </section>
 
+<div id="lieux" style="position:relative;top:-80px;"></div>
+<div id="pratique" style="position:relative;top:-80px;"></div>
 <!-- ============================================
      INFOS PRATIQUES
      ============================================ -->
@@ -2729,6 +3226,74 @@ footer {
 </section>
 
 <!-- ============================================
+     CONTACT & SUGGESTIONS
+     ============================================ -->
+<section class="section" id="contact">
+  <div class="container">
+    <div class="section-header reveal">
+      <span class="section-label">Contact</span>
+      <h2>Nous contacter</h2>
+      <p>Une question, une id&eacute;e, une proposition de partenariat ? &Eacute;crivez-nous.</p>
+    </div>
+    <div class="contact-grid">
+      <div class="contact-form-box reveal">
+        <h3>&#128172; Formulaire de contact</h3>
+        <form onsubmit="handleContactForm(event)">
+          <label for="contact-name">Votre nom</label>
+          <input type="text" id="contact-name" placeholder="Nom et pr&eacute;nom">
+          <label for="contact-email">Email *</label>
+          <input type="email" id="contact-email" required placeholder="votre@email.fr">
+          <label for="contact-subject">Objet</label>
+          <input type="text" id="contact-subject" placeholder="L'objet de votre message">
+          <label for="contact-message">Message *</label>
+          <textarea id="contact-message" required placeholder="Votre message..."></textarea>
+          <button type="submit" class="contact-submit-btn">Envoyer</button>
+        </form>
+        <p id="contactConfirm" style="display:none;margin-top:12px;color:var(--accent);font-weight:600;text-align:center;">Message envoy&eacute; ! Merci.</p>
+      </div>
+      <div class="contact-form-box reveal">
+        <h3>&#128161; Une suggestion pour le festival ?</h3>
+        <p style="font-size:14px;color:var(--text-secondary);margin-bottom:16px;line-height:1.6;">Vos id&eacute;es sont pr&eacute;cieuses pour construire le meilleur festival possible. Chaque suggestion est lue par l'&eacute;quipe organisatrice.</p>
+        <form onsubmit="handleSuggestion(event)">
+          <label for="sugg-name">Votre nom (optionnel)</label>
+          <input type="text" id="sugg-name" placeholder="Anonyme si vide">
+          <label for="sugg-text">Votre suggestion *</label>
+          <textarea id="sugg-text" required placeholder="Votre id&eacute;e, proposition, remarque..."></textarea>
+          <button type="submit" class="contact-submit-btn">Envoyer ma suggestion</button>
+        </form>
+        <p id="suggConfirm" style="display:none;margin-top:12px;color:var(--accent);font-weight:600;text-align:center;">Merci pour votre suggestion !</p>
+      </div>
+    </div>
+    <div style="text-align:center;margin-top:40px;" class="reveal">
+      <p style="font-size:14px;color:var(--text-muted);">&#128222; 03 88 37 67 67 &nbsp;|&nbsp; &#128231; contact@rvgs.fr &nbsp;|&nbsp; Horaires : 9h &mdash; 21h</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================
+     RESERVATION CTA
+     ============================================ -->
+<section class="section section-alt reservation-cta" id="reserver">
+  <div class="container reveal">
+    <span class="section-label">R&eacute;servation</span>
+    <h2>R&eacute;servez votre place</h2>
+    <p>Le festival est gratuit pour les conf&eacute;rences et d&eacute;bats. Inscrivez-vous pour garantir votre place et recevoir votre badge.</p>
+    <div style="display:flex;gap:16px;justify-content:center;flex-wrap:wrap;margin-top:32px;">
+      <a href="#appel" class="btn btn-primary" style="font-size:18px;padding:18px 48px;">R&eacute;server ma place gratuite</a>
+      <a href="#programme" class="btn btn-outline" style="font-size:16px;padding:16px 36px;">Voir le programme complet</a>
+    </div>
+    <div style="margin-top:32px;">
+      <div style="display:flex;gap:24px;justify-content:center;flex-wrap:wrap;font-size:14px;color:var(--text-secondary);">
+        <span>&#127915; Conf&eacute;rences &amp; d&eacute;bats : <strong style="color:var(--accent);">Gratuit</strong></span>
+        <span>&#128218; Ateliers : <strong style="color:var(--accent);">15 &euro;</strong></span>
+        <span>&#127903; Pass 3 jours : <strong style="color:var(--accent);">35 &euro;</strong></span>
+        <span>&#127891; &Eacute;tudiants : <strong style="color:var(--accent);">Gratuit</strong></span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================
      NEWSLETTER
      ============================================ -->
 <section class="section newsletter-section" id="newsletter">
@@ -2826,6 +3391,148 @@ function showSite() {
 // If URL has #site or any section hash, show site directly
 if (window.location.hash && window.location.hash !== '#') {
   showSite();
+}
+
+/* ============================================
+   HERO SLIDER
+   ============================================ */
+var currentSlide = 0;
+var totalSlides = 10;
+var autoplayInterval;
+var sliderPaused = false;
+
+// Default slider data
+var defaultSliderData = [
+  { tag: 'Le festival', title: 'Les Rendez-vous<br>G\u00e9opolitiques de Strasbourg', subtitle: 'Festival international \u2014 19-21 mars 2027', author: '', cta: '', ctaLink: '', bg: 'slide-bg-1' },
+  { tag: 'Le th\u00e8me 2027', title: 'Les batailles de l\'eau', subtitle: 'Des nappes phr\u00e9atiques aux oc\u00e9ans, l\'eau trace de nouvelles lignes de fracture g\u00e9opolitiques', author: '', cta: '', ctaLink: '', bg: 'slide-bg-2' },
+  { tag: 'Le mot du cofondateur', title: '\u00ab Il est urgent de s\'informer, de comprendre, de d\u00e9battre \u00bb', subtitle: '', author: 'Pierre Haski \u2014 Pr\u00e9sident de Reporters Sans Fronti\u00e8res', cta: '', ctaLink: '', bg: 'slide-bg-3' },
+  { tag: 'Le pays invit\u00e9', title: 'Danemark / Estonie', subtitle: 'Nations strat\u00e9giques en mati\u00e8re de s\u00e9curit\u00e9, environnement et ressources naturelles', author: '', cta: '', ctaLink: '', bg: 'slide-bg-4' },
+  { tag: '100 \u00e9v\u00e9nements', title: 'Conf\u00e9rences, tables rondes, expositions, projections, ateliers...', subtitle: 'Gratuit et ouvert \u00e0 tous', author: '', cta: '', ctaLink: '', bg: 'slide-bg-5' },
+  { tag: 'Les intervenants', title: 'G\u00e9opolitologues, historiens, diplomates, journalistes, militaires, artistes...', subtitle: 'Une pluralit\u00e9 de regards sur le monde', author: '', cta: '', ctaLink: '', bg: 'slide-bg-6' },
+  { tag: 'Salon du livre', title: 'Un salon du livre g\u00e9opolitique', subtitle: 'Point focal du festival', author: '', cta: '', ctaLink: '', bg: 'slide-bg-7' },
+  { tag: 'Partenaires', title: 'Parlement europ\u00e9en, Conseil de l\'Europe, Arte, France Inter, Le Monde...', subtitle: 'Des partenaires de premier plan', author: '', cta: '', ctaLink: '', bg: 'slide-bg-8' },
+  { tag: 'Strasbourg', title: 'Un festival au c\u0153ur de la ville', subtitle: 'Ville europ\u00e9enne et internationale par excellence', author: '', cta: '', ctaLink: '', bg: 'slide-bg-9' },
+  { tag: 'Appel \u00e0 contribution', title: 'Rejoignez l\'aventure', subtitle: 'Investisseurs, partenaires, b\u00e9n\u00e9voles \u2014 contactez-nous', author: '', cta: 'Nous contacter \u2192', ctaLink: '#contact', bg: 'slide-bg-10' }
+];
+
+function getSliderData() {
+  var saved = localStorage.getItem('rvgs_slider_data');
+  if (saved) {
+    try { return JSON.parse(saved); } catch(e) {}
+  }
+  return defaultSliderData;
+}
+
+function renderSlider() {
+  var data = getSliderData();
+  totalSlides = data.length;
+  var track = document.getElementById('sliderTrack');
+  var dots = document.getElementById('sliderDots');
+  if (!track || !dots) return;
+
+  track.innerHTML = data.map(function(s, i) {
+    var bgStyle = '';
+    if (s.bgImage) {
+      bgStyle = 'background-image:url(' + s.bgImage + ');background-size:cover;background-position:center;';
+    } else if (s.bgColor) {
+      bgStyle = 'background:' + s.bgColor + ';';
+    }
+    var slideClass = 'slider-slide ' + (s.bg || 'slide-bg-' + ((i % 10) + 1));
+    return '<div class="' + slideClass + '" style="' + bgStyle + '">' +
+      '<div class="slide-content">' +
+      (s.tag ? '<span class="slide-tag">' + s.tag + '</span>' : '') +
+      '<h2 class="slide-title">' + s.title + '</h2>' +
+      (s.subtitle ? '<p class="slide-subtitle">' + s.subtitle + '</p>' : '') +
+      (s.author ? '<p class="slide-author">' + s.author + '</p>' : '') +
+      (s.cta ? '<a href="' + (s.ctaLink || '#contact') + '" class="slide-cta">' + s.cta + '</a>' : '') +
+      '</div></div>';
+  }).join('');
+
+  dots.innerHTML = data.map(function(_, i) {
+    return '<button class="slider-dot' + (i === 0 ? ' active' : '') + '" onclick="goToSlide(' + i + ')" aria-label="Diapo ' + (i+1) + '"></button>';
+  }).join('');
+
+  currentSlide = 0;
+  goToSlide(0);
+}
+
+function goToSlide(n) {
+  if (n < 0) n = totalSlides - 1;
+  if (n >= totalSlides) n = 0;
+  currentSlide = n;
+  var track = document.getElementById('sliderTrack');
+  if (track) track.style.transform = 'translateX(-' + (n * 100) + '%)';
+  document.querySelectorAll('.slider-dot').forEach(function(d, i) {
+    d.classList.toggle('active', i === n);
+  });
+}
+
+function nextSlide() { goToSlide(currentSlide + 1); }
+function prevSlide() { goToSlide(currentSlide - 1); }
+
+function startSliderAutoplay() {
+  if (autoplayInterval) clearInterval(autoplayInterval);
+  autoplayInterval = setInterval(function() {
+    if (!sliderPaused) nextSlide();
+  }, 5000);
+}
+
+// Init slider
+renderSlider();
+startSliderAutoplay();
+
+// Pause on hover
+var sliderEl = document.getElementById('heroSlider');
+if (sliderEl) {
+  sliderEl.addEventListener('mouseenter', function() { sliderPaused = true; });
+  sliderEl.addEventListener('mouseleave', function() { sliderPaused = false; });
+}
+
+// Listen for slider data updates from admin
+window.addEventListener('storage', function(e) {
+  if (e.key === 'rvgs_slider_data') {
+    renderSlider();
+  }
+});
+
+/* ============================================
+   CONTACT & SUGGESTION FORMS
+   ============================================ */
+function handleContactForm(e) {
+  e.preventDefault();
+  var name = document.getElementById('contact-name').value.trim();
+  var email = document.getElementById('contact-email').value.trim();
+  var subject = document.getElementById('contact-subject').value.trim();
+  var message = document.getElementById('contact-message').value.trim();
+  if (!email || !message) return;
+
+  var mailto = 'mailto:contact@rvgs.fr?subject=' + encodeURIComponent(subject || 'Message du site RVGS') +
+    '&body=' + encodeURIComponent('De : ' + (name || 'Anonyme') + ' (' + email + ')\n\n' + message);
+  window.open(mailto);
+
+  document.getElementById('contactConfirm').style.display = 'block';
+  e.target.reset();
+}
+
+function handleSuggestion(e) {
+  e.preventDefault();
+  var name = document.getElementById('sugg-name').value.trim() || 'Anonyme';
+  var text = document.getElementById('sugg-text').value.trim();
+  if (!text) return;
+
+  var suggestions = JSON.parse(localStorage.getItem('rvgs_suggestions') || '[]');
+  suggestions.push({
+    id: Date.now(),
+    name: name,
+    message: text,
+    date: new Date().toISOString(),
+    status: 'nouveau'
+  });
+  localStorage.setItem('rvgs_suggestions', JSON.stringify(suggestions));
+
+  document.getElementById('suggConfirm').style.display = 'block';
+  e.target.reset();
+  setTimeout(function() { document.getElementById('suggConfirm').style.display = 'none'; }, 3000);
 }
 
 /* ============================================
@@ -3203,7 +3910,7 @@ window.addEventListener('scroll', function() {
   nav.classList.toggle('scrolled', window.scrollY > 50);
 
   // Active nav link
-  const sections = ['accueil','thematiques','programme','intervenants','actualites','partenaires','infos','mediatheque','appel'];
+  const sections = ['accueil','thematiques','theme','programme','intervenants','lieux','actualites','partenaires','infos','pratique','mediatheque','contact','reserver','appel'];
   let current = 'accueil';
   sections.forEach(id => {
     const el = document.getElementById(id);

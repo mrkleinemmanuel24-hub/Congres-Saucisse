@@ -294,6 +294,10 @@
   <a class="sidebar-link" onclick="showAdmin('postevent')"><img src="img/icons/icon-emails.png" alt=""> Post-event</a>
   <a class="sidebar-link" onclick="showAdmin('rubriques')"><img src="img/icons/icon-invitations.png" alt=""> Recommandations de Stéphanie</a>
 
+  <div class="sidebar-section">SITE PUBLIC</div>
+  <a class="sidebar-link" onclick="showAdmin('slider-editor')" style="color:#E8D48B;">&#128444; Slider</a>
+  <a class="sidebar-link" onclick="showAdmin('suggestions-admin')" style="color:#E8D48B;">&#128161; Suggestions</a>
+
   <div class="sidebar-section">MODULES EVENEMENT</div>
   <a class="sidebar-link" onclick="showAdmin('reservations')">&#127915; Reservations</a>
   <a class="sidebar-link" onclick="showAdmin('badges')">&#127903; Badges & QR</a>
@@ -549,6 +553,52 @@
 <div id="section-budget" class="section-page admin-section"></div>
 <div id="section-postevent" class="section-page admin-section"></div>
 <div id="section-rubriques" class="section-page admin-section"></div>
+
+<!-- ═══════════════════════════════════════════════════════
+     SLIDER EDITOR
+     ═══════════════════════════════════════════════════════ -->
+<div id="section-slider-editor" class="section-page admin-section" style="background:#0F1118;">
+  <div style="padding:32px 24px;max-width:1200px;margin:0 auto;">
+    <h2 style="font-size:1.3rem;font-weight:800;color:#C9A84C;margin-bottom:6px;">&#128444; Editeur de Slider</h2>
+    <p style="font-size:.85rem;color:#9B978F;margin-bottom:24px;">G&eacute;rez les diapositives du slider de la page d'accueil. Les modifications sont visibles imm&eacute;diatement sur le site public (m&ecirc;me navigateur).</p>
+
+    <div style="display:flex;gap:10px;margin-bottom:24px;flex-wrap:wrap;">
+      <button onclick="addNewSlide()" style="padding:10px 20px;background:#C9A84C;color:#111;border:none;border-radius:10px;font-size:.82rem;font-weight:700;cursor:pointer;">+ Ajouter une diapo</button>
+      <button onclick="resetSliderDefaults()" style="padding:10px 20px;background:rgba(220,38,38,.12);color:#DC2626;border:1px solid rgba(220,38,38,.2);border-radius:10px;font-size:.82rem;font-weight:700;cursor:pointer;">R&eacute;initialiser les d&eacute;fauts</button>
+      <button onclick="exportSliderJSON()" style="padding:10px 20px;background:rgba(59,130,246,.12);color:#3B82F6;border:1px solid rgba(59,130,246,.2);border-radius:10px;font-size:.82rem;font-weight:700;cursor:pointer;">&#128228; Exporter JSON</button>
+      <button onclick="importSliderJSON()" style="padding:10px 20px;background:rgba(34,197,94,.12);color:#22C55E;border:1px solid rgba(34,197,94,.2);border-radius:10px;font-size:.82rem;font-weight:700;cursor:pointer;">&#128229; Importer JSON</button>
+      <input type="file" id="sliderImportFile" accept=".json" style="display:none" onchange="handleSliderImport(event)">
+    </div>
+
+    <div id="sliderEditorList"></div>
+
+    <!-- Preview area -->
+    <div style="margin-top:24px;background:#161822;border:1px solid rgba(201,168,76,.1);border-radius:14px;padding:20px;">
+      <h3 style="font-size:.95rem;font-weight:700;color:#C9A84C;margin-bottom:14px;">Aper&ccedil;u rapide</h3>
+      <div id="sliderPreview" style="height:200px;border-radius:10px;overflow:hidden;position:relative;display:flex;align-items:center;justify-content:center;text-align:center;background:linear-gradient(135deg,#0D1B4A,#1B3A8C);">
+        <p style="color:rgba(255,255,255,0.5);font-size:14px;">Cliquez sur &laquo; Aper&ccedil;u &raquo; d'une diapo pour la pr&eacute;visualiser</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════
+     SUGGESTIONS ADMIN
+     ═══════════════════════════════════════════════════════ -->
+<div id="section-suggestions-admin" class="section-page admin-section" style="background:#0F1118;">
+  <div style="padding:32px 24px;max-width:1200px;margin:0 auto;">
+    <h2 style="font-size:1.3rem;font-weight:800;color:#C9A84C;margin-bottom:6px;">&#128161; Suggestions du public</h2>
+    <p style="font-size:.85rem;color:#9B978F;margin-bottom:24px;">Toutes les suggestions envoy&eacute;es par les visiteurs du site public. Vous pouvez les marquer comme lues ou trait&eacute;es.</p>
+
+    <div style="display:flex;gap:10px;margin-bottom:24px;flex-wrap:wrap;">
+      <button onclick="refreshSuggestions()" style="padding:10px 20px;background:#C9A84C;color:#111;border:none;border-radius:10px;font-size:.82rem;font-weight:700;cursor:pointer;">&#128260; Rafra&icirc;chir</button>
+      <button onclick="clearAllSuggestions()" style="padding:10px 20px;background:rgba(220,38,38,.12);color:#DC2626;border:1px solid rgba(220,38,38,.2);border-radius:10px;font-size:.82rem;font-weight:700;cursor:pointer;">&#128465; Tout supprimer</button>
+      <span id="suggCount" style="padding:10px 16px;font-size:.82rem;color:#9B978F;">0 suggestions</span>
+    </div>
+
+    <div id="suggestionsAdminList" style="display:flex;flex-direction:column;gap:12px;"></div>
+  </div>
+</div>
 
 <!-- ═══════════════════════════════════════════════════════
      MODULES EVENEMENT (reservations, badges, conferenciers, benevoles, logistique, prestataire)
@@ -1547,7 +1597,277 @@ show = function(id) {
   origShow(id);
   if (id.indexOf('erp-') === 0 && !erpBooted) { erpBooted = true; erpRefreshAll(); }
   else if (id.indexOf('erp-') === 0 && erpBooted) { erpRefreshAll(); }
+  if (id === 'slider-editor') { renderSliderEditor(); }
+  if (id === 'suggestions-admin') { renderSuggestionsAdmin(); }
 };
+
+/* ═══════════════════════════════════════════════════════
+   SLIDER EDITOR
+   ═══════════════════════════════════════════════════════ */
+var defaultSliderData = [
+  { tag: 'Le festival', title: 'Les Rendez-vous<br>G\u00e9opolitiques de Strasbourg', subtitle: 'Festival international \u2014 19-21 mars 2027', author: '', cta: '', ctaLink: '', bg: 'slide-bg-1' },
+  { tag: 'Le th\u00e8me 2027', title: 'Les batailles de l\'eau', subtitle: 'Des nappes phr\u00e9atiques aux oc\u00e9ans, l\'eau trace de nouvelles lignes de fracture g\u00e9opolitiques', author: '', cta: '', ctaLink: '', bg: 'slide-bg-2' },
+  { tag: 'Le mot du cofondateur', title: '\u00ab Il est urgent de s\'informer, de comprendre, de d\u00e9battre \u00bb', subtitle: '', author: 'Pierre Haski \u2014 Pr\u00e9sident de Reporters Sans Fronti\u00e8res', cta: '', ctaLink: '', bg: 'slide-bg-3' },
+  { tag: 'Le pays invit\u00e9', title: 'Danemark / Estonie', subtitle: 'Nations strat\u00e9giques en mati\u00e8re de s\u00e9curit\u00e9, environnement et ressources naturelles', author: '', cta: '', ctaLink: '', bg: 'slide-bg-4' },
+  { tag: '100 \u00e9v\u00e9nements', title: 'Conf\u00e9rences, tables rondes, expositions, projections, ateliers...', subtitle: 'Gratuit et ouvert \u00e0 tous', author: '', cta: '', ctaLink: '', bg: 'slide-bg-5' },
+  { tag: 'Les intervenants', title: 'G\u00e9opolitologues, historiens, diplomates, journalistes, militaires, artistes...', subtitle: 'Une pluralit\u00e9 de regards sur le monde', author: '', cta: '', ctaLink: '', bg: 'slide-bg-6' },
+  { tag: 'Salon du livre', title: 'Un salon du livre g\u00e9opolitique', subtitle: 'Point focal du festival', author: '', cta: '', ctaLink: '', bg: 'slide-bg-7' },
+  { tag: 'Partenaires', title: 'Parlement europ\u00e9en, Conseil de l\'Europe, Arte, France Inter, Le Monde...', subtitle: 'Des partenaires de premier plan', author: '', cta: '', ctaLink: '', bg: 'slide-bg-8' },
+  { tag: 'Strasbourg', title: 'Un festival au c\u0153ur de la ville', subtitle: 'Ville europ\u00e9enne et internationale par excellence', author: '', cta: '', ctaLink: '', bg: 'slide-bg-9' },
+  { tag: 'Appel \u00e0 contribution', title: 'Rejoignez l\'aventure', subtitle: 'Investisseurs, partenaires, b\u00e9n\u00e9voles \u2014 contactez-nous', author: '', cta: 'Nous contacter \u2192', ctaLink: '#contact', bg: 'slide-bg-10' }
+];
+
+function getAdminSliderData() {
+  var saved = localStorage.getItem('rvgs_slider_data');
+  if (saved) { try { return JSON.parse(saved); } catch(e) {} }
+  return JSON.parse(JSON.stringify(defaultSliderData));
+}
+
+function saveSliderData(data) {
+  localStorage.setItem('rvgs_slider_data', JSON.stringify(data));
+}
+
+function renderSliderEditor() {
+  var data = getAdminSliderData();
+  var list = document.getElementById('sliderEditorList');
+  if (!list) return;
+
+  list.innerHTML = data.map(function(s, i) {
+    return '<div style="background:#161822;border:1px solid rgba(201,168,76,.1);border-radius:14px;padding:20px;margin-bottom:12px;">' +
+      '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;">' +
+        '<span style="font-size:.95rem;font-weight:800;color:#C9A84C;">Diapo ' + (i+1) + '</span>' +
+        '<div style="display:flex;gap:6px;">' +
+          (i > 0 ? '<button onclick="moveSlide(' + i + ',-1)" style="padding:4px 10px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:6px;color:#9B978F;cursor:pointer;font-size:14px;" title="Monter">\u25B2</button>' : '') +
+          (i < data.length - 1 ? '<button onclick="moveSlide(' + i + ',1)" style="padding:4px 10px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:6px;color:#9B978F;cursor:pointer;font-size:14px;" title="Descendre">\u25BC</button>' : '') +
+          '<button onclick="previewSlide(' + i + ')" style="padding:4px 10px;background:rgba(59,130,246,.12);border:1px solid rgba(59,130,246,.2);border-radius:6px;color:#3B82F6;cursor:pointer;font-size:12px;font-weight:600;">Aper\u00e7u</button>' +
+          '<button onclick="deleteSlide(' + i + ')" style="padding:4px 10px;background:rgba(220,38,38,.12);border:1px solid rgba(220,38,38,.2);border-radius:6px;color:#DC2626;cursor:pointer;font-size:12px;font-weight:600;">\u2716</button>' +
+        '</div>' +
+      '</div>' +
+      '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">' +
+        '<div>' +
+          '<label style="font-size:.72rem;color:#C9A84C;font-weight:600;">Tag / \u00c9tiquette</label>' +
+          '<input type="text" value="' + escH(s.tag || '') + '" onchange="updateSlideField(' + i + ',\'tag\',this.value)" style="width:100%;padding:8px 12px;border-radius:8px;border:1px solid rgba(201,168,76,.1);background:#1a1c2a;color:#E8E4DC;font-size:.82rem;">' +
+        '</div>' +
+        '<div>' +
+          '<label style="font-size:.72rem;color:#C9A84C;font-weight:600;">Couleur fond (CSS)</label>' +
+          '<input type="text" value="' + escH(s.bgColor || '') + '" placeholder="linear-gradient(...) ou #hex" onchange="updateSlideField(' + i + ',\'bgColor\',this.value)" style="width:100%;padding:8px 12px;border-radius:8px;border:1px solid rgba(201,168,76,.1);background:#1a1c2a;color:#E8E4DC;font-size:.82rem;">' +
+        '</div>' +
+      '</div>' +
+      '<div style="margin-top:10px;">' +
+        '<label style="font-size:.72rem;color:#C9A84C;font-weight:600;">Titre</label>' +
+        '<input type="text" value="' + escH(s.title || '') + '" onchange="updateSlideField(' + i + ',\'title\',this.value)" style="width:100%;padding:8px 12px;border-radius:8px;border:1px solid rgba(201,168,76,.1);background:#1a1c2a;color:#E8E4DC;font-size:.82rem;">' +
+      '</div>' +
+      '<div style="margin-top:10px;">' +
+        '<label style="font-size:.72rem;color:#C9A84C;font-weight:600;">Sous-titre / Description</label>' +
+        '<input type="text" value="' + escH(s.subtitle || '') + '" onchange="updateSlideField(' + i + ',\'subtitle\',this.value)" style="width:100%;padding:8px 12px;border-radius:8px;border:1px solid rgba(201,168,76,.1);background:#1a1c2a;color:#E8E4DC;font-size:.82rem;">' +
+      '</div>' +
+      '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px;">' +
+        '<div>' +
+          '<label style="font-size:.72rem;color:#C9A84C;font-weight:600;">Auteur</label>' +
+          '<input type="text" value="' + escH(s.author || '') + '" onchange="updateSlideField(' + i + ',\'author\',this.value)" style="width:100%;padding:8px 12px;border-radius:8px;border:1px solid rgba(201,168,76,.1);background:#1a1c2a;color:#E8E4DC;font-size:.82rem;">' +
+        '</div>' +
+        '<div>' +
+          '<label style="font-size:.72rem;color:#C9A84C;font-weight:600;">URL Image (optionnel)</label>' +
+          '<input type="text" value="' + escH(s.bgImage || '') + '" placeholder="https://... ou data:image/..." onchange="updateSlideField(' + i + ',\'bgImage\',this.value)" style="width:100%;padding:8px 12px;border-radius:8px;border:1px solid rgba(201,168,76,.1);background:#1a1c2a;color:#E8E4DC;font-size:.82rem;">' +
+        '</div>' +
+      '</div>' +
+      '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px;">' +
+        '<div>' +
+          '<label style="font-size:.72rem;color:#C9A84C;font-weight:600;">Texte CTA (bouton)</label>' +
+          '<input type="text" value="' + escH(s.cta || '') + '" onchange="updateSlideField(' + i + ',\'cta\',this.value)" style="width:100%;padding:8px 12px;border-radius:8px;border:1px solid rgba(201,168,76,.1);background:#1a1c2a;color:#E8E4DC;font-size:.82rem;">' +
+        '</div>' +
+        '<div>' +
+          '<label style="font-size:.72rem;color:#C9A84C;font-weight:600;">Lien CTA</label>' +
+          '<input type="text" value="' + escH(s.ctaLink || '') + '" placeholder="#contact ou URL" onchange="updateSlideField(' + i + ',\'ctaLink\',this.value)" style="width:100%;padding:8px 12px;border-radius:8px;border:1px solid rgba(201,168,76,.1);background:#1a1c2a;color:#E8E4DC;font-size:.82rem;">' +
+        '</div>' +
+      '</div>' +
+    '</div>';
+  }).join('');
+}
+
+function escH(str) {
+  return String(str).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+function updateSlideField(index, field, value) {
+  var data = getAdminSliderData();
+  if (data[index]) {
+    data[index][field] = value;
+    saveSliderData(data);
+  }
+}
+
+function moveSlide(index, dir) {
+  var data = getAdminSliderData();
+  var newIndex = index + dir;
+  if (newIndex < 0 || newIndex >= data.length) return;
+  var temp = data[index];
+  data[index] = data[newIndex];
+  data[newIndex] = temp;
+  saveSliderData(data);
+  renderSliderEditor();
+}
+
+function deleteSlide(index) {
+  if (!confirm('Supprimer cette diapo ?')) return;
+  var data = getAdminSliderData();
+  data.splice(index, 1);
+  saveSliderData(data);
+  renderSliderEditor();
+}
+
+function addNewSlide() {
+  var data = getAdminSliderData();
+  data.push({
+    tag: 'Nouvelle diapo',
+    title: 'Titre',
+    subtitle: 'Sous-titre',
+    author: '',
+    cta: '',
+    ctaLink: '',
+    bgColor: '',
+    bgImage: '',
+    bg: 'slide-bg-' + ((data.length % 10) + 1)
+  });
+  saveSliderData(data);
+  renderSliderEditor();
+}
+
+function resetSliderDefaults() {
+  if (!confirm('R\u00e9initialiser toutes les diapos aux valeurs par d\u00e9faut ?')) return;
+  localStorage.removeItem('rvgs_slider_data');
+  renderSliderEditor();
+}
+
+function previewSlide(index) {
+  var data = getAdminSliderData();
+  var s = data[index];
+  if (!s) return;
+  var preview = document.getElementById('sliderPreview');
+  if (!preview) return;
+  var bgStyle = s.bgImage ? 'background-image:url(' + s.bgImage + ');background-size:cover;background-position:center;' :
+    s.bgColor ? 'background:' + s.bgColor + ';' :
+    'background:linear-gradient(135deg,#0D1B4A,#1B3A8C);';
+  preview.style.cssText = 'height:200px;border-radius:10px;overflow:hidden;position:relative;display:flex;align-items:center;justify-content:center;text-align:center;padding:20px;' + bgStyle;
+  preview.innerHTML = '<div>' +
+    (s.tag ? '<span style="display:inline-block;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:2px;color:#D4A843;background:rgba(212,168,67,.15);border:1px solid rgba(212,168,67,.25);padding:4px 14px;border-radius:20px;margin-bottom:10px;">' + s.tag + '</span>' : '') +
+    '<h3 style="font-size:1.3rem;font-weight:900;color:#fff;margin-bottom:8px;text-shadow:0 2px 15px rgba(0,0,0,.3);font-family:Playfair Display,serif;">' + s.title + '</h3>' +
+    (s.subtitle ? '<p style="font-size:.85rem;color:rgba(255,255,255,.8);margin-bottom:6px;">' + s.subtitle + '</p>' : '') +
+    (s.author ? '<p style="font-size:.78rem;color:#D4A843;font-style:italic;">' + s.author + '</p>' : '') +
+    (s.cta ? '<span style="display:inline-block;margin-top:8px;padding:6px 16px;background:#D4A843;color:#0D1B4A;border-radius:6px;font-size:.78rem;font-weight:700;">' + s.cta + '</span>' : '') +
+    '</div>';
+}
+
+function exportSliderJSON() {
+  var data = getAdminSliderData();
+  var blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+  var url = URL.createObjectURL(blob);
+  var a = document.createElement('a');
+  a.href = url;
+  a.download = 'rvgs-slider-' + new Date().toISOString().slice(0,10) + '.json';
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+function importSliderJSON() {
+  document.getElementById('sliderImportFile').click();
+}
+
+function handleSliderImport(e) {
+  var file = e.target.files[0];
+  if (!file) return;
+  var reader = new FileReader();
+  reader.onload = function(ev) {
+    try {
+      var data = JSON.parse(ev.target.result);
+      if (Array.isArray(data)) {
+        saveSliderData(data);
+        renderSliderEditor();
+        alert('Import r\u00e9ussi : ' + data.length + ' diapos import\u00e9es.');
+      } else {
+        alert('Format invalide : le fichier doit contenir un tableau JSON.');
+      }
+    } catch(err) {
+      alert('Erreur de lecture JSON : ' + err.message);
+    }
+  };
+  reader.readAsText(file);
+  e.target.value = '';
+}
+
+/* ═══════════════════════════════════════════════════════
+   SUGGESTIONS ADMIN
+   ═══════════════════════════════════════════════════════ */
+function getSuggestions() {
+  try { return JSON.parse(localStorage.getItem('rvgs_suggestions') || '[]'); } catch(e) { return []; }
+}
+
+function saveSuggestions(data) {
+  localStorage.setItem('rvgs_suggestions', JSON.stringify(data));
+}
+
+function renderSuggestionsAdmin() {
+  var data = getSuggestions();
+  var list = document.getElementById('suggestionsAdminList');
+  var count = document.getElementById('suggCount');
+  if (!list) return;
+  if (count) count.textContent = data.length + ' suggestion' + (data.length > 1 ? 's' : '');
+
+  if (data.length === 0) {
+    list.innerHTML = '<div style="text-align:center;padding:40px;color:#5F5C55;">Aucune suggestion pour le moment.</div>';
+    return;
+  }
+
+  var statusColors = { nouveau: '#F59E0B', lu: '#3B82F6', traite: '#22C55E' };
+  var statusLabels = { nouveau: 'Nouveau', lu: 'Lu', traite: 'Trait\u00e9' };
+
+  list.innerHTML = data.slice().reverse().map(function(s, ri) {
+    var i = data.length - 1 - ri;
+    var color = statusColors[s.status] || '#F59E0B';
+    var label = statusLabels[s.status] || s.status;
+    var date = s.date ? new Date(s.date).toLocaleString('fr-FR') : '';
+    return '<div style="background:#161822;border:1px solid rgba(201,168,76,.1);border-radius:14px;padding:20px;border-left:3px solid ' + color + ';">' +
+      '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;flex-wrap:wrap;gap:8px;">' +
+        '<div>' +
+          '<span style="font-weight:700;color:#E8E4DC;font-size:.88rem;">' + (s.name || 'Anonyme') + '</span>' +
+          '<span style="font-size:.72rem;color:#5F5C55;margin-left:10px;">' + date + '</span>' +
+        '</div>' +
+        '<span style="font-size:.72rem;padding:3px 10px;border-radius:6px;font-weight:700;background:' + color + '22;color:' + color + ';">' + label + '</span>' +
+      '</div>' +
+      '<p style="font-size:.85rem;color:#9B978F;line-height:1.6;margin-bottom:14px;">' + escH(s.message) + '</p>' +
+      '<div style="display:flex;gap:6px;flex-wrap:wrap;">' +
+        (s.status !== 'lu' ? '<button onclick="setSuggestionStatus(' + i + ',\'lu\')" style="padding:5px 12px;background:rgba(59,130,246,.12);color:#3B82F6;border:1px solid rgba(59,130,246,.2);border-radius:6px;font-size:.75rem;font-weight:600;cursor:pointer;">Marquer lu</button>' : '') +
+        (s.status !== 'traite' ? '<button onclick="setSuggestionStatus(' + i + ',\'traite\')" style="padding:5px 12px;background:rgba(34,197,94,.12);color:#22C55E;border:1px solid rgba(34,197,94,.2);border-radius:6px;font-size:.75rem;font-weight:600;cursor:pointer;">Marquer trait\u00e9</button>' : '') +
+        '<button onclick="deleteSuggestion(' + i + ')" style="padding:5px 12px;background:rgba(220,38,38,.12);color:#DC2626;border:1px solid rgba(220,38,38,.2);border-radius:6px;font-size:.75rem;font-weight:600;cursor:pointer;">Supprimer</button>' +
+      '</div>' +
+    '</div>';
+  }).join('');
+}
+
+function refreshSuggestions() { renderSuggestionsAdmin(); }
+
+function setSuggestionStatus(index, status) {
+  var data = getSuggestions();
+  if (data[index]) {
+    data[index].status = status;
+    saveSuggestions(data);
+    renderSuggestionsAdmin();
+  }
+}
+
+function deleteSuggestion(index) {
+  var data = getSuggestions();
+  data.splice(index, 1);
+  saveSuggestions(data);
+  renderSuggestionsAdmin();
+}
+
+function clearAllSuggestions() {
+  if (!confirm('Supprimer toutes les suggestions ?')) return;
+  localStorage.removeItem('rvgs_suggestions');
+  renderSuggestionsAdmin();
+}
+
 </script>
 
 <!-- Bouton retour vers lanceur Stéphanie -->
