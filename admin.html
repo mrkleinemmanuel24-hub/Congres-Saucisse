@@ -414,7 +414,7 @@
 /* ═══════════════════════════════════════════════════════
    SPA NAVIGATION
    ═══════════════════════════════════════════════════════ */
-var ADMIN_PWD = 'SAUCISSE2026';
+var ADMIN_PWD = 'admin';
 var adminUnlocked = !!localStorage.getItem('congress_admin_unlocked');
 var initializedSections = {};
 
@@ -479,5 +479,8 @@ window.addEventListener('DOMContentLoaded', function() {
   }
 });
 </script>
+
+<!-- Bouton retour vers lanceur Stéphanie -->
+<a href="stephanie.html" style="position:fixed;bottom:12px;left:12px;z-index:99999;background:rgba(200,164,78,0.9);color:#0e0e20;padding:8px 16px;border-radius:10px;font-size:13px;font-weight:700;text-decoration:none;font-family:Inter,sans-serif;box-shadow:0 2px 10px rgba(0,0,0,0.3);transition:all .2s" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'" title="Retour au lanceur principal">← Retour</a>
 </body>
 </html>
