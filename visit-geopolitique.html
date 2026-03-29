@@ -1,0 +1,1466 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Visite Géopolitique de Strasbourg — Story Map interactive des lieux de pouvoir et d'influence. RVGS 2026.">
+<meta name="theme-color" content="#0D1B4A">
+<title>Visite Géopolitique de Strasbourg — RVGS 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;800;900&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<style>
+/* ============================================
+   VISITE GÉOPOLITIQUE — Story Map
+   Theme: Nuit diplomatique (dark navy + gold)
+   ============================================ */
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg-primary: #0D1B4A;
+  --bg-secondary: #142866;
+  --bg-card: #1B3A8C;
+  --bg-card-hover: #2248A0;
+  --accent: #D4A843;
+  --accent-hover: #E0B854;
+  --accent-rgb: 212,168,67;
+  --text-primary: #F0EDE6;
+  --text-secondary: #B0B8CC;
+  --text-muted: #7080A0;
+  --border: rgba(212,168,67,0.15);
+  --border-light: rgba(255,255,255,0.06);
+  --shadow: 0 4px 24px rgba(0,0,0,0.3);
+  --shadow-hover: 0 8px 40px rgba(0,0,0,0.4);
+  --footer-bg: #091236;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  line-height: 1.6;
+  overflow-x: hidden;
+  min-height: 100vh;
+}
+
+h1, h2, h3, h4 {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+a { color: var(--accent); text-decoration: none; transition: color 0.3s; }
+a:hover { color: var(--accent-hover); }
+
+/* ============================================
+   BACK BUTTON
+   ============================================ */
+.back-btn {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  background: rgba(13,27,74,0.92);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--border);
+  border-radius: 50px;
+  color: var(--text-primary);
+  font-family: 'Inter', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s;
+  text-decoration: none;
+}
+.back-btn:hover {
+  background: rgba(27,58,140,0.9);
+  border-color: var(--accent);
+  color: var(--accent);
+  transform: translateX(-2px);
+}
+.back-btn svg { width: 16px; height: 16px; transition: transform 0.3s; }
+.back-btn:hover svg { transform: translateX(-3px); }
+
+/* ============================================
+   HERO SECTION
+   ============================================ */
+.hero {
+  position: relative;
+  height: 55vh;
+  min-height: 380px;
+  max-height: 520px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  overflow: hidden;
+}
+.hero-bg {
+  position: absolute;
+  inset: 0;
+  background: url('img/hero-strasbourg.png') center/cover no-repeat;
+}
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(13,27,74,0.88) 0%, rgba(20,40,102,0.78) 50%, rgba(13,27,74,0.92) 100%);
+}
+.hero-content {
+  position: relative;
+  z-index: 2;
+  max-width: 800px;
+  padding: 0 24px;
+  animation: heroFadeIn 1s ease-out;
+}
+@keyframes heroFadeIn {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 20px;
+  background: rgba(212,168,67,0.15);
+  border: 1px solid rgba(212,168,67,0.3);
+  border-radius: 50px;
+  color: var(--accent);
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 20px;
+}
+.hero h1 {
+  font-size: clamp(2rem, 5vw, 3.2rem);
+  font-weight: 800;
+  margin-bottom: 16px;
+  letter-spacing: -0.01em;
+}
+.hero h1 span { color: var(--accent); }
+.hero-subtitle {
+  font-size: clamp(1rem, 2.5vw, 1.2rem);
+  color: var(--text-secondary);
+  max-width: 620px;
+  margin: 0 auto 28px;
+  font-weight: 300;
+  line-height: 1.7;
+}
+.hero-stats {
+  display: flex;
+  justify-content: center;
+  gap: 32px;
+  flex-wrap: wrap;
+}
+.hero-stat {
+  text-align: center;
+}
+.hero-stat-num {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: var(--accent);
+}
+.hero-stat-label {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+/* Scroll indicator */
+.scroll-indicator {
+  position: absolute;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  color: var(--text-muted);
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  animation: scrollBounce 2s infinite;
+}
+@keyframes scrollBounce {
+  0%, 100% { transform: translateX(-50%) translateY(0); }
+  50% { transform: translateX(-50%) translateY(6px); }
+}
+
+/* ============================================
+   MAP SECTION
+   ============================================ */
+.map-section {
+  position: relative;
+  background: var(--bg-secondary);
+}
+.map-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 24px;
+  background: rgba(13,27,74,0.95);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--border);
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.map-toolbar-left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.map-toolbar h3 {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  font-family: 'Inter', sans-serif;
+}
+.poi-count {
+  padding: 4px 12px;
+  background: rgba(212,168,67,0.15);
+  border-radius: 20px;
+  color: var(--accent);
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+.map-toolbar-right {
+  display: flex;
+  gap: 8px;
+}
+.toolbar-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--text-secondary);
+  font-family: 'Inter', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+.toolbar-btn:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+  background: rgba(212,168,67,0.08);
+}
+.toolbar-btn.active {
+  background: var(--accent);
+  color: var(--bg-primary);
+  border-color: var(--accent);
+  font-weight: 600;
+}
+.toolbar-btn svg { width: 14px; height: 14px; }
+
+#map {
+  width: 100%;
+  height: 500px;
+  z-index: 1;
+}
+
+/* Dark map tiles */
+.leaflet-tile-pane { filter: saturate(0.3) brightness(0.65) contrast(1.2); }
+.leaflet-control-zoom a {
+  background: var(--bg-card) !important;
+  color: var(--text-primary) !important;
+  border-color: var(--border) !important;
+}
+.leaflet-control-zoom a:hover {
+  background: var(--bg-card-hover) !important;
+  color: var(--accent) !important;
+}
+.leaflet-control-attribution {
+  background: rgba(13,27,74,0.8) !important;
+  color: var(--text-muted) !important;
+  font-size: 0.65rem !important;
+}
+.leaflet-control-attribution a { color: var(--text-muted) !important; }
+
+/* Custom markers */
+.custom-marker {
+  background: none;
+  border: none;
+}
+.marker-pin {
+  width: 32px;
+  height: 42px;
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform 0.3s;
+  filter: drop-shadow(0 3px 6px rgba(0,0,0,0.4));
+}
+.marker-pin:hover { transform: scale(1.15); }
+.marker-pin svg { width: 32px; height: 42px; }
+.marker-number {
+  position: absolute;
+  top: 6px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: 'Inter', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--bg-primary);
+  pointer-events: none;
+  z-index: 2;
+}
+.marker-pin.active { transform: scale(1.3); }
+.marker-pin.visited::after {
+  content: '';
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  width: 14px;
+  height: 14px;
+  background: #2ecc71;
+  border-radius: 50%;
+  border: 2px solid var(--bg-primary);
+}
+
+/* Route line animation */
+.route-line {
+  stroke-dasharray: 12 6;
+  animation: routeDash 30s linear infinite;
+}
+@keyframes routeDash {
+  to { stroke-dashoffset: -1000; }
+}
+
+/* ============================================
+   SIDE PANEL (Desktop) / BOTTOM SHEET (Mobile)
+   ============================================ */
+.panel-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  z-index: 999;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s;
+}
+.panel-overlay.open { opacity: 1; pointer-events: auto; }
+
+.side-panel {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 440px;
+  max-width: 100%;
+  height: 100vh;
+  background: var(--bg-primary);
+  z-index: 1000;
+  transform: translateX(100%);
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  overflow-y: auto;
+  border-left: 1px solid var(--border);
+  box-shadow: -8px 0 40px rgba(0,0,0,0.3);
+}
+.side-panel.open { transform: translateX(0); }
+
+.panel-close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  z-index: 10;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.3s;
+  font-size: 1.2rem;
+}
+.panel-close:hover { background: rgba(212,168,67,0.15); color: var(--accent); border-color: var(--accent); }
+
+.panel-image {
+  width: 100%;
+  height: 220px;
+  background: var(--bg-card);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 12px;
+  position: relative;
+  overflow: hidden;
+}
+.panel-image-icon {
+  font-size: 3.5rem;
+  opacity: 0.7;
+}
+.panel-image-label {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-align: center;
+  padding: 0 20px;
+}
+.panel-image::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 60px;
+  background: linear-gradient(transparent, var(--bg-primary));
+}
+
+.panel-body { padding: 24px 28px 40px; }
+
+.panel-category {
+  display: inline-block;
+  padding: 5px 14px;
+  background: rgba(212,168,67,0.15);
+  border: 1px solid rgba(212,168,67,0.25);
+  border-radius: 20px;
+  color: var(--accent);
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: 14px;
+}
+.panel-category.rvgs {
+  background: rgba(200,50,50,0.15);
+  border-color: rgba(200,50,50,0.3);
+  color: #E85555;
+}
+
+.panel-title {
+  font-size: 1.6rem;
+  font-weight: 700;
+  margin-bottom: 18px;
+  line-height: 1.25;
+}
+
+.panel-description {
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+  line-height: 1.75;
+  margin-bottom: 24px;
+}
+
+.panel-enjeu {
+  padding: 20px;
+  background: rgba(212,168,67,0.06);
+  border: 1px solid rgba(212,168,67,0.2);
+  border-left: 3px solid var(--accent);
+  border-radius: 8px;
+  margin-bottom: 24px;
+}
+.panel-enjeu-label {
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--accent);
+  margin-bottom: 8px;
+}
+.panel-enjeu-text {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  line-height: 1.7;
+  font-style: italic;
+}
+
+.panel-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding-top: 20px;
+  border-top: 1px solid var(--border);
+}
+.panel-meta-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.82rem;
+  color: var(--text-muted);
+}
+.panel-meta-item svg { width: 16px; height: 16px; color: var(--accent); flex-shrink: 0; }
+
+.panel-visited-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  padding: 14px;
+  margin-top: 24px;
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  color: var(--text-secondary);
+  font-family: 'Inter', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+.panel-visited-btn:hover {
+  border-color: #2ecc71;
+  color: #2ecc71;
+  background: rgba(46,204,113,0.08);
+}
+.panel-visited-btn.checked {
+  background: rgba(46,204,113,0.12);
+  border-color: rgba(46,204,113,0.4);
+  color: #2ecc71;
+}
+.panel-visited-btn svg { width: 18px; height: 18px; }
+
+/* ============================================
+   POI LIST (below map)
+   ============================================ */
+.poi-list-section {
+  padding: 48px 24px;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+.poi-list-section h2 {
+  font-size: 1.6rem;
+  margin-bottom: 8px;
+}
+.poi-list-subtitle {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  margin-bottom: 32px;
+}
+.poi-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 16px;
+}
+.poi-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 20px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-light);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+.poi-card:hover {
+  background: var(--bg-card);
+  border-color: var(--border);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+}
+.poi-card.visited { border-left: 3px solid #2ecc71; }
+.poi-card-number {
+  flex-shrink: 0;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(212,168,67,0.15);
+  border-radius: 50%;
+  color: var(--accent);
+  font-family: 'Playfair Display', serif;
+  font-weight: 700;
+  font-size: 0.9rem;
+}
+.poi-card-number.rvgs {
+  background: rgba(200,50,50,0.15);
+  color: #E85555;
+}
+.poi-card-body { flex: 1; min-width: 0; }
+.poi-card-cat {
+  font-size: 0.68rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--accent);
+  margin-bottom: 4px;
+}
+.poi-card-cat.rvgs { color: #E85555; }
+.poi-card-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 4px;
+  color: var(--text-primary);
+}
+.poi-card-excerpt {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.poi-card-check {
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+  color: transparent;
+  transition: color 0.3s;
+}
+.poi-card.visited .poi-card-check { color: #2ecc71; }
+
+/* ============================================
+   PARCOURS MODE
+   ============================================ */
+.parcours-banner {
+  display: none;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 24px;
+  background: linear-gradient(135deg, rgba(212,168,67,0.12), rgba(212,168,67,0.04));
+  border: 1px solid rgba(212,168,67,0.2);
+  border-radius: 12px;
+  margin: 24px 24px 0;
+  max-width: 1100px;
+  margin-left: auto;
+  margin-right: auto;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.parcours-banner.active { display: flex; }
+.parcours-banner-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.parcours-icon {
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--accent);
+  border-radius: 10px;
+  font-size: 1.3rem;
+}
+.parcours-info h4 {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+.parcours-info p {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}
+.parcours-progress {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.parcours-bar {
+  width: 120px;
+  height: 6px;
+  background: rgba(255,255,255,0.08);
+  border-radius: 3px;
+  overflow: hidden;
+}
+.parcours-bar-fill {
+  height: 100%;
+  background: var(--accent);
+  border-radius: 3px;
+  transition: width 0.5s ease;
+}
+.parcours-bar-text {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  font-weight: 500;
+  white-space: nowrap;
+}
+.parcours-close-btn {
+  padding: 6px 14px;
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--text-muted);
+  font-family: 'Inter', sans-serif;
+  font-size: 0.75rem;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+.parcours-close-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+/* ============================================
+   FOOTER
+   ============================================ */
+footer {
+  background: var(--footer-bg);
+  border-top: 1px solid var(--border);
+  padding: 48px 24px 28px;
+  text-align: center;
+}
+.footer-brand {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.4rem;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+.footer-brand span { color: var(--accent); }
+.footer-dates {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin-bottom: 20px;
+}
+.footer-links {
+  display: flex;
+  justify-content: center;
+  gap: 24px;
+  flex-wrap: wrap;
+  margin-bottom: 24px;
+}
+.footer-links a {
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+  transition: color 0.3s;
+}
+.footer-links a:hover { color: var(--accent); }
+.footer-copy {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+}
+
+/* ============================================
+   MOBILE RESPONSIVE
+   ============================================ */
+@media (max-width: 768px) {
+  .hero { height: 45vh; min-height: 320px; }
+  .hero h1 { font-size: 1.6rem; }
+  .hero-subtitle { font-size: 0.9rem; }
+  .hero-stats { gap: 20px; }
+  .hero-stat-num { font-size: 1.4rem; }
+
+  #map { height: 380px; }
+
+  .map-toolbar { padding: 10px 16px; }
+  .map-toolbar h3 { font-size: 0.85rem; }
+  .toolbar-btn { padding: 6px 12px; font-size: 0.75rem; }
+  .toolbar-btn span.btn-label-long { display: none; }
+
+  /* Bottom sheet on mobile */
+  .side-panel {
+    top: auto;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    height: 80vh;
+    max-height: 80vh;
+    transform: translateY(100%);
+    border-left: none;
+    border-top: 1px solid var(--border);
+    border-radius: 20px 20px 0 0;
+    box-shadow: 0 -8px 40px rgba(0,0,0,0.4);
+  }
+  .side-panel.open { transform: translateY(0); }
+  .side-panel::before {
+    content: '';
+    position: sticky;
+    top: 0;
+    display: block;
+    width: 40px;
+    height: 4px;
+    background: rgba(255,255,255,0.2);
+    border-radius: 2px;
+    margin: 12px auto;
+  }
+
+  .panel-image { height: 160px; }
+  .panel-body { padding: 20px 20px 32px; }
+  .panel-title { font-size: 1.3rem; }
+
+  .poi-grid { grid-template-columns: 1fr; }
+  .poi-list-section { padding: 32px 16px; }
+
+  .parcours-banner { margin: 16px 16px 0; padding: 12px 16px; }
+
+  .back-btn { top: 12px; left: 12px; padding: 8px 14px; font-size: 0.78rem; }
+}
+
+@media (max-width: 480px) {
+  .hero { height: 40vh; min-height: 280px; }
+  .hero-stats { gap: 16px; }
+  .hero-stat-num { font-size: 1.2rem; }
+  .hero-stat-label { font-size: 0.65rem; }
+  #map { height: 320px; }
+  .map-toolbar-right { flex-wrap: wrap; }
+}
+
+/* ============================================
+   ANIMATIONS
+   ============================================ */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.fade-in-up {
+  opacity: 0;
+  animation: fadeInUp 0.6s ease-out forwards;
+}
+.poi-card:nth-child(1) { animation-delay: 0.05s; }
+.poi-card:nth-child(2) { animation-delay: 0.1s; }
+.poi-card:nth-child(3) { animation-delay: 0.15s; }
+.poi-card:nth-child(4) { animation-delay: 0.2s; }
+.poi-card:nth-child(5) { animation-delay: 0.25s; }
+.poi-card:nth-child(6) { animation-delay: 0.3s; }
+.poi-card:nth-child(7) { animation-delay: 0.35s; }
+.poi-card:nth-child(8) { animation-delay: 0.4s; }
+.poi-card:nth-child(9) { animation-delay: 0.45s; }
+.poi-card:nth-child(10) { animation-delay: 0.5s; }
+
+/* Leaflet popup custom */
+.leaflet-popup-content-wrapper {
+  background: var(--bg-primary) !important;
+  color: var(--text-primary) !important;
+  border: 1px solid var(--border) !important;
+  border-radius: 10px !important;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.4) !important;
+}
+.leaflet-popup-tip { background: var(--bg-primary) !important; }
+.leaflet-popup-content { margin: 10px 14px !important; font-family: 'Inter', sans-serif !important; }
+.leaflet-popup-content .popup-title {
+  font-family: 'Playfair Display', serif;
+  font-weight: 600;
+  font-size: 0.95rem;
+  margin-bottom: 4px;
+}
+.leaflet-popup-content .popup-cat {
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--accent);
+  font-weight: 600;
+}
+.leaflet-popup-content .popup-action {
+  display: inline-block;
+  margin-top: 8px;
+  font-size: 0.75rem;
+  color: var(--accent);
+  font-weight: 500;
+  cursor: pointer;
+}
+.leaflet-popup-close-button {
+  color: var(--text-muted) !important;
+  font-size: 20px !important;
+}
+.leaflet-popup-close-button:hover { color: var(--accent) !important; }
+</style>
+</head>
+<body>
+
+<!-- Back Button -->
+<a href="index.html" class="back-btn">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>
+  Retour
+</a>
+
+<!-- Hero Section -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-overlay"></div>
+  <div class="hero-content">
+    <div class="hero-badge">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/><path d="M2 12h20"/></svg>
+      Story Map interactive
+    </div>
+    <h1>Visite <span>Géopolitique</span> de Strasbourg</h1>
+    <p class="hero-subtitle">Découvrez les lieux de pouvoir et d'influence qui font de Strasbourg la capitale européenne</p>
+    <div class="hero-stats">
+      <div class="hero-stat">
+        <div class="hero-stat-num">10</div>
+        <div class="hero-stat-label">Lieux clés</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-num">2h30</div>
+        <div class="hero-stat-label">Parcours</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-num">4</div>
+        <div class="hero-stat-label">Jours de festival</div>
+      </div>
+    </div>
+  </div>
+  <div class="scroll-indicator">
+    <span>Explorer la carte</span>
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 13l5 5 5-5"/><path d="M7 6l5 5 5-5"/></svg>
+  </div>
+</section>
+
+<!-- Map Section -->
+<section class="map-section" id="map-section">
+  <div class="map-toolbar">
+    <div class="map-toolbar-left">
+      <h3>Carte des lieux stratégiques</h3>
+      <span class="poi-count" id="visited-count">0/10 visites</span>
+    </div>
+    <div class="map-toolbar-right">
+      <button class="toolbar-btn" id="btn-parcours" onclick="toggleParcours()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l6-6 4 4 8-8"/><path d="M17 7h4v4"/></svg>
+        <span class="btn-label-long">Parcours suggéré (2h30)</span>
+        <span class="btn-label-short" style="display:none">Parcours</span>
+      </button>
+      <button class="toolbar-btn" onclick="resetVisited()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 4v6h6"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>
+        <span class="btn-label-long">Réinitialiser</span>
+      </button>
+    </div>
+  </div>
+  <div id="map"></div>
+</section>
+
+<!-- Parcours Banner -->
+<div class="parcours-banner" id="parcours-banner">
+  <div class="parcours-banner-left">
+    <div class="parcours-icon">&#x1F6B6;</div>
+    <div class="parcours-info">
+      <h4>Parcours suggéré &mdash; 2h30</h4>
+      <p>Cathédrale &rarr; Petite France &rarr; Neustadt &rarr; RVGS &rarr; Pharmacopée &rarr; Quartier européen &rarr; Parlement &rarr; Conseil &rarr; CEDH &rarr; Port</p>
+    </div>
+  </div>
+  <div class="parcours-progress">
+    <div class="parcours-bar"><div class="parcours-bar-fill" id="parcours-fill" style="width:0%"></div></div>
+    <span class="parcours-bar-text" id="parcours-text">0/10</span>
+  </div>
+  <button class="parcours-close-btn" onclick="toggleParcours()">Fermer</button>
+</div>
+
+<!-- POI List -->
+<section class="poi-list-section">
+  <h2>Les 10 lieux incontournables</h2>
+  <p class="poi-list-subtitle">Cliquez sur un lieu pour découvrir son histoire et ses enjeux géopolitiques</p>
+  <div class="poi-grid" id="poi-grid"></div>
+</section>
+
+<!-- Side Panel -->
+<div class="panel-overlay" id="panel-overlay" onclick="closePanel()"></div>
+<div class="side-panel" id="side-panel">
+  <button class="panel-close" onclick="closePanel()" aria-label="Fermer">&times;</button>
+  <div class="panel-image" id="panel-image">
+    <div class="panel-image-icon" id="panel-icon"></div>
+    <div class="panel-image-label" id="panel-image-label"></div>
+  </div>
+  <div class="panel-body">
+    <div class="panel-category" id="panel-category"></div>
+    <h2 class="panel-title" id="panel-title"></h2>
+    <p class="panel-description" id="panel-description"></p>
+    <div class="panel-enjeu">
+      <div class="panel-enjeu-label">Enjeu stratégique</div>
+      <p class="panel-enjeu-text" id="panel-enjeu"></p>
+    </div>
+    <div class="panel-meta">
+      <div class="panel-meta-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        <span id="panel-coords"></span>
+      </div>
+      <div class="panel-meta-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+        <span id="panel-distance"></span>
+      </div>
+    </div>
+    <button class="panel-visited-btn" id="panel-visited-btn" onclick="toggleVisitedFromPanel()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+      <span id="panel-visited-label">Marquer comme visité</span>
+    </button>
+  </div>
+</div>
+
+<!-- Footer -->
+<footer>
+  <div class="footer-brand">Les Rendez-vous <span>Géopolitiques</span> de Strasbourg</div>
+  <div class="footer-dates">15&ndash;18 octobre 2026, Strasbourg</div>
+  <div class="footer-links">
+    <a href="index.html">Accueil</a>
+    <a href="#map-section">Carte</a>
+    <a href="mentions-legales.html">Mentions légales</a>
+  </div>
+  <div class="footer-copy">&copy; 2026 RVGS &mdash; Les Rendez-vous Géopolitiques de Strasbourg. Tous droits réservés.</div>
+</footer>
+
+<!-- Leaflet.js -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+// ============================================
+// DATA — Points of Interest
+// ============================================
+const CONGRESS_COORDS = [48.5830, 7.7455];
+
+const POIs = [
+  {
+    id: 'parlement',
+    name: 'Parlement européen',
+    lat: 48.5977, lng: 7.7689,
+    category: 'Institution européenne',
+    icon: '\u{1F3DB}',
+    description: 'Siège du Parlement européen depuis 1999. 705 eurodéputés y siègent lors des sessions plénières. Strasbourg est l\'unique siège officiel inscrit dans les traités.',
+    enjeu: 'La bataille entre Strasbourg et Bruxelles pour le siège du Parlement reste un enjeu diplomatique majeur.',
+    isRVGS: false
+  },
+  {
+    id: 'conseil',
+    name: 'Conseil de l\'Europe',
+    lat: 48.5955, lng: 7.7700,
+    category: 'Institution européenne',
+    icon: '\u{1F30D}',
+    description: 'Fondé en 1949, le Conseil de l\'Europe réunit 46 États membres. Il est le gardien des droits de l\'homme, de la démocratie et de l\'État de droit en Europe.',
+    enjeu: 'Après l\'exclusion de la Russie en 2022, le Conseil fait face à la question de son élargissement et de son influence réelle.',
+    isRVGS: false
+  },
+  {
+    id: 'cedh',
+    name: 'Cour européenne des droits de l\'homme',
+    lat: 48.5965, lng: 7.7730,
+    category: 'Institution juridique',
+    icon: '\u{2696}',
+    description: 'Créée en 1959, la CEDH traite les requêtes individuelles contre les 46 États membres. Ses arrêts sont contraignants.',
+    enjeu: 'L\'engorgement de la Cour (70 000 affaires pendantes) et les tensions avec certains États qui refusent d\'appliquer ses arrêts.',
+    isRVGS: false
+  },
+  {
+    id: 'edqm',
+    name: 'Pharmacopée européenne / EDQM',
+    lat: 48.5870, lng: 7.7620,
+    category: 'Santé publique',
+    icon: '\u{1F48A}',
+    description: 'L\'EDQM établit les normes de qualité des médicaments pour 39 pays. C\'est une institution discrète mais stratégique.',
+    enjeu: 'La souveraineté pharmaceutique européenne face à la dépendance aux principes actifs asiatiques.',
+    isRVGS: false
+  },
+  {
+    id: 'quartier',
+    name: 'Quartier européen',
+    lat: 48.5960, lng: 7.7680,
+    category: 'Urbanisme géopolitique',
+    icon: '\u{1F3D9}',
+    description: 'Le quartier européen de Strasbourg concentre les institutions sur 200 hectares. C\'est un laboratoire d\'urbanisme diplomatique.',
+    enjeu: 'L\'aménagement du quartier européen reflète la tension entre ville-symbole et ville fonctionnelle.',
+    isRVGS: false
+  },
+  {
+    id: 'neustadt',
+    name: 'La Neustadt',
+    lat: 48.5850, lng: 7.7500,
+    category: 'Patrimoine UNESCO',
+    icon: '\u{1F3F0}',
+    description: 'Quartier impérial allemand (1871-1918), classé UNESCO en 2017. Un témoignage architectural unique de la double identité franco-allemande de Strasbourg.',
+    enjeu: 'La Neustadt incarne la réconciliation franco-allemande et l\'identité hybride qui a fait de Strasbourg un choix naturel pour les institutions européennes.',
+    isRVGS: false
+  },
+  {
+    id: 'port',
+    name: 'Port autonome de Strasbourg',
+    lat: 48.5630, lng: 7.7850,
+    category: 'Économie stratégique',
+    icon: '\u{1F6A2}',
+    description: '2e port fluvial de France, le port autonome de Strasbourg est un hub logistique au cœur de l\'axe rhénan (Rotterdam-Bâle).',
+    enjeu: 'Le corridor rhénan est un axe commercial vital. Le port positionne Strasbourg dans la géoéconomie européenne.',
+    isRVGS: false
+  },
+  {
+    id: 'cathedrale',
+    name: 'Cathédrale Notre-Dame',
+    lat: 48.5818, lng: 7.7510,
+    category: 'Patrimoine historique',
+    icon: '\u{26EA}',
+    description: 'Chef-d\'œuvre gothique, la cathédrale de Strasbourg fut le plus haut édifice du monde pendant 227 ans (1647-1874). Symbole de la ville depuis le Moyen Âge.',
+    enjeu: 'Objet de querelles entre France et Allemagne pendant des siècles, elle symbolise aujourd\'hui l\'héritage culturel partagé.',
+    isRVGS: false
+  },
+  {
+    id: 'petite-france',
+    name: 'Petite France',
+    lat: 48.5800, lng: 7.7410,
+    category: 'Patrimoine historique',
+    icon: '\u{1F3E0}',
+    description: 'Quartier pittoresque classé UNESCO, la Petite France était le quartier des tanneurs et meuniers au Moyen Âge. Ses maisons à colombages sont devenues l\'image iconique de Strasbourg.',
+    enjeu: 'Le tourisme de masse menace l\'authenticité du quartier. Comment préserver un patrimoine vivant ?',
+    isRVGS: false
+  },
+  {
+    id: 'rvgs',
+    name: 'Lieu du congrès RVGS',
+    lat: 48.5830, lng: 7.7455,
+    category: 'RVGS 2026',
+    icon: '\u{1F3AF}',
+    description: 'Les Rendez-vous Géopolitiques de Strasbourg — 15-18 octobre 2026. Le festival international qui fait dialoguer experts, décideurs et citoyens sur les grands enjeux du monde.',
+    enjeu: 'Première édition d\'un festival qui ambitionne de devenir le Davos de la géopolitique accessible.',
+    isRVGS: true
+  }
+];
+
+// Parcours order (walking route)
+const PARCOURS_ORDER = ['cathedrale', 'petite-france', 'neustadt', 'rvgs', 'edqm', 'quartier', 'parlement', 'conseil', 'cedh', 'port'];
+
+// ============================================
+// STATE
+// ============================================
+let map, markers = {}, routeLine = null, parcoursActive = false;
+let visitedPOIs = JSON.parse(localStorage.getItem('rvgs-visited') || '[]');
+let currentPOI = null;
+
+// ============================================
+// INIT MAP
+// ============================================
+function initMap() {
+  map = L.map('map', {
+    center: [48.5870, 7.7580],
+    zoom: 13,
+    zoomControl: true,
+    scrollWheelZoom: true
+  });
+
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; <a href="https://openstreetmap.org">OpenStreetMap</a>',
+    maxZoom: 18
+  }).addTo(map);
+
+  // Add markers
+  POIs.forEach((poi, index) => {
+    const isVisited = visitedPOIs.includes(poi.id);
+    const markerColor = poi.isRVGS ? '#E85555' : '#D4A843';
+    const markerColorDark = poi.isRVGS ? '#B03030' : '#A07828';
+
+    const icon = L.divIcon({
+      className: 'custom-marker',
+      html: `
+        <div class="marker-pin ${isVisited ? 'visited' : ''}" data-poi="${poi.id}">
+          <svg viewBox="0 0 32 42" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M16 0C7.16 0 0 7.16 0 16c0 12 16 26 16 26s16-14 16-26C32 7.16 24.84 0 16 0z" fill="${markerColor}"/>
+            <path d="M16 0C7.16 0 0 7.16 0 16c0 12 16 26 16 26s16-14 16-26C32 7.16 24.84 0 16 0z" fill="url(#grad-${poi.id})" opacity="0.3"/>
+            <circle cx="16" cy="15" r="10" fill="${markerColorDark}" opacity="0.3"/>
+            <defs>
+              <linearGradient id="grad-${poi.id}" x1="16" y1="0" x2="16" y2="42" gradientUnits="userSpaceOnUse">
+                <stop stop-color="#fff" stop-opacity="0.4"/>
+                <stop offset="1" stop-color="#000" stop-opacity="0.2"/>
+              </linearGradient>
+            </defs>
+          </svg>
+          <span class="marker-number">${index + 1}</span>
+        </div>
+      `,
+      iconSize: [32, 42],
+      iconAnchor: [16, 42],
+      popupAnchor: [0, -44]
+    });
+
+    const marker = L.marker([poi.lat, poi.lng], { icon }).addTo(map);
+
+    marker.bindPopup(`
+      <div class="popup-cat">${poi.category}</div>
+      <div class="popup-title">${poi.name}</div>
+      <div class="popup-action" onclick="openPanel('${poi.id}')">Voir les détails &rarr;</div>
+    `, { closeButton: true, maxWidth: 250 });
+
+    marker.on('click', () => {
+      openPanel(poi.id);
+    });
+
+    markers[poi.id] = marker;
+  });
+
+  updateVisitedCount();
+}
+
+// ============================================
+// DISTANCE CALCULATION
+// ============================================
+function haversineDistance(lat1, lng1, lat2, lng2) {
+  const R = 6371e3;
+  const p1 = lat1 * Math.PI / 180;
+  const p2 = lat2 * Math.PI / 180;
+  const dp = (lat2 - lat1) * Math.PI / 180;
+  const dl = (lng2 - lng1) * Math.PI / 180;
+  const a = Math.sin(dp / 2) ** 2 + Math.cos(p1) * Math.cos(p2) * Math.sin(dl / 2) ** 2;
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  return R * c;
+}
+
+function formatDistance(meters) {
+  if (meters < 1000) return Math.round(meters) + ' m du lieu du congrès';
+  return (meters / 1000).toFixed(1) + ' km du lieu du congrès';
+}
+
+// ============================================
+// PANEL
+// ============================================
+function openPanel(poiId) {
+  const poi = POIs.find(p => p.id === poiId);
+  if (!poi) return;
+  currentPOI = poi;
+
+  // Close any open popup
+  map.closePopup();
+
+  // Fly to marker
+  map.flyTo([poi.lat, poi.lng], 15, { duration: 0.8 });
+
+  // Populate panel
+  document.getElementById('panel-icon').textContent = poi.icon;
+  document.getElementById('panel-image-label').textContent = poi.name;
+  document.getElementById('panel-category').textContent = poi.category;
+  document.getElementById('panel-category').className = 'panel-category' + (poi.isRVGS ? ' rvgs' : '');
+  document.getElementById('panel-title').textContent = poi.name;
+  document.getElementById('panel-description').textContent = poi.description;
+  document.getElementById('panel-enjeu').textContent = poi.enjeu;
+  document.getElementById('panel-coords').textContent = poi.lat.toFixed(4) + ', ' + poi.lng.toFixed(4);
+
+  const dist = haversineDistance(poi.lat, poi.lng, CONGRESS_COORDS[0], CONGRESS_COORDS[1]);
+  document.getElementById('panel-distance').textContent = formatDistance(dist);
+
+  // Visited state
+  const isVisited = visitedPOIs.includes(poi.id);
+  const btn = document.getElementById('panel-visited-btn');
+  btn.className = 'panel-visited-btn' + (isVisited ? ' checked' : '');
+  document.getElementById('panel-visited-label').textContent = isVisited ? 'Visité !' : 'Marquer comme visité';
+
+  // Set image background gradient based on category
+  const imageEl = document.getElementById('panel-image');
+  if (poi.isRVGS) {
+    imageEl.style.background = 'linear-gradient(135deg, #3a1020, #5a1530, #3a1020)';
+  } else {
+    imageEl.style.background = 'linear-gradient(135deg, #142866, #1B3A8C, #142866)';
+  }
+
+  // Open panel
+  document.getElementById('side-panel').classList.add('open');
+  document.getElementById('panel-overlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+
+  // Highlight marker
+  Object.values(markers).forEach(m => {
+    const pin = m.getElement()?.querySelector('.marker-pin');
+    if (pin) pin.classList.remove('active');
+  });
+  const activePin = markers[poi.id]?.getElement()?.querySelector('.marker-pin');
+  if (activePin) activePin.classList.add('active');
+}
+
+function closePanel() {
+  document.getElementById('side-panel').classList.remove('open');
+  document.getElementById('panel-overlay').classList.remove('open');
+  document.body.style.overflow = '';
+  currentPOI = null;
+
+  // Remove active marker highlight
+  Object.values(markers).forEach(m => {
+    const pin = m.getElement()?.querySelector('.marker-pin');
+    if (pin) pin.classList.remove('active');
+  });
+}
+
+// ============================================
+// VISITED MANAGEMENT
+// ============================================
+function toggleVisitedFromPanel() {
+  if (!currentPOI) return;
+  toggleVisited(currentPOI.id);
+
+  const isVisited = visitedPOIs.includes(currentPOI.id);
+  const btn = document.getElementById('panel-visited-btn');
+  btn.className = 'panel-visited-btn' + (isVisited ? ' checked' : '');
+  document.getElementById('panel-visited-label').textContent = isVisited ? 'Visité !' : 'Marquer comme visité';
+}
+
+function toggleVisited(poiId) {
+  const idx = visitedPOIs.indexOf(poiId);
+  if (idx === -1) {
+    visitedPOIs.push(poiId);
+  } else {
+    visitedPOIs.splice(idx, 1);
+  }
+  localStorage.setItem('rvgs-visited', JSON.stringify(visitedPOIs));
+  updateVisitedCount();
+  updateMarkerVisited(poiId);
+  updatePOICards();
+  updateParcoursProgress();
+}
+
+function updateMarkerVisited(poiId) {
+  const marker = markers[poiId];
+  if (!marker) return;
+  const pin = marker.getElement()?.querySelector('.marker-pin');
+  if (!pin) return;
+  if (visitedPOIs.includes(poiId)) {
+    pin.classList.add('visited');
+  } else {
+    pin.classList.remove('visited');
+  }
+}
+
+function updateVisitedCount() {
+  document.getElementById('visited-count').textContent = visitedPOIs.length + '/10 visites';
+}
+
+function resetVisited() {
+  if (!confirm('Réinitialiser toutes les visites ?')) return;
+  visitedPOIs = [];
+  localStorage.setItem('rvgs-visited', JSON.stringify(visitedPOIs));
+  updateVisitedCount();
+  POIs.forEach(poi => updateMarkerVisited(poi.id));
+  updatePOICards();
+  updateParcoursProgress();
+  if (currentPOI) {
+    const btn = document.getElementById('panel-visited-btn');
+    btn.className = 'panel-visited-btn';
+    document.getElementById('panel-visited-label').textContent = 'Marquer comme visité';
+  }
+}
+
+// ============================================
+// POI CARDS
+// ============================================
+function renderPOICards() {
+  const grid = document.getElementById('poi-grid');
+  grid.innerHTML = POIs.map((poi, i) => {
+    const isVisited = visitedPOIs.includes(poi.id);
+    const dist = haversineDistance(poi.lat, poi.lng, CONGRESS_COORDS[0], CONGRESS_COORDS[1]);
+    return `
+      <div class="poi-card fade-in-up ${isVisited ? 'visited' : ''}" data-poi="${poi.id}" onclick="openPanel('${poi.id}'); document.getElementById('map-section').scrollIntoView({behavior:'smooth'});">
+        <div class="poi-card-number ${poi.isRVGS ? 'rvgs' : ''}">${i + 1}</div>
+        <div class="poi-card-body">
+          <div class="poi-card-cat ${poi.isRVGS ? 'rvgs' : ''}">${poi.category}</div>
+          <div class="poi-card-title">${poi.name}</div>
+          <div class="poi-card-excerpt">${poi.description}</div>
+        </div>
+        <svg class="poi-card-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+      </div>
+    `;
+  }).join('');
+}
+
+function updatePOICards() {
+  document.querySelectorAll('.poi-card').forEach(card => {
+    const poiId = card.dataset.poi;
+    if (visitedPOIs.includes(poiId)) {
+      card.classList.add('visited');
+    } else {
+      card.classList.remove('visited');
+    }
+  });
+}
+
+// ============================================
+// PARCOURS MODE
+// ============================================
+function toggleParcours() {
+  parcoursActive = !parcoursActive;
+  const btn = document.getElementById('btn-parcours');
+  const banner = document.getElementById('parcours-banner');
+
+  if (parcoursActive) {
+    btn.classList.add('active');
+    banner.classList.add('active');
+    showRoute();
+    updateParcoursProgress();
+  } else {
+    btn.classList.remove('active');
+    banner.classList.remove('active');
+    hideRoute();
+  }
+}
+
+function showRoute() {
+  if (routeLine) map.removeLayer(routeLine);
+
+  const routeCoords = PARCOURS_ORDER.map(id => {
+    const poi = POIs.find(p => p.id === id);
+    return [poi.lat, poi.lng];
+  });
+
+  routeLine = L.polyline(routeCoords, {
+    color: '#D4A843',
+    weight: 3,
+    opacity: 0.7,
+    dashArray: '12 6',
+    className: 'route-line'
+  }).addTo(map);
+
+  // Fit map to route
+  map.fitBounds(routeLine.getBounds().pad(0.15), { duration: 0.8 });
+
+  // Update marker numbers to parcours order
+  PARCOURS_ORDER.forEach((id, i) => {
+    const marker = markers[id];
+    if (!marker) return;
+    const numEl = marker.getElement()?.querySelector('.marker-number');
+    if (numEl) numEl.textContent = i + 1;
+  });
+}
+
+function hideRoute() {
+  if (routeLine) {
+    map.removeLayer(routeLine);
+    routeLine = null;
+  }
+
+  // Restore original marker numbers
+  POIs.forEach((poi, i) => {
+    const marker = markers[poi.id];
+    if (!marker) return;
+    const numEl = marker.getElement()?.querySelector('.marker-number');
+    if (numEl) numEl.textContent = i + 1;
+  });
+}
+
+function updateParcoursProgress() {
+  if (!parcoursActive) return;
+  const visited = PARCOURS_ORDER.filter(id => visitedPOIs.includes(id)).length;
+  const total = PARCOURS_ORDER.length;
+  const pct = Math.round((visited / total) * 100);
+  document.getElementById('parcours-fill').style.width = pct + '%';
+  document.getElementById('parcours-text').textContent = visited + '/' + total;
+}
+
+// ============================================
+// KEYBOARD SHORTCUTS
+// ============================================
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') closePanel();
+});
+
+// ============================================
+// MOBILE: short labels
+// ============================================
+function handleResize() {
+  const isMobile = window.innerWidth <= 768;
+  document.querySelectorAll('.btn-label-long').forEach(el => el.style.display = isMobile ? 'none' : '');
+  document.querySelectorAll('.btn-label-short').forEach(el => el.style.display = isMobile ? '' : 'none');
+}
+window.addEventListener('resize', handleResize);
+
+// ============================================
+// INIT
+// ============================================
+document.addEventListener('DOMContentLoaded', () => {
+  initMap();
+  renderPOICards();
+  handleResize();
+});
+</script>
+
+</body>
+</html>

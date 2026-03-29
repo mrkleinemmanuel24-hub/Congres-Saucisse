@@ -1,26 +1,44 @@
-Stephanie ! 🌭
+Stéphanie ! 🌍
 
-La saucisse est prete ! J'ai termine le site + le back office pour ton congres.
+Ton congrès est prêt ! J'ai terminé le site public + le back-office complet pour Les Rencontres de Strasbourg.
+
+Tout est là, et c'est très simple — tu peux tout faire toi-même avec le mode d'emploi intégré.
+
+📱 TON ACCUEIL PERSO (commence ici) :
+https://congres-saucisse.pages.dev/stephanie.html
+
+De là tu accèdes à tout :
 
 🌐 LE SITE PUBLIC :
 https://congres-saucisse.pages.dev
-(Clone de rdv-histoire.com avec toutes les rubriques, adapte Strasbourg + saucisses qui rebondissent 😄)
+Programme 4 jours, 45+ intervenants, partenaires, infos pratiques.
+3 thèmes graphiques au choix (Classique noir/or, Strasbourg, Moderne).
 
 🔐 TON ESPACE ADMIN :
 https://congres-saucisse.pages.dev/admin.html
-Mot de passe : SAUCISSE2026
+Mot de passe : admin
 
 Dans ton espace tu as :
 📊 Ton Dashboard personnel avec graphiques et stats
-💰 Un simulateur financier (tous les frais d'un congres + revenus + rentabilite)
+💰 Un simulateur financier (tous les frais + revenus + rentabilité)
 ✅ Une checklist de 66 items (J-6 mois → post-event)
-🔒 Module securite complet (14 scenarios de crise, autorisations, VIP)
+🔒 Module sécurité complet (14 scénarios de crise, autorisations, VIP)
 👥 Gestion participants, badges QR, check-in
 📧 Templates d'invitation + emails automatiques
-🍽️ Gestion traiteur (regimes alimentaires, marge, repas staff)
-📝 Ton espace "Recommandations de Stephanie" pour ajouter tes idees
+🍽️ Gestion traiteur (régimes alimentaires, marge, repas staff)
+📝 Ton espace "Recommandations de Stéphanie" pour ajouter tes idées
+
+📖 LE MODE D'EMPLOI :
+Chaque section du back-office a un guide intégré. Tu cliques, tu suis les étapes, c'est fait. Pas besoin d'être technique — c'est conçu pour que tu puisses tout configurer rapidement toute seule.
+
+📞 NUMÉRO DU CONGRÈS :
+09 39 24 26 92 — c'est un vrai numéro avec un serveur vocal automatique.
+Quand quelqu'un appelle, il entend le programme, les infos pratiques, et peut laisser un message.
+À terme, ce numéro servira à tous les membres pour accéder à l'application.
+
+À terme, ce même outil servira à tous les membres du congrès pour charger l'application et gérer leur espace.
 
 Regarde et dis-moi ce que tu en penses !
-Je suis tout ouie (enfin, tout yeux 😄 — tu sais, malentendant...)
+Je suis tout ouïe (enfin, tout yeux 😄 — tu sais, malentendant...)
 
-Emmanuel 🌭
+Emmanuel 🌍

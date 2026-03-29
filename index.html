@@ -3,9 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="Les Rendez-vous Géopolitiques de Strasbourg — Festival international de géopolitique. 19-21 mars 2027. La géopolitique dans tous ses états.">
+<meta name="description" content="Les Rendez-vous Géopolitiques de Strasbourg — Festival international de géopolitique. 15-18 octobre 2026. La géopolitique dans tous ses états.">
 <meta name="theme-color" content="#0D1B4A">
-<title>Les Rendez-vous Géopolitiques de Strasbourg — Festival international 2027</title>
+<title>Les Rendez-vous Géopolitiques de Strasbourg — Festival international 2026</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;800;900&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -107,7 +107,7 @@
 [data-theme="europe"] .hero-subtitle { color: rgba(255,255,255,0.9) !important; }
 [data-theme="europe"] .hero h1 { color: #fff !important; }
 [data-theme="europe"] .hero-meta { color: rgba(255,255,255,0.8) !important; }
-[data-theme="europe"] .hero .btn-outline { border-color: rgba(255,255,255,0.4); color: #fff; }
+[data-theme="europe"] .hero .btn-outline { border-color: rgba(255,255,255,0.65); color: #fff; }
 [data-theme="europe"] .footer-section { color: #ccc; }
 [data-theme="europe"] footer a { color: #aaa; }
 [data-theme="europe"] footer a:hover { color: #FFCC00; }
@@ -152,7 +152,7 @@
 [data-theme="institutionnel"] .hero-subtitle { color: rgba(255,255,255,0.9) !important; }
 [data-theme="institutionnel"] .hero h1 { color: #fff !important; }
 [data-theme="institutionnel"] .hero-meta { color: rgba(255,255,255,0.8) !important; }
-[data-theme="institutionnel"] .hero .btn-outline { border-color: rgba(255,255,255,0.4); color: #fff; }
+[data-theme="institutionnel"] .hero .btn-outline { border-color: rgba(255,255,255,0.65); color: #fff; }
 [data-theme="institutionnel"] .footer-section { color: #ccc; }
 [data-theme="institutionnel"] footer a { color: #aaa; }
 [data-theme="institutionnel"] footer a:hover { color: #fff; }
@@ -447,7 +447,7 @@ body.theme-republique .tricolor-bar { display: block; }
 }
 .theme-pill:hover {
   transform: scale(1.15);
-  border-color: rgba(255,255,255,0.4);
+  border-color: rgba(255,255,255,0.65);
 }
 .theme-pill.active {
   border-color: var(--accent);
@@ -2078,8 +2078,8 @@ footer {
     <div class="gold-circle"></div>
     <div class="gold-circle-inner"></div>
     <h1>Les Rendez-vous<br>G&eacute;opolitiques<br>de Strasbourg</h1>
-    <div class="landing-subtitle">Festival international &mdash; 19-21 mars 2027</div>
-    <div class="landing-theme">Th&egrave;me 2027 : Les batailles de l'eau</div>
+    <div class="landing-subtitle">Festival international &mdash; 15-18 octobre 2026</div>
+    <div class="landing-theme">Th&egrave;me 2026 : Les batailles de l'eau</div>
     <div class="landing-org-top">ARDG &mdash; Association Rh&eacute;nane pour la D&eacute;mocratisation de la G&eacute;opolitique</div>
   </div>
 
@@ -2088,9 +2088,6 @@ footer {
   <div class="landing-buttons">
     <a href="#site" onclick="showSite()" class="landing-btn site-btn">
       <span class="btn-icon">&#127760;</span> D&eacute;couvrir le festival
-    </a>
-    <a href="admin.html" class="landing-btn admin-btn">
-      <span class="btn-icon">&#9881;</span> Espace organisateur
     </a>
   </div>
 
@@ -2131,15 +2128,16 @@ footer {
      ============================================ -->
 <nav id="navbar">
   <div class="nav-inner">
-    <a href="#accueil" class="nav-logo">RVGS 2027</a>
+    <a href="#accueil" class="nav-logo">RVGS 2026</a>
     <div class="nav-links">
       <a href="#accueil" class="active">Accueil</a>
       <div class="nav-dropdown">
         <a href="#programme">Programme</a>
         <div class="nav-dropdown-menu">
-          <a href="#programme" onclick="showDay(1)">Jour 1 &mdash; Mercredi 19 mars</a>
-          <a href="#programme" onclick="showDay(2)">Jour 2 &mdash; Jeudi 20 mars</a>
-          <a href="#programme" onclick="showDay(3)">Jour 3 &mdash; Vendredi 21 mars</a>
+          <a href="#programme" onclick="showDay(1)">Jour 1 &mdash; Mardi 15 octobre</a>
+          <a href="#programme" onclick="showDay(2)">Jour 2 &mdash; Mercredi 16 octobre</a>
+          <a href="#programme" onclick="showDay(3)">Jour 3 &mdash; Jeudi 17 octobre</a>
+          <a href="#programme" onclick="showDay(4)">Jour 4 &mdash; Vendredi 18 octobre</a>
           <a href="#theme">Th&egrave;me : Les batailles de l'eau</a>
           <a href="#theme">Pays invit&eacute; : Danemark / Estonie</a>
         </div>
@@ -2158,7 +2156,6 @@ footer {
         <div class="nav-theme-dot" data-dot="institutionnel" onclick="setTheme('institutionnel')" title="Institutionnel"><div class="dot-inner"></div></div>
         <div class="nav-theme-dot" data-dot="eau" onclick="setTheme('eau')" title="Batailles de l'eau"><div class="dot-inner"></div></div>
       </div>
-      <a href="admin.html" style="color:var(--accent);font-weight:700;font-size:12px;margin-left:8px" title="Espace organisateur">&#9881; Admin</a>
     </div>
     <button class="hamburger" onclick="toggleMobileMenu()" aria-label="Menu">&#9776;</button>
   </div>
@@ -2187,7 +2184,7 @@ footer {
 <!-- Search overlay -->
 <div class="search-overlay" id="searchOverlay" onclick="if(event.target===this)closeSearch()">
   <div class="search-box">
-    <input type="text" id="searchInput" placeholder="Rechercher un intervenant, une conference..." oninput="performSearch(this.value)" autocomplete="off">
+    <input type="text" id="searchInput" placeholder="Rechercher un intervenant, une conf&eacute;rence..." oninput="performSearch(this.value)" autocomplete="off">
     <div class="search-results" id="searchResults"></div>
   </div>
 </div>
@@ -2203,13 +2200,13 @@ footer {
       <div class="slide-content">
         <span class="slide-tag">Le festival</span>
         <h2 class="slide-title">Les Rendez-vous<br>G&eacute;opolitiques de Strasbourg</h2>
-        <p class="slide-subtitle">Festival international &mdash; 19-21 mars 2027</p>
+        <p class="slide-subtitle">Festival international &mdash; 15-18 octobre 2026</p>
       </div>
     </div>
     <!-- Slide 2: Le theme 2027 -->
     <div class="slider-slide slide-bg-2">
       <div class="slide-content">
-        <span class="slide-tag">Le th&egrave;me 2027</span>
+        <span class="slide-tag">Le th&egrave;me 2026</span>
         <h2 class="slide-title">Les batailles de l'eau</h2>
         <p class="slide-subtitle">Des nappes phr&eacute;atiques aux oc&eacute;ans, l'eau trace de nouvelles lignes de fracture g&eacute;opolitiques</p>
       </div>
@@ -2280,7 +2277,7 @@ footer {
       </div>
     </div>
   </div>
-  <button class="slider-arrow prev" onclick="prevSlide()" aria-label="Diapo precedente">&#10094;</button>
+  <button class="slider-arrow prev" onclick="prevSlide()" aria-label="Diapo pr&eacute;c&eacute;dente">&#10094;</button>
   <button class="slider-arrow next" onclick="nextSlide()" aria-label="Diapo suivante">&#10095;</button>
   <div class="slider-dots" id="sliderDots"></div>
 </div>
@@ -2310,10 +2307,10 @@ footer {
 <div class="numbers-bar">
   <div class="container">
     <div class="numbers-grid">
-      <div class="num-item reveal"><div class="num-val" data-count="200">0</div><div class="num-label">Intervenants</div></div>
-      <div class="num-item reveal"><div class="num-val" data-count="80">0</div><div class="num-label">Conferences</div></div>
-      <div class="num-item reveal"><div class="num-val" data-count="40">0</div><div class="num-label">Debats</div></div>
-      <div class="num-item reveal"><div class="num-val" data-count="20">0</div><div class="num-label">Ateliers</div></div>
+      <div class="num-item reveal"><div class="num-val" data-count="45">0</div><div class="num-label">Intervenants</div></div>
+      <div class="num-item reveal"><div class="num-val" data-count="32">0</div><div class="num-label">Conf&eacute;rences</div></div>
+      <div class="num-item reveal"><div class="num-val" data-count="18">0</div><div class="num-label">D&eacute;bats</div></div>
+      <div class="num-item reveal"><div class="num-val" data-count="12">0</div><div class="num-label">Ateliers</div></div>
     </div>
   </div>
 </div>
@@ -2324,46 +2321,46 @@ footer {
 <section class="section" id="thematiques">
   <div class="container">
     <div class="section-header reveal">
-      <span class="section-label">Thematiques</span>
-      <h2>Six axes de reflexion</h2>
-      <p>Trois jours pour interroger les grands enjeux geopolitiques de notre epoque, a travers six thematiques transversales.</p>
+      <span class="section-label">Th&eacute;matiques</span>
+      <h2>Six axes de r&eacute;flexion</h2>
+      <p>Quatre jours pour interroger les grands enjeux g&eacute;opolitiques de notre &eacute;poque, &agrave; travers six th&eacute;matiques transversales.</p>
     </div>
     <div class="themes-grid">
       <div class="card reveal">
         <span class="card-icon">&#127963;</span>
-        <h3>Politique & Democratie</h3>
-        <p>Institutions, elections, citoyennete, construction europeenne, crise de la representation.</p>
-        <span class="theme-badge">14 conferences</span>
+        <h3>Politique &amp; D&eacute;mocratie</h3>
+        <p>Institutions, &eacute;lections, citoyennet&eacute;, construction europ&eacute;enne, crise de la repr&eacute;sentation.</p>
+        <span class="theme-badge">14 conf&eacute;rences</span>
       </div>
       <div class="card reveal">
         <span class="card-icon">&#127757;</span>
-        <h3>Environnement & Climat</h3>
-        <p>Transition ecologique, biodiversite, energie, adaptation climatique, justice environnementale.</p>
-        <span class="theme-badge">16 conferences</span>
+        <h3>Environnement &amp; Climat</h3>
+        <p>Transition &eacute;cologique, biodiversit&eacute;, &eacute;nergie, adaptation climatique, justice environnementale.</p>
+        <span class="theme-badge">16 conf&eacute;rences</span>
       </div>
       <div class="card reveal">
         <span class="card-icon">&#128101;</span>
-        <h3>Societe & Vivre-ensemble</h3>
-        <p>Inegalites, education, sante publique, migrations, cohesion sociale, laicite.</p>
-        <span class="theme-badge">15 conferences</span>
+        <h3>Soci&eacute;t&eacute; &amp; Vivre-ensemble</h3>
+        <p>In&eacute;galit&eacute;s, &eacute;ducation, sant&eacute; publique, migrations, coh&eacute;sion sociale, la&iuml;cit&eacute;.</p>
+        <span class="theme-badge">15 conf&eacute;rences</span>
       </div>
       <div class="card reveal">
         <span class="card-icon">&#128188;</span>
-        <h3>Economie & Travail</h3>
-        <p>Emploi, innovation, economie sociale et solidaire, reindustrialisation, precarite.</p>
-        <span class="theme-badge">12 conferences</span>
+        <h3>&Eacute;conomie &amp; Travail</h3>
+        <p>Emploi, innovation, &eacute;conomie sociale et solidaire, r&eacute;industrialisation, pr&eacute;carit&eacute;.</p>
+        <span class="theme-badge">12 conf&eacute;rences</span>
       </div>
       <div class="card reveal">
         <span class="card-icon">&#128300;</span>
-        <h3>Sciences & Technologies</h3>
-        <p>Intelligence artificielle, numerique, ethique des donnees, sante de demain, transhumanisme.</p>
-        <span class="theme-badge">13 conferences</span>
+        <h3>Sciences &amp; Technologies</h3>
+        <p>Intelligence artificielle, num&eacute;rique, &eacute;thique des donn&eacute;es, sant&eacute; de demain, transhumanisme.</p>
+        <span class="theme-badge">13 conf&eacute;rences</span>
       </div>
       <div class="card reveal">
         <span class="card-icon">&#127912;</span>
-        <h3>Culture & Patrimoine</h3>
-        <p>Memoire collective, identite, creation artistique, medias, pluralisme culturel.</p>
-        <span class="theme-badge">10 conferences</span>
+        <h3>Culture &amp; Patrimoine</h3>
+        <p>M&eacute;moire collective, identit&eacute;, cr&eacute;ation artistique, m&eacute;dias, pluralisme culturel.</p>
+        <span class="theme-badge">10 conf&eacute;rences</span>
       </div>
     </div>
   </div>
@@ -2374,12 +2371,12 @@ footer {
 </section>
 
 <!-- ============================================
-     THEME 2027 : LES BATAILLES DE L'EAU
+     THEME 2026 : LES BATAILLES DE L'EAU
      ============================================ -->
 <section class="section section-alt" id="theme">
   <div class="container">
     <div class="section-header reveal">
-      <span class="section-label">Th&egrave;me 2027</span>
+      <span class="section-label">Th&egrave;me 2026</span>
       <h2>Les batailles de l'eau</h2>
       <p>Des nappes phr&eacute;atiques aux oc&eacute;ans, l'eau trace de nouvelles lignes de fracture g&eacute;opolitiques. Un th&egrave;me transversal qui irrigue les six axes de r&eacute;flexion du festival.</p>
     </div>
@@ -2422,15 +2419,15 @@ footer {
   <div class="container">
     <div class="section-header reveal">
       <span class="section-label">Programme</span>
-      <h2>Trois jours de debats et de rencontres</h2>
-      <p>Conferences plenieres, tables rondes, ateliers participatifs et projections — le programme complet du festival 2027.</p>
+      <h2>Quatre jours de d&eacute;bats et de rencontres</h2>
+      <p>Conf&eacute;rences pl&eacute;ni&egrave;res, tables rondes, ateliers participatifs et projections &mdash; le programme complet du festival 2026.</p>
     </div>
 
     <div class="day-tabs">
-      <button class="day-tab active" onclick="showDay(1)">Jour 1<span class="day-date">Ven. 19 mars</span></button>
-      <button class="day-tab" onclick="showDay(2)">Jour 2<span class="day-date">Sam. 20 mars</span></button>
-      <button class="day-tab" onclick="showDay(3)">Jour 3<span class="day-date">Dim. 21 mars</span></button>
-      <button class="day-tab" onclick="showDay(4)">Jour 4<span class="day-date">Sessions bonus</span></button>
+      <button class="day-tab active" onclick="showDay(1)">Jour 1<span class="day-date">Mar. 15 oct.</span></button>
+      <button class="day-tab" onclick="showDay(2)">Jour 2<span class="day-date">Mer. 16 oct.</span></button>
+      <button class="day-tab" onclick="showDay(3)">Jour 3<span class="day-date">Jeu. 17 oct.</span></button>
+      <button class="day-tab" onclick="showDay(4)">Jour 4<span class="day-date">Ven. 18 oct.</span></button>
     </div>
 
     <!-- DAY 1 -->
@@ -2439,20 +2436,20 @@ footer {
         <div class="session-card reveal" data-search="ouverture europe democratie">
           <div class="session-time">9h00</div>
           <div class="session-info">
-            <h4>Ceremonie d'ouverture — L'Europe a la croisee des chemins</h4>
+            <h4>C&eacute;r&eacute;monie d'ouverture &mdash; L'Europe &agrave; la crois&eacute;e des chemins</h4>
             <div class="session-speaker">Sylvie Kauffmann &middot; Catherine Trautmann</div>
             <div class="session-meta">
               <span class="session-room">&#128205; Grand Auditorium</span>
               <span class="session-theme-badge">Politique</span>
-              <span class="session-status status-few">Dernieres places</span>
+              <span class="session-status status-few">Derni&egrave;res places</span>
             </div>
           </div>
         </div>
         <div class="session-card reveal" data-search="populisme democratie europe">
           <div class="session-time">10h30</div>
           <div class="session-info">
-            <h4>L'Europe face aux populismes : comprendre, resister, reformer</h4>
-            <div class="session-speaker">Pascal Music &middot; Dominique Moisi &middot; Nathalie Tocci</div>
+            <h4>L'Europe face aux populismes : comprendre, r&eacute;sister, r&eacute;former</h4>
+            <div class="session-speaker">Pascal Music &middot; Dominique Mo&iuml;si &middot; Nathalie Tocci</div>
             <div class="session-meta">
               <span class="session-room">&#128205; Salle Erasme</span>
               <span class="session-theme-badge">Politique</span>
@@ -2463,8 +2460,8 @@ footer {
         <div class="session-card reveal" data-search="climat urgence transition ecologique">
           <div class="session-time">11h30</div>
           <div class="session-info">
-            <h4>Urgence climatique : de la prise de conscience a l'action collective</h4>
-            <div class="session-speaker">Valerie Masson-Delmotte &middot; Jean Jouzel</div>
+            <h4>Urgence climatique : de la prise de conscience &agrave; l'action collective</h4>
+            <div class="session-speaker">Val&eacute;rie Masson-Delmotte &middot; Jean Jouzel</div>
             <div class="session-meta">
               <span class="session-room">&#128205; Grand Auditorium</span>
               <span class="session-theme-badge">Environnement</span>
@@ -2475,8 +2472,8 @@ footer {
         <div class="session-card reveal" data-search="IA democratie intelligence artificielle numerique">
           <div class="session-time">14h00</div>
           <div class="session-info">
-            <h4>IA et democratie : menace ou opportunite ?</h4>
-            <div class="session-speaker">Cedric Villani &middot; Laurence Devillers &middot; Asma Mhalla</div>
+            <h4>IA et d&eacute;mocratie : menace ou opportunit&eacute; ?</h4>
+            <div class="session-speaker">C&eacute;dric Villani &middot; Laurence Devillers &middot; Asma Mhalla</div>
             <div class="session-meta">
               <span class="session-room">&#128205; Salle Gutenberg</span>
               <span class="session-theme-badge">Sciences</span>
@@ -2487,11 +2484,11 @@ footer {
         <div class="session-card reveal" data-search="education inegalites jeunesse societe">
           <div class="session-time">14h00</div>
           <div class="session-info">
-            <h4>L'ecole de demain : repenser l'education face aux inegalites</h4>
+            <h4>L'&eacute;cole de demain : repenser l'&eacute;ducation face aux in&eacute;galit&eacute;s</h4>
             <div class="session-speaker">Philippe Meirieu &middot; Najat Vallaud-Belkacem</div>
             <div class="session-meta">
               <span class="session-room">&#128205; Salle Schweitzer</span>
-              <span class="session-theme-badge">Societe</span>
+              <span class="session-theme-badge">Soci&eacute;t&eacute;</span>
               <span class="session-status status-available">Places disponibles</span>
             </div>
           </div>
@@ -2499,11 +2496,11 @@ footer {
         <div class="session-card reveal" data-search="travail emploi precarite economie">
           <div class="session-time">15h30</div>
           <div class="session-info">
-            <h4>Le travail en mutation : entre ubérisation et quête de sens</h4>
-            <div class="session-speaker">Dominique Meda &middot; Denis Maillard</div>
+            <h4>Le travail en mutation : entre ub&eacute;risation et qu&ecirc;te de sens</h4>
+            <div class="session-speaker">Dominique M&eacute;da &middot; Denis Maillard</div>
             <div class="session-meta">
               <span class="session-room">&#128205; Salle Erasme</span>
-              <span class="session-theme-badge">Economie</span>
+              <span class="session-theme-badge">&Eacute;conomie</span>
               <span class="session-status status-available">Places disponibles</span>
             </div>
           </div>
@@ -2511,7 +2508,7 @@ footer {
         <div class="session-card reveal" data-search="medias desinformation information culture">
           <div class="session-time">16h30</div>
           <div class="session-info">
-            <h4>Medias et desinformation : le defi de la confiance</h4>
+            <h4>M&eacute;dias et d&eacute;sinformation : le d&eacute;fi de la confiance</h4>
             <div class="session-speaker">Christophe Deloire &middot; Julia Cage</div>
             <div class="session-meta">
               <span class="session-room">&#128205; Salle Gutenberg</span>
@@ -2523,7 +2520,7 @@ footer {
         <div class="session-card reveal" data-search="keynote conference magistrale soir">
           <div class="session-time">18h30</div>
           <div class="session-info">
-            <h4>Conference magistrale — Ou va le monde ? Lecture geopolitique de 2026</h4>
+            <h4>Conf&eacute;rence magistrale &mdash; O&ugrave; va le monde ? Lecture g&eacute;opolitique de 2026</h4>
             <div class="session-speaker">Thomas Piketty</div>
             <div class="session-meta">
               <span class="session-room">&#128205; Grand Auditorium</span>
@@ -2535,12 +2532,12 @@ footer {
         <div class="session-card reveal" data-search="cocktail reception inauguration">
           <div class="session-time">20h00</div>
           <div class="session-info">
-            <h4>Cocktail inaugural — Terrasse du Palais des Congres</h4>
+            <h4>Cocktail inaugural &mdash; Terrasse du Palais des Congr&egrave;s</h4>
             <div class="session-speaker">Sur invitation</div>
             <div class="session-meta">
               <span class="session-room">&#128205; Terrasse panoramique</span>
-              <span class="session-theme-badge">Evenement</span>
-              <span class="session-status status-few">Dernieres places</span>
+              <span class="session-theme-badge">&Eacute;v&eacute;nement</span>
+              <span class="session-status status-few">Derni&egrave;res places</span>
             </div>
           </div>
         </div>
@@ -2553,7 +2550,7 @@ footer {
         <div class="session-card reveal" data-search="biodiversite vivant nature">
           <div class="session-time">9h00</div>
           <div class="session-info">
-            <h4>Biodiversite : la sixieme extinction est-elle evitable ?</h4>
+            <h4>Biodiversit&eacute; : la sixi&egrave;me extinction est-elle &eacute;vitable ?</h4>
             <div class="session-speaker">Gilles Boeuf &middot; Isabelle Autissier</div>
             <div class="session-meta">
               <span class="session-room">&#128205; Grand Auditorium</span>
@@ -2565,11 +2562,11 @@ footer {
         <div class="session-card reveal" data-search="sante hopital systeme soins">
           <div class="session-time">9h00</div>
           <div class="session-info">
-            <h4>Systeme de sante : soigner les soignants, reformer l'hopital</h4>
-            <div class="session-speaker">Martin Hirsch &middot; Agnes Buzyn</div>
+            <h4>Syst&egrave;me de sant&eacute; : soigner les soignants, r&eacute;former l'h&ocirc;pital</h4>
+            <div class="session-speaker">Martin Hirsch &middot; Agn&egrave;s Buzyn</div>
             <div class="session-meta">
               <span class="session-room">&#128205; Salle Schweitzer</span>
-              <span class="session-theme-badge">Societe</span>
+              <span class="session-theme-badge">Soci&eacute;t&eacute;</span>
               <span class="session-status status-available">Places disponibles</span>
             </div>
           </div>
@@ -2577,11 +2574,11 @@ footer {
         <div class="session-card reveal" data-search="migration refugies accueil asile">
           <div class="session-time">10h30</div>
           <div class="session-info">
-            <h4>Migrations : entre devoir d'humanite et souverainete des Etats</h4>
-            <div class="session-speaker">Francois Gemenne &middot; Catherine Wihtol de Wenden</div>
+            <h4>Migrations : entre devoir d'humanit&eacute; et souverainet&eacute; des &Eacute;tats</h4>
+            <div class="session-speaker">Fran&ccedil;ois Gemenne &middot; Catherine Wihtol de Wenden</div>
             <div class="session-meta">
               <span class="session-room">&#128205; Grand Auditorium</span>
-              <span class="session-theme-badge">Societe</span>
+              <span class="session-theme-badge">Soci&eacute;t&eacute;</span>
               <span class="session-status status-full">Complet</span>
             </div>
           </div>
@@ -2589,7 +2586,7 @@ footer {
         <div class="session-card reveal" data-search="energie nucleaire renouvelable">
           <div class="session-time">10h30</div>
           <div class="session-info">
-            <h4>Nucleaire, solaire, eolien : quel mix energetique pour 2050 ?</h4>
+            <h4>Nucl&eacute;aire, solaire, &eacute;olien : quel mix &eacute;nerg&eacute;tique pour 2050 ?</h4>
             <div class="session-speaker">Jean-Marc Jancovici &middot; Corinne Lepage</div>
             <div class="session-meta">
               <span class="session-room">&#128205; Salle Erasme</span>
@@ -2601,11 +2598,11 @@ footer {
         <div class="session-card reveal" data-search="laicite religion republique vivre ensemble">
           <div class="session-time">14h00</div>
           <div class="session-info">
-            <h4>Laicite en France : un principe a reinventer ?</h4>
-            <div class="session-speaker">Jean Bauberot &middot; Dounia Bouzar &middot; Patrick Weil</div>
+            <h4>La&iuml;cit&eacute; en France : un principe &agrave; r&eacute;inventer ?</h4>
+            <div class="session-speaker">Jean Baub&eacute;rot &middot; Dounia Bouzar &middot; Patrick Weil</div>
             <div class="session-meta">
               <span class="session-room">&#128205; Grand Auditorium</span>
-              <span class="session-theme-badge">Societe</span>
+              <span class="session-theme-badge">Soci&eacute;t&eacute;</span>
               <span class="session-status status-available">Places disponibles</span>
             </div>
           </div>
@@ -2613,11 +2610,11 @@ footer {
         <div class="session-card reveal" data-search="reindustrialisation souverainete economique">
           <div class="session-time">14h00</div>
           <div class="session-info">
-            <h4>Reindustrialiser la France : mythe ou strategie ?</h4>
-            <div class="session-speaker">Elie Cohen &middot; Anais Voy-Gillis</div>
+            <h4>R&eacute;industrialiser la France : mythe ou strat&eacute;gie ?</h4>
+            <div class="session-speaker">&Eacute;lie Cohen &middot; Ana&iuml;s Voy-Gillis</div>
             <div class="session-meta">
               <span class="session-room">&#128205; Salle Gutenberg</span>
-              <span class="session-theme-badge">Economie</span>
+              <span class="session-theme-badge">&Eacute;conomie</span>
               <span class="session-status status-available">Places disponibles</span>
             </div>
           </div>
@@ -2625,7 +2622,7 @@ footer {
         <div class="session-card reveal" data-search="numerique ethique donnees RGPD">
           <div class="session-time">15h30</div>
           <div class="session-info">
-            <h4>Ethique du numerique : qui gouverne nos donnees ?</h4>
+            <h4>&Eacute;thique du num&eacute;rique : qui gouverne nos donn&eacute;es ?</h4>
             <div class="session-speaker">Cynthia Fleury &middot; Tariq Krim</div>
             <div class="session-meta">
               <span class="session-room">&#128205; Salle Erasme</span>
@@ -2637,7 +2634,7 @@ footer {
         <div class="session-card reveal" data-search="patrimoine memoire identite alsace">
           <div class="session-time">16h30</div>
           <div class="session-info">
-            <h4>Patrimoine vivant : Strasbourg, memoire d'Europe</h4>
+            <h4>Patrimoine vivant : Strasbourg, m&eacute;moire d'Europe</h4>
             <div class="session-speaker">Georges Bischoff &middot; Marie-Christine Pouchelle</div>
             <div class="session-meta">
               <span class="session-room">&#128205; Salle Schweitzer</span>
@@ -2649,12 +2646,12 @@ footer {
         <div class="session-card reveal" data-search="projection documentaire film">
           <div class="session-time">20h30</div>
           <div class="session-info">
-            <h4>Projection-debat : "Demain" de Cyril Dion (seance speciale)</h4>
-            <div class="session-speaker">Cyril Dion (sous reserve)</div>
+            <h4>Projection-d&eacute;bat : &laquo; Demain &raquo; de Cyril Dion (s&eacute;ance sp&eacute;ciale)</h4>
+            <div class="session-speaker">Cyril Dion (sous r&eacute;serve)</div>
             <div class="session-meta">
               <span class="session-room">&#128205; Grand Auditorium</span>
               <span class="session-theme-badge">Environnement</span>
-              <span class="session-status status-few">Dernieres places</span>
+              <span class="session-status status-few">Derni&egrave;res places</span>
             </div>
           </div>
         </div>
@@ -2667,7 +2664,7 @@ footer {
         <div class="session-card reveal" data-search="atelier citoyen democratie participative">
           <div class="session-time">9h00</div>
           <div class="session-info">
-            <h4>Atelier — Democratie participative : et si les citoyens decidaient ?</h4>
+            <h4>Atelier &mdash; D&eacute;mocratie participative : et si les citoyens d&eacute;cidaient ?</h4>
             <div class="session-speaker">Loic Blondiaux &middot; animateurs locaux</div>
             <div class="session-meta">
               <span class="session-room">&#128205; Espace Ateliers A</span>
@@ -2679,8 +2676,8 @@ footer {
         <div class="session-card reveal" data-search="atelier climat fresque">
           <div class="session-time">9h00</div>
           <div class="session-info">
-            <h4>Atelier — Fresque du Climat : comprendre pour agir</h4>
-            <div class="session-speaker">Animateurs certifies Fresque du Climat</div>
+            <h4>Atelier &mdash; Fresque du Climat : comprendre pour agir</h4>
+            <div class="session-speaker">Animateurs certifi&eacute;s Fresque du Climat</div>
             <div class="session-meta">
               <span class="session-room">&#128205; Espace Ateliers B</span>
               <span class="session-theme-badge">Environnement</span>
@@ -2691,11 +2688,11 @@ footer {
         <div class="session-card reveal" data-search="feminisme egalite genre parite">
           <div class="session-time">10h30</div>
           <div class="session-info">
-            <h4>Debat — Egalite femmes-hommes : ou en est-on vraiment ?</h4>
-            <div class="session-speaker">Caroline De Haas &middot; Marlene Schiappa &middot; Sandrine Rousseau</div>
+            <h4>D&eacute;bat &mdash; &Eacute;galit&eacute; femmes-hommes : o&ugrave; en est-on vraiment ?</h4>
+            <div class="session-speaker">Caroline De Haas &middot; Marl&egrave;ne Schiappa &middot; Sandrine Rousseau</div>
             <div class="session-meta">
               <span class="session-room">&#128205; Grand Auditorium</span>
-              <span class="session-theme-badge">Societe</span>
+              <span class="session-theme-badge">Soci&eacute;t&eacute;</span>
               <span class="session-status status-full">Complet</span>
             </div>
           </div>
@@ -2703,11 +2700,11 @@ footer {
         <div class="session-card reveal" data-search="economie circulaire decroissance sobriete">
           <div class="session-time">10h30</div>
           <div class="session-info">
-            <h4>Debat — Croissance, decroissance, post-croissance : quel modele ?</h4>
-            <div class="session-speaker">Timothee Parrique &middot; Eloi Laurent</div>
+            <h4>D&eacute;bat &mdash; Croissance, d&eacute;croissance, post-croissance : quel mod&egrave;le ?</h4>
+            <div class="session-speaker">Timoth&eacute;e Parrique &middot; &Eacute;lo&iuml; Laurent</div>
             <div class="session-meta">
               <span class="session-room">&#128205; Salle Erasme</span>
-              <span class="session-theme-badge">Economie</span>
+              <span class="session-theme-badge">&Eacute;conomie</span>
               <span class="session-status status-available">Places disponibles</span>
             </div>
           </div>
@@ -2715,11 +2712,11 @@ footer {
         <div class="session-card reveal" data-search="sante mentale jeunes bien-etre">
           <div class="session-time">14h00</div>
           <div class="session-info">
-            <h4>Atelier — Sante mentale des jeunes : l'urgence invisible</h4>
+            <h4>Atelier &mdash; Sant&eacute; mentale des jeunes : l'urgence invisible</h4>
             <div class="session-speaker">Boris Cyrulnik &middot; psychiatres hospitaliers</div>
             <div class="session-meta">
               <span class="session-room">&#128205; Espace Ateliers A</span>
-              <span class="session-theme-badge">Societe</span>
+              <span class="session-theme-badge">Soci&eacute;t&eacute;</span>
               <span class="session-status status-available">Places disponibles</span>
             </div>
           </div>
@@ -2727,20 +2724,20 @@ footer {
         <div class="session-card reveal" data-search="medecine genomique biotechnologie">
           <div class="session-time">14h00</div>
           <div class="session-info">
-            <h4>Debat — Genomique et biotechnologies : jusqu'ou aller ?</h4>
-            <div class="session-speaker">Emmanuelle Charpentier &middot; Jean-Francois Delfraissy</div>
+            <h4>D&eacute;bat &mdash; G&eacute;nomique et biotechnologies : jusqu'o&ugrave; aller ?</h4>
+            <div class="session-speaker">Emmanuelle Charpentier &middot; Jean-Fran&ccedil;ois Delfraissy</div>
             <div class="session-meta">
               <span class="session-room">&#128205; Salle Gutenberg</span>
               <span class="session-theme-badge">Sciences</span>
-              <span class="session-status status-few">Dernieres places</span>
+              <span class="session-status status-few">Derni&egrave;res places</span>
             </div>
           </div>
         </div>
         <div class="session-card reveal" data-search="atelier journalisme medias fake news">
           <div class="session-time">15h30</div>
           <div class="session-info">
-            <h4>Atelier — Decrypter les fake news : outils et methodes</h4>
-            <div class="session-speaker">Samuel Laurent (Les Decodeurs) &middot; journalistes AFP</div>
+            <h4>Atelier &mdash; D&eacute;crypter les fake news : outils et m&eacute;thodes</h4>
+            <div class="session-speaker">Samuel Laurent (Les D&eacute;codeurs) &middot; journalistes AFP</div>
             <div class="session-meta">
               <span class="session-room">&#128205; Espace Ateliers B</span>
               <span class="session-theme-badge">Culture</span>
@@ -2751,7 +2748,7 @@ footer {
         <div class="session-card reveal" data-search="urbanisme ville durable mobilite">
           <div class="session-time">16h00</div>
           <div class="session-info">
-            <h4>Debat — La ville en 2050 : densifier, verdir, ralentir</h4>
+            <h4>D&eacute;bat &mdash; La ville en 2050 : densifier, verdir, ralentir</h4>
             <div class="session-speaker">Carlos Moreno &middot; Jeanne Barseghian</div>
             <div class="session-meta">
               <span class="session-room">&#128205; Salle Erasme</span>
@@ -2763,8 +2760,8 @@ footer {
         <div class="session-card reveal" data-search="concert spectacle culture soiree">
           <div class="session-time">20h30</div>
           <div class="session-info">
-            <h4>Soiree speciale — Lectures engagees & musique</h4>
-            <div class="session-speaker">Auteurs invites &middot; Ensemble Accroche Note</div>
+            <h4>Soir&eacute;e sp&eacute;ciale &mdash; Lectures engag&eacute;es &amp; musique</h4>
+            <div class="session-speaker">Auteurs invit&eacute;s &middot; Ensemble Accroche Note</div>
             <div class="session-meta">
               <span class="session-room">&#128205; Grand Auditorium</span>
               <span class="session-theme-badge">Culture</span>
@@ -2781,7 +2778,7 @@ footer {
         <div class="session-card reveal" data-search="europe defense geopolitique">
           <div class="session-time">9h00</div>
           <div class="session-info">
-            <h4>Table ronde — Defense europeenne : vers une autonomie strategique ?</h4>
+            <h4>Table ronde &mdash; D&eacute;fense europ&eacute;enne : vers une autonomie strat&eacute;gique ?</h4>
             <div class="session-speaker">Nicole Gnesotto &middot; Bruno Tertrais &middot; Florence Parly</div>
             <div class="session-meta">
               <span class="session-room">&#128205; Grand Auditorium</span>
@@ -2793,7 +2790,7 @@ footer {
         <div class="session-card reveal" data-search="agriculture alimentation souverainete alimentaire">
           <div class="session-time">9h00</div>
           <div class="session-info">
-            <h4>Table ronde — Souverainete alimentaire : nourrir sans detruire</h4>
+            <h4>Table ronde &mdash; Souverainet&eacute; alimentaire : nourrir sans d&eacute;truire</h4>
             <div class="session-speaker">Marc Dufumier &middot; Maxime de Rostolan</div>
             <div class="session-meta">
               <span class="session-room">&#128205; Salle Erasme</span>
@@ -2805,11 +2802,11 @@ footer {
         <div class="session-card reveal" data-search="justice sociale redistribution fiscalite">
           <div class="session-time">10h30</div>
           <div class="session-info">
-            <h4>Table ronde — Fiscalite et justice sociale : qui paie, qui gagne ?</h4>
+            <h4>Table ronde &mdash; Fiscalit&eacute; et justice sociale : qui paie, qui gagne ?</h4>
             <div class="session-speaker">Gabriel Zucman &middot; Esther Duflo</div>
             <div class="session-meta">
               <span class="session-room">&#128205; Grand Auditorium</span>
-              <span class="session-theme-badge">Economie</span>
+              <span class="session-theme-badge">&Eacute;conomie</span>
               <span class="session-status status-full">Complet</span>
             </div>
           </div>
@@ -2817,7 +2814,7 @@ footer {
         <div class="session-card reveal" data-search="espace exploration science futur">
           <div class="session-time">10h30</div>
           <div class="session-info">
-            <h4>Conference — L'exploration spatiale, nouvelle frontiere de l'humanite</h4>
+            <h4>Conf&eacute;rence &mdash; L'exploration spatiale, nouvelle fronti&egrave;re de l'humanit&eacute;</h4>
             <div class="session-speaker">Thomas Pesquet (en visio)</div>
             <div class="session-meta">
               <span class="session-room">&#128205; Salle Gutenberg</span>
@@ -2829,11 +2826,11 @@ footer {
         <div class="session-card reveal" data-search="jeunesse engagement generation">
           <div class="session-time">14h00</div>
           <div class="session-info">
-            <h4>Table ronde — La jeunesse s'engage : nouvelles formes de mobilisation</h4>
-            <div class="session-speaker">Camille Etienne &middot; Priscillia Ludosky &middot; etudiants engages</div>
+            <h4>Table ronde &mdash; La jeunesse s'engage : nouvelles formes de mobilisation</h4>
+            <div class="session-speaker">Camille Etienne &middot; Priscillia Ludosky &middot; &eacute;tudiants engag&eacute;s</div>
             <div class="session-meta">
               <span class="session-room">&#128205; Grand Auditorium</span>
-              <span class="session-theme-badge">Societe</span>
+              <span class="session-theme-badge">Soci&eacute;t&eacute;</span>
               <span class="session-status status-available">Places disponibles</span>
             </div>
           </div>
@@ -2841,8 +2838,8 @@ footer {
         <div class="session-card reveal" data-search="livre edition creation litterature">
           <div class="session-time">14h00</div>
           <div class="session-info">
-            <h4>Table ronde — Le livre face au numerique : creation en danger ?</h4>
-            <div class="session-speaker">Leila Slimani &middot; Sylvain Tesson</div>
+            <h4>Table ronde &mdash; Le livre face au num&eacute;rique : cr&eacute;ation en danger ?</h4>
+            <div class="session-speaker">Le&iuml;la Slimani &middot; Sylvain Tesson</div>
             <div class="session-meta">
               <span class="session-room">&#128205; Salle Schweitzer</span>
               <span class="session-theme-badge">Culture</span>
@@ -2853,7 +2850,7 @@ footer {
         <div class="session-card reveal" data-search="eau ressources stress hydrique">
           <div class="session-time">15h30</div>
           <div class="session-info">
-            <h4>Conference — L'eau, le petrole du XXIe siecle</h4>
+            <h4>Conf&eacute;rence &mdash; L'eau, le p&eacute;trole du XXIe si&egrave;cle</h4>
             <div class="session-speaker">Erik Orsenna &middot; Emma Haziza</div>
             <div class="session-meta">
               <span class="session-room">&#128205; Salle Erasme</span>
@@ -2865,11 +2862,11 @@ footer {
         <div class="session-card reveal" data-search="synthese bilan perspectives conclusion cloture">
           <div class="session-time">17h00</div>
           <div class="session-info">
-            <h4>Seance de cloture — Synthese et perspectives pour 2027</h4>
-            <div class="session-speaker">Comite scientifique &middot; Tous les intervenants invites</div>
+            <h4>S&eacute;ance de cl&ocirc;ture &mdash; Synth&egrave;se et perspectives</h4>
+            <div class="session-speaker">Comit&eacute; scientifique &middot; Tous les intervenants invit&eacute;s</div>
             <div class="session-meta">
               <span class="session-room">&#128205; Grand Auditorium</span>
-              <span class="session-theme-badge">Evenement</span>
+              <span class="session-theme-badge">&Eacute;v&eacute;nement</span>
               <span class="session-status status-available">Places disponibles</span>
             </div>
           </div>
@@ -2877,11 +2874,11 @@ footer {
         <div class="session-card reveal" data-search="apero cloture fin evenement">
           <div class="session-time">18h30</div>
           <div class="session-info">
-            <h4>Aperitif de cloture — Vins d'Alsace & gastronomie locale</h4>
-            <div class="session-speaker">Ouvert a tous les participants</div>
+            <h4>Ap&eacute;ritif de cl&ocirc;ture &mdash; Vins d'Alsace &amp; gastronomie locale</h4>
+            <div class="session-speaker">Ouvert &agrave; tous les participants</div>
             <div class="session-meta">
               <span class="session-room">&#128205; Hall d'honneur</span>
-              <span class="session-theme-badge">Evenement</span>
+              <span class="session-theme-badge">&Eacute;v&eacute;nement</span>
               <span class="session-status status-available">Places disponibles</span>
             </div>
           </div>
@@ -2903,16 +2900,16 @@ footer {
   <div class="container">
     <div class="section-header reveal">
       <span class="section-label">Intervenants</span>
-      <h2>200+ voix pour eclairer le debat</h2>
-      <p>Chercheurs, elus, journalistes, militants, artistes — des personnalites de premier plan pour nourrir la reflexion collective.</p>
+      <h2>45+ voix pour &eacute;clairer le d&eacute;bat</h2>
+      <p>Chercheurs, &eacute;lus, journalistes, militants, artistes &mdash; des personnalit&eacute;s de premier plan pour nourrir la r&eacute;flexion collective.</p>
     </div>
 
     <div class="speakers-filters">
       <button class="filter-btn active" onclick="filterSpeakers('all')">Tous</button>
       <button class="filter-btn" onclick="filterSpeakers('politique')">Politique</button>
       <button class="filter-btn" onclick="filterSpeakers('environnement')">Environnement</button>
-      <button class="filter-btn" onclick="filterSpeakers('societe')">Societe</button>
-      <button class="filter-btn" onclick="filterSpeakers('economie')">Economie</button>
+      <button class="filter-btn" onclick="filterSpeakers('societe')">Soci&eacute;t&eacute;</button>
+      <button class="filter-btn" onclick="filterSpeakers('economie')">&Eacute;conomie</button>
       <button class="filter-btn" onclick="filterSpeakers('sciences')">Sciences</button>
       <button class="filter-btn" onclick="filterSpeakers('culture')">Culture</button>
     </div>
@@ -2935,9 +2932,9 @@ footer {
 <section class="section section-alt" id="actualites">
   <div class="container">
     <div class="section-header reveal">
-      <span class="section-label">Actualites</span>
-      <h2>Les dernieres nouvelles du Festival</h2>
-      <p>Annonces, coulisses, partenariats — suivez la preparation des Rendez-vous Geopolitiques de Strasbourg 2027.</p>
+      <span class="section-label">Actualit&eacute;s</span>
+      <h2>Les derni&egrave;res nouvelles du Festival</h2>
+      <p>Annonces, coulisses, partenariats &mdash; suivez la pr&eacute;paration des Rendez-vous G&eacute;opolitiques de Strasbourg 2026.</p>
     </div>
     <div class="news-grid" id="newsGrid"></div>
   </div>
@@ -2955,30 +2952,30 @@ footer {
     <div class="section-header reveal">
       <span class="section-label">Partenaires</span>
       <h2>Ils nous soutiennent</h2>
-      <p>Institutions, medias, universites et entreprises — un ecosysteme de partenaires pour un evenement d'envergure.</p>
+      <p>Institutions, m&eacute;dias, universit&eacute;s et entreprises &mdash; un &eacute;cosyst&egrave;me de partenaires pour un &eacute;v&eacute;nement d'envergure.</p>
     </div>
 
     <div class="partners-category reveal">
       <h3>&#127963; Institutionnels</h3>
       <div class="partners-row">
         <div class="partner-item">Ville de Strasbourg</div>
-        <div class="partner-item">Region Grand Est</div>
+        <div class="partner-item">R&eacute;gion Grand Est</div>
         <div class="partner-item">Conseil de l'Europe</div>
-        <div class="partner-item">Parlement Europeen</div>
-        <div class="partner-item">Ministere de la Culture</div>
-        <div class="partner-item">Prefecture du Bas-Rhin</div>
-        <div class="partner-item">Eurometropole de Strasbourg</div>
-        <div class="partner-item">Collectivite europeenne d'Alsace</div>
+        <div class="partner-item">Parlement europ&eacute;en</div>
+        <div class="partner-item">Minist&egrave;re de la Culture</div>
+        <div class="partner-item">Pr&eacute;fecture du Bas-Rhin</div>
+        <div class="partner-item">Eurom&eacute;tropole de Strasbourg</div>
+        <div class="partner-item">Collectivit&eacute; europ&eacute;enne d'Alsace</div>
       </div>
     </div>
 
     <div class="partners-category reveal">
-      <h3>&#128240; Medias</h3>
+      <h3>&#128240; M&eacute;dias</h3>
       <div class="partners-row">
         <div class="partner-item">France Culture</div>
         <div class="partner-item">Le Monde</div>
         <div class="partner-item">Arte</div>
-        <div class="partner-item">DNA — Dernieres Nouvelles d'Alsace</div>
+        <div class="partner-item">DNA &mdash; Derni&egrave;res Nouvelles d'Alsace</div>
         <div class="partner-item">France 3 Grand Est</div>
         <div class="partner-item">Mediapart</div>
         <div class="partner-item">La Croix</div>
@@ -2987,22 +2984,22 @@ footer {
     </div>
 
     <div class="partners-category reveal">
-      <h3>&#127891; Academiques</h3>
+      <h3>&#127891; Acad&eacute;miques</h3>
       <div class="partners-row">
-        <div class="partner-item">Universite de Strasbourg</div>
+        <div class="partner-item">Universit&eacute; de Strasbourg</div>
         <div class="partner-item">Sciences Po Strasbourg</div>
         <div class="partner-item">CNRS</div>
         <div class="partner-item">INSP (ex-ENA)</div>
         <div class="partner-item">EHESS</div>
-        <div class="partner-item">College de France</div>
+        <div class="partner-item">Coll&egrave;ge de France</div>
         <div class="partner-item">Institut Universitaire de France</div>
       </div>
     </div>
 
     <div class="partners-category reveal">
-      <h3>&#128188; Entreprises & Mecenat</h3>
+      <h3>&#128188; Entreprises &amp; M&eacute;c&eacute;nat</h3>
       <div class="partners-row">
-        <div class="partner-item">Caisse des Depots</div>
+        <div class="partner-item">Caisse des D&eacute;p&ocirc;ts</div>
         <div class="partner-item">Banque de France</div>
         <div class="partner-item">Groupe La Poste</div>
         <div class="partner-item">EDF</div>
@@ -3027,44 +3024,44 @@ footer {
   <div class="container">
     <div class="section-header reveal">
       <span class="section-label">Infos pratiques</span>
-      <h2>Venir aux Rendez-vous Geopolitiques</h2>
-      <p>Tout ce qu'il faut savoir pour preparer votre venue a Strasbourg du 19 au 21 mars 2027.</p>
+      <h2>Venir aux Rendez-vous G&eacute;opolitiques</h2>
+      <p>Tout ce qu'il faut savoir pour pr&eacute;parer votre venue &agrave; Strasbourg du 15 au 18 octobre 2026.</p>
     </div>
 
     <div class="infos-grid">
       <div class="info-block reveal">
         <h3><span class="info-icon">&#128205;</span> Lieu</h3>
-        <p><strong>Palais de la Musique et des Congres</strong><br>Place de Bordeaux<br>67000 Strasbourg</p>
+        <p><strong>Palais de la Musique et des Congr&egrave;s</strong><br>Place de Bordeaux<br>67000 Strasbourg</p>
         <div id="map-container"></div>
       </div>
 
       <div class="info-block reveal">
-        <h3><span class="info-icon">&#128652;</span> Acces</h3>
+        <h3><span class="info-icon">&#128652;</span> Acc&egrave;s</h3>
         <ul>
-          <li><strong>Tram :</strong> Lignes B, E, F — arret "Wacken"</li>
+          <li><strong>Tram :</strong> Lignes B, E, F &mdash; arr&ecirc;t &laquo; Wacken &raquo;</li>
           <li><strong>Train :</strong> Gare de Strasbourg (TGV Paris 1h46) puis tram</li>
           <li><strong>Voiture :</strong> Parking Wacken (1200 places), A35 sortie Wacken</li>
-          <li><strong>Avion :</strong> Aeroport Strasbourg-Entzheim (15 min navette)</li>
-          <li><strong>Velo :</strong> Station Velop — Place de Bordeaux</li>
+          <li><strong>Avion :</strong> A&eacute;roport Strasbourg-Entzheim (15 min navette)</li>
+          <li><strong>V&eacute;lo :</strong> Station V&eacute;lop &mdash; Place de Bordeaux</li>
         </ul>
       </div>
 
       <div class="info-block reveal">
         <h3><span class="info-icon">&#127915;</span> Tarifs</h3>
         <div class="tarif-item">
-          <span>Conferences & debats</span>
+          <span>Conf&eacute;rences &amp; d&eacute;bats</span>
           <span class="tarif-price">Gratuit</span>
         </div>
         <div class="tarif-item">
-          <span>Ateliers (unite)</span>
+          <span>Ateliers (unit&eacute;)</span>
           <span class="tarif-price">15 &euro;</span>
         </div>
         <div class="tarif-item">
-          <span>Pass 3 jours (tout inclus)</span>
+          <span>Pass 4 jours (tout inclus)</span>
           <span class="tarif-price">35 &euro;</span>
         </div>
         <div class="tarif-item">
-          <span>Tarif etudiant / demandeur d'emploi</span>
+          <span>Tarif &eacute;tudiant / demandeur d'emploi</span>
           <span class="tarif-price">Gratuit</span>
         </div>
         <div class="tarif-item">
@@ -3074,10 +3071,10 @@ footer {
       </div>
 
       <div class="info-block reveal">
-        <h3><span class="info-icon">&#127976;</span> Hebergement partenaire</h3>
+        <h3><span class="info-icon">&#127976;</span> H&eacute;bergement partenaire</h3>
         <ul>
-          <li><strong>Hotel Regent Petite France</strong> — 5 rue des Moulins (code RVGS2027 : -15%)</li>
-          <li><strong>Holiday Inn Strasbourg Nord</strong> — 20 place de Bordeaux (tarif groupe 89&euro;/nuit)</li>
+          <li><strong>H&ocirc;tel Regent Petite France</strong> &mdash; 5 rue des Moulins (code RVGS2026 : -15%)</li>
+          <li><strong>Holiday Inn Strasbourg Nord</strong> &mdash; 20 place de Bordeaux (tarif groupe 89&euro;/nuit)</li>
           <li><strong>CIARUS Auberge de Jeunesse</strong> — 7 rue Finkmatt (25&euro;/nuit en dortoir)</li>
         </ul>
       </div>
@@ -3086,10 +3083,10 @@ footer {
         <h3><span class="info-icon">&#128222;</span> Contact</h3>
         <ul>
           <li><strong>Email :</strong> contact@rvgs.fr</li>
-          <li><strong>Telephone :</strong> 03 88 37 67 67</li>
+          <li><strong>Telephone :</strong> <a href="tel:+33939242692" style="color:inherit;text-decoration:none;">09 39 24 26 92</a></li>
           <li><strong>Horaires :</strong> 9h — 21h (chaque jour)</li>
           <li><strong>Accueil presse :</strong> presse@rvgs.fr</li>
-          <li><strong>Accessibilite :</strong> Site entierement accessible PMR</li>
+          <li><strong>Accessibilit&eacute; :</strong> Site enti&egrave;rement accessible PMR</li>
         </ul>
       </div>
 
@@ -3097,11 +3094,11 @@ footer {
         <h3><span class="info-icon">&#128197;</span> Horaires</h3>
         <ul>
           <li><strong>Accueil :</strong> 8h00 — Ouverture des portes</li>
-          <li><strong>Conferences :</strong> 9h00 — 18h30</li>
+          <li><strong>Conf&eacute;rences :</strong> 9h00 &mdash; 18h30</li>
           <li><strong>Ateliers :</strong> 9h00 — 17h00 (sur inscription)</li>
           <li><strong>Librairie :</strong> 9h00 — 20h00</li>
           <li><strong>Espace restauration :</strong> 11h30 — 14h30</li>
-          <li><strong>Soirees speciales :</strong> 20h00 — 22h30</li>
+          <li><strong>Soir&eacute;es sp&eacute;ciales :</strong> 20h00 &mdash; 22h30</li>
         </ul>
       </div>
     </div>
@@ -3118,37 +3115,37 @@ footer {
 <section class="section" id="mediatheque">
   <div class="container">
     <div class="section-header reveal">
-      <span class="section-label">Mediatheque</span>
-      <h2>Revivre les Rendez-vous en video</h2>
-      <p>L'integralite des conferences sera filmee et mise en ligne gratuitement apres l'evenement.</p>
+      <span class="section-label">M&eacute;diath&egrave;que</span>
+      <h2>Revivre les Rendez-vous en vid&eacute;o</h2>
+      <p>L'int&eacute;gralit&eacute; des conf&eacute;rences sera film&eacute;e et mise en ligne gratuitement apr&egrave;s l'&eacute;v&eacute;nement.</p>
     </div>
 
     <div class="media-placeholder reveal">
       <div class="media-icon">&#127909;</div>
-      <h3>200+ heures de conferences</h3>
-      <p>Les videos seront disponibles apres le festival, a partir d'avril 2027. En attendant, decouvrez quelques conferences qui ont inspire notre programmation.</p>
+      <h3>100+ heures de conf&eacute;rences</h3>
+      <p>Les vid&eacute;os seront disponibles apr&egrave;s le festival, &agrave; partir de novembre 2026. En attendant, d&eacute;couvrez quelques conf&eacute;rences qui ont inspir&eacute; notre programmation.</p>
     </div>
 
     <div class="videos-preview">
       <div class="video-card reveal">
-        <iframe src="https://www.youtube.com/embed/9bS2g4L2vxc" title="Conference politique" loading="lazy" allowfullscreen></iframe>
+        <div style="width:100%;aspect-ratio:16/9;background:var(--bg-card);display:flex;align-items:center;justify-content:center;color:var(--text-muted);font-size:14px;text-align:center;padding:20px;">Vid&eacute;os disponibles apr&egrave;s le festival</div>
         <div class="video-info">
-          <h4>Thomas Piketty — Capital et ideologie</h4>
-          <p>Conference inaugurale, Sciences Po Paris</p>
+          <h4>Thomas Piketty &mdash; Capital et id&eacute;ologie</h4>
+          <p>Conf&eacute;rence inaugurale, Sciences Po Paris</p>
         </div>
       </div>
       <div class="video-card reveal">
-        <iframe src="https://www.youtube.com/embed/diKGSsbbfHQ" title="Conference climat" loading="lazy" allowfullscreen></iframe>
+        <div style="width:100%;aspect-ratio:16/9;background:var(--bg-card);display:flex;align-items:center;justify-content:center;color:var(--text-muted);font-size:14px;text-align:center;padding:20px;">Vid&eacute;os disponibles apr&egrave;s le festival</div>
         <div class="video-info">
-          <h4>Jean-Marc Jancovici — Energie et climat</h4>
+          <h4>Jean-Marc Jancovici &mdash; &Eacute;nergie et climat</h4>
           <p>Cours des Mines, Paris</p>
         </div>
       </div>
       <div class="video-card reveal">
-        <iframe src="https://www.youtube.com/embed/NKGnXgH_CzI" title="Conference societe" loading="lazy" allowfullscreen></iframe>
+        <div style="width:100%;aspect-ratio:16/9;background:var(--bg-card);display:flex;align-items:center;justify-content:center;color:var(--text-muted);font-size:14px;text-align:center;padding:20px;">Vid&eacute;os disponibles apr&egrave;s le festival</div>
         <div class="video-info">
-          <h4>Edgar Morin — Penser la complexite</h4>
-          <p>Conference au College de France</p>
+          <h4>Edgar Morin &mdash; Penser la complexit&eacute;</h4>
+          <p>Conf&eacute;rence au Coll&egrave;ge de France</p>
         </div>
       </div>
     </div>
@@ -3161,9 +3158,9 @@ footer {
 <section class="section section-alt" id="appel">
   <div class="container">
     <div class="section-header reveal">
-      <span class="section-label">Appel a communications</span>
+      <span class="section-label">Appel &agrave; communications</span>
       <h2>Proposez votre intervention</h2>
-      <p>Chercheurs, experts, acteurs de terrain — soumettez votre proposition de conference, atelier ou table ronde pour le festival 2027.</p>
+      <p>Chercheurs, experts, acteurs de terrain &mdash; soumettez votre proposition de conf&eacute;rence, atelier ou table ronde pour le festival 2026.</p>
     </div>
 
     <div class="form-container reveal" id="formContainer">
@@ -3174,8 +3171,8 @@ footer {
             <input type="text" id="f-nom" required placeholder="Votre nom">
           </div>
           <div class="form-group">
-            <label for="f-prenom">Prenom *</label>
-            <input type="text" id="f-prenom" required placeholder="Votre prenom">
+            <label for="f-prenom">Pr&eacute;nom *</label>
+            <input type="text" id="f-prenom" required placeholder="Votre pr&eacute;nom">
           </div>
         </div>
         <div class="form-row">
@@ -3185,17 +3182,17 @@ footer {
           </div>
           <div class="form-group">
             <label for="f-institution">Institution / Organisme</label>
-            <input type="text" id="f-institution" placeholder="Universite, entreprise, association...">
+            <input type="text" id="f-institution" placeholder="Universit&eacute;, entreprise, association...">
           </div>
         </div>
         <div class="form-group">
-          <label for="f-theme">Thematique *</label>
+          <label for="f-theme">Th&eacute;matique *</label>
           <select id="f-theme" required>
-            <option value="">-- Choisissez une thematique --</option>
-            <option value="politique">Politique & Democratie</option>
+            <option value="">-- Choisissez une th&eacute;matique --</option>
+            <option value="politique">Politique &amp; D&eacute;mocratie</option>
             <option value="environnement">Environnement & Climat</option>
-            <option value="societe">Societe & Vivre-ensemble</option>
-            <option value="economie">Economie & Travail</option>
+            <option value="societe">Soci&eacute;t&eacute; &amp; Vivre-ensemble</option>
+            <option value="economie">&Eacute;conomie &amp; Travail</option>
             <option value="sciences">Sciences & Technologies</option>
             <option value="culture">Culture & Patrimoine</option>
           </select>
@@ -3205,21 +3202,21 @@ footer {
           <input type="text" id="f-titre" required placeholder="Titre de votre proposition">
         </div>
         <div class="form-group">
-          <label for="f-resume">Resume (300 mots max.) *</label>
-          <textarea id="f-resume" required placeholder="Decrivez votre proposition : objectifs, problematique, apport original..." maxlength="2000"></textarea>
+          <label for="f-resume">R&eacute;sum&eacute; (300 mots max.) *</label>
+          <textarea id="f-resume" required placeholder="D&eacute;crivez votre proposition : objectifs, probl&eacute;matique, apport original..." maxlength="2000"></textarea>
         </div>
         <div style="text-align:center; margin-top:24px;">
           <button type="submit" class="btn btn-primary">Soumettre ma proposition</button>
         </div>
         <div class="form-deadline">
-          <strong>Date limite : 31 decembre 2026</strong>
+          <strong>Date limite : 31 ao&ucirc;t 2026</strong>
         </div>
       </form>
 
       <div class="form-success" id="formSuccess">
         <div class="check-icon">&#9989;</div>
-        <h3>Proposition envoyee !</h3>
-        <p>Merci pour votre soumission. Le comite scientifique vous repondra avant le 31 janvier 2027.</p>
+        <h3>Proposition envoy&eacute;e !</h3>
+        <p>Merci pour votre soumission. Le comit&eacute; scientifique vous r&eacute;pondra avant le 15 septembre 2026.</p>
       </div>
     </div>
   </div>
@@ -3265,7 +3262,7 @@ footer {
       </div>
     </div>
     <div style="text-align:center;margin-top:40px;" class="reveal">
-      <p style="font-size:14px;color:var(--text-muted);">&#128222; 03 88 37 67 67 &nbsp;|&nbsp; &#128231; contact@rvgs.fr &nbsp;|&nbsp; Horaires : 9h &mdash; 21h</p>
+      <p style="font-size:14px;color:var(--text-muted);">&#128222; <a href="tel:+33939242692" style="color:inherit;">09 39 24 26 92</a> &nbsp;|&nbsp; &#128231; contact@rvgs.fr &nbsp;|&nbsp; Horaires : 9h &mdash; 21h</p>
     </div>
   </div>
 </section>
@@ -3286,7 +3283,7 @@ footer {
       <div style="display:flex;gap:24px;justify-content:center;flex-wrap:wrap;font-size:14px;color:var(--text-secondary);">
         <span>&#127915; Conf&eacute;rences &amp; d&eacute;bats : <strong style="color:var(--accent);">Gratuit</strong></span>
         <span>&#128218; Ateliers : <strong style="color:var(--accent);">15 &euro;</strong></span>
-        <span>&#127903; Pass 3 jours : <strong style="color:var(--accent);">35 &euro;</strong></span>
+        <span>&#127903; Pass 4 jours : <strong style="color:var(--accent);">35 &euro;</strong></span>
         <span>&#127891; &Eacute;tudiants : <strong style="color:var(--accent);">Gratuit</strong></span>
       </div>
     </div>
@@ -3299,13 +3296,13 @@ footer {
 <section class="section newsletter-section" id="newsletter">
   <div class="container">
     <div class="newsletter-inner reveal">
-      <h2>Restez informe</h2>
-      <p>Recevez les dernieres actualites, le programme detaille et les invitations speciales.</p>
+      <h2>Restez inform&eacute;</h2>
+      <p>Recevez les derni&egrave;res actualit&eacute;s, le programme d&eacute;taill&eacute; et les invitations sp&eacute;ciales.</p>
       <form class="newsletter-form" onsubmit="handleNewsletter(event)">
         <input type="email" placeholder="Votre adresse email" required id="nlEmail">
         <button type="submit">S'inscrire</button>
       </form>
-      <p id="nlConfirm" style="display:none; margin-top:16px; color:var(--accent); font-weight:600;">Inscription confirmee ! Merci.</p>
+      <p id="nlConfirm" style="display:none; margin-top:16px; color:var(--accent); font-weight:600;">Inscription confirm&eacute;e ! Merci.</p>
     </div>
   </div>
 </section>
@@ -3317,14 +3314,14 @@ footer {
   <div class="container">
     <div class="footer-grid">
       <div class="footer-brand">
-        <div class="footer-logo">Les Rendez-vous Geopolitiques de Strasbourg</div>
-        <p>Festival international de geopolitique. Du 19 au 21 mars 2027 au Palais de la Musique et des Congres. Cofonde par Pierre Haski. Organise par l'ARDG.</p>
+        <div class="footer-logo">Les Rendez-vous G&eacute;opolitiques de Strasbourg</div>
+        <p>Festival international de g&eacute;opolitique. Du 15 au 18 octobre 2026 au Palais de la Musique et des Congr&egrave;s. Cofond&eacute; par Pierre Haski. Organis&eacute; par l'ARDG.</p>
         <div class="social-links">
-          <a href="#" class="social-link" title="Facebook" aria-label="Facebook">f</a>
-          <a href="#" class="social-link" title="X / Twitter" aria-label="Twitter">X</a>
-          <a href="#" class="social-link" title="Instagram" aria-label="Instagram">ig</a>
-          <a href="#" class="social-link" title="LinkedIn" aria-label="LinkedIn">in</a>
-          <a href="#" class="social-link" title="YouTube" aria-label="YouTube">&#9654;</a>
+          <span class="social-link" title="Facebook" aria-label="Facebook">f</span>
+          <span class="social-link" title="X / Twitter" aria-label="Twitter">X</span>
+          <span class="social-link" title="Instagram" aria-label="Instagram">ig</span>
+          <span class="social-link" title="LinkedIn" aria-label="LinkedIn">in</span>
+          <span class="social-link" title="YouTube" aria-label="YouTube">&#9654;</span>
         </div>
       </div>
       <div class="footer-section">
@@ -3332,30 +3329,30 @@ footer {
         <a href="#accueil">Accueil</a>
         <a href="#programme">Programme</a>
         <a href="#intervenants">Intervenants</a>
-        <a href="#actualites">Actualites</a>
+        <a href="#actualites">Actualit&eacute;s</a>
         <a href="#partenaires">Partenaires</a>
       </div>
       <div class="footer-section">
         <h4>Participer</h4>
-        <a href="#appel">Appel a communications</a>
+        <a href="#appel">Appel &agrave; communications</a>
         <a href="#infos">Infos pratiques</a>
-        <a href="#mediatheque">Mediatheque</a>
+        <a href="#mediatheque">M&eacute;diath&egrave;que</a>
         <a href="#newsletter">Newsletter</a>
       </div>
       <div class="footer-section">
         <h4>Contact</h4>
         <a href="mailto:contact@rvgs.fr">contact@rvgs.fr</a>
-        <a href="tel:+33388376767">03 88 37 67 67</a>
-        <a href="#">Espace presse</a>
-        <a href="#">Devenir partenaire</a>
+        <a href="tel:+33939242692">09 39 24 26 92</a>
+        <a href="#contact">Espace presse</a>
+        <a href="#contact">Devenir partenaire</a>
       </div>
     </div>
     <div class="footer-bottom">
-      <p>&copy; 2027 Les Rendez-vous Geopolitiques de Strasbourg — ARDG — Tous droits reserves</p>
+      <p>&copy; 2026 Les Rendez-vous G&eacute;opolitiques de Strasbourg &mdash; ARDG &mdash; Tous droits r&eacute;serv&eacute;s</p>
       <div class="footer-legal">
-        <a href="#">Mentions legales</a>
-        <a href="#">CGU</a>
-        <a href="#">Confidentialite</a>
+        <a href="#contact">Mentions l&eacute;gales</a>
+        <a href="#contact">CGU</a>
+        <a href="#contact">Confidentialit&eacute;</a>
       </div>
     </div>
   </div>
@@ -3366,7 +3363,7 @@ footer {
      ============================================ -->
 <div class="cookie-banner" id="cookieBanner">
   <div class="cookie-inner">
-    <p>Ce site utilise des cookies pour ameliorer votre experience. En poursuivant votre navigation, vous acceptez l'utilisation de cookies conformement a notre politique de confidentialite (RGPD).</p>
+    <p>Ce site utilise des cookies pour am&eacute;liorer votre exp&eacute;rience. En poursuivant votre navigation, vous acceptez l'utilisation de cookies conform&eacute;ment &agrave; notre politique de confidentialit&eacute; (RGPD).</p>
     <div class="cookie-btns">
       <button class="cookie-accept" onclick="acceptCookies()">Accepter</button>
       <button class="cookie-decline" onclick="declineCookies()">Refuser</button>
@@ -3403,8 +3400,8 @@ var sliderPaused = false;
 
 // Default slider data
 var defaultSliderData = [
-  { tag: 'Le festival', title: 'Les Rendez-vous<br>G\u00e9opolitiques de Strasbourg', subtitle: 'Festival international \u2014 19-21 mars 2027', author: '', cta: '', ctaLink: '', bg: 'slide-bg-1' },
-  { tag: 'Le th\u00e8me 2027', title: 'Les batailles de l\'eau', subtitle: 'Des nappes phr\u00e9atiques aux oc\u00e9ans, l\'eau trace de nouvelles lignes de fracture g\u00e9opolitiques', author: '', cta: '', ctaLink: '', bg: 'slide-bg-2' },
+  { tag: 'Le festival', title: 'Les Rendez-vous<br>G\u00e9opolitiques de Strasbourg', subtitle: 'Festival international \u2014 15-18 octobre 2026', author: '', cta: '', ctaLink: '', bg: 'slide-bg-1' },
+  { tag: 'Le th\u00e8me 2026', title: 'Les batailles de l\'eau', subtitle: 'Des nappes phr\u00e9atiques aux oc\u00e9ans, l\'eau trace de nouvelles lignes de fracture g\u00e9opolitiques', author: '', cta: '', ctaLink: '', bg: 'slide-bg-2' },
   { tag: 'Le mot du cofondateur', title: '\u00ab Il est urgent de s\'informer, de comprendre, de d\u00e9battre \u00bb', subtitle: '', author: 'Pierre Haski \u2014 Pr\u00e9sident de Reporters Sans Fronti\u00e8res', cta: '', ctaLink: '', bg: 'slide-bg-3' },
   { tag: 'Le pays invit\u00e9', title: 'Danemark / Estonie', subtitle: 'Nations strat\u00e9giques en mati\u00e8re de s\u00e9curit\u00e9, environnement et ressources naturelles', author: '', cta: '', ctaLink: '', bg: 'slide-bg-4' },
   { tag: '100 \u00e9v\u00e9nements', title: 'Conf\u00e9rences, tables rondes, expositions, projections, ateliers...', subtitle: 'Gratuit et ouvert \u00e0 tous', author: '', cta: '', ctaLink: '', bg: 'slide-bg-5' },
@@ -3541,127 +3538,127 @@ function handleSuggestion(e) {
 
 const speakers = [
   { name: "Pierre Haski", title: "Cofondateur RVGS, journaliste", inst: "France Inter / Rue89", theme: "politique", initials: "PH" },
-  { name: "Sylvie Kauffmann", title: "Editorialiste", inst: "Le Monde", theme: "politique", initials: "SK" },
-  { name: "Catherine Trautmann", title: "Ancienne ministre", inst: "Parlement Europeen", theme: "politique", initials: "CT" },
-  { name: "Dominique Moisi", title: "Geopolitologue", inst: "Institut Montaigne", theme: "politique", initials: "DM" },
-  { name: "Thomas Piketty", title: "Economiste", inst: "EHESS / PSE", theme: "economie", initials: "TP" },
-  { name: "Valerie Masson-Delmotte", title: "Paleoclimatologue", inst: "GIEC / CEA", theme: "environnement", initials: "VM" },
+  { name: "Sylvie Kauffmann", title: "\u00c9ditorialiste", inst: "Le Monde", theme: "politique", initials: "SK" },
+  { name: "Catherine Trautmann", title: "Ancienne ministre", inst: "Parlement europ\u00e9en", theme: "politique", initials: "CT" },
+  { name: "Dominique Mo\u00efsi", title: "G\u00e9opolitologue", inst: "Institut Montaigne", theme: "politique", initials: "DM" },
+  { name: "Thomas Piketty", title: "\u00c9conomiste", inst: "EHESS / PSE", theme: "economie", initials: "TP" },
+  { name: "Val\u00e9rie Masson-Delmotte", title: "Pal\u00e9oclimatologue", inst: "GIEC / CEA", theme: "environnement", initials: "VM" },
   { name: "Jean Jouzel", title: "Climatologue", inst: "GIEC / CEA", theme: "environnement", initials: "JJ" },
-  { name: "Cedric Villani", title: "Mathematicien", inst: "Assemblee Nationale", theme: "sciences", initials: "CV" },
+  { name: "C\u00e9dric Villani", title: "Math\u00e9maticien", inst: "Assembl\u00e9e Nationale", theme: "sciences", initials: "CV" },
   { name: "Laurence Devillers", title: "Chercheuse IA", inst: "CNRS / Sorbonne", theme: "sciences", initials: "LD" },
-  { name: "Asma Mhalla", title: "Politologue du numerique", inst: "Sciences Po", theme: "sciences", initials: "AM" },
-  { name: "Philippe Meirieu", title: "Pedagogue", inst: "Universite Lumiere Lyon 2", theme: "societe", initials: "PM" },
+  { name: "Asma Mhalla", title: "Politologue du num\u00e9rique", inst: "Sciences Po", theme: "sciences", initials: "AM" },
+  { name: "Philippe Meirieu", title: "P\u00e9dagogue", inst: "Universit\u00e9 Lumi\u00e8re Lyon 2", theme: "societe", initials: "PM" },
   { name: "Najat Vallaud-Belkacem", title: "Ancienne ministre", inst: "ONE France", theme: "societe", initials: "NV" },
-  { name: "Dominique Meda", title: "Sociologue", inst: "Universite Paris-Dauphine", theme: "economie", initials: "DMe" },
-  { name: "Julia Cage", title: "Economiste des medias", inst: "Sciences Po Paris", theme: "culture", initials: "JC" },
-  { name: "Gilles Boeuf", title: "Biologiste marin", inst: "Sorbonne Universite", theme: "environnement", initials: "GB" },
-  { name: "Isabelle Autissier", title: "Navigatrice, ecrivaine", inst: "WWF France", theme: "environnement", initials: "IA" },
-  { name: "Martin Hirsch", title: "Medecin, haut fonctionnaire", inst: "AP-HP", theme: "societe", initials: "MH" },
-  { name: "Francois Gemenne", title: "Politologue", inst: "GIEC / Universite de Liege", theme: "societe", initials: "FG" },
+  { name: "Dominique M\u00e9da", title: "Sociologue", inst: "Universit\u00e9 Paris-Dauphine", theme: "economie", initials: "DMe" },
+  { name: "Julia Cag\u00e9", title: "\u00c9conomiste des m\u00e9dias", inst: "Sciences Po Paris", theme: "culture", initials: "JC" },
+  { name: "Gilles Boeuf", title: "Biologiste marin", inst: "Sorbonne Universit\u00e9", theme: "environnement", initials: "GB" },
+  { name: "Isabelle Autissier", title: "Navigatrice, \u00e9crivaine", inst: "WWF France", theme: "environnement", initials: "IA" },
+  { name: "Martin Hirsch", title: "M\u00e9decin, haut fonctionnaire", inst: "AP-HP", theme: "societe", initials: "MH" },
+  { name: "Fran\u00e7ois Gemenne", title: "Politologue", inst: "GIEC / Universit\u00e9 de Li\u00e8ge", theme: "societe", initials: "FG" },
   { name: "Jean-Marc Jancovici", title: "Ingenieur, essayiste", inst: "The Shift Project", theme: "environnement", initials: "JMJ" },
   { name: "Corinne Lepage", title: "Avocate, ancienne ministre", inst: "Cap21", theme: "environnement", initials: "CL" },
-  { name: "Jean Bauberot", title: "Historien de la laicite", inst: "EPHE", theme: "societe", initials: "JB" },
-  { name: "Elie Cohen", title: "Economiste", inst: "CNRS", theme: "economie", initials: "EC" },
-  { name: "Anais Voy-Gillis", title: "Chercheuse industrie", inst: "Institut Choiseul", theme: "economie", initials: "AV" },
+  { name: "Jean Baub\u00e9rot", title: "Historien de la la\u00efcit\u00e9", inst: "EPHE", theme: "societe", initials: "JB" },
+  { name: "\u00c9lie Cohen", title: "\u00c9conomiste", inst: "CNRS", theme: "economie", initials: "EC" },
+  { name: "Ana\u00efs Voy-Gillis", title: "Chercheuse industrie", inst: "Institut Choiseul", theme: "economie", initials: "AV" },
   { name: "Cynthia Fleury", title: "Philosophe", inst: "CNAM / Conservatoire", theme: "sciences", initials: "CF" },
   { name: "Tariq Krim", title: "Entrepreneur tech", inst: "Netvibes / Jolicloud", theme: "sciences", initials: "TK" },
-  { name: "Georges Bischoff", title: "Historien", inst: "Universite de Strasbourg", theme: "culture", initials: "GBi" },
+  { name: "Georges Bischoff", title: "Historien", inst: "Universit\u00e9 de Strasbourg", theme: "culture", initials: "GBi" },
   { name: "Loic Blondiaux", title: "Politiste", inst: "Universite Paris 1", theme: "politique", initials: "LB" },
-  { name: "Sandrine Rousseau", title: "Economiste, elue", inst: "Assemblee Nationale", theme: "societe", initials: "SR" },
-  { name: "Timothee Parrique", title: "Economiste ecologique", inst: "Universite de Lund", theme: "economie", initials: "TPa" },
-  { name: "Eloi Laurent", title: "Economiste", inst: "Sciences Po / OFCE", theme: "economie", initials: "EL" },
-  { name: "Boris Cyrulnik", title: "Neuropsychiatre", inst: "Universite de Toulon", theme: "societe", initials: "BC" },
+  { name: "Sandrine Rousseau", title: "\u00c9conomiste, \u00e9lue", inst: "Assembl\u00e9e Nationale", theme: "societe", initials: "SR" },
+  { name: "Timoth\u00e9e Parrique", title: "\u00c9conomiste \u00e9cologique", inst: "Universit\u00e9 de Lund", theme: "economie", initials: "TPa" },
+  { name: "\u00c9lo\u00ef Laurent", title: "\u00c9conomiste", inst: "Sciences Po / OFCE", theme: "economie", initials: "EL" },
+  { name: "Boris Cyrulnik", title: "Neuropsychiatre", inst: "Universit\u00e9 de Toulon", theme: "societe", initials: "BC" },
   { name: "Emmanuelle Charpentier", title: "Nobel Chimie 2020", inst: "Max Planck Berlin", theme: "sciences", initials: "ECh" },
-  { name: "Carlos Moreno", title: "Urbaniste", inst: "Universite Paris 1", theme: "environnement", initials: "CM" },
+  { name: "Carlos Moreno", title: "Urbaniste", inst: "Universit\u00e9 Paris 1", theme: "environnement", initials: "CM" },
   { name: "Jeanne Barseghian", title: "Maire de Strasbourg", inst: "Ville de Strasbourg", theme: "politique", initials: "JBa" },
-  { name: "Nicole Gnesotto", title: "Geopoliticienne", inst: "CNAM", theme: "politique", initials: "NG" },
-  { name: "Bruno Tertrais", title: "Geopolitologue", inst: "Fondation pour la Recherche Strategique", theme: "politique", initials: "BT" },
-  { name: "Gabriel Zucman", title: "Economiste, fiscaliste", inst: "UC Berkeley / PSE", theme: "economie", initials: "GZ" },
-  { name: "Esther Duflo", title: "Nobel Economie 2019", inst: "MIT / J-PAL", theme: "economie", initials: "ED" },
+  { name: "Nicole Gnesotto", title: "G\u00e9opoliticienne", inst: "CNAM", theme: "politique", initials: "NG" },
+  { name: "Bruno Tertrais", title: "G\u00e9opolitologue", inst: "Fondation pour la Recherche Strat\u00e9gique", theme: "politique", initials: "BT" },
+  { name: "Gabriel Zucman", title: "\u00c9conomiste, fiscaliste", inst: "UC Berkeley / PSE", theme: "economie", initials: "GZ" },
+  { name: "Esther Duflo", title: "Nobel \u00c9conomie 2019", inst: "MIT / J-PAL", theme: "economie", initials: "ED" },
   { name: "Thomas Pesquet", title: "Astronaute", inst: "ESA / CNES", theme: "sciences", initials: "TPe" },
   { name: "Camille Etienne", title: "Activiste climat", inst: "Independante", theme: "environnement", initials: "CE" },
-  { name: "Leila Slimani", title: "Ecrivaine, Prix Goncourt", inst: "Gallimard", theme: "culture", initials: "LS" },
-  { name: "Sylvain Tesson", title: "Ecrivain voyageur", inst: "Gallimard", theme: "culture", initials: "ST" },
-  { name: "Erik Orsenna", title: "Academicien, ecrivain", inst: "Academie francaise", theme: "environnement", initials: "EO" },
+  { name: "Le\u00efla Slimani", title: "\u00c9crivaine, Prix Goncourt", inst: "Gallimard", theme: "culture", initials: "LS" },
+  { name: "Sylvain Tesson", title: "\u00c9crivain voyageur", inst: "Gallimard", theme: "culture", initials: "ST" },
+  { name: "Erik Orsenna", title: "Acad\u00e9micien, \u00e9crivain", inst: "Acad\u00e9mie fran\u00e7aise", theme: "environnement", initials: "EO" },
   { name: "Emma Haziza", title: "Hydrologue", inst: "Mayane", theme: "environnement", initials: "EH" },
   { name: "Marc Dufumier", title: "Agronome", inst: "AgroParisTech", theme: "environnement", initials: "MD" },
   { name: "Nathalie Tocci", title: "Politologue", inst: "Istituto Affari Internazionali", theme: "politique", initials: "NT" },
   { name: "Patrick Weil", title: "Historien du droit", inst: "CNRS / Yale", theme: "societe", initials: "PW" },
-  { name: "Samuel Laurent", title: "Journaliste fact-checking", inst: "Le Monde - Les Decodeurs", theme: "culture", initials: "SL" },
-  { name: "Cyril Dion", title: "Realisateur, ecrivain", inst: "Mouvement Colibris", theme: "environnement", initials: "CD" },
-  { name: "Jean-Francois Delfraissy", title: "Immunologue", inst: "Comite national d'ethique", theme: "sciences", initials: "JFD" },
-  { name: "Denis Maillard", title: "Essayiste travail", inst: "Temps Commun", theme: "economie", initials: "DMa" },
+  { name: "Samuel Laurent", title: "Journaliste fact-checking", inst: "Le Monde - Les D\u00e9codeurs", theme: "culture", initials: "SL" },
+  { name: "Cyril Dion", title: "R\u00e9alisateur, \u00e9crivain", inst: "Mouvement Colibris", theme: "environnement", initials: "CD" },
+  { name: "Jean-Fran\u00e7ois Delfraissy", title: "Immunologue", inst: "Comit\u00e9 national d'\u00e9thique", theme: "sciences", initials: "JFD" },
+  { name: "Denis Maillard", title: "Essayiste travail", inst: "Temps Commun", theme: "economie", initials: "DMa" }
 ];
 
 const news = [
   {
     date: "24 mars 2026",
-    title: "Le theme du festival 2027 devoile",
-    summary: "Le comite scientifique a choisi « Les batailles de l'eau » comme fil rouge des Rendez-vous Geopolitiques de Strasbourg 2027.",
-    full: "Ce theme transversal irriguera les six axes de reflexion du Forum. De la crise democratique a l'urgence climatique, en passant par les mutations technologiques, les 200 intervenants tenteront de dessiner les contours du monde de demain.",
+    title: "Le th\u00e8me du festival 2026 d\u00e9voil\u00e9",
+    summary: "Le comit\u00e9 scientifique a choisi \u00ab Les batailles de l'eau \u00bb comme fil rouge des Rendez-vous G\u00e9opolitiques de Strasbourg 2026.",
+    full: "Ce th\u00e8me transversal irriguera les six axes de r\u00e9flexion du Festival. De la crise d\u00e9mocratique \u00e0 l'urgence climatique, en passant par les mutations technologiques, les 45 intervenants tenteront de dessiner les contours du monde de demain.",
     badge: "Annonce"
   },
   {
     date: "18 mars 2026",
-    title: "Thomas Piketty, conference inaugurale",
-    summary: "L'economiste Thomas Piketty prononcera la conference magistrale d'ouverture le 19 mars au Grand Auditorium.",
-    full: "Auteur de « Capital et Ideologie », Thomas Piketty proposera une lecture geopolitique de l'annee 2026, entre montee des inegalites, crise de la democratie et espoirs de transformation sociale.",
+    title: "Thomas Piketty, conf\u00e9rence inaugurale",
+    summary: "L'\u00e9conomiste Thomas Piketty prononcera la conf\u00e9rence magistrale d'ouverture le 15 octobre au Grand Auditorium.",
+    full: "Auteur de \u00ab Capital et Id\u00e9ologie \u00bb, Thomas Piketty proposera une lecture g\u00e9opolitique de l'ann\u00e9e 2026, entre mont\u00e9e des in\u00e9galit\u00e9s, crise de la d\u00e9mocratie et espoirs de transformation sociale.",
     badge: "Intervenants"
   },
   {
     date: "12 mars 2026",
     title: "Partenariat avec le Conseil de l'Europe",
-    summary: "Le Conseil de l'Europe devient partenaire institutionnel majeur du festival, renforçant la dimension europeenne des RVGS.",
-    full: "Siegeant a Strasbourg, le Conseil de l'Europe apporte son expertise sur les droits de l'homme, la democratie et l'Etat de droit. Plusieurs sessions seront co-organisees avec ses experts.",
+    summary: "Le Conseil de l'Europe devient partenaire institutionnel majeur du festival, renfor\u00e7ant la dimension europ\u00e9enne des RVGS.",
+    full: "Si\u00e9geant \u00e0 Strasbourg, le Conseil de l'Europe apporte son expertise sur les droits de l'homme, la d\u00e9mocratie et l'\u00c9tat de droit. Plusieurs sessions seront co-organis\u00e9es avec ses experts.",
     badge: "Partenariat"
   },
   {
     date: "5 mars 2026",
-    title: "Masterclass France Culture : 4 emissions en direct",
-    summary: "France Culture installera ses studios au coeur du Palais des Congres pour 4 emissions speciales en direct.",
-    full: "Les emissions « Les Matins », « La Grande Table », « La Suite dans les idees » et « Soft Power » seront enregistrees en public pendant les 3 jours du Festival.",
-    badge: "Medias"
+    title: "Masterclass France Culture : 4 \u00e9missions en direct",
+    summary: "France Culture installera ses studios au c\u0153ur du Palais des Congr\u00e8s pour 4 \u00e9missions sp\u00e9ciales en direct.",
+    full: "Les \u00e9missions \u00ab Les Matins \u00bb, \u00ab La Grande Table \u00bb, \u00ab La Suite dans les id\u00e9es \u00bb et \u00ab Soft Power \u00bb seront enregistr\u00e9es en public pendant les 4 jours du Festival.",
+    badge: "M\u00e9dias"
   },
   {
     date: "28 fevrier 2026",
-    title: "Appel a communications : prolongation jusqu'au 30 juin",
-    summary: "Face au nombre de propositions recues, le comite scientifique prolonge l'appel a communications jusqu'au 31 decembre 2026.",
-    full: "Plus de 350 propositions ont deja ete recues. Le comite encourage particulierement les soumissions sur les thematiques « Sciences & Technologies » et « Culture & Patrimoine », encore sous-representees.",
+    title: "Appel \u00e0 communications : prolongation jusqu'au 31 ao\u00fbt",
+    summary: "Face au nombre de propositions re\u00e7ues, le comit\u00e9 scientifique prolonge l'appel \u00e0 communications jusqu'au 31 ao\u00fbt 2026.",
+    full: "Plus de 350 propositions ont d\u00e9j\u00e0 \u00e9t\u00e9 re\u00e7ues. Le comit\u00e9 encourage particuli\u00e8rement les soumissions sur les th\u00e9matiques \u00ab Sciences & Technologies \u00bb et \u00ab Culture & Patrimoine \u00bb, encore sous-repr\u00e9sent\u00e9es.",
     badge: "Organisation"
   },
   {
     date: "20 fevrier 2026",
-    title: "Esther Duflo et Gabriel Zucman reunis pour la premiere fois",
-    summary: "Les deux laureats du Nobel dialogueront sur la fiscalite et la justice sociale lors d'une table ronde exceptionnelle.",
-    full: "Esther Duflo (Prix Nobel 2019) et Gabriel Zucman se retrouveront le dimanche 21 mars pour un echange inedit sur la redistribution des richesses a l'echelle mondiale.",
+    title: "Esther Duflo et Gabriel Zucman r\u00e9unis pour la premi\u00e8re fois",
+    summary: "Les deux laur\u00e9ats du Nobel dialogueront sur la fiscalit\u00e9 et la justice sociale lors d'une table ronde exceptionnelle.",
+    full: "Esther Duflo (Prix Nobel 2019) et Gabriel Zucman se retrouveront le vendredi 18 octobre pour un \u00e9change in\u00e9dit sur la redistribution des richesses \u00e0 l'\u00e9chelle mondiale.",
     badge: "Intervenants"
   },
   {
     date: "14 fevrier 2026",
-    title: "200+ heures de video en acces libre apres l'evenement",
-    summary: "Toutes les conferences seront filmees et mises en ligne gratuitement dans les semaines suivant le Forum.",
-    full: "En partenariat avec Arte et France Culture, une equipe de 20 cameras couvrira l'integralite des sessions. La mediatheque en ligne sera accessible des avril 2027.",
-    badge: "Mediatheque"
+    title: "100+ heures de vid\u00e9o en acc\u00e8s libre apr\u00e8s l'\u00e9v\u00e9nement",
+    summary: "Toutes les conf\u00e9rences seront film\u00e9es et mises en ligne gratuitement dans les semaines suivant le Festival.",
+    full: "En partenariat avec Arte et France Culture, une \u00e9quipe de 20 cam\u00e9ras couvrira l'int\u00e9gralit\u00e9 des sessions. La m\u00e9diath\u00e8que en ligne sera accessible d\u00e8s novembre 2026.",
+    badge: "M\u00e9diath\u00e8que"
   },
   {
     date: "7 fevrier 2026",
-    title: "Arte co-produit une serie documentaire sur les RVGS",
-    summary: "La chaine franco-allemande suivra les coulisses de la preparation du Forum pour un documentaire en 3 episodes.",
-    full: "Diffusion prevue en mai 2027 sur Arte et arte.tv. Le tournage a debute en janvier et suivra le parcours de plusieurs intervenants et organisateurs.",
-    badge: "Medias"
+    title: "Arte co-produit une s\u00e9rie documentaire sur les RVGS",
+    summary: "La cha\u00eene franco-allemande suivra les coulisses de la pr\u00e9paration du Festival pour un documentaire en 3 \u00e9pisodes.",
+    full: "Diffusion pr\u00e9vue en d\u00e9cembre 2026 sur Arte et arte.tv. Le tournage a d\u00e9but\u00e9 en janvier et suivra le parcours de plusieurs intervenants et organisateurs.",
+    badge: "M\u00e9dias"
   },
   {
     date: "30 janvier 2026",
     title: "Ateliers Fresque du Climat : inscriptions ouvertes",
-    summary: "20 sessions de la Fresque du Climat seront proposees pendant les 3 jours. Inscrivez-vous des maintenant.",
-    full: "Encadres par des animateurs certifies, ces ateliers de 3 heures permettent de comprendre les mecanismes du changement climatique de maniere ludique et collaborative. Places limitees a 15 personnes par session.",
+    summary: "20 sessions de la Fresque du Climat seront propos\u00e9es pendant les 4 jours. Inscrivez-vous d\u00e8s maintenant.",
+    full: "Encadr\u00e9s par des animateurs certifi\u00e9s, ces ateliers de 3 heures permettent de comprendre les m\u00e9canismes du changement climatique de mani\u00e8re ludique et collaborative. Places limit\u00e9es \u00e0 15 personnes par session.",
     badge: "Programme"
   },
   {
     date: "15 janvier 2026",
     title: "Le site officiel des RVGS est en ligne !",
-    summary: "Decouvrez le programme provisoire, les premiers intervenants confirmes et toutes les informations pratiques.",
-    full: "Apres 6 mois de preparation, le comite d'organisation est fier de presenter le site officiel des Rendez-vous Geopolitiques de Strasbourg 2027. Programme, intervenants, infos pratiques : tout y est.",
+    summary: "D\u00e9couvrez le programme provisoire, les premiers intervenants confirm\u00e9s et toutes les informations pratiques.",
+    full: "Apr\u00e8s 6 mois de pr\u00e9paration, le comit\u00e9 d'organisation est fier de pr\u00e9senter le site officiel des Rendez-vous G\u00e9opolitiques de Strasbourg 2026. Programme, intervenants, infos pratiques : tout y est.",
     badge: "Annonce"
   }
 ];
@@ -3769,7 +3766,7 @@ function performSearch(query) {
       const title = card.querySelector('h4').textContent;
       const speaker = card.querySelector('.session-speaker').textContent;
       html += `<div class="search-result-item" onclick="closeSearch();location.hash='programme';">
-        <div class="sr-type">Conference</div>
+        <div class="sr-type">Conf\u00e9rence</div>
         <div class="sr-title">${title}</div>
         <div class="sr-meta">${speaker}</div>
       </div>`;
@@ -3793,7 +3790,7 @@ function performSearch(query) {
    COUNTDOWN
    ============================================ */
 function updateCountdown() {
-  const target = new Date('2027-03-19T09:00:00+01:00');
+  const target = new Date('2026-10-15T09:00:00+02:00');
   const now = new Date();
   const diff = target - now;
   if (diff <= 0) {
@@ -3849,7 +3846,7 @@ function filterSpeakers(theme) {
   document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.toggle('active', btn.textContent.toLowerCase().replace('e','e').includes(theme) || (theme === 'all' && btn.textContent === 'Tous')));
   // Fix filter active state properly
   document.querySelectorAll('.filter-btn').forEach(btn => {
-    const map = { 'Tous': 'all', 'Politique': 'politique', 'Environnement': 'environnement', 'Societe': 'societe', 'Economie': 'economie', 'Sciences': 'sciences', 'Culture': 'culture' };
+    const map = { 'Tous': 'all', 'Politique': 'politique', 'Environnement': 'environnement', 'Soci\u00e9t\u00e9': 'societe', '\u00c9conomie': 'economie', 'Sciences': 'sciences', 'Culture': 'culture' };
     btn.classList.toggle('active', map[btn.textContent] === theme);
   });
   renderSpeakers();
@@ -3994,7 +3991,7 @@ function declineCookies() {
 (function() {
   // Floating button
   var btn = document.createElement('div');
-  btn.innerHTML = '<img src="img/icons/icon-saucisse.png" alt="" style="width:24px;height:24px" onerror="this.style.display=\'none\'">&nbsp;Remarques';
+  btn.innerHTML = '&#9998;&nbsp;Remarques';
   btn.style.cssText = 'position:fixed;bottom:20px;right:20px;z-index:9999;background:var(--accent,#D4A843);color:#fff;padding:12px 20px;border-radius:50px;cursor:pointer;font-family:var(--font);font-size:14px;font-weight:700;box-shadow:0 4px 20px rgba(0,0,0,0.3);display:flex;align-items:center;transition:transform .2s';
   btn.onmouseover = function(){this.style.transform='scale(1.05)'};
   btn.onmouseout = function(){this.style.transform='scale(1)'};
@@ -4056,8 +4053,8 @@ function sendFeedback() {
   localStorage.setItem('congres_feedbacks', JSON.stringify(feedbacks));
 
   // Send email
-  var subject = 'RVGS 2027 — Remarque de ' + name + ' [' + type + '] ' + section;
-  var body = 'REMARQUE RVGS 2027\n' +
+  var subject = 'RVGS 2026 — Remarque de ' + name + ' [' + type + '] ' + section;
+  var body = 'REMARQUE RVGS 2026\n' +
     '========================\n\n' +
     'De : ' + name + '\n' +
     'Section : ' + section + '\n' +
@@ -4164,7 +4161,7 @@ function openFeedback(section) {
       {type:'Info',name:'Palais de la Musique et des Congrès',desc:'Place de Bordeaux, 67000 Strasbourg',section:'infos'},
       {type:'Info',name:'Tram B ou E — Arrêt Wacken',desc:'Accès direct au Palais des Congrès',section:'infos'},
       {type:'Info',name:'TGV Paris-Strasbourg',desc:'1h46, Gare de l\'Est',section:'infos'},
-      {type:'Info',name:'Tarifs',desc:'Gratuit (conferences), 15EUR (ateliers), Pass 3 jours 35EUR',section:'infos'},
+      {type:'Info',name:'Tarifs',desc:'Gratuit (conf\u00e9rences), 15EUR (ateliers), Pass 4 jours 35EUR',section:'infos'},
       {type:'Contact',name:'Contact organisation',desc:'contact@rvgs.fr',section:'infos'},
       {type:'Info',name:'Appel à communications',desc:'Date limite 31 decembre 2026',section:'appel'},
     ];
@@ -4217,7 +4214,7 @@ function openFeedback(section) {
     '<button onclick="closeSearch()" style="padding:16px;background:none;border:2px solid rgba(255,255,255,0.3);border-radius:14px;color:#fff;font-size:20px;cursor:pointer;width:54px">&times;</button>' +
     '</div>' +
     '<div id="searchResults" style="max-height:60vh;overflow-y:auto"></div>' +
-    '<p style="text-align:center;font-size:12px;color:rgba(255,255,255,0.4);margin-top:16px">Appuyez sur Echap pour fermer · Recherche propulsée par Fuse.js</p>' +
+    '<p style="text-align:center;font-size:12px;color:rgba(255,255,255,0.65);margin-top:16px">Appuyez sur Echap pour fermer · Recherche propulsée par Fuse.js</p>' +
     '</div>';
   document.body.appendChild(overlay);
 
@@ -4241,17 +4238,17 @@ function openFeedback(section) {
   window.doSearch = function(q) {
     var results = document.getElementById('searchResults');
     if (!q || q.length < 2 || !window._congressFuse) {
-      results.innerHTML = q && q.length < 2 ? '<p style="text-align:center;color:rgba(255,255,255,0.5);padding:20px">Tapez au moins 2 caractères</p>' : '';
+      results.innerHTML = q && q.length < 2 ? '<p style="text-align:center;color:rgba(255,255,255,0.7);padding:20px">Tapez au moins 2 caractères</p>' : '';
       return;
     }
     // Normaliser la requête aussi (accents)
     var qNorm = q.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
     var found = window._congressFuse.search(qNorm);
     if (found.length === 0) {
-      results.innerHTML = '<p style="text-align:center;color:rgba(255,255,255,0.5);padding:20px">Aucun résultat pour "' + q + '"</p>';
+      results.innerHTML = '<p style="text-align:center;color:rgba(255,255,255,0.7);padding:20px">Aucun résultat pour "' + q + '"</p>';
       return;
     }
-    var html = '<p style="font-size:13px;color:rgba(255,255,255,0.5);margin-bottom:12px">' + found.length + ' résultat(s)</p>';
+    var html = '<p style="font-size:13px;color:rgba(255,255,255,0.7);margin-bottom:12px">' + found.length + ' résultat(s)</p>';
     var typeColors = {Intervenant:'#D4A843',Session:'#2AD783',Thématique:'#1B3A8C',Actualité:'#E05A6D',Partenaire:'#9B59B6',Info:'#888',Contact:'#E8793A',Contenu:'#666'};
     found.slice(0, 15).forEach(function(r) {
       var item = r.item;
@@ -4261,7 +4258,7 @@ function openFeedback(section) {
         '<strong style="color:#fff;font-size:15px">' + item.name + '</strong>' +
         '<span style="font-size:11px;padding:2px 8px;border-radius:20px;background:' + color + ';color:#fff;font-weight:600">' + item.type + '</span>' +
         '</div>' +
-        (item.desc ? '<p style="font-size:13px;color:rgba(255,255,255,0.5);line-height:1.5;margin:0">' + item.desc.substring(0,120) + (item.desc.length>120?'...':'') + '</p>' : '') +
+        (item.desc ? '<p style="font-size:13px;color:rgba(255,255,255,0.7);line-height:1.5;margin:0">' + item.desc.substring(0,120) + (item.desc.length>120?'...':'') + '</p>' : '') +
         '</div>';
     });
     results.innerHTML = html;

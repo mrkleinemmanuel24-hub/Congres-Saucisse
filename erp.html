@@ -2,11 +2,28 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-<meta http-equiv="refresh" content="0;url=admin.html#erp-dashboard">
-<title>Redirection ERP...</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Accès back-office — Les Rendez-vous Géopolitiques de Strasbourg</title>
+<style>
+  body { margin: 0; min-height: 100vh; display: flex; align-items: center; justify-content: center; background: #0e0e20; color: #fff; font-family: 'Inter', system-ui, sans-serif; }
+  .redirect-box { text-align: center; padding: 40px; }
+  .redirect-box p { font-size: 16px; color: rgba(255,255,255,0.7); margin-bottom: 16px; }
+  .redirect-box a { color: #c8a44e; text-decoration: none; font-weight: 600; }
+  .redirect-box a:hover { text-decoration: underline; }
+  .spinner { display: inline-block; width: 24px; height: 24px; border: 3px solid rgba(200,164,78,0.2); border-top-color: #c8a44e; border-radius: 50%; animation: spin 0.8s linear infinite; margin-bottom: 16px; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+</style>
 </head>
 <body>
-<p>Redirection vers le <a href="admin.html#erp-dashboard">back-office unifie</a>...</p>
-<script>window.location.href = 'admin.html#erp-dashboard';</script>
+<div class="redirect-box" role="status" aria-live="polite">
+  <div class="spinner"></div>
+  <p>Redirection vers le <a href="admin.html#erp-dashboard">back-office unifié</a>...</p>
+</div>
+<noscript>
+  <p style="text-align:center;color:#fff;padding:40px;">JavaScript désactivé. <a href="admin.html#erp-dashboard" style="color:#c8a44e;">Cliquez ici pour accéder au back-office</a></p>
+</noscript>
+<script>
+  window.location.href = 'admin.html#erp-dashboard';
+</script>
 </body>
 </html>
