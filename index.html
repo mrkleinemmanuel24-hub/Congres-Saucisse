@@ -3252,59 +3252,7 @@ const news = [
   }
 ];
 
-/* ============================================
-   THEME SYSTEM
-   ============================================ */
-function setTheme(theme) {
-  // Map old theme names to new ones for backward compat
-  var themeMap = { 'classique': 'nuit', 'strasbourg': 'europe', 'moderne': 'institutionnel' };
-  if (themeMap[theme]) theme = themeMap[theme];
-
-  if (theme === 'nuit') {
-    document.documentElement.removeAttribute('data-theme');
-  } else {
-    document.documentElement.setAttribute('data-theme', theme);
-  }
-  localStorage.setItem('rs-theme', theme);
-
-  // Tricolor bar visibility
-  var tribar = document.getElementById('tricolorBar');
-  if (tribar) tribar.style.display = (theme === 'republique') ? 'block' : 'none';
-
-  // Body class for republique tricolor bar
-  document.body.classList.toggle('theme-republique', theme === 'republique');
-
-  // Update active state in nav theme panel
-  document.querySelectorAll('.theme-option').forEach(function(opt) {
-    opt.classList.toggle('active', opt.dataset.themeOpt === theme);
-  });
-
-  // Update active state on landing pills
-  document.querySelectorAll('.theme-pill').forEach(function(pill) {
-    pill.classList.toggle('active', pill.dataset.pill === theme);
-  });
-
-  // Adjust nav top offset for tricolor bar
-  var nav = document.getElementById('navbar');
-  if (nav) nav.style.top = (theme === 'republique') ? '4px' : '0';
-}
-
-function toggleThemePanel() {
-  document.getElementById('themePanel').classList.toggle('open');
-}
-
-// Close theme panel on outside click
-document.addEventListener('click', function(e) {
-  var panel = document.getElementById('themePanel');
-  var toggle = document.querySelector('.theme-toggle');
-  if (panel && !panel.contains(e.target) && !toggle.contains(e.target)) {
-    panel.classList.remove('open');
-  }
-});
-
-// Load saved theme (default: nuit)
-var savedTheme = localStorage.getItem('rs-theme') || 'nuit';
-setTheme(savedTheme);
+/* Thème unique CHANEL — pas de sélecteur */
 
 /* ============================================
    MOBILE MENU
