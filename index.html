@@ -1660,42 +1660,7 @@ footer {
   padding: 18px 48px;
 }
 
-/* Nav theme dots — compact on right */
-.nav-theme-dots {
-  display: flex;
-  gap: 4px;
-  align-items: center;
-  margin-left: 8px;
-}
-.nav-theme-dot {
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  border: 2px solid rgba(255,255,255,0.15);
-  cursor: pointer;
-  transition: all 0.2s;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-}
-.nav-theme-dot:hover { border-color: var(--accent); transform: scale(1.15); }
-.nav-theme-dot .dot-inner {
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-}
-.nav-theme-dot[data-dot="nuit"] .dot-inner { background: linear-gradient(135deg, #0D1B4A, #D4A843); }
-.nav-theme-dot[data-dot="republique"] .dot-inner { background: linear-gradient(90deg, #002654 33%, #fff 33% 66%, #C8102E 66%); }
-.nav-theme-dot[data-dot="europe"] .dot-inner { background: linear-gradient(135deg, #F5F3EE, #003399); }
-.nav-theme-dot[data-dot="institutionnel"] .dot-inner { background: linear-gradient(135deg, #F8F8F6, #1B3A8C); }
-.nav-theme-dot[data-dot="eau"] .dot-inner { background: linear-gradient(135deg, #0A1628, #4ECDC4); }
-
-/* Light themes — dots border */
-[data-theme="europe"] .nav-theme-dot,
-[data-theme="institutionnel"] .nav-theme-dot { border-color: rgba(0,0,0,0.15); }
-[data-theme="europe"] .nav-theme-dot:hover,
-[data-theme="institutionnel"] .nav-theme-dot:hover { border-color: var(--accent); }
+/* Thème unique — nav-theme-dots supprimés */
 
 </style>
 </head>
