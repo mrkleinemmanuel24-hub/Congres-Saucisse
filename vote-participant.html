@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
+  <meta name="theme-color" content="#0e0e20">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <title>Voter — Les Rencontres de Strasbourg</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800;900&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0e0e20;
+      --bg2: #161630;
+      --bg-card: #1a1a35;
+      --gold: #C9A84C;
+      --gold-light: #E8D48B;
+      --gold-dark: #9A7B2E;
+      --green: #2AD783;
+      --green-light: rgba(42,215,131,0.12);
+      --red: #EF4444;
+      --blue: #3B82F6;
+      --purple: #8B5CF6;
+      --yellow: #F59E0B;
+      --text: #F0ECF8;
+      --text-dim: #8888b0;
+      --card: rgba(255,255,255,0.06);
+      --card-border: rgba(201,168,76,0.15);
+      --shadow: 0 4px 20px rgba(0,0,0,0.3);
+      --radius: 18px;
+    }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    button, a, input, select, textarea { touch-action: manipulation; }
+    html { font-size:16px; }
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      min-height: 100dvh;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+    .container { max-width:480px; margin:0 auto; padding:1.5rem 1rem; }
+    h1, h2, h3 { font-family: 'Playfair Display', Georgia, serif; }
+
+    /* -- Join screen -- */
+    .join-screen { text-align:center; padding-top:12vh; }
+    .join-screen h1 { font-size:1.8rem; font-weight:900; margin-bottom:0.3rem; }
+    .join-screen .sub { color:var(--text-dim); margin-bottom:2rem; font-size:0.95rem; }
+    .code-input-wrap {
+      display:flex; justify-content:center; gap:0.6rem; margin:1.5rem 0;
+    }
+    .code-digit {
+      width:3.5rem; height:4.5rem; text-align:center;
+      font-size:2rem; font-weight:800; border-radius:16px;
+      border:3px solid var(--card-border); background:var(--bg2);
+      color: var(--gold); outline:none; caret-color:var(--gold);
+      box-shadow: var(--shadow); transition: border-color 0.2s;
+      font-family: 'Courier New', monospace;
+    }
+    .code-digit:focus { border-color:var(--gold); }
+
+    .name-input {
+      width:100%; padding:1rem; border-radius:16px;
+      border:2px solid var(--card-border); background:var(--bg2);
+      color:var(--text); font-size:1rem; outline:none;
+      margin:1rem 0; font-family:'Inter',sans-serif;
+    }
+    .name-input:focus { border-color:var(--gold); }
+    .name-input::placeholder { color:var(--text-dim); }
+
+    .join-btn {
+      width:100%; padding:1rem; border-radius:16px; border:none;
+      background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+      color:#0e0e20; font-size:1.2rem; font-weight:700; cursor:pointer;
+      box-shadow: 0 6px 24px rgba(201,168,76,0.3);
+      transition: transform 0.2s; font-family:'Inter',sans-serif;
+    }
+    .join-btn:active { transform:scale(0.97); }
+    .join-error {
+      color:var(--red); font-size:0.9rem; margin-top:0.5rem;
+      min-height:1.2rem;
+    }
+
+    /* -- Waiting -- */
+    .waiting { text-align:center; padding-top:18vh; }
+    .waiting-icon { font-size:4rem; margin-bottom:1rem; }
+    .waiting h2 { font-size:1.5rem; margin-bottom:0.3rem; }
+    .waiting .sub { color:var(--text-dim); }
+    .dots::after { content:''; animation: dots 1.5s steps(4,end) infinite; }
+    @keyframes dots { 0% { content:''; } 25% { content:'.'; } 50% { content:'..'; } 75% { content:'...'; } }
+
+    /* -- Header bar -- */
+    .header-bar {
+      display:flex; align-items:center; justify-content:space-between;
+      padding:0.5rem 0; margin-bottom:0.5rem;
+    }
+    .header-name { font-size:0.9rem; color:var(--gold-light); font-weight:600; }
+    .header-code { font-size:0.8rem; color:var(--text-dim); }
+
+    /* -- Vote buttons -- */
+    .vote-grid { display:grid; grid-template-columns:1fr 1fr; gap:0.8rem; margin:1.5rem 0; }
+    .vote-grid.single-col { grid-template-columns:1fr; }
+    .vote-btn {
+      padding:1.4rem 1rem; border-radius:16px; border:3px solid transparent;
+      font-size:1.1rem; font-weight:700; cursor:pointer; transition:all 0.2s;
+      display:flex; flex-direction:column; align-items:center; gap:0.3rem;
+      background: var(--bg2); color:var(--text); font-family:'Inter',sans-serif;
+    }
+    .vote-btn:active { transform:scale(0.95); }
+    .vote-btn.selected { border-color:var(--gold); background:rgba(201,168,76,0.15); transform:scale(1.03); }
+
+    /* YesNo colors */
+    .vote-btn-oui { background:rgba(42,215,131,0.12); color:var(--green); border-color:rgba(42,215,131,0.2); }
+    .vote-btn-non { background:rgba(239,68,68,0.12); color:var(--red); border-color:rgba(239,68,68,0.2); }
+    .vote-btn-abstention { background:rgba(136,136,176,0.12); color:var(--text-dim); border-color:rgba(136,136,176,0.2); }
+
+    /* Likert colors */
+    .likert-1 { background:rgba(239,68,68,0.1); color:#EF4444; }
+    .likert-2 { background:rgba(245,158,11,0.1); color:#F59E0B; }
+    .likert-3 { background:rgba(136,136,176,0.1); color:#8888b0; }
+    .likert-4 { background:rgba(59,130,246,0.1); color:#3B82F6; }
+    .likert-5 { background:rgba(42,215,131,0.1); color:#2AD783; }
+
+    /* -- Estimation input -- */
+    .estimation-input {
+      width:100%; padding:1.2rem; border-radius:16px;
+      border:3px solid var(--card-border); background:var(--bg2);
+      color:var(--gold); font-size:2rem; font-weight:800;
+      text-align:center; outline:none; font-family:'Courier New',monospace;
+    }
+    .estimation-input:focus { border-color:var(--gold); }
+    .estimation-input::placeholder { color:var(--text-dim); font-size:1rem; font-weight:400; }
+
+    /* -- Word input -- */
+    .word-input {
+      width:100%; padding:1rem; border-radius:16px;
+      border:2px solid var(--card-border); background:var(--bg2);
+      color:var(--text); font-size:1.2rem; font-weight:600;
+      text-align:center; outline:none; font-family:'Inter',sans-serif;
+    }
+    .word-input:focus { border-color:var(--gold); }
+    .word-input::placeholder { color:var(--text-dim); font-weight:400; }
+
+    .submit-btn {
+      width:100%; padding:1rem; border-radius:16px; border:none;
+      background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+      color:#0e0e20; font-size:1.1rem; font-weight:700; cursor:pointer;
+      margin-top:1rem; transition:transform 0.2s; font-family:'Inter',sans-serif;
+    }
+    .submit-btn:active { transform:scale(0.97); }
+
+    /* -- Confirmation -- */
+    .vote-confirmation {
+      text-align:center; padding:2rem;
+      background: var(--green-light);
+      border:1px solid rgba(42,215,131,0.2);
+      border-radius:20px; margin:1rem 0;
+    }
+    .vote-confirmation .check { font-size:3rem; }
+
+    /* -- Reactions -- */
+    .reaction-btns {
+      display:flex; gap:0.6rem; justify-content:center; margin:1.5rem 0;
+    }
+    .reaction-btn {
+      padding:0.8rem 1.2rem; border-radius:14px;
+      border:2px solid var(--card-border); background:var(--bg2);
+      font-size:1rem; cursor:pointer; transition:all 0.2s;
+      color:var(--text); font-family:'Inter',sans-serif;
+    }
+    .reaction-btn:active { transform:scale(0.95); }
+    .reaction-btn.sent { background:rgba(201,168,76,0.15); border-color:var(--gold); }
+
+    /* -- Ask question -- */
+    .ask-section {
+      background: var(--card); border:1px solid var(--card-border);
+      border-radius:18px; padding:1.2rem; margin:1rem 0;
+    }
+    .ask-section h4 { font-size:0.85rem; color:var(--gold); margin-bottom:0.8rem; font-family:'Inter',sans-serif; font-weight:700; }
+    .ask-input {
+      width:100%; padding:0.8rem 1rem; border-radius:12px;
+      border:2px solid var(--card-border); background:rgba(255,255,255,0.04);
+      color:var(--text); font-size:0.95rem; outline:none;
+      font-family:'Inter',sans-serif; resize:none;
+    }
+    .ask-input:focus { border-color:var(--gold); }
+    .ask-input::placeholder { color:var(--text-dim); }
+    .ask-send {
+      margin-top:0.5rem; padding:0.6rem 1.5rem; border-radius:12px;
+      border:none; background:var(--gold); color:#0e0e20;
+      font-size:0.85rem; font-weight:700; cursor:pointer;
+      font-family:'Inter',sans-serif;
+    }
+
+    /* -- Section title -- */
+    .section-title {
+      font-size:1.2rem; font-weight:700; text-align:center;
+      margin:1.5rem 0 0.5rem; color:var(--text);
+      font-family:'Playfair Display',serif;
+    }
+    .step-label {
+      text-align:center; font-size:0.8rem; color:var(--text-dim);
+      margin-bottom:0.5rem;
+    }
+
+    /* -- Common -- */
+    .screen { display:none; }
+    .screen.active { display:block; }
+    @keyframes fadeIn { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
+    .fade-in { animation: fadeIn 0.4s ease forwards; }
+
+    /* -- Branding footer -- */
+    .brand-footer {
+      text-align:center; padding:2rem 0 1rem; font-size:0.75rem;
+      color:var(--text-dim); border-top:1px solid var(--card-border); margin-top:2rem;
+    }
+    .brand-footer .gold { font-weight:700; }
+  </style>
+</head>
+<body>
+
+<!-- ================================================================
+     SCREEN: Join
+     ================================================================ -->
+<div id="screen-join" class="screen active">
+  <div class="container join-screen">
+    <div style="font-size:3rem;margin-bottom:0.5rem;">&#127891;&#128499;</div>
+    <h1>Votez <span style="color:var(--gold)">en direct</span></h1>
+    <p class="sub">Entrez le code affiche a l'ecran</p>
+
+    <div class="code-input-wrap">
+      <input type="tel" class="code-digit" id="d1" maxlength="1" inputmode="numeric" autocomplete="off">
+      <input type="tel" class="code-digit" id="d2" maxlength="1" inputmode="numeric" autocomplete="off">
+      <input type="tel" class="code-digit" id="d3" maxlength="1" inputmode="numeric" autocomplete="off">
+      <input type="tel" class="code-digit" id="d4" maxlength="1" inputmode="numeric" autocomplete="off">
+    </div>
+
+    <input type="text" class="name-input" id="display-name" placeholder="Votre nom (facultatif)" maxlength="40" autocomplete="name">
+
+    <button class="join-btn" id="btn-join">Rejoindre la session</button>
+    <div class="join-error" id="join-error"></div>
+
+    <div class="brand-footer">
+      <span class="gold">RVGS 2027</span> — Les Rencontres Geopolitiques de Strasbourg
+    </div>
+  </div>
+</div>
+
+<!-- ================================================================
+     SCREEN: Waiting
+     ================================================================ -->
+<div id="screen-waiting" class="screen">
+  <div class="container waiting">
+    <div class="waiting-icon">&#128499;</div>
+    <h2>Connecte !</h2>
+    <p class="sub">En attente de la prochaine question<span class="dots"></span></p>
+    <p style="margin-top:1.5rem;color:var(--text-dim);font-size:0.85rem;">
+      Bienvenue, <strong id="display-name-show" style="color:var(--gold-light);"></strong>
+    </p>
+    <p style="margin-top:0.5rem;color:var(--text-dim);font-size:0.8rem;">Session <span id="waiting-code" style="color:var(--gold);"></span></p>
+  </div>
+</div>
+
+<!-- ================================================================
+     SCREEN: Vote
+     ================================================================ -->
+<div id="screen-vote" class="screen">
+  <div class="container">
+    <div class="header-bar">
+      <span class="header-name" id="vote-name"></span>
+      <span class="header-code" id="vote-code"></span>
+    </div>
+    <div class="step-label" id="vote-type-label"></div>
+
+    <div id="vote-question-zone">
+      <div class="section-title" id="vote-question-text"></div>
+      <div id="vote-interface">
+        <!-- Filled dynamically by JS based on question type -->
+      </div>
+    </div>
+
+    <div id="vote-confirmed" class="vote-confirmation" style="display:none;">
+      <div class="check">&#9989;</div>
+      <div style="font-size:1.1rem;font-weight:700;margin-top:0.5rem;">Vote enregistre !</div>
+      <div style="color:var(--text-dim);margin-top:0.3rem;font-size:0.9rem;">En attente de la question suivante...</div>
+    </div>
+
+    <!-- Reactions -->
+    <div class="reaction-btns">
+      <button class="reaction-btn" id="btn-react-applaud">&#128079; Applaudir</button>
+      <button class="reaction-btn" id="btn-react-interesting">&#129300; Interessant</button>
+      <button class="reaction-btn" id="btn-react-question">&#10067; Question</button>
+    </div>
+
+    <!-- Ask a question -->
+    <div class="ask-section">
+      <h4>&#128172; Poser une question au conferencier</h4>
+      <textarea class="ask-input" id="ask-text" rows="2" placeholder="Votre question..." maxlength="300"></textarea>
+      <button class="ask-send" id="btn-ask-send">Envoyer</button>
+    </div>
+
+    <div class="brand-footer">
+      <span class="gold">RVGS 2027</span>
+    </div>
+  </div>
+</div>
+
+<script>
+// ===============================================================
+// RVGS -- Vote Participant (Congressiste View)
+// ===============================================================
+
+var API = 'https://sos-toutou-api.sos-toutou-ek.workers.dev/api/atelier';
+var sessionCode = '';
+var myName = '';
+var myId = '';
+var pollInterval = null;
+var currentQuestionId = '';
+var hasVoted = false;
+var votedQuestions = {};
+
+// -- Read code from URL --
+(function init() {
+  var params = new URLSearchParams(window.location.search);
+  var code = params.get('code');
+  if (code && code.length === 4) {
+    document.getElementById('d1').value = code[0];
+    document.getElementById('d2').value = code[1];
+    document.getElementById('d3').value = code[2];
+    document.getElementById('d4').value = code[3];
+  }
+
+  // Restore session
+  var saved = localStorage.getItem('rvgs_vote_session');
+  if (saved) {
+    try {
+      var s = JSON.parse(saved);
+      if (s.code && s.id) {
+        sessionCode = s.code;
+        myName = s.name || '';
+        myId = s.id;
+        votedQuestions = s.voted || {};
+        document.getElementById('display-name-show').textContent = myName || 'Participant';
+        document.getElementById('waiting-code').textContent = sessionCode;
+        showScreen('screen-waiting');
+        startPolling();
+        return;
+      }
+    } catch(e) {}
+  }
+})();
+
+// -- Code input auto-advance --
+var digits = [document.getElementById('d1'), document.getElementById('d2'),
+              document.getElementById('d3'), document.getElementById('d4')];
+for (var i = 0; i < digits.length; i++) {
+  (function(idx) {
+    digits[idx].addEventListener('input', function() {
+      this.value = this.value.replace(/[^0-9]/g, '');
+      if (this.value.length === 1 && idx < 3) {
+        digits[idx + 1].focus();
+      }
+      if (idx === 3 && this.value.length === 1) {
+        document.getElementById('display-name').focus();
+      }
+    });
+    digits[idx].addEventListener('keydown', function(e) {
+      if (e.key === 'Backspace' && this.value === '' && idx > 0) {
+        digits[idx - 1].focus();
+      }
+    });
+  })(i);
+}
+
+document.getElementById('btn-join').addEventListener('click', joinSession);
+document.getElementById('display-name').addEventListener('keydown', function(e) {
+  if (e.key === 'Enter') joinSession();
+});
+
+function joinSession() {
+  var code = digits.map(function(d) { return d.value; }).join('');
+  if (code.length !== 4) {
+    document.getElementById('join-error').textContent = 'Entrez les 4 chiffres du code';
+    return;
+  }
+
+  sessionCode = code;
+  myName = document.getElementById('display-name').value.trim() || 'Participant';
+  myId = Date.now().toString(36) + Math.random().toString(36).slice(2, 5);
+
+  fetch(API, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ action: 'join', session: sessionCode, avatar: myName.charAt(0).toUpperCase(), student: myId, name: myName })
+  })
+  .then(function(r) { return r.json(); })
+  .then(function(data) {
+    if (data.error) {
+      document.getElementById('join-error').textContent = data.error;
+      return;
+    }
+    saveLocal();
+    enterWaiting();
+  })
+  .catch(function() {
+    // Graceful degradation
+    saveLocal();
+    enterWaiting();
+  });
+}
+
+function enterWaiting() {
+  document.getElementById('display-name-show').textContent = myName;
+  document.getElementById('waiting-code').textContent = sessionCode;
+  showScreen('screen-waiting');
+  startPolling();
+}
+
+function saveLocal() {
+  localStorage.setItem('rvgs_vote_session', JSON.stringify({
+    code: sessionCode, name: myName, id: myId, voted: votedQuestions
+  }));
+}
+
+// -- Screens --
+function showScreen(id) {
+  var screens = document.querySelectorAll('.screen');
+  for (var i = 0; i < screens.length; i++) screens[i].classList.remove('active');
+  document.getElementById(id).classList.add('active');
+  // Update headers
+  var nameEls = document.querySelectorAll('.header-name');
+  for (var i = 0; i < nameEls.length; i++) nameEls[i].textContent = myName;
+  var codeEls = document.querySelectorAll('.header-code');
+  for (var i = 0; i < codeEls.length; i++) codeEls[i].textContent = 'Session ' + sessionCode;
+}
+
+// -- Polling --
+function startPolling() {
+  if (pollInterval) clearInterval(pollInterval);
+  pollInterval = setInterval(fetchState, 2500);
+  fetchState();
+}
+
+function fetchState() {
+  fetch(API + '?session=' + sessionCode)
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+      if (data.error) return;
+      handleStateUpdate(data);
+    })
+    .catch(function() {});
+}
+
+function handleStateUpdate(data) {
+  // Check if there's an active question
+  var qId = data.questionId || '';
+  var qType = data.questionType || '';
+  var qText = data.questionText || '';
+  var qOptions = data.options || [];
+
+  if (qId && qId !== currentQuestionId) {
+    currentQuestionId = qId;
+    hasVoted = !!votedQuestions[qId];
+    renderVoteInterface(qId, qType, qText, qOptions);
+    showScreen('screen-vote');
+  } else if (!qId && currentQuestionId) {
+    // No active question, go back to waiting
+    currentQuestionId = '';
+    showScreen('screen-waiting');
+  }
+}
+
+// -- Render vote interface --
+function renderVoteInterface(qId, qType, qText, options) {
+  document.getElementById('vote-question-text').textContent = qText;
+  var typeLabels = { yesno:'OUI / NON / Abstention', qcm:'QCM', likert:'Votre opinion', estimation:'Estimation', wordcloud:'Nuage de mots' };
+  document.getElementById('vote-type-label').textContent = typeLabels[qType] || '';
+
+  var zone = document.getElementById('vote-interface');
+  var confirmed = document.getElementById('vote-confirmed');
+
+  if (votedQuestions[qId]) {
+    zone.style.display = 'none';
+    confirmed.style.display = 'block';
+    document.getElementById('vote-question-zone').style.display = 'block';
+    return;
+  }
+
+  zone.style.display = 'block';
+  confirmed.style.display = 'none';
+  zone.innerHTML = '';
+
+  if (qType === 'yesno') {
+    var grid = document.createElement('div');
+    grid.className = 'vote-grid';
+    var btns = [
+      { label: 'OUI', cls: 'vote-btn-oui', icon: '&#9989;' },
+      { label: 'NON', cls: 'vote-btn-non', icon: '&#10060;' },
+      { label: 'Abstention', cls: 'vote-btn-abstention', icon: '&#128528;' }
+    ];
+    for (var i = 0; i < btns.length; i++) {
+      var btn = document.createElement('button');
+      btn.className = 'vote-btn ' + btns[i].cls;
+      btn.innerHTML = '<span style="font-size:1.8rem;">' + btns[i].icon + '</span><span>' + btns[i].label + '</span>';
+      btn.setAttribute('data-answer', btns[i].label);
+      btn.addEventListener('click', function() {
+        submitVote(qId, this.getAttribute('data-answer'));
+      });
+      grid.appendChild(btn);
+    }
+    zone.appendChild(grid);
+
+  } else if (qType === 'qcm') {
+    var grid = document.createElement('div');
+    grid.className = 'vote-grid';
+    var colors = ['rgba(201,168,76,0.12)', 'rgba(59,130,246,0.12)', 'rgba(42,215,131,0.12)', 'rgba(139,92,246,0.12)'];
+    var textColors = ['#C9A84C', '#3B82F6', '#2AD783', '#8B5CF6'];
+    for (var i = 0; i < options.length; i++) {
+      var btn = document.createElement('button');
+      btn.className = 'vote-btn';
+      btn.style.background = colors[i % colors.length];
+      btn.style.color = textColors[i % textColors.length];
+      btn.innerHTML = '<span style="font-size:1.6rem;font-weight:900;">' + String.fromCharCode(65 + i) + '</span><span style="font-size:0.9rem;">' + escapeHtml(options[i]) + '</span>';
+      btn.setAttribute('data-answer', options[i]);
+      btn.addEventListener('click', function() {
+        submitVote(qId, this.getAttribute('data-answer'));
+      });
+      grid.appendChild(btn);
+    }
+    zone.appendChild(grid);
+
+  } else if (qType === 'likert') {
+    var grid = document.createElement('div');
+    grid.className = 'vote-grid single-col';
+    var labels = ['Pas du tout d\'accord','Pas d\'accord','Neutre','D\'accord','Tout a fait d\'accord'];
+    var icons = ['&#128544;','&#128533;','&#128528;','&#128578;','&#129321;'];
+    for (var i = 0; i < labels.length; i++) {
+      var btn = document.createElement('button');
+      btn.className = 'vote-btn likert-' + (i + 1);
+      btn.style.flexDirection = 'row';
+      btn.style.justifyContent = 'flex-start';
+      btn.style.gap = '1rem';
+      btn.innerHTML = '<span style="font-size:1.8rem;">' + icons[i] + '</span><span>' + labels[i] + '</span>';
+      btn.setAttribute('data-answer', labels[i]);
+      btn.addEventListener('click', function() {
+        submitVote(qId, this.getAttribute('data-answer'));
+      });
+      grid.appendChild(btn);
+    }
+    zone.appendChild(grid);
+
+  } else if (qType === 'estimation') {
+    var input = document.createElement('input');
+    input.type = 'number';
+    input.className = 'estimation-input';
+    input.placeholder = 'Votre estimation...';
+    input.id = 'est-input';
+    input.inputMode = 'numeric';
+    zone.appendChild(input);
+    var btn = document.createElement('button');
+    btn.className = 'submit-btn';
+    btn.textContent = 'Valider mon estimation';
+    btn.addEventListener('click', function() {
+      var val = document.getElementById('est-input').value.trim();
+      if (!val || isNaN(val)) return;
+      submitEstimation(qId, val);
+    });
+    zone.appendChild(btn);
+
+  } else if (qType === 'wordcloud') {
+    var input = document.createElement('input');
+    input.type = 'text';
+    input.className = 'word-input';
+    input.placeholder = 'Un seul mot...';
+    input.id = 'word-input';
+    input.maxLength = 30;
+    zone.appendChild(input);
+    var btn = document.createElement('button');
+    btn.className = 'submit-btn';
+    btn.textContent = 'Envoyer';
+    btn.addEventListener('click', function() {
+      var val = document.getElementById('word-input').value.trim();
+      if (!val) return;
+      submitWord(qId, val);
+    });
+    zone.appendChild(btn);
+  }
+}
+
+// -- Submit votes --
+function submitVote(qId, answer) {
+  fetch(API, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      action: 'vote', session: sessionCode,
+      step: 1, question: 1,
+      answer: answer, student: myId,
+      questionId: qId
+    })
+  })
+  .then(function(r) {
+    if (!r.ok) throw new Error('Erreur reseau');
+    votedQuestions[qId] = answer;
+    saveLocal();
+    document.getElementById('vote-interface').style.display = 'none';
+    document.getElementById('vote-confirmed').style.display = 'block';
+  })
+  .catch(function() {
+    var errEl = document.getElementById('vote-error') || document.querySelector('.vote-error');
+    if (errEl) errEl.textContent = 'Erreur réseau — votre vote n\'a pas été enregistré. Réessayez.';
+    else alert('Erreur réseau — votre vote n\'a pas été enregistré.');
+  });
+}
+
+function submitEstimation(qId, value) {
+  votedQuestions[qId] = value;
+  saveLocal();
+
+  fetch(API, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      action: 'estimation', session: sessionCode,
+      questionId: qId, value: value, student: myId
+    })
+  }).catch(function() {});
+
+  document.getElementById('vote-interface').style.display = 'none';
+  document.getElementById('vote-confirmed').style.display = 'block';
+}
+
+function submitWord(qId, word) {
+  votedQuestions[qId] = word;
+  saveLocal();
+
+  fetch(API, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      action: 'word', session: sessionCode,
+      questionId: qId, word: word, student: myId
+    })
+  }).catch(function() {});
+
+  document.getElementById('vote-interface').style.display = 'none';
+  document.getElementById('vote-confirmed').style.display = 'block';
+}
+
+// -- Reactions --
+document.getElementById('btn-react-applaud').addEventListener('click', function() {
+  this.classList.add('sent');
+  fetch(API, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ action: 'react', session: sessionCode, reaction: 'applaud', student: myId })
+  }).catch(function() {});
+});
+
+document.getElementById('btn-react-interesting').addEventListener('click', function() {
+  this.classList.add('sent');
+  fetch(API, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ action: 'react', session: sessionCode, reaction: 'interesting', student: myId })
+  }).catch(function() {});
+});
+
+document.getElementById('btn-react-question').addEventListener('click', function() {
+  this.classList.add('sent');
+  fetch(API, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ action: 'react', session: sessionCode, reaction: 'question', student: myId })
+  }).catch(function() {});
+});
+
+// -- Ask question to speaker --
+document.getElementById('btn-ask-send').addEventListener('click', function() {
+  var text = document.getElementById('ask-text').value.trim();
+  if (!text) return;
+
+  fetch(API, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      action: 'audience_question', session: sessionCode,
+      student: myId, name: myName, text: text
+    })
+  }).catch(function() {});
+
+  document.getElementById('ask-text').value = '';
+  var btn = this;
+  btn.textContent = 'Envoye !';
+  btn.style.background = 'var(--green)';
+  setTimeout(function() { btn.textContent = 'Envoyer'; btn.style.background = ''; }, 2000);
+});
+
+function escapeHtml(t) {
+  var d = document.createElement('div');
+  d.textContent = t;
+  return d.innerHTML;
+}
+</script>
+</body>
+</html>
