@@ -127,10 +127,10 @@ window.CONGRES = (function() {
 
   // ─── DEMO INSCRIPTIONS (5) ───
   var INSCRIPTIONS = [
-    { id: 'INS-001', nom: 'Dupont', prenom: 'Jean', email: 'jean.dupont@gmail.com', tel: '06 12 34 56 78', entreprise: 'Charcuterie Dupont', pass: 'gold', sessions: [1,2,7,9,11,12,13,18,22,27,31,32], repas: 'standard', hotel: 2, jours: [1,2,3], statut: 'confirmed', date: '2026-02-15' },
-    { id: 'INS-002', nom: 'Martin', prenom: 'Sophie', email: 'sophie.martin@inrae.fr', tel: '06 98 76 54 32', entreprise: 'INRAE', pass: 'standard', sessions: [1,4,9,12,17,20,23,29], repas: 'veggie', hotel: null, jours: [1,2,3], statut: 'confirmed', date: '2026-02-28' },
-    { id: 'INS-003', nom: 'Schmidt', prenom: 'Hans', email: 'h.schmidt@bratwurst-akademie.de', tel: '+49 911 234 567', entreprise: 'Bratwurst Akademie', pass: 'platinum', sessions: [1,2,3,7,8,11,12,13,15,18,19,22,24,27,31,32], repas: 'standard', hotel: 1, jours: [1,2,3], statut: 'confirmed', date: '2026-03-01' },
-    { id: 'INS-004', nom: 'Petit', prenom: 'Claire', email: 'claire.petit@lemonde.fr', tel: '06 55 44 33 22', entreprise: 'Le Monde', pass: 'standard', sessions: [1,7,12,18,22,27,31,32], repas: 'gluten', hotel: 3, jours: [1,2,3], statut: 'pending', date: '2026-03-10' },
+    { id: 'INS-001', nom: 'Dupont', prenom: 'Jean', email: 'jean.dupont@gmail.com', tel: '06 12 34 56 78', entreprise: 'Charcuterie Dupont', pass: 'vip', sessions: [1,2,7,9,11,12,13,18,22,27,31,32], repas: 'standard', hotel: 2, jours: [1,2,3], statut: 'confirmed', date: '2026-02-15' },
+    { id: 'INS-002', nom: 'Martin', prenom: 'Sophie', email: 'sophie.martin@inrae.fr', tel: '06 98 76 54 32', entreprise: 'INRAE', pass: 'spectateur', sessions: [1,4,9,12,17,20,23,29], repas: 'veggie', hotel: null, jours: [1,2,3], statut: 'confirmed', date: '2026-02-28' },
+    { id: 'INS-003', nom: 'Schmidt', prenom: 'Hans', email: 'h.schmidt@bratwurst-akademie.de', tel: '+49 911 234 567', entreprise: 'Bratwurst Akademie', pass: 'vip', sessions: [1,2,3,7,8,11,12,13,15,18,19,22,24,27,31,32], repas: 'standard', hotel: 1, jours: [1,2,3], statut: 'confirmed', date: '2026-03-01' },
+    { id: 'INS-004', nom: 'Petit', prenom: 'Claire', email: 'claire.petit@lemonde.fr', tel: '06 55 44 33 22', entreprise: 'Le Monde', pass: 'spectateur', sessions: [1,7,12,18,22,27,31,32], repas: 'gluten', hotel: 3, jours: [1,2,3], statut: 'pending', date: '2026-03-10' },
     { id: 'INS-005', nom: 'Weber', prenom: 'Marc', email: 'marc.weber@staff.org', tel: '06 11 22 33 44', entreprise: 'Organisation', pass: 'staff', sessions: [], repas: 'standard', hotel: null, jours: [1,2,3], statut: 'confirmed', date: '2026-01-15' }
   ];
 
